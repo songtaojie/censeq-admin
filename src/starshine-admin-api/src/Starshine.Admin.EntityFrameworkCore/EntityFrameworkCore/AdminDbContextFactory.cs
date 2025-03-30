@@ -16,8 +16,6 @@ public class AdminDbContextFactory : IDesignTimeDbContextFactory<StarshineAdminD
         // https://www.npgsql.org/efcore/release-notes/6.0.html#opting-out-of-the-new-timestamp-mapping-logic
         //AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
 
-        AdminEfCoreEntityExtensionMappings.Configure();
-        
         var builder = new DbContextOptionsBuilder<StarshineAdminDbContext>()
             .UseDynamicSql(BuildConfiguration())
             .UseSnakeCaseNamingConvention();

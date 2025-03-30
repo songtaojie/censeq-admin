@@ -24,13 +24,11 @@ public class AdminDbMigrationService : ITransientDependency
     private readonly IEnumerable<IAdminDbSchemaMigrator> _dbSchemaMigrators;
     private readonly ITenantRepository _tenantRepository;
     private readonly ICurrentTenant _currentTenant;
-    private readonly AbpDataSeedOptions _Options;
     public AdminDbMigrationService(
         IDataSeeder dataSeeder,
         IEnumerable<IAdminDbSchemaMigrator> dbSchemaMigrators,
         ITenantRepository tenantRepository,
-        ICurrentTenant currentTenant,
-        IOptions<AbpDataSeedOptions> options)
+        ICurrentTenant currentTenant)
     {
         _dataSeeder = dataSeeder;
         _dbSchemaMigrators = dbSchemaMigrators;
@@ -38,7 +36,6 @@ public class AdminDbMigrationService : ITransientDependency
         _currentTenant = currentTenant;
 
         Logger = NullLogger<AdminDbMigrationService>.Instance;
-        _Options = options.Value;
     }
 
     public async Task MigrateAsync()

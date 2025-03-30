@@ -19,6 +19,7 @@
 	</ItemGroup>
 
     <ItemGroup>
+        <ProjectReference Include="..\..\..\..\..\starshine-abp\framework\src\Starshine.Abp.AspNetCore\Starshine.Abp.AspNetCore.csproj" />
         <ProjectReference Include="..\..\..\..\..\starshine-abp\framework\src\Starshine.Abp.Swashbuckle\Starshine.Abp.Swashbuckle.csproj" />
         <ProjectReference Include="..\Starshine.Admin.Application\Starshine.Admin.Application.csproj" />
         <ProjectReference Include="..\Starshine.Admin.EntityFrameworkCore\Starshine.Admin.EntityFrameworkCore.csproj" />

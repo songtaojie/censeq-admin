@@ -1,0 +1,103 @@
+﻿@page "/Account/Login"
+@using Microsoft.AspNetCore.Mvc.Localization
+@using Starshine.Admin.Localization
+@using Starshine.Admin.Settings
+@using Starshine.Admin.Web.Pages.Account;
+@using Starshine.Admin.Web.Pages.Account.Login
+@using Volo.Abp.Identity;
+@using Volo.Abp.Settings
+@model Starshine.Admin.Web.Pages.Account.Login.LoginModel
+@inject IHtmlLocalizer<AdminResource> L
+@inject Volo.Abp.Settings.ISettingProvider SettingProvider
+
+@section styles {
+    <link rel="stylesheet" href="~/css/hx/hx.login.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/hx/hx.login.bg.css" asp-append-version="true" />
+}
+
+<div class="login-container d-flex h-100">
+    <div class="w-50 login-left">
+        <div class="d-flex align-items-center position-absolute login-left-logo">
+            <img src="\images\logo.png" />
+            <div class="d-flex flex-column ms-2">
+                <span class="fs-3 fw-bold text-white">Startshine.Admin</span>
+                <span class="fs-7 fw-bold text-white pt-1">站在巨人肩膀上的 .NET 通用权限开发框架</span>
+            </div>
+        </div>
+        <partial name="LoginCarousel" />
+    </div>
+    <div class="d-flex w-50 login-right">
+        <div class="login-right-warp m-auto">
+            <span class="login-right-warp-one"></span>
+            <span class="login-right-warp-two"></span>
+            <div class="login-right-warp-main d-flex flex-column h-100">
+                <div class="login-right-warp-main-title text-center fs-2 fw-bold">@L["Login"]</div>
+                <div class="px-5 pb-5">
+                    @if (Model.EnableLocalLogin)
+                    {
+                        <form method="post" class="row needs-validation" novalidate>
+                            <div class="row mb-4  col-12">
+                                <div class="input-group">
+                                    <i class="fa-solid fa-user input-group-text d-flex align-self-center h-100"></i>
+                                    <input asp-for="LoginInput.UserNameOrEmailAddress" placeholder="@Html.DisplayNameFor(m => m.LoginInput.UserNameOrEmailAddress)" class="form-control" />
+                                </div>
+                                <span asp-validation-for="LoginInput.UserNameOrEmailAddress" class="text-danger"></span>
+                            </div>
+
+                            <div class="row mb-4  col-12">
+                                <div class="input-group">
+                                    <i class="fa-solid fa-lock input-group-text d-flex align-self-center h-100"></i>
+                                    <input type="password" placeholder="@Html.DisplayNameFor(m => m.LoginInput.Password)" class="form-control" autocomplete="new-password" maxlength="@IdentityUserConsts.MaxPasswordLength" asp-for="LoginInput.Password" />
+                                    <button class="btn btn-secondary" type="button" id="PasswordVisibilityButton"><i class="fa fa-eye-slash" aria-hidden="true"></i></button>
+                                </div>
+                                <span asp-validation-for="LoginInput.Password" class="text-danger"></span>
+                            </div>
+                            @if (Model.EnableRememberMe)
+                            {
+                                <div class="row mb-4 col-12">
+                                    <label asp-for="LoginInput.RememberMe">
+                                        <input asp-for="LoginInput.RememberMe">
+                                        <strong>记住我</strong>
+                                    </label>
+                                </div>
+                            }
+
+                            <div class="row mb-4 col-12">
+                                <div class="btn-group" role="group" aria-label="Basic mixed styles example">
+                                    <button type="submit" class="btn btn-primary" name="button" value="login">@L["Login"]</button>
+                                    @if (Model.ShowCancelButton)
+                                    {
+                                        <button type="button" name="submit" value="cancel" class="btn btn-outline-secondary ms-2">@L["Cancel"]</button>
+                                    }
+                                </div>
+                            </div>
+                        </form>
+                    }
+
+                    <div class="row mb-3 col-12">
+                        <div class="d-flex justify-content-end">
+                            @if (Model.EnableLocalLogin)
+                            {
+                                <a asp-page="/account/forgot-password" asp-route-returnUrl="@Model.ReturnUrl" asp-route-returnUrlHash="@Model.ReturnUrlHash">@L["ForgotPassword"]</a>
+                                <a asp-page="./forgot-password" asp-route-returnUrl="@Model.ReturnUrl" asp-route-returnUrlHash="@Model.ReturnUrlHash">@L["ForgotPassword"]</a>
+                                <a href="@Url.Page("/account/forgot-password",null, new {returnUrl = Model.ReturnUrl, returnUrlHash = Model.ReturnUrlHash})">@L["ForgotPassword"]</a>
+                            }
+                            @if (Model.IsSelfRegistrationEnabled)
+                            {
+                                <strong>
+                                    @L["AreYouANewUser"]
+                                    <a href="@Url.Page("/account/Register", new {returnUrl = Model.ReturnUrl, returnUrlHash = Model.ReturnUrlHash})" class="text-decoration-none">@L["Register"]</a>
+                                </strong>
+                            }
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@section scripts
+{
+    <script src="~/js/hx/login.js" asp-append-version="true"></script>
+}

@@ -8,8 +8,6 @@ public class AdminSettingDefinitionProvider : SettingDefinitionProvider
 {
     public override void Define(ISettingDefinitionContext context)
     {
-        //Define your own settings here. Example:
-        //context.Add(new SettingDefinition(AdminSettings.MySetting1));
         context.Add(
                new SettingDefinition(
                    AdminSettingNames.IsSelfRegistrationEnabled,
@@ -25,6 +23,21 @@ public class AdminSettingDefinitionProvider : SettingDefinitionProvider
                 L("DisplayName:Abp.Account.EnableLocalLogin"),
                 L("Description:Abp.Account.EnableLocalLogin"), isVisibleToClients: true)
         );
+        context.Add(
+            new SettingDefinition(
+                AdminSettingNames.EnableRememberMe,
+                "true",
+                L("DisplayName:Abp.Account.EnableLocalLogin"),
+                L("Description:Abp.Account.EnableLocalLogin"), isVisibleToClients: true)
+        );
+        context.Add(
+            new SettingDefinition(
+                AdminSettingNames.ShowCancelButton,
+                "true",
+                L("DisplayName:Abp.Account.EnableLocalLogin"),
+                L("Description:Abp.Account.EnableLocalLogin"), isVisibleToClients: true)
+        );
+
     }
 
     private static LocalizableString L(string name)

@@ -2,13 +2,9 @@
 @using Microsoft.AspNetCore.Mvc.Localization
 @using Starshine.Admin.Localization
 @using Starshine.Admin.Web.Pages.Account
-@using Volo.Abp.AspNetCore.Mvc.UI.Theming
-@inject IThemeManager ThemeManager
 @inject IHtmlLocalizer<AdminResource> L
 @model ManageModel
-@{
-    Layout = ThemeManager.CurrentTheme.GetApplicationLayout();
-}
+
 @section scripts {
     <abp-script-bundle name="@typeof(ManageModel).FullName" />
 }

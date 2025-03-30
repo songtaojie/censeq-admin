@@ -21,6 +21,8 @@ using Volo.Abp.OpenIddict;
 using Volo.Abp.Identity.AspNetCore;
 using Starshine.Admin.Web;
 using OpenIddict.Validation.AspNetCore;
+using Volo.Abp.SecurityLog;
+using Starshine.Abp.AspNetCore;
 
 namespace Starshine.Admin;
 
@@ -34,7 +36,8 @@ namespace Starshine.Admin;
     typeof(AbpAspNetCoreSerilogModule),
     typeof(AbpIdentityAspNetCoreModule),
     typeof(StarshineSwashbuckleModule),
-    typeof(StarshineAdminWebModule)
+    typeof(StarshineAdminWebModule),
+    typeof(StarshineAspNetCoreModule)
 )]
 public class AdminHttpApiHostModule : AbpModule
 {
@@ -66,7 +69,10 @@ public class AdminHttpApiHostModule : AbpModule
         ConfigureAuthentication(context);
         ConfigureUrls(configuration);
         ConfigureVirtualFileSystem(context);
-        ConfigureCors(context, configuration);
+        //Configure<AbpSecurityLogOptions>(options =>
+        //{
+        //    options.IsEnabled = false;
+        //});
     }
 
     private static void ConfigureAuthentication(ServiceConfigurationContext context)
@@ -114,26 +120,6 @@ public class AdminHttpApiHostModule : AbpModule
         }
     }
 
-    private void ConfigureCors(ServiceConfigurationContext context, IConfiguration configuration)
-    {
-        context.Services.AddCors(options =>
-        {
-            options.AddDefaultPolicy(builder =>
-            {
-                builder
-                    .WithOrigins(configuration["App:CorsOrigins"]?
-                        .Split(",", StringSplitOptions.RemoveEmptyEntries)
-                        .Select(o => o.RemovePostFix("/"))
-                        .ToArray() ?? Array.Empty<string>())
-                    .WithAbpExposedHeaders()
-                    .SetIsOriginAllowedToAllowWildcardSubdomains()
-                    .AllowAnyHeader()
-                    .AllowAnyMethod()
-                    .AllowCredentials();
-            });
-        });
-    }
-
     public override void OnApplicationInitialization(ApplicationInitializationContext context)
     {
         var app = context.GetApplicationBuilder();
@@ -154,7 +140,7 @@ public class AdminHttpApiHostModule : AbpModule
         app.UseCorrelationId();
         app.UseStaticFiles();
         app.UseRouting();
-        app.UseCors();
+        //app.UseCors();
         app.UseAuthentication();
         app.UseAbpOpenIddictValidation();
 
