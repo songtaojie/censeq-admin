@@ -22,4 +22,10 @@
     <PackageReference Include="Volo.Abp.SettingManagement.Application" Version="8.3.4" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="Account\Emailing\Templates\PasswordResetLink.tpl">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>

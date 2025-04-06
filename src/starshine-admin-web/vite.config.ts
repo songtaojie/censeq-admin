@@ -16,11 +16,13 @@ const alias: Record<string, string> = {
 
 const viteConfig = defineConfig((mode: ConfigEnv) => {
 	const env = loadEnv(mode.mode, process.cwd());
+	console.log('mode.command ' + mode.command);
 	return {
 		plugins: [vue(), vueSetupExtend(), viteCompression(), JSON.parse(env.VITE_OPEN_CDN) ? buildConfig.cdn() : null],
 		root: process.cwd(),
 		resolve: { alias },
-		base: mode.command === 'serve' ? './' : env.VITE_PUBLIC_PATH,
+		// base: mode.command === 'serve' ? './' : env.VITE_PUBLIC_PATH,
+		base: '/',
 		optimizeDeps: {
 			include: ['element-plus/es/locale/lang/zh-cn', 'element-plus/es/locale/lang/en', 'element-plus/es/locale/lang/zh-tw'],
 			exclude: ['vue-demi'],
@@ -53,7 +55,7 @@ const viteConfig = defineConfig((mode: ConfigEnv) => {
 						}
 					},
 				},
-				...(JSON.parse(env.VITE_OPEN_CDN) ? {external:  buildConfig.external} : {}),
+				...(JSON.parse(env.VITE_OPEN_CDN) ? { external: buildConfig.external } : {}),
 			},
 		},
 		css: { preprocessorOptions: { css: { charset: false } } },

@@ -1,8 +1,7 @@
-﻿using Starshine.Admin;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Volo.Abp.UI.Navigation.Urls;
 
-namespace Starshine.Abp.Account.Emailing;
+namespace Starshine.Admin.Account.Emailing;
 
 public static class AppUrlProviderAccountExtensions
 {

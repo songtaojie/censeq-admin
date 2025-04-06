@@ -88,11 +88,11 @@ public class AdminHttpApiHostModule : AbpModule
     {
         Configure<AppUrlOptions>(options =>
         {
-            options.Applications["MVC"].RootUrl = configuration["App:SelfUrl"];
+            options.Applications[AdminConsts.AppName].RootUrl = configuration["App:SelfUrl"];
             options.RedirectAllowedUrls.AddRange(configuration["App:RedirectAllowedUrls"]?.Split(',') ?? Array.Empty<string>());
 
             options.Applications["Angular"].RootUrl = configuration["App:ClientUrl"];
-            options.Applications["Angular"].Urls[AdminConsts.PasswordReset] = "account/reset-password";
+            options.Applications[AdminConsts.AppName].Urls[AdminConsts.PasswordReset] = "account/reset-password";
         });
     }
 
@@ -136,7 +136,6 @@ public class AdminHttpApiHostModule : AbpModule
         //{
         //    app.UseErrorPage();
         //}
-
         app.UseCorrelationId();
         app.UseStaticFiles();
         app.UseRouting();
@@ -154,6 +153,7 @@ public class AdminHttpApiHostModule : AbpModule
 
         app.UseAuditing();
         app.UseAbpSerilogEnrichers();
+        
         app.UseConfiguredEndpoints();
     }
 }

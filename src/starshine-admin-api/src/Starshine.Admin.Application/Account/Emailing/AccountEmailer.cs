@@ -4,12 +4,15 @@ using System.Text.Encodings.Web;
 using System.Threading.Tasks;
 using System.Web;
 using Microsoft.Extensions.Localization;
+using Starshine.Admin.Account.Emailing;
+using Starshine.Admin.Account.Emailing.Templates;
 using Starshine.Admin.Localization;
-using Volo.Abp.Account.Emailing.Templates;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Emailing;
+using Volo.Abp.Emailing.Smtp;
 using Volo.Abp.Identity;
 using Volo.Abp.MultiTenancy;
+using Volo.Abp.Security.Encryption;
 using Volo.Abp.TextTemplating;
 using Volo.Abp.UI.Navigation.Urls;
 
@@ -22,19 +25,25 @@ public class AccountEmailer : IAccountEmailer, ITransientDependency
     protected IStringLocalizer<AdminResource> StringLocalizer { get; }
     protected IAppUrlProvider AppUrlProvider { get; }
     protected ICurrentTenant CurrentTenant { get; }
+    protected ISmtpEmailSenderConfiguration SmtpConfiguration { get; }
+    protected IStringEncryptionService StringEncryptionService { get; }
 
     public AccountEmailer(
         IEmailSender emailSender,
         ITemplateRenderer templateRenderer,
         IStringLocalizer<AdminResource> stringLocalizer,
         IAppUrlProvider appUrlProvider,
-        ICurrentTenant currentTenant)
+        ICurrentTenant currentTenant,
+        ISmtpEmailSenderConfiguration smtpEmailSenderConfiguration,
+        IStringEncryptionService stringEncryptionService)
     {
         EmailSender = emailSender;
         StringLocalizer = stringLocalizer;
         AppUrlProvider = appUrlProvider;
         CurrentTenant = currentTenant;
         TemplateRenderer = templateRenderer;
+        SmtpConfiguration = smtpEmailSenderConfiguration;
+        StringEncryptionService = stringEncryptionService;
     }
 
     public virtual async Task SendPasswordResetLinkAsync(
@@ -49,8 +58,11 @@ public class AccountEmailer : IAccountEmailer, ITransientDependency
         var url = await AppUrlProvider.GetResetPasswordUrlAsync(appName);
 
         //TODO: Use AbpAspNetCoreMultiTenancyOptions to get the key
-        var link = $"{url}?userId={user.Id}&{TenantResolverConsts.DefaultTenantKey}={user.TenantId}&resetToken={UrlEncoder.Default.Encode(resetToken)}";
-
+        var link = $"{url}?userId={user.Id}&resetToken={UrlEncoder.Default.Encode(resetToken)}";
+        if (user.TenantId.HasValue)
+        {
+            link += $"&{TenantResolverConsts.DefaultTenantKey}={user.TenantId}";
+        }
         if (!returnUrl.IsNullOrEmpty())
         {
             link += "&returnUrl=" + NormalizeReturnUrl(returnUrl);
@@ -65,7 +77,7 @@ public class AccountEmailer : IAccountEmailer, ITransientDependency
             AccountEmailTemplates.PasswordResetLink,
             new { link = link }
         );
-
+        var pass = await SmtpConfiguration.GetPasswordAsync();
         await EmailSender.SendAsync(
             user.Email,
             StringLocalizer["PasswordReset"],

@@ -6,12 +6,12 @@ using Volo.Abp.Modularity;
 using Volo.Abp.PermissionManagement;
 using Volo.Abp.SettingManagement;
 using Volo.Abp.TenantManagement;
+using Volo.Abp.VirtualFileSystem;
 
 namespace Starshine.Admin;
 
 [DependsOn(
     typeof(AdminDomainModule),
-    //typeof(AbpAccountApplicationModule),
     typeof(AdminApplicationContractsModule),
     typeof(AbpIdentityApplicationModule),
     typeof(AbpPermissionManagementApplicationModule),
@@ -26,6 +26,10 @@ public class AdminApplicationModule : AbpModule
         Configure<AbpAutoMapperOptions>(options =>
         {
             options.AddMaps<AdminApplicationModule>();
+        });
+        Configure<AbpVirtualFileSystemOptions>(options =>
+        {
+            options.FileSets.AddEmbedded<AdminApplicationModule>();
         });
     }
 }

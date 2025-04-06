@@ -21,7 +21,7 @@ using Volo.Abp.Settings;
 using Volo.Abp.Validation;
 using IdentityUser = Volo.Abp.Identity.IdentityUser;
 
-namespace Starshine.Admin.Web.Pages.Account.Login;
+namespace Starshine.Admin.Web.Pages.Account;
 
 public class LoginModel : AccountPageModel
 {

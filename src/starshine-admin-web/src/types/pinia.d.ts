@@ -12,7 +12,7 @@ declare interface UserInfosState<T = any> {
 		userName: string;
 		[key: string]: T;
 	};
-	constList: T[],
+	constList: T[];
 }
 
 // 路由缓存列表
@@ -41,7 +41,7 @@ declare interface RoutesListState<T = any> {
 
 // 布局配置
 declare interface ThemeConfigState {
-	themeConfig:{
+	themeConfig: {
 		isDrawer: boolean;
 		primary: string;
 		topBar: string;
@@ -88,14 +88,26 @@ declare interface ThemeConfigState {
 		globalViceTitleMsg: string;
 		globalI18n: string;
 		globalComponentSize: string;
-	}
+	};
 }
 
 // 系统配置
 declare interface SystemConfigState {
-	sysConfig:{
+	sysConfig: {
 		secondVerEnabled: boolean;
 		captchaEnabled: boolean;
 		watermarkEnabled: boolean;
-	}
+	};
+}
+
+// 用户授权配置
+declare interface AuthInfo {
+	accessToken: string | undefined;
+	expiresAt: number;
+	idToken: string | undefined;
+	refreshToken: string | undefined;
+	tokenType: string | undefined;
+	expired: boolean;
+	expiresIn: number;
+	scopes: Array<string | undefined> | undefined;
 }

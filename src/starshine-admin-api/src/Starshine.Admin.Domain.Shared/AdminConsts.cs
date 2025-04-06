@@ -2,6 +2,8 @@
 
 public static class AdminConsts
 {
+    public const string AppName = "Mvc";
+
     public const string DbTablePrefix = "App";
 
     public const string DbSchema = null;

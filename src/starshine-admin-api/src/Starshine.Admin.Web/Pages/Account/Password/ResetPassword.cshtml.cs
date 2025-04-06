@@ -16,7 +16,7 @@ public class ResetPasswordModel : AccountPageModel
     [Required]
     [HiddenInput]
     [BindProperty(SupportsGet = true)]
-    public Guid UserId { get; set; }
+    public Guid? UserId { get; set; }
 
     [Required]
     [HiddenInput]
@@ -54,7 +54,7 @@ public class ResetPasswordModel : AccountPageModel
         InvalidToken = !await AccountAppService.VerifyPasswordResetTokenAsync(
             new VerifyPasswordResetTokenInput
             {
-                UserId = UserId,
+                UserId = UserId.Value,
                 ResetToken = ResetToken
             }
         );
@@ -71,7 +71,7 @@ public class ResetPasswordModel : AccountPageModel
             await AccountAppService.ResetPasswordAsync(
                 new ResetPasswordInput
                 {
-                    UserId = UserId,
+                    UserId = UserId.Value,
                     ResetToken = ResetToken,
                     Password = Password
                 }
@@ -81,13 +81,11 @@ public class ResetPasswordModel : AccountPageModel
         {
             if (!string.IsNullOrWhiteSpace(e.Message))
             {
-                Alerts.Warning(GetLocalizeExceptionMessage(e));
+                ModelState.AddModelError("SubmitError", GetLocalizeExceptionMessage(e));
                 return Page();
             }
-
-            throw;
         }
-        catch (AbpValidationException e)
+        catch (AbpValidationException)
         {
             return Page();
         }

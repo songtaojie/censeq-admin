@@ -1,7 +1,7 @@
-﻿using System.ComponentModel.DataAnnotations;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Starshine.Admin.Dtos;
+using System.ComponentModel.DataAnnotations;
+using System.Threading.Tasks;
 using Volo.Abp;
 using Volo.Abp.Identity;
 using Volo.Abp.Validation;
@@ -37,7 +37,7 @@ public class ForgotPasswordModel : AccountPageModel
                 new SendPasswordResetCodeInput
                 {
                     Email = Email,
-                    AppName = "MVC", //TODO: Const!
+                    AppName = AdminConsts.AppName, //TODO: Const!
                     ReturnUrl = ReturnUrl,
                     ReturnUrlHash = ReturnUrlHash
                 }
@@ -45,13 +45,12 @@ public class ForgotPasswordModel : AccountPageModel
         }
         catch (UserFriendlyException e)
         {
-            Alerts.Danger(GetLocalizeExceptionMessage(e));
+            ModelState.AddModelError(string.Empty, GetLocalizeExceptionMessage(e));
             return Page();
         }
 
 
-        return RedirectToPage(
-            "./PasswordResetLinkSent",
+        return RedirectToPage("./PasswordResetLinkSent",
             new
             {
                 returnUrl = ReturnUrl,

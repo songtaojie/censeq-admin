@@ -20,7 +20,7 @@ using Volo.Abp.Settings;
 using Volo.Abp.Validation;
 using IdentityUser = Volo.Abp.Identity.IdentityUser;
 
-namespace Starshine.Admin.Web.Pages.Account.Register;
+namespace Starshine.Admin.Web.Pages.Account;
 
 public class RegisterModel : AccountPageModel
 {
@@ -73,8 +73,7 @@ public class RegisterModel : AccountPageModel
             {
                 return await OnPostExternalLogin(ExternalLoginScheme);
             }
-
-            Alerts.Warning(L["SelfRegistrationDisabledMessage"]);
+            ModelState.AddModelError(string.Empty, L["SelfRegistrationDisabledMessage"]);
         }
 
         await TrySetEmailAsync();
@@ -144,7 +143,7 @@ public class RegisterModel : AccountPageModel
         }
         catch (BusinessException e)
         {
-            Alerts.Danger(GetLocalizeExceptionMessage(e));
+            ModelState.AddModelError(string.Empty, GetLocalizeExceptionMessage(e));
             return Page();
         }
     }

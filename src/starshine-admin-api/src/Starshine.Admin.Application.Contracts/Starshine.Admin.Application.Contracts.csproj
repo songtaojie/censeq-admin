@@ -5,7 +5,7 @@
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
     <Nullable>enable</Nullable>
-    <RootNamespace>Starshine.Admin.Application.Contracts</RootNamespace>
+    <RootNamespace>Starshine.Admin</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>

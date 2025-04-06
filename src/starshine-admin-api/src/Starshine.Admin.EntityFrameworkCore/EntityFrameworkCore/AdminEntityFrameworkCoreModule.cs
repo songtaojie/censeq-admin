@@ -16,6 +16,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Volo.Abp.Auditing;
 using Volo.Abp.SecurityLog;
+using Volo.Abp.SettingManagement;
 
 namespace Starshine.Admin.EntityFrameworkCore;
 
@@ -55,6 +56,5 @@ public class AdminEntityFrameworkCoreModule : AbpModule
                 dbContext.UseDynamicSql(configuration);
             });
         });
-        
     }
 }

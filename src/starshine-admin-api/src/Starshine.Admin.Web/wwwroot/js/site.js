@@ -1,4 +1,7 @@
-﻿// Please see documentation at https://learn.microsoft.com/aspnet/core/client-side/bundling-and-minification
-// for details on configuring this project to bundle and minify static web assets.
-
-// Write your JavaScript code.
+﻿$(function () {
+    var toastEl = $("#errorToast");
+    if (toastEl.length > 0) {
+        var toast = new bootstrap.Toast(toastEl[0], { autohide: true, delay: 3000 });
+        toast.show();
+    }
+});

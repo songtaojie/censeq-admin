@@ -1,12 +1,11 @@
-﻿@page "/Account/Login"
+﻿@page "/account/login"
 @using Microsoft.AspNetCore.Mvc.Localization
 @using Starshine.Admin.Localization
 @using Starshine.Admin.Settings
 @using Starshine.Admin.Web.Pages.Account;
-@using Starshine.Admin.Web.Pages.Account.Login
 @using Volo.Abp.Identity;
 @using Volo.Abp.Settings
-@model Starshine.Admin.Web.Pages.Account.Login.LoginModel
+@model Starshine.Admin.Web.Pages.Account.LoginModel
 @inject IHtmlLocalizer<AdminResource> L
 @inject Volo.Abp.Settings.ISettingProvider SettingProvider
 
@@ -15,8 +14,8 @@
     <link rel="stylesheet" href="~/css/hx/hx.login.bg.css" asp-append-version="true" />
 }
 
-<div class="login-container d-flex h-100">
-    <div class="w-50 login-left">
+<div class="login-container d-flex w-100 h-100">
+    <div class="login-left w-100 w-xl-50 d-none d-sm-flex flex-column">
         <div class="d-flex align-items-center position-absolute login-left-logo">
             <img src="\images\logo.png" />
             <div class="d-flex flex-column ms-2">
@@ -24,31 +23,36 @@
                 <span class="fs-7 fw-bold text-white pt-1">站在巨人肩膀上的 .NET 通用权限开发框架</span>
             </div>
         </div>
-        <partial name="LoginCarousel" />
+        <partial name="./Components/Login/LoginCarousel" />
     </div>
-    <div class="d-flex w-50 login-right">
-        <div class="login-right-warp m-auto">
+   
+    <div class="d-flex login-right flex-xl-grow-1 top-sm-50 start-sm-50 position-sm-absolute position-xl-relative top-xl-0 start-xl-0 bg-white rounded
+          translate-sm-middle translate-xl-none w-100 h-100 w-sm-auto h-sm-auto ">
+        <div class="login-right-warp pt-5 m-sm-auto pt-sm-0">
             <span class="login-right-warp-one"></span>
             <span class="login-right-warp-two"></span>
             <div class="login-right-warp-main d-flex flex-column h-100">
                 <div class="login-right-warp-main-title text-center fs-2 fw-bold">@L["Login"]</div>
-                <div class="px-5 pb-5">
+                <partial name="_ValidationSummary" />
+                <div class="px-5 flex-fill d-flex flex-column">
                     @if (Model.EnableLocalLogin)
                     {
                         <form method="post" class="row needs-validation" novalidate>
-                            <div class="row mb-4  col-12">
+                            <div class="row mb-4 col-12">
                                 <div class="input-group">
-                                    <i class="fa-solid fa-user input-group-text d-flex align-self-center h-100"></i>
-                                    <input asp-for="LoginInput.UserNameOrEmailAddress" placeholder="@Html.DisplayNameFor(m => m.LoginInput.UserNameOrEmailAddress)" class="form-control" />
+                                    <span class="input-group-text"><i class="fa-solid fa-user"></i></span>
+                                    <input asp-for="LoginInput.UserNameOrEmailAddress" value="songtaojie" placeholder="@Html.DisplayNameFor(m => m.LoginInput.UserNameOrEmailAddress)" class="form-control" />
                                 </div>
                                 <span asp-validation-for="LoginInput.UserNameOrEmailAddress" class="text-danger"></span>
                             </div>
 
                             <div class="row mb-4  col-12">
                                 <div class="input-group">
-                                    <i class="fa-solid fa-lock input-group-text d-flex align-self-center h-100"></i>
-                                    <input type="password" placeholder="@Html.DisplayNameFor(m => m.LoginInput.Password)" class="form-control" autocomplete="new-password" maxlength="@IdentityUserConsts.MaxPasswordLength" asp-for="LoginInput.Password" />
-                                    <button class="btn btn-secondary" type="button" id="PasswordVisibilityButton"><i class="fa fa-eye-slash" aria-hidden="true"></i></button>
+                                    <span class="input-group-text"><i class="fa-solid fa-lock"></i></span>
+                                    <input type="password" value="S1q2w3e*" placeholder="@Html.DisplayNameFor(m => m.LoginInput.Password)" class="form-control" autocomplete="new-password" maxlength="@IdentityUserConsts.MaxPasswordLength" asp-for="LoginInput.Password" />
+                                    <button class="btn btn-secondary" type="button" id="PasswordVisibilityButton">
+                                        <i class="fa fa-eye-slash" aria-hidden="true" ></i>
+                                    </button>
                                 </div>
                                 <span asp-validation-for="LoginInput.Password" class="text-danger"></span>
                             </div>
@@ -74,24 +78,26 @@
                         </form>
                     }
 
-                    <div class="row mb-3 col-12">
+                    <div class="row mb-4 col-12 z-2">
                         <div class="d-flex justify-content-end">
                             @if (Model.EnableLocalLogin)
                             {
-                                <a asp-page="/account/forgot-password" asp-route-returnUrl="@Model.ReturnUrl" asp-route-returnUrlHash="@Model.ReturnUrlHash">@L["ForgotPassword"]</a>
-                                <a asp-page="./forgot-password" asp-route-returnUrl="@Model.ReturnUrl" asp-route-returnUrlHash="@Model.ReturnUrlHash">@L["ForgotPassword"]</a>
-                                <a href="@Url.Page("/account/forgot-password",null, new {returnUrl = Model.ReturnUrl, returnUrlHash = Model.ReturnUrlHash})">@L["ForgotPassword"]</a>
+                                <a href="@Url.Page("./Password/ForgotPassword", new { returnUrl = Model.ReturnUrl, returnUrlHash = Model.ReturnUrlHash })">
+                                    @L["ForgotPassword"]
+                                </a>
                             }
                             @if (Model.IsSelfRegistrationEnabled)
                             {
                                 <strong>
                                     @L["AreYouANewUser"]
-                                    <a href="@Url.Page("/account/Register", new {returnUrl = Model.ReturnUrl, returnUrlHash = Model.ReturnUrlHash})" class="text-decoration-none">@L["Register"]</a>
+                                    <a asp-page="./Register" asp-route-returnUrl="@Model.ReturnUrl" asp-route-returnUrlHash="@Model.ReturnUrlHash" class="text-decoration-none">@L["Register"]</a>
                                 </strong>
                             }
                         </div>
                     </div>
-
+                    <div class="row col-12 fs-7 text-secondary mt-4 mb-auto fs-6 pb-4">
+                        * 温馨提示：建议使用谷歌、Microsoft Edge，版本 79.0.1072.62 及以上浏览器，360浏览器请使用极速模式
+                    </div>
                 </div>
             </div>
         </div>

@@ -38,16 +38,17 @@ declare module 'vue-router' {
  * @returns 返回路由菜单数据
  */
 export const dynamicRoutes: Array<RouteRecordRaw> = [
-	{
-		path: '/',
-		name: '/',
-		component: () => import('/@/layout/index.vue'),
-		redirect: '/dashboard/home',
-		meta: {
-			isKeepAlive: true,
-		},
-		children: [],
-	},
+	// {
+	// 	path: '/',
+	// 	name: '/',
+	// 	component: () => import('/@/layout/index.vue'),
+	// 	redirect: '/dashboard/home',
+	// 	meta: {
+	// 		isKeepAlive: true,
+	// 		requireAuth: true,
+	// 	},
+	// 	children: [],
+	// },
 	{
 		path: '/platform/job/dashboard',
 		name: 'jobDashboard',
@@ -97,11 +98,36 @@ export const notFoundAndNoPower = [
  */
 export const staticRoutes: Array<RouteRecordRaw> = [
 	{
+		path: '/',
+		name: '/',
+		component: () => import('/@/layout/index.vue'),
+		// redirect: '/dashboard/home',
+		meta: {
+			isKeepAlive: true,
+			requireAuth: true,
+		},
+		children: [],
+	},
+	{
 		path: '/login',
 		name: 'login',
 		component: () => import('/@/views/login/index.vue'),
 		meta: {
 			title: '登录',
+		},
+	},
+	{
+		path: '/callback',
+		name: 'callback',
+		component: () => import('/@/views/callback.vue'),
+		meta: {
+			isKeepAlive: true,
+			requireAuth: false,
+		},
+		children: [],
+		beforeEnter: (to) => {
+			debugger;
+			console.log(to);
 		},
 	},
 	/**

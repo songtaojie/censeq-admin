@@ -1,7 +1,7 @@
 ﻿$(function () {
     $("#PasswordVisibilityButton").click(function (e) {
-        let button = $(this);
-        let passwordInput = button.parent().find("input");
+        let icon = $(this);
+        let passwordInput = icon.parent().find("input");
         if (!passwordInput) {
             return;
         }
@@ -13,10 +13,7 @@
             passwordInput.attr("type", "password");
         }
 
-        let icon = button.find("i");
-        if (icon) {
-            icon.toggleClass("fa-eye-slash").toggleClass("fa-eye");
-        }
+        icon.toggleClass("fa-eye-slash").toggleClass("fa-eye");
     });
 
     $("input").on("blur", function () {

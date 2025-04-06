@@ -22,6 +22,8 @@ using Starshine.Admin.Consts;
 using Volo.Abp.OpenIddict;
 using Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic;
 using Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic.Bundling;
+using Microsoft.AspNetCore.Routing;
+using Microsoft.AspNetCore.Builder;
 
 namespace Starshine.Admin.Web;
 
@@ -68,7 +70,7 @@ public class StarshineAdminWebModule : AbpModule
         });
 
         ConfigureProfileManagementPage();
-
+        context.Services.AddRazorPages();
         context.Services.AddAutoMapperObjectMapper<StarshineAdminWebModule>();
         Configure<AbpAutoMapperOptions>(options =>
         {
@@ -78,6 +80,14 @@ public class StarshineAdminWebModule : AbpModule
         Configure<DynamicJavaScriptProxyOptions>(options =>
         {
             options.DisableModule(AccountRemoteServiceConsts.ModuleName);
+        });
+
+        Configure<AbpEndpointRouterOptions>(options =>
+        {
+            options.EndpointConfigureActions.Add(builder =>
+            {
+                builder.Endpoints.MapRazorPages();
+            });
         });
     }
 
