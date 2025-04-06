@@ -10,7 +10,9 @@ import { Session } from '/@/utils/storage';
 import { staticRoutes, notFoundAndNoPower } from '/@/router/route';
 import { initFrontEndControlRoutes } from '/@/router/frontEnd';
 import { initBackEndControlRoutes } from '/@/router/backEnd';
-import { authService } from '/@/oauth';
+import { useAuth } from '/@/stores/useAuth';
+import { useOidcAuth } from '/@/composables/useOidcAuth';
+import { computed } from 'vue';
 
 /**
  * 1、前端控制路由时：isRequestRoutes 为 false，需要写 roles，需要走 setFilterRoute 方法。
@@ -25,7 +27,10 @@ import { authService } from '/@/oauth';
 const storesThemeConfig = useThemeConfig(pinia);
 const { themeConfig } = storeToRefs(storesThemeConfig);
 const { isRequestRoutes } = themeConfig.value;
-
+const auth = useAuth();
+console.log('rooter,id', auth.$id);
+const isAuthenticated = computed(() => auth.isAuthenticated);
+const { login } = useOidcAuth();
 /**
  * 创建一个可以被 Vue 应用程序使用的路由实例
  * @method createRouter(options: RouterOptions): Router
@@ -98,13 +103,14 @@ router.beforeEach(async (to, from, next) => {
 	NProgress.configure({ showSpinner: false });
 	if (to.meta.title) NProgress.start();
 	if (to.meta.requireAuth) {
-		const isAuthenticated = authService.isAuthenticated.value;
-		if (!isAuthenticated) {
+		debugger;
+		if (!isAuthenticated.value) {
 			// 跳转登录
 			// var redirect = `/account/login/${to.path}&params=${JSON.stringify(to.query ? to.query : to.params)}`
-			await authService.signIn({ state: { target: null } });
+			await login();
 			NProgress.done();
 		} else {
+			// checkAndRenew();
 			next();
 		}
 	} else {

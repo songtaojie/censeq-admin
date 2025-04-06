@@ -1,27 +1,17 @@
-// composables/useAuth.ts
-import { useAuthStore } from './authInfo';
 import { storeToRefs } from 'pinia';
+import { useAuthStore } from './auth';
 
 export function useAuth() {
-	const authStore = useAuthStore();
-	const { accessToken, expired, refreshToken, tokenType } = storeToRefs(authStore);
-
-	const setAuth = authStore.setAuth;
-	const clearAuth = authStore.clearAuth;
-	const isLoggedIn = authStore.isLoggedIn;
+	const store = useAuthStore();
+	const { accessToken, expired } = storeToRefs(store);
 
 	return {
-		// state
+		$id: store.$id,
 		accessToken,
 		expired,
-		refreshToken,
-		tokenType,
-
-		// actions
-		setAuth,
-		clearAuth,
-
-		// getters
-		isLoggedIn,
+		isAuthenticated: store.isAuthenticated,
+		setAuth: store.setAuth,
+		clearAuth: store.clearAuth,
+		restoreFromStorage: store.restoreFromStorage,
 	};
 }
