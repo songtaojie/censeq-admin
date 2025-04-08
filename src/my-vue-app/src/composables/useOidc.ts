@@ -17,10 +17,11 @@ const oidcConfig: UserManagerSettings = {
 };
 
 const userManager = new UserManager(oidcConfig);
-const auth = useAuth();
-console.log('useOidc,id', auth.$id);
+
 export function useOidc() {
 	// 发起登录
+	const auth = useAuth();
+	console.log('useOidc,id', auth.$id);
 	const login = async () => {
 		await userManager.signinRedirect();
 	};
