@@ -1,8 +1,5 @@
 import { nextTick } from 'vue';
 import * as svg from '@element-plus/icons-vue';
-// import 本地样式类名数组
-import { iconfonntClassList } from '/@/theme/iconfont/font_2298093_rnp72ifj3ba.ts';
-import { fontAwesomeClassList } from '/@/theme/font-awesome/font-awesome.ts';
 
 // 获取阿里字体图标
 const getAlicdnIconfont = () => {
@@ -19,17 +16,12 @@ const getAlicdnIconfont = () => {
 			for (let i = 0; i < sheetsList.length; i++) {
 				for (let j = 0; j < sheetsList[i].cssRules.length; j++) {
 					if (sheetsList[i].cssRules[j].selectorText && sheetsList[i].cssRules[j].selectorText.indexOf('.icon-') > -1) {
-						sheetsIconList.push(`${sheetsList[i].cssRules[j].selectorText.substring(1, sheetsList[i].cssRules[j].selectorText.length).replace(/\:\:before/gi, '')}`);
+						sheetsIconList.push(
+							`${sheetsList[i].cssRules[j].selectorText.substring(1, sheetsList[i].cssRules[j].selectorText.length).replace(/\:\:before/gi, '')}`
+						);
 					}
 				}
 			}
-			// 从本地读取阿里字体
-			if (sheetsIconList.length == 0) {
-				for (let i = 0; i < iconfonntClassList.length; i++) {
-					sheetsIconList.push(iconfonntClassList[i]);
-				}
-			}
-
 			if (sheetsIconList.length > 0) resolve(sheetsIconList);
 			else reject('未获取到值，请刷新重试');
 		});
@@ -59,26 +51,25 @@ const getAwesomeIconfont = () => {
 			let sheetsList = [];
 			let sheetsIconList = [];
 			for (let i = 0; i < styles.length; i++) {
-				if (styles[i].href && styles[i].href.indexOf('netdna.bootstrapcdn.com') > -1) {
+				if (styles[i].href && styles[i].href.indexOf('https://cdn.jsdelivr.net') > -1) {
 					sheetsList.push(styles[i]);
 				}
 			}
 			for (let i = 0; i < sheetsList.length; i++) {
 				for (let j = 0; j < sheetsList[i].cssRules.length; j++) {
-					if (sheetsList[i].cssRules[j].selectorText && sheetsList[i].cssRules[j].selectorText.indexOf('.fa-') === 0 && sheetsList[i].cssRules[j].selectorText.indexOf(',') === -1) {
+					if (
+						sheetsList[i].cssRules[j].selectorText &&
+						sheetsList[i].cssRules[j].selectorText.indexOf('.fa-') === 0 &&
+						sheetsList[i].cssRules[j].selectorText.indexOf(',') === -1
+					) {
 						if (/::before/.test(sheetsList[i].cssRules[j].selectorText)) {
-							sheetsIconList.push(`${sheetsList[i].cssRules[j].selectorText.substring(1, sheetsList[i].cssRules[j].selectorText.length).replace(/\:\:before/gi, '')}`);
+							sheetsIconList.push(
+								`${sheetsList[i].cssRules[j].selectorText.substring(1, sheetsList[i].cssRules[j].selectorText.length).replace(/\:\:before/gi, '')}`
+							);
 						}
 					}
 				}
 			}
-			// 从本地读取阿里字体
-			if (sheetsIconList.length == 0) {
-				for (let i = 0; i < fontAwesomeClassList.length; i++) {
-					sheetsIconList.push(fontAwesomeClassList[i]);
-				}
-			}
-
 			if (sheetsIconList.length > 0) resolve(sheetsIconList.reverse());
 			else reject('未获取到值，请刷新重试');
 		});

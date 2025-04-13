@@ -3,16 +3,16 @@
  */
 
 // 用户信息
-declare interface UserInfosState<T = any> {
-	userInfos: {
-		authBtnList: string[];
-		photo: string;
-		roles: string[];
-		time: number;
-		userName: string;
-		[key: string]: T;
-	};
-	constList: T[];
+declare interface UserInfos<T = any> {
+	authBtnList: string[];
+	photo: string;
+	roles: string[];
+	time: number;
+	userName: string;
+	[key: string]: T;
+}
+declare interface UserInfosState {
+	userInfos: UserInfos;
 }
 
 // 路由缓存列表
@@ -75,8 +75,8 @@ declare interface ThemeConfigState {
 		isGrayscale: boolean;
 		isInvert: boolean;
 		isIsDark: boolean;
-		isWatermark: boolean;
-		watermarkText: string;
+		isWartermark: boolean;
+		wartermarkText: string;
 		tagsStyle: string;
 		animation: string;
 		columnsAsideStyle: string;
@@ -89,25 +89,4 @@ declare interface ThemeConfigState {
 		globalI18n: string;
 		globalComponentSize: string;
 	};
-}
-
-// 系统配置
-declare interface SystemConfigState {
-	sysConfig: {
-		secondVerEnabled: boolean;
-		captchaEnabled: boolean;
-		watermarkEnabled: boolean;
-	};
-}
-
-// 用户授权配置
-declare interface AuthInfo {
-	accessToken: string | undefined;
-	expiresAt: number;
-	idToken: string | undefined;
-	refreshToken: string | undefined;
-	tokenType: string | undefined;
-	expired: boolean;
-	expiresIn: number;
-	scopes: Array<string | undefined> | undefined;
 }

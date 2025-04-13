@@ -26,12 +26,12 @@
 import { onMounted, ref } from 'vue';
 import Cookies from 'js-cookie';
 import { storeToRefs } from 'pinia';
-import { useUserInfo } from '/@/stores/userInfo';
+import { useUserInfo } from '/@/composables/useUserInfo';
+import { Session } from '/@/utils/storage';
 import { frontEndsResetRoute, setAddRoute, setFilterMenuAndCacheTagsViewRoutes } from '/@/router/frontEnd';
 
 // 定义变量内容
-const storesUserInfo = useUserInfo();
-const { userInfos } = storeToRefs(storesUserInfo);
+const { userInfos, setUserInfos } = useUserInfo();
 const userAuth = ref('');
 
 // 初始化用户权限
@@ -40,11 +40,14 @@ const initUserAuth = () => {
 };
 // 用户权限改变时
 const onRadioChange = async () => {
+	// 清空之前缓存的 userInfo，防止不请求接口。
+	// stores/userInfo.ts
+	Session.remove('userInfo');
 	// 模拟数据
 	frontEndsResetRoute();
 	Cookies.set('userName', userAuth.value);
 	// 模拟切换不同权限用户
-	await storesUserInfo.setUserInfos();
+	await setUserInfos();
 	await setAddRoute();
 	setFilterMenuAndCacheTagsViewRoutes();
 };

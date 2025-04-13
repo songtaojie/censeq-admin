@@ -287,7 +287,7 @@ declare type WorkflowDrawerState<T = any> = {
  */
 // tableDemo
 declare type TableDemoPageType = {
-	page: number;
+	pageNum: number;
 	pageSize: number;
 };
 
@@ -300,10 +300,6 @@ declare type TableHeaderType = {
 	width?: string | number;
 	height?: string | number;
 	isCheck: boolean;
-	align: string;
-	headerAlign: string;
-	toolTip: boolean;
-	sortable: boolean;
 };
 
 declare type TableSearchType = {
@@ -313,39 +309,22 @@ declare type TableSearchType = {
 	required: boolean;
 	type: string;
 	options?: SelectOptionType[];
-	cascaderData?: object[];
-	cascaderProps?: object;
-	comProps?: object;
 };
 
 declare type TableDemoState = {
 	tableData: {
-		// data: EmptyObjectType[];
-		// header: TableHeaderType[];
-		columns: Object[]; //列设置，同ELTable-Column属性
+		data: EmptyObjectType[];
+		header: TableHeaderType[];
 		config: {
-			// total: number;
-			// loading: boolean;
-			isStripe: boolean;
+			total: number;
+			loading: boolean;
 			isBorder: boolean;
 			isSelection: boolean;
-			showSelection: boolean;
 			isSerialNo: boolean;
-			pageSize: number;
-			hideExport?: boolean;
-			exportFileName?: string;
-			// isOperate: boolean;
+			isOperate: boolean;
 		};
-		// actions: WorkflowDrawerLabelType[];
 		search: TableSearchType[];
 		param: EmptyObjectType;
-		defaultSort: EmptyObjectType;
+		printName: string;
 	};
 };
-
-// HTTP 作业消息（字段定义来源 Furion 的 HttpJobMessage）
-interface HttpJobMessage {
-	requestUri?: string | null;
-	httpMethod?: string | null;
-	body?: string | null;
-}

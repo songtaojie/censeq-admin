@@ -1,179 +1,146 @@
 <template>
-	<div class="sys-role-container">
-		<el-card shadow="hover" :body-style="{ paddingBottom: '0' }">
-			<el-form :model="state.queryParams" ref="queryForm" :inline="true">
-				<el-form-item label="角色名称" prop="name">
-					<el-input placeholder="角色名称" clearable @keyup.enter="handleQuery" v-model="state.queryParams.name" />
-				</el-form-item>
-				<el-form-item label="角色编码" prop="code">
-					<el-input placeholder="角色编码" clearable @keyup.enter="handleQuery" v-model="state.queryParams.code" />
-				</el-form-item>
-				<el-form-item>
-					<el-button-group>
-						<el-button type="primary" icon="ele-Search" @click="handleQuery" v-auth="'sysRole:page'"> 查询 </el-button>
-						<el-button icon="ele-Refresh" @click="resetQuery"> 重置 </el-button>
-					</el-button-group>
-				</el-form-item>
-				<el-form-item>
-					<el-button type="primary" icon="ele-Plus" @click="openAddRole" v-auth="'sysRole:add'"> 新增 </el-button>
-				</el-form-item>
-			</el-form>
-		</el-card>
-
-		<el-card class="full-table" shadow="hover" style="margin-top: 8px">
-			<el-table :data="state.roleData" style="width: 100%" v-loading="state.loading" border>
-				<el-table-column type="index" label="序号" width="55" align="center" fixed />
-				<el-table-column prop="name" label="角色名称" show-overflow-tooltip />
-				<el-table-column prop="code" label="角色编码" show-overflow-tooltip />
-				<el-table-column label="数据范围" align="center" show-overflow-tooltip>
+	<div class="system-role-container layout-padding">
+		<div class="system-role-padding layout-padding-auto layout-padding-view">
+			<div class="system-user-search mb15">
+				<el-input v-model="state.tableData.param.search" size="default" placeholder="请输入角色名称" style="max-width: 180px"> </el-input>
+				<el-button size="default" type="primary" class="ml10">
+					<el-icon>
+						<ele-Search />
+					</el-icon>
+					查询
+				</el-button>
+				<el-button size="default" type="success" class="ml10" @click="onOpenAddRole('add')">
+					<el-icon>
+						<ele-FolderAdd />
+					</el-icon>
+					新增角色
+				</el-button>
+			</div>
+			<el-table :data="state.tableData.data" v-loading="state.tableData.loading" style="width: 100%">
+				<el-table-column type="index" label="序号" width="60" />
+				<el-table-column prop="roleName" label="角色名称" show-overflow-tooltip></el-table-column>
+				<el-table-column prop="roleSign" label="角色标识" show-overflow-tooltip></el-table-column>
+				<el-table-column prop="sort" label="排序" show-overflow-tooltip></el-table-column>
+				<el-table-column prop="status" label="角色状态" show-overflow-tooltip>
 					<template #default="scope">
-						<el-tag effect="plain" v-if="scope.row.dataScope === 1">全部数据</el-tag>
-						<el-tag effect="plain" v-else-if="scope.row.dataScope === 2">本部门及以下数据</el-tag>
-						<el-tag effect="plain" v-else-if="scope.row.dataScope === 3">本部门数据</el-tag>
-						<el-tag effect="plain" v-else-if="scope.row.dataScope === 4">仅本人数据</el-tag>
-						<el-tag effect="plain" v-else-if="scope.row.dataScope === 5">自定义数据</el-tag>
+						<el-tag type="success" v-if="scope.row.status">启用</el-tag>
+						<el-tag type="info" v-else>禁用</el-tag>
 					</template>
 				</el-table-column>
-				<el-table-column prop="sort" label="排序" width="70" align="center" show-overflow-tooltip />
-				<el-table-column label="状态" width="70" align="center" show-overflow-tooltip>
+				<el-table-column prop="describe" label="角色描述" show-overflow-tooltip></el-table-column>
+				<el-table-column prop="createTime" label="创建时间" show-overflow-tooltip></el-table-column>
+				<el-table-column label="操作" width="100">
 					<template #default="scope">
-						<el-tag type="success" v-if="scope.row.status === 1">启用</el-tag>
-						<el-tag type="danger" v-else>禁用</el-tag>
-					</template>
-				</el-table-column>
-				<el-table-column prop="updateTime" label="修改时间" align="center" show-overflow-tooltip />
-				<el-table-column prop="remark" label="备注" show-overflow-tooltip />
-				<el-table-column label="操作" width="110" fixed="right" align="center" show-overflow-tooltip>
-					<template #default="scope">
-						<el-button icon="ele-Edit" size="small" text type="primary" @click="openEditRole(scope.row)" v-auth="'sysRole:update'"> 编辑 </el-button>
-						<el-dropdown>
-							<el-button icon="ele-MoreFilled" size="small" text type="primary" style="padding-left: 12px" />
-							<template #dropdown>
-								<el-dropdown-menu>
-									<el-dropdown-item icon="ele-OfficeBuilding" @click="openGrantData(scope.row)" :disabled="!auth('sysRole:grantDataScope')"> 数据范围 </el-dropdown-item>
-									<el-dropdown-item icon="ele-Delete" @click="delRole(scope.row)" divided :disabled="!auth('sysRole:delete')"> 删除角色 </el-dropdown-item>
-								</el-dropdown-menu>
-							</template>
-						</el-dropdown>
+						<el-button :disabled="scope.row.roleName === '超级管理员'" size="small" text type="primary" @click="onOpenEditRole('edit', scope.row)"
+							>修改</el-button
+						>
+						<el-button :disabled="scope.row.roleName === '超级管理员'" size="small" text type="primary" @click="onRowDel(scope.row)">删除</el-button>
 					</template>
 				</el-table-column>
 			</el-table>
 			<el-pagination
-				v-model:currentPage="state.tableParams.page"
-				v-model:page-size="state.tableParams.pageSize"
-				:total="state.tableParams.total"
-				:page-sizes="[10, 20, 50, 100]"
-				small
+				@size-change="onHandleSizeChange"
+				@current-change="onHandleCurrentChange"
+				class="mt15"
+				:pager-count="5"
+				:page-sizes="[10, 20, 30]"
+				v-model:current-page="state.tableData.param.pageNum"
 				background
-				@size-change="handleSizeChange"
-				@current-change="handleCurrentChange"
+				v-model:page-size="state.tableData.param.pageSize"
 				layout="total, sizes, prev, pager, next, jumper"
-			/>
-		</el-card>
-		<EditRole ref="editRoleRef" :title="state.editRoleTitle" />
-		<GrantData ref="grantDataRef" />
+				:total="state.tableData.total"
+			>
+			</el-pagination>
+		</div>
+		<RoleDialog ref="roleDialogRef" @refresh="getTableData()" />
 	</div>
 </template>
 
-<script lang="ts" setup name="sysRole">
-import { onMounted, onUnmounted, reactive, ref } from 'vue';
+<script setup lang="ts" name="systemRole">
+import { defineAsyncComponent, reactive, onMounted, ref } from 'vue';
 import { ElMessageBox, ElMessage } from 'element-plus';
-import mittBus from '/@/utils/mitt';
-import { auth } from '/@/utils/authFunction';
-import EditRole from './component/editRole.vue';
-import GrantData from './component/grantData.vue';
 
-import { getAPI } from '/@/utils/axios-utils';
-import { SysRoleApi } from '/@/api-services/api';
-import { SysRole } from '/@/api-services/models';
+// 引入组件
+const RoleDialog = defineAsyncComponent(() => import('/@/views/system/role/dialog.vue'));
 
-const editRoleRef = ref<InstanceType<typeof EditRole>>();
-const grantDataRef = ref<InstanceType<typeof GrantData>>();
-const state = reactive({
-	loading: false,
-	roleData: [] as Array<SysRole>,
-	queryParams: {
-		name: undefined,
-		code: undefined,
+// 定义变量内容
+const roleDialogRef = ref();
+const state = reactive<SysRoleState>({
+	tableData: {
+		data: [],
+		total: 0,
+		loading: false,
+		param: {
+			search: '',
+			pageNum: 1,
+			pageSize: 10,
+		},
 	},
-	tableParams: {
-		page: 1,
-		pageSize: 10,
-		total: 0 as any,
-	},
-	editRoleTitle: '',
 });
-
-onMounted(async () => {
-	handleQuery();
-
-	mittBus.on('submitRefresh', () => {
-		handleQuery();
-	});
-});
-
-onUnmounted(() => {
-	mittBus.off('submitRefresh');
-});
-
-// 查询操作
-const handleQuery = async () => {
-	state.loading = true;
-	let params = Object.assign(state.queryParams, state.tableParams);
-	var res = await getAPI(SysRoleApi).getSysRolePage(params);
-	state.roleData = res.data.data?.items ?? [];
-	state.tableParams.total = res.data.data?.total;
-	state.loading = false;
+// 初始化表格数据
+const getTableData = () => {
+	state.tableData.loading = true;
+	const data = [];
+	for (let i = 0; i < 20; i++) {
+		data.push({
+			roleName: i === 0 ? '超级管理员' : '普通用户',
+			roleSign: i === 0 ? 'admin' : 'common',
+			describe: `测试角色${i + 1}`,
+			sort: i,
+			status: true,
+			createTime: new Date().toLocaleString(),
+		});
+	}
+	state.tableData.data = data;
+	state.tableData.total = state.tableData.data.length;
+	setTimeout(() => {
+		state.tableData.loading = false;
+	}, 500);
 };
-
-// 重置操作
-const resetQuery = () => {
-	state.queryParams.name = undefined;
-	state.queryParams.code = undefined;
-	handleQuery();
+// 打开新增角色弹窗
+const onOpenAddRole = (type: string) => {
+	roleDialogRef.value.openDialog(type);
 };
-
-// 打开新增页面
-const openAddRole = () => {
-	state.editRoleTitle = '添加角色';
-	editRoleRef.value?.openDialog({});
+// 打开修改角色弹窗
+const onOpenEditRole = (type: string, row: Object) => {
+	roleDialogRef.value.openDialog(type, row);
 };
-
-// 打开编辑页面
-const openEditRole = async (row: any) => {
-	state.editRoleTitle = '编辑角色';
-	editRoleRef.value?.openDialog(row);
-};
-
-// 打开授权数据范围页面
-const openGrantData = (row: any) => {
-	grantDataRef.value?.openDialog(row);
-};
-
-// 删除
-const delRole = (row: any) => {
-	ElMessageBox.confirm(`确定删角色：【${row.name}】?`, '提示', {
-		confirmButtonText: '确定',
+// 删除角色
+const onRowDel = (row: RowRoleType) => {
+	ElMessageBox.confirm(`此操作将永久删除角色名称：“${row.roleName}”，是否继续?`, '提示', {
+		confirmButtonText: '确认',
 		cancelButtonText: '取消',
 		type: 'warning',
 	})
-		.then(async () => {
-			await getAPI(SysRoleApi).deleteSysRole({ id: row.id });
-			handleQuery();
+		.then(() => {
+			getTableData();
 			ElMessage.success('删除成功');
 		})
 		.catch(() => {});
 };
-
-// 改变页面容量
-const handleSizeChange = (val: number) => {
-	state.tableParams.pageSize = val;
-	handleQuery();
+// 分页改变
+const onHandleSizeChange = (val: number) => {
+	state.tableData.param.pageSize = val;
+	getTableData();
 };
-
-// 改变页码序号
-const handleCurrentChange = (val: number) => {
-	state.tableParams.page = val;
-	handleQuery();
+// 分页改变
+const onHandleCurrentChange = (val: number) => {
+	state.tableData.param.pageNum = val;
+	getTableData();
 };
+// 页面加载时
+onMounted(() => {
+	getTableData();
+});
 </script>
+
+<style scoped lang="scss">
+.system-role-container {
+	.system-role-padding {
+		padding: 15px;
+		.el-table {
+			flex: 1;
+		}
+	}
+}
+</style>

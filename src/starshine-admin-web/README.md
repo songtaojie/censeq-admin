@@ -32,7 +32,7 @@
 
 #### ⛱️ 线上预览
 
-- vue3.x 版本预览（vue-next-admin）<a href="https://lyt-top.gitee.io/vue-next-admin-preview/#/login" target="_blank">https://lyt-top.gitee.io/vue-next-admin-preview/#/login</a>
+- vue3.x 版本预览（vue-next-admin）<a href="http://vuenextadmin.ccfast.cc/ " target="_blank">http://vuenextadmin.ccfast.cc/ </a>
 - vue2.x 版本预览（vue-prev-admin）<a href="https://lyt-top.gitee.io/vue-prev-admin-preview/#/login" target="_blank">https://lyt-top.gitee.io/vue-prev-admin-preview/#/login</a>
 - vue3.x + uni-app 商城 H5（vue-next-admin-shop）<a href="https://lyt-top.gitee.io/vue-next-admin-shop-preview" target="_blank">https://lyt-top.gitee.io/vue-next-admin-shop-preview</a>
 
@@ -79,12 +79,21 @@ cnpm run build
 
 #### 📚 开发文档
 
-- 查看开发文档：<a href="https://lyt-top.gitee.io/vue-next-admin-doc-preview" target="_blank">vue-next-admin-doc</a>
+- 查看开发文档：<a href="https://lyt-top.gitee.io/vue-next-admin-doc-preview" target="_blank">https://lyt-top.gitee.io/vue-next-admin-doc-preview</a>
+- 查看开发文档：<a href="https://lyt-top.github.io/vue-next-admin-doc-preview/" target="_blank">https://lyt-top.github.io/vue-next-admin-doc-preview/</a>
 
+
+#### 💯 学习交流加 QQ 群
+
+> 群已满，请加以下群号，感谢老哥们支持！
+
+群号：895724688
+
+其它交流群请查看文档首页 [vueNextAdmin 解疑问](https://lyt-top.gitee.io/vue-next-admin-doc-preview/)
 
 #### 💒 集成后端
 
-- <a target="_blank" href="https://github.com/songtaojie/starshine-admin">@songtaojie starshine-admin</a>
+- <a target="_blank" href="https://gitee.com/zuohuaijun/Admin.NET">@zuohuaijun Admin.NET</a>
 - <a target="_blank" href="https://github.com/PandaGoAdmin/PandaX">@熊猫 PandaGoAdmin</a>
 - <a target="_blank" href="https://toscode.gitee.com/GionConnection/gopro_free">@甜蜜蜜 GoPro 平台</a>
 - <a target="_blank" href="https://gitee.com/GionConnection/niupi-free">@甜蜜蜜 NiuPi 平台</a>

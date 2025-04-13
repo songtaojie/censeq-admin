@@ -10,9 +10,8 @@ import { Session } from '/@/utils/storage';
 import { staticRoutes, notFoundAndNoPower } from '/@/router/route';
 import { initFrontEndControlRoutes } from '/@/router/frontEnd';
 import { initBackEndControlRoutes } from '/@/router/backEnd';
-import { useAuth } from '/@/stores/useAuth';
-import { useOidcAuth } from '/@/composables/useOidcAuth';
-import { computed } from 'vue';
+import { useOidc } from '/@/composables/useOidc';
+const excludeRoute = ['/login', '/callback', '/logout-callback'];
 
 /**
  * 1、前端控制路由时：isRequestRoutes 为 false，需要写 roles，需要走 setFilterRoute 方法。
@@ -27,17 +26,14 @@ import { computed } from 'vue';
 const storesThemeConfig = useThemeConfig(pinia);
 const { themeConfig } = storeToRefs(storesThemeConfig);
 const { isRequestRoutes } = themeConfig.value;
-const auth = useAuth();
-console.log('rooter,id', auth.$id);
-const isAuthenticated = computed(() => auth.isAuthenticated);
-const { login } = useOidcAuth();
+
 /**
  * 创建一个可以被 Vue 应用程序使用的路由实例
  * @method createRouter(options: RouterOptions): Router
  * @link 参考：https://next.router.vuejs.org/zh/api/#createrouter
  */
 export const router = createRouter({
-	history: createWebHistory('/'),
+	history: createWebHistory(),
 	/**
 	 * 说明：
 	 * 1、notFoundAndNoPower 默认添加 404、401 界面，防止一直提示 No match found for location with path 'xxx'
@@ -74,8 +70,6 @@ export function formatTwoStageRoutes(arr: any) {
 	const newArr: any = [];
 	const cacheList: Array<string> = [];
 	arr.forEach((v: any) => {
-		if (v.path == null || v.path == undefined) return;
-
 		if (v.path === '/') {
 			newArr.push({ component: v.component, name: v.name, path: v.path, redirect: v.redirect, meta: v.meta, children: [] });
 		} else {
@@ -102,86 +96,46 @@ export function formatTwoStageRoutes(arr: any) {
 router.beforeEach(async (to, from, next) => {
 	NProgress.configure({ showSpinner: false });
 	if (to.meta.title) NProgress.start();
-	if (to.meta.requireAuth) {
-		debugger;
-		if (!isAuthenticated.value) {
-			// 跳转登录
-			// var redirect = `/account/login/${to.path}&params=${JSON.stringify(to.query ? to.query : to.params)}`
+	const { login, isAuthenticated } = useOidc();
+	var isAuth = await isAuthenticated();
+	if (excludeRoute.includes(to.path) && !isAuth) {
+		next();
+		NProgress.done();
+	} else {
+		if (!isAuth) {
+			Session.clear();
+			Session.set(
+				'pre_auth_route',
+				JSON.stringify({
+					path: to.path,
+					query: to.query,
+				})
+			);
 			await login();
 			NProgress.done();
+		} else if (isAuth && excludeRoute.includes(to.path)) {
+			next('/home');
+			NProgress.done();
 		} else {
-			// checkAndRenew();
-			next();
+			const storesRoutesList = useRoutesList(pinia);
+			const { routesList } = storeToRefs(storesRoutesList);
+			if (routesList.value.length === 0) {
+				if (isRequestRoutes) {
+					// 后端控制路由：路由数据初始化，防止刷新时丢失
+					await initBackEndControlRoutes();
+					// 解决刷新时，一直跳 404 页面问题，关联问题 No match found for location with path 'xxx'
+					// to.query 防止页面刷新时，普通路由带参数时，参数丢失。动态路由（xxx/:id/:name"）isDynamic 无需处理
+					next({ path: to.path, query: to.query });
+				} else {
+					// https://gitee.com/lyt-top/vue-next-admin/issues/I5F1HP
+					await initFrontEndControlRoutes();
+					next({ path: to.path, query: to.query });
+				}
+			} else {
+				next();
+			}
 		}
-	} else {
-		next();
 	}
-	// debugger;
-	// console.log('router.beforeEach:' + JSON.stringify(to));
-	// console.log('router.beforeEach:' + to.meta.requiresAuth);
-	// if (to.meta.requireAuth) {
-	// 	console.log('router.beforeEach--auth');
-	// 	const isAuthenticated = authService.isAuthenticated.value;
-	// 	console.log('router.beforeEach--auth:' + isAuthenticated);
-	// 	if (!isAuthenticated) {
-	// 		// 跳转登录
-	// 		// var redirect = `/account/login/${to.path}&params=${JSON.stringify(to.query ? to.query : to.params)}`
-	// 		await authService.signIn({ state: { target: null } });
-	// 		NProgress.done();
-	// 	} else {
-	// 		next();
-	// 	}
-	// } else {
-	// 	console.log('router.beforeEach--noauth');
-	// 	const storesRoutesList = useRoutesList(pinia);
-	// 	const { routesList } = storeToRefs(storesRoutesList);
-	// 	if (routesList.value.length === 0) {
-	// 		if (isRequestRoutes) {
-	// 			// 后端控制路由：路由数据初始化，防止刷新时丢失
-	// 			await initBackEndControlRoutes();
-	// 			// 解决刷新时，一直跳 404 页面问题，关联问题 No match found for location with path 'xxx'
-	// 			// to.query 防止页面刷新时，普通路由带参数时，参数丢失。动态路由（xxx/:id/:name"）isDynamic 无需处理
-	// 			next({ path: to.path, query: to.query });
-	// 		} else {
-	// 			// https://gitee.com/lyt-top/vue-next-admin/issues/I5F1HP
-	// 			await initFrontEndControlRoutes();
-	// 			next({ path: to.path, query: to.query });
-	// 		}
-	// 	} else {
-	// 		next();
-	// 	}
-	// const token = Session.get('token');
-	// if (to.path === '/login' && !token) {
-	// 	next();
-	// 	NProgress.done();
-	// } else {
-	// 	if (!token) {
-	// 		next(`/login?redirect=${to.path}&params=${JSON.stringify(to.query ? to.query : to.params)}`);
-	// 		Session.clear();
-	// 		NProgress.done();
-	// 	} else if (token && to.path === '/login') {
-	// 		next('/dashboard/home');
-	// 		NProgress.done();
-	// 	} else {
-	// 		const storesRoutesList = useRoutesList(pinia);
-	// 		const { routesList } = storeToRefs(storesRoutesList);
-	// 		if (routesList.value.length === 0) {
-	// 			if (isRequestRoutes) {
-	// 				// 后端控制路由：路由数据初始化，防止刷新时丢失
-	// 				await initBackEndControlRoutes();
-	// 				// 解决刷新时，一直跳 404 页面问题，关联问题 No match found for location with path 'xxx'
-	// 				// to.query 防止页面刷新时，普通路由带参数时，参数丢失。动态路由（xxx/:id/:name"）isDynamic 无需处理
-	// 				next({ path: to.path, query: to.query });
-	// 			} else {
-	// 				// https://gitee.com/lyt-top/vue-next-admin/issues/I5F1HP
-	// 				await initFrontEndControlRoutes();
-	// 				next({ path: to.path, query: to.query });
-	// 			}
-	// 		} else {
-	// 			next();
-	// 		}
-	// 	}
-	// }
 });
 
 // 路由加载后
