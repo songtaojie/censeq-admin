@@ -54,6 +54,9 @@ export default function () {
 			}
 		});
 	};
+	const hasOwnProperty = <T extends object>(object: T, key: string | keyof T): key is keyof T => {
+		return Object.prototype.hasOwnProperty.call(object, key);
+	};
 	return {
 		percentFormat,
 		dateFormatYMD,
@@ -62,5 +65,6 @@ export default function () {
 		scaleFormat,
 		scale2Format,
 		copyText,
+		hasOwnProperty,
 	};
 }

@@ -17,6 +17,7 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Volo.Abp.Auditing;
 using Volo.Abp.SecurityLog;
 using Volo.Abp.SettingManagement;
+using Microsoft.Extensions.Logging;
 
 namespace Starshine.Admin.EntityFrameworkCore;
 
@@ -54,6 +55,12 @@ public class AdminEntityFrameworkCoreModule : AbpModule
             {
                 dbContext.DbContextOptions.UseSnakeCaseNamingConvention();
                 dbContext.UseDynamicSql(configuration);
+                // 启用详细日志记录 
+                dbContext.DbContextOptions.EnableDetailedErrors();
+                dbContext.DbContextOptions.EnableSensitiveDataLogging();
+
+                // 使用ABP的日志系统记录EF Core日志 
+                dbContext.DbContextOptions.UseLoggerFactory(context.Services.GetRequiredService<ILoggerFactory>());
             });
         });
     }

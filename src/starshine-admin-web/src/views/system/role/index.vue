@@ -59,7 +59,7 @@
 <script setup lang="ts" name="systemRole">
 import { defineAsyncComponent, reactive, onMounted, ref } from 'vue';
 import { ElMessageBox, ElMessage } from 'element-plus';
-
+import { useIdentityApi } from '/@/api/apis';
 // 引入组件
 const RoleDialog = defineAsyncComponent(() => import('/@/views/system/role/dialog.vue'));
 
@@ -80,17 +80,23 @@ const state = reactive<SysRoleState>({
 // 初始化表格数据
 const getTableData = () => {
 	state.tableData.loading = true;
+	const { page } = useIdentityApi();
 	const data = [];
-	for (let i = 0; i < 20; i++) {
-		data.push({
-			roleName: i === 0 ? '超级管理员' : '普通用户',
-			roleSign: i === 0 ? 'admin' : 'common',
-			describe: `测试角色${i + 1}`,
-			sort: i,
-			status: true,
-			createTime: new Date().toLocaleString(),
-		});
-	}
+	// for (let i = 0; i < 20; i++) {
+	// 	data.push({
+	// 		roleName: i === 0 ? '超级管理员' : '普通用户',
+	// 		roleSign: i === 0 ? 'admin' : 'common',
+	// 		describe: `测试角色${i + 1}`,
+	// 		sort: i,
+	// 		status: true,
+	// 		createTime: new Date().toLocaleString(),
+	// 	});
+	// }
+	page({
+		maxResultCount: 10,
+	}).then((data) => {
+		console.log(data);
+	});
 	state.tableData.data = data;
 	state.tableData.total = state.tableData.data.length;
 	setTimeout(() => {
