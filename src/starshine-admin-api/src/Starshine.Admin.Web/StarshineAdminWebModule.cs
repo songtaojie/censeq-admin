@@ -5,12 +5,11 @@ using Starshine.Admin.Web.Pages.Account.Components.ProfileManagementGroup.Person
 using Starshine.Admin.Web.ProfileManagement;
 using Volo.Abp.AspNetCore.Mvc.Localization;
 using Volo.Abp.AspNetCore.Mvc.UI.Bundling;
-using Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared;
 using Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.Toolbars;
 using Volo.Abp.AutoMapper;
 using Volo.Abp.ExceptionHandling;
 using Volo.Abp.Http.ProxyScripting.Generators.JQuery;
-using Volo.Abp.Identity.AspNetCore;
+using Starshine.Abp.Identity.AspNetCore;
 using Volo.Abp.Modularity;
 using Volo.Abp.ObjectExtending;
 using Volo.Abp.ObjectExtending.Modularity;
@@ -19,21 +18,19 @@ using Volo.Abp.UI.Navigation;
 using Volo.Abp.VirtualFileSystem;
 using Starshine.Admin.Localization;
 using Starshine.Admin.Consts;
-using Volo.Abp.OpenIddict;
-using Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic;
-using Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic.Bundling;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.AspNetCore.Builder;
+using Starshine.Abp.OpenIddict;
 
 namespace Starshine.Admin.Web;
 
 [DependsOn(
     typeof(AdminApplicationContractsModule),
-    typeof(AbpIdentityAspNetCoreModule),
+    typeof(StarshineIdentityAspNetCoreModule),
     typeof(AbpAutoMapperModule),
-    typeof(AbpOpenIddictAspNetCoreModule),
-    typeof(AbpExceptionHandlingModule),
-    typeof(AbpAspNetCoreMvcUiBasicThemeModule)
+    typeof(StarshineOpenIddictAspNetCoreModule),
+    typeof(AbpExceptionHandlingModule)
+    //typeof(AbpAspNetCoreMvcUiBasicThemeModule)
     )]
 public class StarshineAdminWebModule : AbpModule
 {

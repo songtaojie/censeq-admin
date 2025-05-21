@@ -6,7 +6,7 @@ dotnet ef migrations add InitialDb --project ./src/Starshine.Admin.EntityFramewo
 dotnet ef migrations script 0 InitialDb --output ./src/Starshine.Admin.EntityFrameworkCore/Migrations/Scripts/InitialDb.sql --project ./src/Starshine.Admin.EntityFrameworkCore/Starshine.Admin.EntityFrameworkCore.csproj --startup-project ./src/Starshine.Admin.HttpApi.Host/Starshine.Admin.HttpApi.Host.csproj --context StarshineAdminDbContext
 //3. 列出可用的迁移：dotnet ef migrations list
 //4. 删除上一次迁移：
-dotnet ef migrations remove --project ./Tmc.TravelControl.Infrastructure/Tmc.TravelControl.Infrastructure.csproj --startup-project ./Tmc.Obt.Api/Tmc.Obt.Api.csproj --context StarshineAdminDbContext
+dotnet ef migrations remove --project ./src/Starshine.Admin.EntityFrameworkCore/Starshine.Admin.EntityFrameworkCore.csproj --startup-project ./src/Starshine.Admin.HttpApi.Host/Starshine.Admin.HttpApi.Host.csproj --context StarshineAdminDbContext
 //5. 检查自上次迁移以来是否对模型进行了任何更改：dotnet ef migrations has-pending-model-changes
 
 dotnet ef database update --project ./Starshine.Admin.EntityFrameworkCore/Starshine.Admin.EntityFrameworkCore.csproj --startup-project ./Starshine.Admin.HttpApi.Host/Starshine.Admin.HttpApi.Host.csproj --context StarshineAdminDbContext

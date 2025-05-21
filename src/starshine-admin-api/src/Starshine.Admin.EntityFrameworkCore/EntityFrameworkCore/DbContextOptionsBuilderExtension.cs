@@ -69,7 +69,7 @@ namespace Starshine.Admin.EntityFrameworkCore
                 case "mysql":
                     context.UseMySQL(opt => opt.ConfigureMigrations());
                     break;
-                case "postgresql":
+                case "npgsql":
                     context.UseNpgsql(opt => opt.ConfigureMigrations());
                     break;
                 default:

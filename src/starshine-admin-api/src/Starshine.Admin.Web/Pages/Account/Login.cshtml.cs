@@ -15,7 +15,7 @@ using System.Threading.Tasks;
 using Volo.Abp;
 using Volo.Abp.Auditing;
 using Volo.Abp.Identity;
-using Volo.Abp.Identity.AspNetCore;
+using Starshine.Abp.Identity.AspNetCore;
 using Volo.Abp.Security.Claims;
 using Volo.Abp.Settings;
 using Volo.Abp.Validation;

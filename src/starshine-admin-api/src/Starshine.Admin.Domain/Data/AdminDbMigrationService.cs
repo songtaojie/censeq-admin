@@ -180,7 +180,7 @@ public class AdminDbMigrationService : ITransientDependency
 
         try
         {
-            Process.Start(procStartInfo);
+           var process = Process.Start(procStartInfo);
         }
         catch (Exception)
         {

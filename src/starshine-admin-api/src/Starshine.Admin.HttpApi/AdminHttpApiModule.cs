@@ -1,6 +1,7 @@
 ﻿using Localization.Resources.AbpUi;
 using Microsoft.Extensions.DependencyInjection;
 using Starshine.Admin.Localization;
+using Volo.Abp.Account;
 using Volo.Abp.AspNetCore.Mvc;
 using Volo.Abp.FeatureManagement;
 using Volo.Abp.Identity;
@@ -13,6 +14,7 @@ using Volo.Abp.TenantManagement;
 namespace Starshine.Admin;
 
 [DependsOn(
+    typeof(AbpAccountHttpApiModule),
     typeof(AdminApplicationContractsModule),
     typeof(AbpIdentityHttpApiModule),
     typeof(AbpPermissionManagementHttpApiModule),

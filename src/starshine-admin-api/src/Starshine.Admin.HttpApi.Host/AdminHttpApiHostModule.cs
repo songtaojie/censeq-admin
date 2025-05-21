@@ -1,8 +1,6 @@
 using System;
 using System.IO;
-using System.Linq;
 using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Cors;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -17,12 +15,12 @@ using Volo.Abp.Security.Claims;
 using Volo.Abp.UI.Navigation.Urls;
 using Volo.Abp.VirtualFileSystem;
 using Starshine.Abp.Swashbuckle;
-using Volo.Abp.OpenIddict;
 using Volo.Abp.Identity.AspNetCore;
-using Starshine.Admin.Web;
 using OpenIddict.Validation.AspNetCore;
-using Volo.Abp.SecurityLog;
 using Starshine.Abp.AspNetCore;
+using Starshine.Abp.Account.Web;
+using Volo.Abp.AspNetCore.Mvc.Libs;
+using Starshine.Abp.AspNetCore.Mvc.UI.Theme.Basic;
 
 namespace Starshine.Admin;
 
@@ -32,11 +30,10 @@ namespace Starshine.Admin;
     typeof(AbpAspNetCoreMultiTenancyModule),
     typeof(AdminApplicationModule),
     typeof(AdminEntityFrameworkCoreModule),
-    typeof(AbpOpenIddictAspNetCoreModule),
+    typeof(StarshineAccountWebOpenIddictModule),
+    typeof(StarshineAspNetCoreMvcUIBasicThemeModule),
     typeof(AbpAspNetCoreSerilogModule),
-    typeof(AbpIdentityAspNetCoreModule),
     typeof(StarshineSwashbuckleModule),
-    typeof(StarshineAdminWebModule),
     typeof(StarshineAspNetCoreModule)
 )]
 public class AdminHttpApiHostModule : AbpModule
@@ -69,6 +66,10 @@ public class AdminHttpApiHostModule : AbpModule
         ConfigureAuthentication(context);
         ConfigureUrls(configuration);
         ConfigureVirtualFileSystem(context);
+        Configure<AbpMvcLibsOptions>(options =>
+        {
+            options.CheckLibs = false;
+        });
         //Configure<AbpSecurityLogOptions>(options =>
         //{
         //    options.IsEnabled = false;
