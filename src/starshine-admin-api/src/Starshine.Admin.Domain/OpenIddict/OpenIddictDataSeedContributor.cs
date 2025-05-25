@@ -38,7 +38,7 @@ public class OpenIddictDataSeedContributor : IDataSeedContributor, ITransientDep
         IOpenIddictScopeRepository openIddictScopeRepository,
         IOpenIddictScopeManager scopeManager,
         IPermissionDataSeeder permissionDataSeeder,
-        IStringLocalizer<OpenIddictResponse> l )
+        IStringLocalizer<OpenIddictResponse> l)
     {
         _configuration = configuration;
         _openIddictApplicationRepository = openIddictApplicationRepository;
@@ -60,8 +60,11 @@ public class OpenIddictDataSeedContributor : IDataSeedContributor, ITransientDep
     {
         if (await _openIddictScopeRepository.FindByNameAsync("Admin") == null)
         {
-            await _scopeManager.CreateAsync(new OpenIddictScopeDescriptor {
-                Name = "Admin", DisplayName = "Admin API", Resources = { "Admin" }
+            await _scopeManager.CreateAsync(new OpenIddictScopeDescriptor
+            {
+                Name = "Admin",
+                DisplayName = "Admin API",
+                Resources = { "Admin" }
             });
         }
     }
@@ -84,28 +87,27 @@ public class OpenIddictDataSeedContributor : IDataSeedContributor, ITransientDep
         var consoleAndAngularClientId = configurationSection["Admin_App:ClientId"];
         if (!consoleAndAngularClientId.IsNullOrWhiteSpace())
         {
+            var consoleAndAngularClientRedirectUri = configurationSection["Admin_App:RedirectUri"]?.TrimEnd('/');
+            var consoleAndAngularClientClientUri = configurationSection["Admin_App:ClientUri"]?.TrimEnd('/');
             var consoleAndAngularClientRootUrl = configurationSection["Admin_App:RootUrl"]?.TrimEnd('/');
             await CreateApplicationAsync(
                 name: consoleAndAngularClientId!,
                 type: OpenIddictConstants.ClientTypes.Public,
                 consentType: OpenIddictConstants.ConsentTypes.Implicit,
-                displayName: "Console Test / Angular Application",
+                displayName: "控制台/Vue应用程序",
                 secret: null,
-                grantTypes: new List<string> {
+                grantTypes: [
                     OpenIddictConstants.GrantTypes.AuthorizationCode,
                     OpenIddictConstants.GrantTypes.Password,
                     OpenIddictConstants.GrantTypes.ClientCredentials,
                     OpenIddictConstants.GrantTypes.RefreshToken
-                },
+                ],
                 scopes: commonScopes,
-                redirectUri: consoleAndAngularClientRootUrl,
-                clientUri: consoleAndAngularClientRootUrl,
+                redirectUri: consoleAndAngularClientRedirectUri ?? consoleAndAngularClientRootUrl,
+                clientUri: consoleAndAngularClientClientUri ?? consoleAndAngularClientRootUrl,
                 postLogoutRedirectUri: consoleAndAngularClientRootUrl
             );
         }
-
-
-
 
         // Swagger Client
         var swaggerClientId = configurationSection["Admin_Swagger:ClientId"];
@@ -117,9 +119,9 @@ public class OpenIddictDataSeedContributor : IDataSeedContributor, ITransientDep
                 name: swaggerClientId!,
                 type: OpenIddictConstants.ClientTypes.Public,
                 consentType: OpenIddictConstants.ConsentTypes.Implicit,
-                displayName: "Swagger Application",
+                displayName: "Swagger应用程序",
                 secret: null,
-                grantTypes: new List<string> { OpenIddictConstants.GrantTypes.AuthorizationCode, },
+                grantTypes: [OpenIddictConstants.GrantTypes.AuthorizationCode,],
                 scopes: commonScopes,
                 redirectUri: $"{swaggerRootUrl}/swagger/oauth2-redirect.html",
                 clientUri: swaggerRootUrl
@@ -154,7 +156,8 @@ public class OpenIddictDataSeedContributor : IDataSeedContributor, ITransientDep
 
         var client = await _openIddictApplicationRepository.FindByClientIdAsync(name);
 
-        var application = new AbpApplicationDescriptor {
+        var application = new AbpApplicationDescriptor
+        {
             ClientId = name,
             ClientType = type,
             ClientSecret = secret,

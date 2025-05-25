@@ -21,6 +21,7 @@ using Starshine.Abp.AspNetCore;
 using Starshine.Abp.Account.Web;
 using Volo.Abp.AspNetCore.Mvc.Libs;
 using Starshine.Abp.AspNetCore.Mvc.UI.Theme.Basic;
+using Starshine.Abp.Account.Web.Consts;
 
 namespace Starshine.Admin;
 
@@ -89,11 +90,11 @@ public class AdminHttpApiHostModule : AbpModule
     {
         Configure<AppUrlOptions>(options =>
         {
-            options.Applications[AdminConsts.AppName].RootUrl = configuration["App:SelfUrl"];
+            options.Applications[StarshineAccountConsts.AppName].RootUrl = configuration["App:SelfUrl"];
             options.RedirectAllowedUrls.AddRange(configuration["App:RedirectAllowedUrls"]?.Split(',') ?? Array.Empty<string>());
 
             options.Applications["Angular"].RootUrl = configuration["App:ClientUrl"];
-            options.Applications[AdminConsts.AppName].Urls[AdminConsts.PasswordReset] = "account/reset-password";
+            options.Applications[StarshineAccountConsts.AppName].Urls[StarshineAccountConsts.PasswordReset] = "account/reset-password";
         });
     }
 

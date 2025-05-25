@@ -32,9 +32,14 @@ service.interceptors.request.use(
 	async (config) => {
 		// 在发送请求之前做些什么 token
 		const { isAuthenticated, getAcessToken } = useOidc();
-		var acessToken = getXsrfToken();
-		if (acessToken) {
-			config.headers!['RequestVerificationToken'] = `${acessToken}`;
+		var xsrfToken = getXsrfToken();
+		if (xsrfToken) {
+			config.headers!['RequestVerificationToken'] = `${xsrfToken}`;
+		}
+		var acessToken = await getAcessToken();
+		if(!config.headers.has('Authorization') && acessToken)
+		{
+			config.headers['Authorization'] = `Bearer ${acessToken}`;
 		}
 		// 记录中止控制信息
 		const controller = new AbortController();
