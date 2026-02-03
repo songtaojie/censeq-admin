@@ -1,0 +1,4 @@
+﻿[*.cs]
+
+# CA1860: 避免使用 'Enumerable.Any()' 扩展方法
+dotnet_diagnostic.CA1860.severity = none

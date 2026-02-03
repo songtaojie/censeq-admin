@@ -13,7 +13,7 @@ using Volo.Abp.EntityFrameworkCore;
 namespace Starshine.Admin.Migrations
 {
     [DbContext(typeof(StarshineAdminDbContext))]
-    [Migration("20250521133139_InitialDb")]
+    [Migration("20260203131533_InitialDb")]
     partial class InitialDb
     {
         /// <inheritdoc />

@@ -9,7 +9,7 @@ namespace Starshine.Admin.EntityFrameworkCore;
 
 /* This class is needed for EF Core console commands
  * (like Add-Migration and Update-Database commands) */
-public class AdminDbContextFactory : IDesignTimeDbContextFactory<StarshineAdminDbContext>
+public class AdminDesignTimeDbContextFactory : IDesignTimeDbContextFactory<StarshineAdminDbContext>
 {
     public StarshineAdminDbContext CreateDbContext(string[] args)
     {

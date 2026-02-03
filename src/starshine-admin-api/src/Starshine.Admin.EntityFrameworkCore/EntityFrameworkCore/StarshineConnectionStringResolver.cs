@@ -25,7 +25,7 @@ namespace Starshine.Admin.EntityFrameworkCore
         /// </summary>
         /// <param name="connectionStringName"></param>
         /// <returns></returns>
-        [System.Obsolete]
+        [System.Obsolete(message: "请使用ResolveAsync")]
         public override string Resolve(string? connectionStringName = null)
         {
             var connectionString = base.Resolve(connectionStringName);

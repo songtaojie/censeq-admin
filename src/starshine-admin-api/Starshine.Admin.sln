@@ -71,6 +71,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Starshine.Abp.Users.EntityF
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Starshine.Abp.Identity.HttpApi", "..\..\..\starshine-abp\modules\identity\src\Starshine.Abp.Identity.HttpApi\Starshine.Abp.Identity.HttpApi.csproj", "{14680C1A-B4C0-17D1-B30F-ED024AFDCF58}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{C8D685EC-3049-495B-B862-EF04B55CE64F}"
+	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
