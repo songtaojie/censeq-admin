@@ -3,10 +3,12 @@ using Microsoft.Extensions.DependencyInjection;
 using Starshine.Admin.Localization;
 using Volo.Abp.Account;
 using Volo.Abp.AspNetCore.Mvc;
+using Volo.Abp.AspNetCore.Mvc.Localization;
 using Volo.Abp.FeatureManagement;
 using Volo.Abp.Identity;
 using Volo.Abp.Localization;
 using Volo.Abp.Modularity;
+using Volo.Abp.PermissionManagement;
 using Volo.Abp.PermissionManagement.HttpApi;
 using Volo.Abp.SettingManagement;
 using Volo.Abp.TenantManagement;
@@ -34,6 +36,10 @@ public class AdminHttpApiModule : AbpModule
     public override void ConfigureServices(ServiceConfigurationContext context)
     {
         ConfigureLocalization();
+        Configure<AbpAspNetCoreMvcOptions>(options =>
+        {
+            options.ControllersToRemove.Add(typeof(PermissionsController));
+        });
     }
 
     private void ConfigureLocalization()

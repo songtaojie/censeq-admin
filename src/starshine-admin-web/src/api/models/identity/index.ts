@@ -1,10 +1,10 @@
-import type { ExtensibleEntityDto, ExtensibleFullAuditedEntityDto, ExtensibleObject, PagedAndSortedResultRequestDto } from '../core';
+import type { ExtensibleEntityDto, ExtensibleFullAuditedEntityDto, ExtensibleObject, PagedAndSortedRequestDto } from '../core';
 
-export interface GetIdentityRolesInput extends PagedAndSortedResultRequestDto {
+export interface GetIdentityRolesRequest extends PagedAndSortedRequestDto {
 	filter?: string;
 }
 
-export interface GetIdentityUsersInput extends PagedAndSortedResultRequestDto {
+export interface GetIdentityUsersRequest extends PagedAndSortedRequestDto {
 	filter?: string;
 }
 
@@ -17,7 +17,7 @@ export interface IdentityRoleCreateOrUpdateDtoBase extends ExtensibleObject {
 }
 
 export interface IdentityRoleDto extends ExtensibleEntityDto<string> {
-	name?: string;
+	name: string;
 	isDefault: boolean;
 	isStatic: boolean;
 	isPublic: boolean;
@@ -67,10 +67,10 @@ export interface IdentityUserUpdateRolesDto {
 	roleNames: string[];
 }
 
-export interface UserLookupCountInputDto {
+export interface UserLookupCountRequest {
 	filter?: string;
 }
 
-export interface UserLookupSearchInputDto extends PagedAndSortedResultRequestDto {
+export interface UserLookupSearchRequest extends PagedAndSortedRequestDto {
 	filter?: string;
 }

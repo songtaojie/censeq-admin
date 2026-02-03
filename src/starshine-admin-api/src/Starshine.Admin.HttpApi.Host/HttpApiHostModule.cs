@@ -15,13 +15,14 @@ using Volo.Abp.Security.Claims;
 using Volo.Abp.UI.Navigation.Urls;
 using Volo.Abp.VirtualFileSystem;
 using Starshine.Abp.Swashbuckle;
-using Volo.Abp.Identity.AspNetCore;
 using OpenIddict.Validation.AspNetCore;
 using Starshine.Abp.AspNetCore;
 using Starshine.Abp.Account.Web;
 using Volo.Abp.AspNetCore.Mvc.Libs;
 using Starshine.Abp.AspNetCore.Mvc.UI.Theme.Basic;
 using Starshine.Abp.Account.Web.Consts;
+using Volo.Abp.OpenIddict;
+using Volo.Abp.AspNetCore.Mvc;
 
 namespace Starshine.Admin;
 
@@ -37,19 +38,34 @@ namespace Starshine.Admin;
     typeof(StarshineSwashbuckleModule),
     typeof(StarshineAspNetCoreModule)
 )]
-public class AdminHttpApiHostModule : AbpModule
+public class HttpApiHostModule : AbpModule
 {
     public override void PreConfigureServices(ServiceConfigurationContext context)
     {
+        var hostingEnvironment = context.Services.GetHostingEnvironment();
+        var configuration = context.Services.GetConfiguration();
         PreConfigure<OpenIddictBuilder>(builder =>
         {
             builder.AddValidation(options =>
             {
-                options.AddAudiences("Admin");
+                //options.AddAudiences("Admin");
                 options.UseLocalServer();
                 options.UseAspNetCore();
             });
         });
+        if (!hostingEnvironment.IsDevelopment())
+        {
+            PreConfigure<AbpOpenIddictAspNetCoreOptions>(options =>
+            {
+                options.AddDevelopmentEncryptionAndSigningCertificate = false;
+            });
+            PreConfigure<OpenIddictServerBuilder>(serverBuilder =>
+            {
+                //serverBuilder.AddProductionEncryptionAndSigningCertificate("openiddict.pfx", configuration["AuthServer:CertificatePassPhrase"]!);
+                serverBuilder.SetIssuer(new Uri(configuration["AuthServer:Authority"]!));
+            });
+        }
+       
         //动态Api-改进在pre中配置，启动更快
         //PreConfigure<AbpAspNetCoreMvcOptions>(options =>
         //{
@@ -71,6 +87,7 @@ public class AdminHttpApiHostModule : AbpModule
         {
             options.CheckLibs = false;
         });
+
         //Configure<AbpSecurityLogOptions>(options =>
         //{
         //    options.IsEnabled = false;

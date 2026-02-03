@@ -1,8 +1,15 @@
-import axios, { AxiosInstance } from 'axios';
+import axios, { AxiosInstance, AxiosResponse } from 'axios';
 import { ElMessage, ElMessageBox } from 'element-plus';
 import { Session } from '/@/utils/storage';
 import qs from 'qs';
 import { useOidc } from '/@/composables/useOidc';
+
+export interface ApiResponse<T = any> {
+	code: number;
+	message: string;
+	data: T;
+}
+
 // 定义请求中止控制器映射表
 const abortControllerMap: Map<string, AbortController> = new Map();
 
@@ -56,22 +63,20 @@ service.interceptors.request.use(
 
 // 添加响应拦截器
 service.interceptors.response.use(
-	(response) => {
+	(response : AxiosResponse<any>) => {
 		// 对响应数据做点什么
-		const res = response.data;
-		if (res.code && res.code !== 0) {
+		if(response.status != 200) {
 			// `token` 过期或者账号已在别处登录
-			if (res.code === 401 || res.code === 4001) {
+			if (response.status === 401) {
 				Session.clear(); // 清除浏览器全部临时缓存
 				window.location.href = '/'; // 去登录页
 				ElMessageBox.alert('你已被登出，请重新登录', '提示', {})
 					.then(() => {})
 					.catch(() => {});
 			}
-			return Promise.reject(service.interceptors.response);
-		} else {
-			return res;
+			return Promise.reject(response);
 		}
+		return response.data;
 	},
 	(error) => {
 		// 对响应错误做点什么

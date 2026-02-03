@@ -2,10 +2,10 @@ import { Starshine } from './common';
 import commonFunction from '/@/utils/commonFunction';
 const { hasOwnProperty } = commonFunction();
 
-export class ListResultDto<T> {
+export class ListResponseDto<T> {
 	items?: T[];
 
-	constructor(initialValues: Partial<ListResultDto<T>> = {}) {
+	constructor(initialValues: Partial<ListResponseDto<T>> = {}) {
 		for (const key in initialValues) {
 			if (hasOwnProperty(initialValues, key)) {
 				this[key] = initialValues[key];
@@ -14,10 +14,10 @@ export class ListResultDto<T> {
 	}
 }
 type ValueOf<T> = T[keyof T];
-export class PagedResultDto<T> extends ListResultDto<T> {
+export class PagedResponseDto<T> extends ListResponseDto<T> {
 	totalCount?: number;
 
-	constructor(initialValues: Partial<PagedResultDto<T>> = {}) {
+	constructor(initialValues: Partial<PagedResponseDto<T>> = {}) {
 		super(initialValues);
 	}
 }
@@ -42,54 +42,54 @@ export class ExtensibleEntityDto<TKey = string> extends ExtensibleObject {
 	}
 }
 
-export class LimitedResultRequestDto {
+export class LimitedRequestDto {
 	maxResultCount = 10;
 
-	constructor(initialValues: Partial<LimitedResultRequestDto> = {}) {
+	constructor(initialValues: Partial<LimitedRequestDto> = {}) {
 		for (const key in initialValues) {
 			if (hasOwnProperty(initialValues, key) && initialValues[key] !== undefined) {
-				this[key] = initialValues[key] as ValueOf<LimitedResultRequestDto>;
+				this[key] = initialValues[key] as ValueOf<LimitedRequestDto>;
 			}
 		}
 	}
 }
 
-export class ExtensibleLimitedResultRequestDto extends ExtensibleEntityDto {
+export class ExtensibleLimitedRequestDto extends ExtensibleEntityDto {
 	maxResultCount = 10;
 
-	constructor(initialValues: Partial<ExtensibleLimitedResultRequestDto> = {}) {
+	constructor(initialValues: Partial<ExtensibleLimitedRequestDto> = {}) {
 		super(initialValues);
 	}
 }
 
-export class PagedResultRequestDto extends LimitedResultRequestDto {
+export class PagedRequestDto extends LimitedRequestDto {
 	skipCount?: number;
 
-	constructor(initialValues: Partial<PagedResultRequestDto> = {}) {
+	constructor(initialValues: Partial<PagedRequestDto> = {}) {
 		super(initialValues);
 	}
 }
 
-export class ExtensiblePagedResultRequestDto extends ExtensibleLimitedResultRequestDto {
+export class ExtensiblePagedRequestDto extends ExtensibleLimitedRequestDto {
 	skipCount?: number;
 
-	constructor(initialValues: Partial<ExtensiblePagedResultRequestDto> = {}) {
+	constructor(initialValues: Partial<ExtensiblePagedRequestDto> = {}) {
 		super(initialValues);
 	}
 }
 
-export class PagedAndSortedResultRequestDto extends PagedResultRequestDto {
+export class PagedAndSortedRequestDto extends PagedRequestDto {
 	sorting?: string;
 
-	constructor(initialValues: Partial<PagedAndSortedResultRequestDto> = {}) {
+	constructor(initialValues: Partial<PagedAndSortedRequestDto> = {}) {
 		super(initialValues);
 	}
 }
 
-export class ExtensiblePagedAndSortedResultRequestDto extends ExtensiblePagedResultRequestDto {
+export class ExtensiblePagedAndSortedRequestDto extends ExtensiblePagedRequestDto {
 	sorting?: string;
 
-	constructor(initialValues: Partial<ExtensiblePagedAndSortedResultRequestDto> = {}) {
+	constructor(initialValues: Partial<ExtensiblePagedAndSortedRequestDto> = {}) {
 		super(initialValues);
 	}
 }

@@ -1,19 +1,22 @@
-import type { GetIdentityRolesInput, IdentityRoleCreateDto, IdentityRoleDto, IdentityRoleUpdateDto } from '/@/api/models/identity';
-import type { ListResultDto, PagedResultDto } from '/@/api/models/core';
-import request from '/@/utils/request';
+import type { GetIdentityRolesRequest, IdentityRoleCreateDto, IdentityRoleDto, IdentityRoleUpdateDto } from '/@/api/models/identity';
+import type { ListResponseDto, PagedResponseDto } from '/@/api/models/core';
 import { useBaseApi } from '../base';
 var identityApi = useBaseApi('identity');
 /**
  * （不建议写成 request.post(xxx)，因为这样 post 时，无法 params 与 data 同时传参）
  *
- * 登录api接口集合
- * @method signIn 用户登录
- * @method signOut 用户退出登录
+ * 用户认证api接口集合
+ * @method createRole 创建用户角色
+ * @method getRolePage 获取角色分页列表
  */
 export function useIdentityApi() {
 	return {
-		create: (input: IdentityRoleCreateDto) => identityApi.add(input),
-		page: (input: GetIdentityRolesInput) => identityApi.page(input, 'roles'),
+		createRole: async (input: IdentityRoleCreateDto): Promise<IdentityRoleDto> => {
+			return await identityApi.add<IdentityRoleDto>('api/identity/roles',input);
+		},
+		getRolePage: async ( input: GetIdentityRolesRequest): Promise<PagedResponseDto<IdentityRoleDto>> => {
+			return await identityApi.page<IdentityRoleDto>('api/identity/roles',input);
+		},
 	};
 }
 
@@ -49,7 +52,7 @@ export function useIdentityApi() {
 // 			{ apiName: this.apiName }
 // 		);
 
-// 	getList = (input: GetIdentityRolesInput) =>
+// 	getList = (input: GetIdentityRolesRequest) =>
 // 		this.restService.request<any, PagedResultDto<IdentityRoleDto>>(
 // 			{
 // 				method: 'GET',
