@@ -1,38 +1,39 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
+using Starshine.Admin.TenantManagement;
 using Volo.Abp.Account;
 using Volo.Abp.FeatureManagement;
 using Volo.Abp.Identity;
 using Volo.Abp.Modularity;
 using Volo.Abp.PermissionManagement;
-using Volo.Abp.TenantManagement;
 using Volo.Abp.SettingManagement;
+using Volo.Abp.TenantManagement;
 using Volo.Abp.VirtualFileSystem;
 
 namespace Starshine.Admin;
 
 [DependsOn(
-    typeof(AdminApplicationContractsModule),
+    typeof(StarshineAdminApplicationContractsModule),
     typeof(AbpAccountHttpApiClientModule),
     typeof(AbpIdentityHttpApiClientModule),
     typeof(AbpPermissionManagementHttpApiClientModule),
-    typeof(AbpTenantManagementHttpApiClientModule),
     typeof(AbpFeatureManagementHttpApiClientModule),
     typeof(AbpSettingManagementHttpApiClientModule)
 )]
-public class AdminHttpApiClientModule : AbpModule
+public class StarshineAdminHttpApiClientModule : AbpModule
 {
     public const string RemoteServiceName = "Default";
 
     public override void ConfigureServices(ServiceConfigurationContext context)
     {
         context.Services.AddHttpClientProxies(
-            typeof(AdminApplicationContractsModule).Assembly,
+            typeof(StarshineAdminApplicationContractsModule).Assembly,
             RemoteServiceName
         );
 
         Configure<AbpVirtualFileSystemOptions>(options =>
         {
-            options.FileSets.AddEmbedded<AdminHttpApiClientModule>();
+            options.FileSets.AddEmbedded<StarshineAdminHttpApiClientModule>();
         });
+       
     }
 }

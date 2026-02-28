@@ -1,26 +1,29 @@
 ﻿using MailKit.Security;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.DependencyInjection.Extensions;
+using Starshine.Abp.TenantManagement;
+using Starshine.Admin.Entities;
 using Starshine.Admin.MultiTenancy;
 using Volo.Abp.AuditLogging;
 using Volo.Abp.BackgroundJobs;
-using Volo.Abp.Emailing;
+using Volo.Abp.Domain.Entities.Events.Distributed;
 using Volo.Abp.FeatureManagement;
 using Volo.Abp.Identity;
 using Volo.Abp.Localization;
 using Volo.Abp.MailKit;
 using Volo.Abp.Modularity;
 using Volo.Abp.MultiTenancy;
+using Volo.Abp.ObjectExtending;
+using Volo.Abp.ObjectExtending.Modularity;
 using Volo.Abp.OpenIddict;
 using Volo.Abp.PermissionManagement.Identity;
 using Volo.Abp.PermissionManagement.OpenIddict;
 using Volo.Abp.SettingManagement;
-using Volo.Abp.TenantManagement;
+using Volo.Abp.Threading;
 
 namespace Starshine.Admin;
 
 [DependsOn(
-    typeof(AdminDomainSharedModule),
+    typeof(AbpMultiTenancyModule),
+    typeof(StarshineAdminDomainSharedModule),
     typeof(AbpAuditLoggingDomainModule),
     typeof(AbpBackgroundJobsDomainModule),
     typeof(AbpFeatureManagementDomainModule),
@@ -29,11 +32,12 @@ namespace Starshine.Admin;
     typeof(AbpPermissionManagementDomainOpenIddictModule),
     typeof(AbpPermissionManagementDomainIdentityModule),
     typeof(AbpSettingManagementDomainModule),
-    typeof(AbpTenantManagementDomainModule),
     typeof(AbpMailKitModule)
 )]
-public class AdminDomainModule : AbpModule
+public class StarshineAdminDomainModule : AbpModule
 {
+    private static readonly OneTimeRunner OneTimeRunner = new OneTimeRunner();
+
     public override void ConfigureServices(ServiceConfigurationContext context)
     {
         Configure<AbpLocalizationOptions>(options =>
@@ -67,8 +71,25 @@ public class AdminDomainModule : AbpModule
             options.SecureSocketOption = SecureSocketOptions.SslOnConnect;
         });
 
+        Configure<AbpDistributedEntityEventOptions>(options =>
+        {
+            options.EtoMappings.Add<Tenant, TenantEto>();
+        });
+
         //#if DEBUG
         //        context.Services.Replace(ServiceDescriptor.Singleton<IEmailSender, NullEmailSender>());
         //#endif
+    }
+
+    public override void PostConfigureServices(ServiceConfigurationContext context)
+    {
+        OneTimeRunner.Run(() =>
+        {
+            ModuleExtensionConfigurationHelper.ApplyEntityConfigurationToEntity(
+                TenantManagementModuleExtensionConsts.ModuleName,
+                TenantManagementModuleExtensionConsts.EntityNames.Tenant,
+                typeof(Tenant)
+            );
+        });
     }
 }

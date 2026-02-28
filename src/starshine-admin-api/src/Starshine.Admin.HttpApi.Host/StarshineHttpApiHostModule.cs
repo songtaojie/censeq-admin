@@ -27,10 +27,10 @@ using Volo.Abp.AspNetCore.Mvc;
 namespace Starshine.Admin;
 
 [DependsOn(
-    typeof(AdminHttpApiModule),
+    typeof(StarshineAdminHttpApiModule),
     typeof(AbpAutofacModule),
     typeof(AbpAspNetCoreMultiTenancyModule),
-    typeof(AdminApplicationModule),
+    typeof(StarshineAdminApplicationModule),
     typeof(AdminEntityFrameworkCoreModule),
     typeof(StarshineAccountWebOpenIddictModule),
     typeof(StarshineAspNetCoreMvcUIBasicThemeModule),
@@ -38,7 +38,7 @@ namespace Starshine.Admin;
     typeof(StarshineSwashbuckleModule),
     typeof(StarshineAspNetCoreModule)
 )]
-public class HttpApiHostModule : AbpModule
+public class StarshineHttpApiHostModule : AbpModule
 {
     public override void PreConfigureServices(ServiceConfigurationContext context)
     {
@@ -123,16 +123,16 @@ public class HttpApiHostModule : AbpModule
         {
             Configure<AbpVirtualFileSystemOptions>(options =>
             {
-                options.FileSets.ReplaceEmbeddedByPhysical<AdminDomainSharedModule>(
+                options.FileSets.ReplaceEmbeddedByPhysical<StarshineAdminDomainSharedModule>(
                     Path.Combine(hostingEnvironment.ContentRootPath,
                         $"..{Path.DirectorySeparatorChar}Starshine.Admin.Domain.Shared"));
-                options.FileSets.ReplaceEmbeddedByPhysical<AdminDomainModule>(
+                options.FileSets.ReplaceEmbeddedByPhysical<StarshineAdminDomainModule>(
                     Path.Combine(hostingEnvironment.ContentRootPath,
                         $"..{Path.DirectorySeparatorChar}Starshine.Admin.Domain"));
-                options.FileSets.ReplaceEmbeddedByPhysical<AdminApplicationContractsModule>(
+                options.FileSets.ReplaceEmbeddedByPhysical<StarshineAdminApplicationContractsModule>(
                     Path.Combine(hostingEnvironment.ContentRootPath,
                         $"..{Path.DirectorySeparatorChar}Starshine.Admin.Application.Contracts"));
-                options.FileSets.ReplaceEmbeddedByPhysical<AdminApplicationModule>(
+                options.FileSets.ReplaceEmbeddedByPhysical<StarshineAdminApplicationModule>(
                     Path.Combine(hostingEnvironment.ContentRootPath,
                         $"..{Path.DirectorySeparatorChar}Starshine.Admin.Application"));
             });

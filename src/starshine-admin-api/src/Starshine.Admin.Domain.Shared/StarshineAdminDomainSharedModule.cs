@@ -9,7 +9,6 @@ using Volo.Abp.Modularity;
 using Volo.Abp.OpenIddict;
 using Volo.Abp.PermissionManagement;
 using Volo.Abp.SettingManagement;
-using Volo.Abp.TenantManagement;
 using Volo.Abp.Validation.Localization;
 using Volo.Abp.VirtualFileSystem;
 
@@ -22,10 +21,9 @@ namespace Starshine.Admin;
     typeof(AbpIdentityDomainSharedModule),
     typeof(AbpOpenIddictDomainSharedModule),
     typeof(AbpPermissionManagementDomainSharedModule),
-    typeof(AbpSettingManagementDomainSharedModule),
-    typeof(AbpTenantManagementDomainSharedModule)    
+    typeof(AbpSettingManagementDomainSharedModule)   
     )]
-public class AdminDomainSharedModule : AbpModule
+public class StarshineAdminDomainSharedModule : AbpModule
 {
     public override void PreConfigureServices(ServiceConfigurationContext context)
     {
@@ -37,22 +35,28 @@ public class AdminDomainSharedModule : AbpModule
     {
         Configure<AbpVirtualFileSystemOptions>(options =>
         {
-            options.FileSets.AddEmbedded<AdminDomainSharedModule>();
+            options.FileSets.AddEmbedded<StarshineAdminDomainSharedModule>();
         });
 
         Configure<AbpLocalizationOptions>(options =>
         {
             options.Resources
-                .Add<AdminResource>("zh-Hans")
+                .Add<StarshineAdminResource>("zh-Hans")
                 .AddBaseTypes(typeof(AbpValidationResource))
                 .AddVirtualJson("/Localization/Resources");
-
-            options.DefaultResourceType = typeof(AdminResource);
+            options.Resources
+                .Add<StarshineTenantManagementResource>("zh-Hans")
+                .AddBaseTypes(
+                    typeof(AbpValidationResource)
+                ).AddVirtualJson("/Localization/TenantResources");
+            options.DefaultResourceType = typeof(StarshineAdminResource);
         });
 
         Configure<AbpExceptionLocalizationOptions>(options =>
         {
-            options.MapCodeNamespace("Admin", typeof(AdminResource));
+            options.MapCodeNamespace("Starshine.Admin", typeof(StarshineAdminResource));
+            options.MapCodeNamespace("Starshine.Admin.TenantManagement", typeof(StarshineTenantManagementResource));
         });
+
     }
 }

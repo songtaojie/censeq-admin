@@ -1,8 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Volo.Abp.TenantManagement.EntityFrameworkCore;
-using Volo.Abp.TenantManagement;
+using Starshine.Admin.Consts;
+using Starshine.Admin.Entities;
 using Volo.Abp;
 using Volo.Abp.EntityFrameworkCore.Modeling;
+using static Starshine.Admin.Consts.TenantConsts;
 
 namespace Starshine.Admin.EntityFrameworkCore.Modeling
 {
@@ -38,8 +39,6 @@ namespace Starshine.Admin.EntityFrameworkCore.Modeling
                 b.Property(cs => cs.Value).IsRequired().HasMaxLength(TenantConnectionStringConsts.MaxValueLength);
                 b.ApplyObjectExtensionMappings();
             });
-
-            builder.TryConfigureObjectExtensions<TenantManagementDbContext>();
         }
     }
 }

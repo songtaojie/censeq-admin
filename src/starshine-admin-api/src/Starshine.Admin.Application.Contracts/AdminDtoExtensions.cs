@@ -1,5 +1,7 @@
-﻿using Volo.Abp.Identity;
+﻿using Starshine.Admin.TenantManagement.Dtos;
+using Volo.Abp.Identity;
 using Volo.Abp.ObjectExtending;
+using Volo.Abp.ObjectExtending.Modularity;
 using Volo.Abp.Threading;
 
 namespace Starshine.Admin;
@@ -12,17 +14,25 @@ public static class AdminDtoExtensions
     {
         OneTimeRunner.Run(() =>
         {
-                /* You can add extension properties to DTOs
-                 * defined in the depended modules.
-                 *
-                 * Example:
-                 *
-                 * ObjectExtensionManager.Instance
-                 *   .AddOrUpdateProperty<IdentityRoleDto, string>("Title");
-                 *
-                 * See the documentation for more:
-                 * https://docs.abp.io/en/abp/latest/Object-Extensions
-                 */
+            /* You can add extension properties to DTOs
+             * defined in the depended modules.
+             *
+             * Example:
+             *
+             * ObjectExtensionManager.Instance
+             *   .AddOrUpdateProperty<IdentityRoleDto, string>("Title");
+             *
+             * See the documentation for more:
+             * https://docs.abp.io/en/abp/latest/Object-Extensions
+             */
+            ModuleExtensionConfigurationHelper
+            .ApplyEntityConfigurationToApi(
+                TenantManagementModuleExtensionConsts.ModuleName,
+                TenantManagementModuleExtensionConsts.EntityNames.Tenant,
+                getApiTypes: [typeof(TenantDto)],
+                createApiTypes: [typeof(TenantCreateDto)],
+                updateApiTypes: [typeof(TenantUpdateDto)]
+            );
         });
     }
 }

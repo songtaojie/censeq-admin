@@ -7,7 +7,7 @@ namespace Starshine.Admin.DbMigrator;
 [DependsOn(
     typeof(AbpAutofacModule),
     typeof(AdminEntityFrameworkCoreModule),
-    typeof(AdminApplicationContractsModule)
+    typeof(StarshineAdminApplicationContractsModule)
     )]
 public class AdminDbMigratorModule : AbpModule
 {

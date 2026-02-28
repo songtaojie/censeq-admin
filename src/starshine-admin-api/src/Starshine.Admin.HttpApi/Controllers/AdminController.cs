@@ -9,6 +9,6 @@ public abstract class AdminController : AbpControllerBase
 {
     protected AdminController()
     {
-        LocalizationResource = typeof(AdminResource);
+        LocalizationResource = typeof(StarshineAdminResource);
     }
 }

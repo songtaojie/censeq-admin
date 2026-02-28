@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Starshine.Admin.Entities;
 using Starshine.Admin.EntityFrameworkCore.Modeling;
 using Volo.Abp.AuditLogging;
 using Volo.Abp.BackgroundJobs;
@@ -13,12 +14,10 @@ using Volo.Abp.OpenIddict.Scopes;
 using Volo.Abp.OpenIddict.Tokens;
 using Volo.Abp.PermissionManagement;
 using Volo.Abp.SettingManagement;
-using Volo.Abp.TenantManagement;
 
 namespace Starshine.Admin.EntityFrameworkCore;
 
 [ReplaceDbContext(typeof(Volo.Abp.Identity.EntityFrameworkCore.IIdentityDbContext))]
-[ReplaceDbContext(typeof(Volo.Abp.TenantManagement.EntityFrameworkCore.ITenantManagementDbContext))]
 [ReplaceDbContext(typeof(Volo.Abp.SettingManagement.EntityFrameworkCore.ISettingManagementDbContext))]
 [ReplaceDbContext(typeof(Volo.Abp.FeatureManagement.EntityFrameworkCore.IFeatureManagementDbContext))]
 [ReplaceDbContext(typeof(Volo.Abp.PermissionManagement.EntityFrameworkCore.IPermissionManagementDbContext))]
@@ -28,7 +27,6 @@ namespace Starshine.Admin.EntityFrameworkCore;
 [ConnectionStringName(ConnectionStrings.DefaultConnectionStringName)]
 public class StarshineAdminDbContext(DbContextOptions<StarshineAdminDbContext> options) : AbpDbContext<StarshineAdminDbContext>(options),
     Volo.Abp.Identity.EntityFrameworkCore.IIdentityDbContext,
-    Volo.Abp.TenantManagement.EntityFrameworkCore.ITenantManagementDbContext,
     Volo.Abp.SettingManagement.EntityFrameworkCore.ISettingManagementDbContext,
     Volo.Abp.FeatureManagement.EntityFrameworkCore.IFeatureManagementDbContext,
     Volo.Abp.PermissionManagement.EntityFrameworkCore.IPermissionManagementDbContext,

@@ -1,4 +1,4 @@
-﻿namespace Starshine.Admin;
+﻿namespace Starshine.Admin.Consts;
 
 public static class AdminConsts
 {

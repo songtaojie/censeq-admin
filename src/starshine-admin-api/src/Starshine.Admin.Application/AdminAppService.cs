@@ -12,6 +12,6 @@ public abstract class AdminAppService : ApplicationService
 {
     protected AdminAppService()
     {
-        LocalizationResource = typeof(AdminResource);
+        LocalizationResource = typeof(StarshineAdminResource);
     }
 }

@@ -10,9 +10,9 @@ namespace Starshine.Admin;
 [ExposeServices(typeof(IStarshineBrandingProvider),typeof(IBrandingProvider))]
 public class AdminBrandingProvider : DefaultStarshineBrandingProvider
 {
-    private IStringLocalizer<AdminResource> _localizer;
+    private IStringLocalizer<StarshineAdminResource> _localizer;
 
-    public AdminBrandingProvider(IStringLocalizer<AdminResource> localizer)
+    public AdminBrandingProvider(IStringLocalizer<StarshineAdminResource> localizer)
     {
         _localizer = localizer;
     }

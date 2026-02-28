@@ -3,7 +3,6 @@
 namespace Starshine.Admin.Localization;
 
 [LocalizationResourceName("Admin")]
-public class AdminResource
+public class StarshineAdminResource
 {
-
 }
