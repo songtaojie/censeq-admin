@@ -8,6 +8,8 @@ using Volo.Abp.FeatureManagement.EntityFrameworkCore;
 using Volo.Abp.FeatureManagement;
 using Volo.Abp;
 using Volo.Abp.EntityFrameworkCore.Modeling;
+using Starshine.Admin.Consts;
+using Starshine.Admin.Entities;
 
 namespace Starshine.Admin.EntityFrameworkCore.Modeling
 {

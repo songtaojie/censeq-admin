@@ -1,7 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Starshine.Admin.Entities;
 using Starshine.Admin.EntityFrameworkCore.Modeling;
-using Volo.Abp.AuditLogging;
 using Volo.Abp.BackgroundJobs;
 using Volo.Abp.Data;
 using Volo.Abp.DependencyInjection;
@@ -22,7 +21,6 @@ namespace Starshine.Admin.EntityFrameworkCore;
 [ReplaceDbContext(typeof(Volo.Abp.FeatureManagement.EntityFrameworkCore.IFeatureManagementDbContext))]
 [ReplaceDbContext(typeof(Volo.Abp.PermissionManagement.EntityFrameworkCore.IPermissionManagementDbContext))]
 [ReplaceDbContext(typeof(Volo.Abp.OpenIddict.EntityFrameworkCore.IOpenIddictDbContext))]
-[ReplaceDbContext(typeof(Volo.Abp.AuditLogging.EntityFrameworkCore.IAuditLoggingDbContext))]
 [ReplaceDbContext(typeof(Volo.Abp.BackgroundJobs.EntityFrameworkCore.IBackgroundJobsDbContext))]
 [ConnectionStringName(ConnectionStrings.DefaultConnectionStringName)]
 public class StarshineAdminDbContext(DbContextOptions<StarshineAdminDbContext> options) : AbpDbContext<StarshineAdminDbContext>(options),
@@ -31,7 +29,6 @@ public class StarshineAdminDbContext(DbContextOptions<StarshineAdminDbContext> o
     Volo.Abp.FeatureManagement.EntityFrameworkCore.IFeatureManagementDbContext,
     Volo.Abp.PermissionManagement.EntityFrameworkCore.IPermissionManagementDbContext,
     Volo.Abp.OpenIddict.EntityFrameworkCore.IOpenIddictDbContext,
-    Volo.Abp.AuditLogging.EntityFrameworkCore.IAuditLoggingDbContext,
     Volo.Abp.BackgroundJobs.EntityFrameworkCore.IBackgroundJobsDbContext
 {
     /* Add DbSet properties for your Aggregate Roots / Entities here. */

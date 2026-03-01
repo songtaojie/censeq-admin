@@ -31,7 +31,7 @@ namespace Starshine.Admin;
     typeof(AbpAutofacModule),
     typeof(AbpAspNetCoreMultiTenancyModule),
     typeof(StarshineAdminApplicationModule),
-    typeof(AdminEntityFrameworkCoreModule),
+    typeof(StarshineAdminEntityFrameworkCoreModule),
     typeof(StarshineAccountWebOpenIddictModule),
     typeof(StarshineAspNetCoreMvcUIBasicThemeModule),
     typeof(AbpAspNetCoreSerilogModule),

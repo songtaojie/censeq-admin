@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Starshine.Admin.Consts;
+using Starshine.Admin.Entities;
 using Volo.Abp;
-using Volo.Abp.AuditLogging;
-using Volo.Abp.AuditLogging.EntityFrameworkCore;
 using Volo.Abp.EntityFrameworkCore.Modeling;
 
 namespace Starshine.Admin.EntityFrameworkCore.Modeling
@@ -91,8 +91,6 @@ namespace Starshine.Admin.EntityFrameworkCore.Modeling
                 b.HasIndex(x => new { x.EntityChangeId });
                 b.ApplyObjectExtensionMappings();
             });
-
-            builder.TryConfigureObjectExtensions<AbpAuditLoggingDbContext>();
         }
     }
 }

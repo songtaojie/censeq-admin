@@ -57,8 +57,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Starshine.Abp.Identity.Appl
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Starshine.Abp.Identity.EntityFrameworkCore", "..\..\..\starshine-abp\modules\identity\src\Starshine.Abp.Identity.EntityFrameworkCore\Starshine.Abp.Identity.EntityFrameworkCore.csproj", "{D5714660-A18A-B691-CF01-95053E15ED37}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Starshine.Abp.PermissionManagement.Domain.Identity", "..\..\..\starshine-abp\modules\identity\src\Starshine.Abp.PermissionManagement.Domain.Identity\Starshine.Abp.PermissionManagement.Domain.Identity.csproj", "{5050DFF1-F9A6-FF7D-C813-0987A289C53E}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "users", "users", "{47D07C75-4AFC-4B82-BEDC-56627C4FAE58}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Starshine.Abp.Users.Domain.Shared", "..\..\..\starshine-abp\modules\users\src\Starshine.Abp.Users.Domain.Shared\Starshine.Abp.Users.Domain.Shared.csproj", "{4715B6BF-BDE4-7173-7FD3-B3C72C7EC752}"
@@ -162,10 +160,6 @@ Global
 		{D5714660-A18A-B691-CF01-95053E15ED37}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D5714660-A18A-B691-CF01-95053E15ED37}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D5714660-A18A-B691-CF01-95053E15ED37}.Release|Any CPU.Build.0 = Release|Any CPU
-		{5050DFF1-F9A6-FF7D-C813-0987A289C53E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{5050DFF1-F9A6-FF7D-C813-0987A289C53E}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{5050DFF1-F9A6-FF7D-C813-0987A289C53E}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{5050DFF1-F9A6-FF7D-C813-0987A289C53E}.Release|Any CPU.Build.0 = Release|Any CPU
 		{4715B6BF-BDE4-7173-7FD3-B3C72C7EC752}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{4715B6BF-BDE4-7173-7FD3-B3C72C7EC752}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4715B6BF-BDE4-7173-7FD3-B3C72C7EC752}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -216,7 +210,6 @@ Global
 		{3F5D29BE-35F0-3686-B1E9-8013974A6365} = {E7D8950B-A7A3-4B2E-9117-5DE5BCE1EE01}
 		{782329EC-172C-F0E6-D4E2-BDCC2D2F4FA4} = {E7D8950B-A7A3-4B2E-9117-5DE5BCE1EE01}
 		{D5714660-A18A-B691-CF01-95053E15ED37} = {E7D8950B-A7A3-4B2E-9117-5DE5BCE1EE01}
-		{5050DFF1-F9A6-FF7D-C813-0987A289C53E} = {E7D8950B-A7A3-4B2E-9117-5DE5BCE1EE01}
 		{47D07C75-4AFC-4B82-BEDC-56627C4FAE58} = {C606A10A-958D-4CA2-A358-411CFE2CA7E4}
 		{4715B6BF-BDE4-7173-7FD3-B3C72C7EC752} = {47D07C75-4AFC-4B82-BEDC-56627C4FAE58}
 		{31D76302-0358-36B6-CE88-86BEBBE8E002} = {47D07C75-4AFC-4B82-BEDC-56627C4FAE58}

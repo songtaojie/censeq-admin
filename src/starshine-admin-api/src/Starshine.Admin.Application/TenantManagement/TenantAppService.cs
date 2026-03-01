@@ -1,7 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authorization;
-using Starshine.Abp.TenantManagement.Managers;
 using Starshine.Admin.Entities;
-using Starshine.Admin.Repositories;
 using Starshine.Admin.TenantManagement;
 using Starshine.Admin.TenantManagement.Dtos;
 using System;
