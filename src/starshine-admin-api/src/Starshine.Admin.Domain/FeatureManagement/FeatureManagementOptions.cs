@@ -22,6 +22,6 @@ public class FeatureManagementOptions
     public FeatureManagementOptions()
     {
         Providers = new TypeList<IFeatureManagementProvider>();
-        ProviderPolicies = new Dictionary<string, string>();
+        ProviderPolicies = [];
     }
 }

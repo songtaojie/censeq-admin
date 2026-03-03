@@ -1,15 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Volo.Abp.FeatureManagement.EntityFrameworkCore;
-using Volo.Abp.FeatureManagement;
-using Volo.Abp;
-using Volo.Abp.EntityFrameworkCore.Modeling;
 using Starshine.Admin.Consts;
 using Starshine.Admin.Entities;
+using Volo.Abp;
 
 namespace Starshine.Admin.EntityFrameworkCore.Modeling
 {
@@ -67,8 +59,6 @@ namespace Starshine.Admin.EntityFrameworkCore.Modeling
 
                 b.ApplyObjectExtensionMappings();
             });
-
-            builder.TryConfigureObjectExtensions<FeatureManagementDbContext>();
         }
     }
 }

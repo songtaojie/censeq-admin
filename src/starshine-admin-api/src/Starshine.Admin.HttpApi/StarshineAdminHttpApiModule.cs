@@ -1,10 +1,12 @@
 ﻿using Localization.Resources.AbpUi;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
+using Starshine.Admin.FeatureManagement;
+using Starshine.Admin.FeatureManagement.JsonConverters;
 using Starshine.Admin.Localization;
+using System.Collections.Generic;
 using Volo.Abp.Account;
 using Volo.Abp.AspNetCore.Mvc;
-using Volo.Abp.FeatureManagement;
-using Volo.Abp.FeatureManagement.Localization;
 using Volo.Abp.Identity;
 using Volo.Abp.Localization;
 using Volo.Abp.Modularity;
@@ -19,7 +21,6 @@ namespace Starshine.Admin;
     typeof(StarshineAdminApplicationContractsModule),
     typeof(AbpIdentityHttpApiModule),
     typeof(AbpPermissionManagementHttpApiModule),
-    typeof(AbpFeatureManagementHttpApiModule),
     typeof(AbpSettingManagementHttpApiModule)
     )]
 public class StarshineAdminHttpApiModule : AbpModule
@@ -40,6 +41,12 @@ public class StarshineAdminHttpApiModule : AbpModule
             options.ControllersToRemove.Add(typeof(PermissionsController));
         });
 
+        var valueValidatorFactoryOptions = context.Services.ExecutePreConfiguredActions<ValueValidatorFactoryOptions>();
+        Configure<JsonOptions>(options =>
+        {
+            options.JsonSerializerOptions.Converters.AddIfNotContains(new StringValueTypeJsonConverter(valueValidatorFactoryOptions));
+        });
+
     }
 
     private void ConfigureLocalization()
@@ -50,7 +57,7 @@ public class StarshineAdminHttpApiModule : AbpModule
                 .Get<StarshineAdminResource>()
                 .AddBaseTypes(
                     typeof(StarshineTenantManagementResource),
-                    typeof(AbpFeatureManagementResource),
+                    typeof(StarshineFeatureManagementResource),
                     typeof(AbpUiResource)
                 );
         });

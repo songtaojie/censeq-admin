@@ -5,7 +5,6 @@ using Volo.Abp.BackgroundJobs;
 using Volo.Abp.Data;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.EntityFrameworkCore;
-using Volo.Abp.FeatureManagement;
 using Volo.Abp.Identity;
 using Volo.Abp.OpenIddict.Applications;
 using Volo.Abp.OpenIddict.Authorizations;
@@ -18,7 +17,6 @@ namespace Starshine.Admin.EntityFrameworkCore;
 
 [ReplaceDbContext(typeof(Volo.Abp.Identity.EntityFrameworkCore.IIdentityDbContext))]
 [ReplaceDbContext(typeof(Volo.Abp.SettingManagement.EntityFrameworkCore.ISettingManagementDbContext))]
-[ReplaceDbContext(typeof(Volo.Abp.FeatureManagement.EntityFrameworkCore.IFeatureManagementDbContext))]
 [ReplaceDbContext(typeof(Volo.Abp.PermissionManagement.EntityFrameworkCore.IPermissionManagementDbContext))]
 [ReplaceDbContext(typeof(Volo.Abp.OpenIddict.EntityFrameworkCore.IOpenIddictDbContext))]
 [ReplaceDbContext(typeof(Volo.Abp.BackgroundJobs.EntityFrameworkCore.IBackgroundJobsDbContext))]
@@ -26,7 +24,6 @@ namespace Starshine.Admin.EntityFrameworkCore;
 public class StarshineAdminDbContext(DbContextOptions<StarshineAdminDbContext> options) : AbpDbContext<StarshineAdminDbContext>(options),
     Volo.Abp.Identity.EntityFrameworkCore.IIdentityDbContext,
     Volo.Abp.SettingManagement.EntityFrameworkCore.ISettingManagementDbContext,
-    Volo.Abp.FeatureManagement.EntityFrameworkCore.IFeatureManagementDbContext,
     Volo.Abp.PermissionManagement.EntityFrameworkCore.IPermissionManagementDbContext,
     Volo.Abp.OpenIddict.EntityFrameworkCore.IOpenIddictDbContext,
     Volo.Abp.BackgroundJobs.EntityFrameworkCore.IBackgroundJobsDbContext
@@ -45,25 +42,23 @@ public class StarshineAdminDbContext(DbContextOptions<StarshineAdminDbContext> o
     public DbSet<IdentitySession> Sessions { get; set; }
     #endregion
 
-    #region ITenantManagementDbContext
+    #region StarshineAdminDbContext
     // Tenant Management
     public DbSet<Tenant> Tenants { get; set; }
     public DbSet<TenantConnectionString> TenantConnectionStrings { get; set; }
+    public DbSet<FeatureGroupDefinitionRecord> FeatureGroups { get; set; }
+
+    public DbSet<FeatureDefinitionRecord> Features { get; set; }
+
+    public DbSet<FeatureValue> FeatureValues { get; set; }
+
+    public DbSet<AuditLog> AuditLogs { get; set; }
     #endregion
 
 
     #region ISettingManagementDbContext
     public DbSet<Setting> Settings { get; set; }
     public DbSet<SettingDefinitionRecord> SettingDefinitionRecords { get; set; }
-
-    #endregion
-
-    #region IFeatureManagementDbContext
-    public DbSet<FeatureGroupDefinitionRecord> FeatureGroups { get; set; }
-
-    public DbSet<FeatureDefinitionRecord> Features { get; set; }
-
-    public DbSet<FeatureValue> FeatureValues { get; set; }
 
     #endregion
 
@@ -86,10 +81,6 @@ public class StarshineAdminDbContext(DbContextOptions<StarshineAdminDbContext> o
     public DbSet<OpenIddictScope> Scopes { get; set; }
 
     public DbSet<OpenIddictToken> Tokens { get; set; }
-    #endregion
-
-    #region IAuditLoggingDbContext
-    public DbSet<AuditLog> AuditLogs { get; set; }
     #endregion
 
     #region IBackgroundJobsDbContext

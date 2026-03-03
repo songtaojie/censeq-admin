@@ -1,6 +1,5 @@
 ﻿using Volo.Abp.Account;
 using Volo.Abp.AutoMapper;
-using Volo.Abp.FeatureManagement;
 using Volo.Abp.Identity;
 using Volo.Abp.Modularity;
 using Volo.Abp.PermissionManagement;
@@ -15,7 +14,6 @@ namespace Starshine.Admin;
     typeof(StarshineAdminApplicationContractsModule),
     typeof(AbpIdentityApplicationModule),
     typeof(AbpPermissionManagementApplicationModule),
-    typeof(AbpFeatureManagementApplicationModule),
     typeof(AbpSettingManagementApplicationModule)
     )]
 public class StarshineAdminApplicationModule : AbpModule

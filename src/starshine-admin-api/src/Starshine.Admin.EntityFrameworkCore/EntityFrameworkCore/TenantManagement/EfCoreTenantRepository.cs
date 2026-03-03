@@ -11,7 +11,7 @@ using Volo.Abp.DependencyInjection;
 using Volo.Abp.Domain.Repositories.EntityFrameworkCore;
 using Volo.Abp.EntityFrameworkCore;
 
-namespace Starshine.Admin.EntityFrameworkCore;
+namespace Starshine.Admin.EntityFrameworkCore.TenantManagement;
 /// <summary>
 /// EfCoreTenantRepository
 /// </summary>

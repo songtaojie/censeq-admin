@@ -9,7 +9,6 @@ using Volo.Abp.DependencyInjection;
 using Volo.Abp.Http.Client;
 using Volo.Abp.Http.Client.ClientProxying;
 using Volo.Abp.Http.Modeling;
-using Volo.Abp.TenantManagement;
 
 namespace Starshine.Admin.TenantManagement;
 

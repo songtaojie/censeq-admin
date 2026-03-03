@@ -14,7 +14,7 @@ using Volo.Abp.Domain.Entities;
 using Volo.Abp.Domain.Repositories.EntityFrameworkCore;
 using Volo.Abp.EntityFrameworkCore;
 
-namespace Starshine.Admin.EntityFrameworkCore;
+namespace Starshine.Admin.EntityFrameworkCore.AuditLogging;
 
 public class EfCoreAuditLogRepository : EfCoreRepository<StarshineAdminDbContext, AuditLog, Guid>, IAuditLogRepository
 {

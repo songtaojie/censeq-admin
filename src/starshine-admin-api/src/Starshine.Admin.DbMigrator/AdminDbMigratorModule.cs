@@ -1,5 +1,4 @@
-﻿using Starshine.Admin.EntityFrameworkCore;
-using Volo.Abp.Autofac;
+﻿using Volo.Abp.Autofac;
 using Volo.Abp.Modularity;
 
 namespace Starshine.Admin.DbMigrator;
