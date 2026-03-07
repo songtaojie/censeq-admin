@@ -1,0 +1,22 @@
+<Project Sdk="Microsoft.NET.Sdk">
+	<Import Project="..\..\..\..\common.props" />
+	<PropertyGroup>
+		<TargetFramework>$(NETVersion)</TargetFramework>
+		<WarningsAsErrors>Nullable</WarningsAsErrors>
+		<AssemblyName>Censeq.Abp.Identity.Application.Contracts</AssemblyName>
+		<PackageId>Censeq.Abp.Identity.Application.Contracts</PackageId>
+		<GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
+		<GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
+		<GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
+		<RootNamespace />
+	</PropertyGroup>
+	<ItemGroup>
+		<ProjectReference Include="..\Censeq.Abp.Identity.Domain.Shared\Censeq.Abp.Identity.Domain.Shared.csproj" />
+		<!--<ProjectReference Include="..\..\..\permission-management\src\Censeq.Abp.PermissionManagement.Application.Contracts\Censeq.Abp.PermissionManagement.Application.Contracts.csproj" />-->
+		<ProjectReference Include="..\..\..\users\src\Censeq.Abp.Users.Abstractions\Censeq.Abp.Users.Abstractions.csproj" />
+	</ItemGroup>
+	<ItemGroup>
+		<PackageReference Include="Volo.Abp.Authorization" Version="$(AbpVersion)" />
+		<PackageReference Include="Volo.Abp.PermissionManagement.Application.Contracts" Version="$(AbpVersion)" />
+	</ItemGroup>
+</Project>

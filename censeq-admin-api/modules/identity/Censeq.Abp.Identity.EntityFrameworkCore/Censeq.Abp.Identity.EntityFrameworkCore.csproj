@@ -1,0 +1,18 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+	<Import Project="..\..\..\..\common.props" />
+	<PropertyGroup>
+		<TargetFramework>$(NETVersion)</TargetFramework>
+		<WarningsAsErrors>Nullable</WarningsAsErrors>
+		<AssemblyName>Censeq.Abp.Identity.EntityFrameworkCore</AssemblyName>
+		<PackageId>Censeq.Abp.Identity.EntityFrameworkCore</PackageId>
+		<GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
+		<GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
+		<GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
+		<RootNamespace />
+	</PropertyGroup>
+	<ItemGroup>
+		<ProjectReference Include="..\Censeq.Abp.Identity.Domain\Censeq.Abp.Identity.Domain.csproj" />
+		<ProjectReference Include="..\..\..\users\src\Censeq.Abp.Users.EntityFrameworkCore\Censeq.Abp.Users.EntityFrameworkCore.csproj" />
+	</ItemGroup>
+
+</Project>

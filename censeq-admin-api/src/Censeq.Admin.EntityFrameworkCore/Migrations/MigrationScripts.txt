@@ -1,0 +1,15 @@
+//��src�ļ���Ŀ¼��ִ��
+//1. �����µ�Ǩ�ƣ�dotnet ef migrations add <name>
+dotnet ef migrations add InitialDb --project ./src/Censeq.Admin.EntityFrameworkCore/Censeq.Admin.EntityFrameworkCore.csproj --startup-project ./src/Censeq.Admin.HttpApi.Host/Censeq.Admin.HttpApi.Host.csproj --context StarshineAdminDbContext
+
+//2. ����Ǩ������SQL�ű���dotnet ef migrations script <from> <to>
+dotnet ef migrations script 0 InitialDb --output ./src/Censeq.Admin.EntityFrameworkCore/Migrations/Scripts/InitialDb.sql --project ./src/Censeq.Admin.EntityFrameworkCore/Censeq.Admin.EntityFrameworkCore.csproj --startup-project ./src/Censeq.Admin.HttpApi.Host/Censeq.Admin.HttpApi.Host.csproj --context StarshineAdminDbContext
+//3. �г����õ�Ǩ�ƣ�dotnet ef migrations list
+//4. ɾ����һ��Ǩ�ƣ�
+dotnet ef migrations remove --project ./src/Censeq.Admin.EntityFrameworkCore/Censeq.Admin.EntityFrameworkCore.csproj --startup-project ./src/Censeq.Admin.HttpApi.Host/Censeq.Admin.HttpApi.Host.csproj --context StarshineAdminDbContext
+//5. ������ϴ�Ǩ�������Ƿ��ģ�ͽ������κθ��ģ�dotnet ef migrations has-pending-model-changes
+
+dotnet ef database update --project ./Censeq.Admin.EntityFrameworkCore/Censeq.Admin.EntityFrameworkCore.csproj --startup-project ./Censeq.Admin.HttpApi.Host/Censeq.Admin.HttpApi.Host.csproj --context StarshineAdminDbContext
+
+
+dotnet ef migrations add InitialDb  --project ./src/Censeq.Admin.EntityFrameworkCore/Censeq.Admin.EntityFrameworkCore.csproj  --startup-project ./src/Censeq.Admin.DbMigrator/Censeq.Admin.DbMigrator.csproj  --context StarshineAdminDbContext -v

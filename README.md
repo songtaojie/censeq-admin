@@ -1,4 +1,4 @@
-<div align="center"><h1>Starshine.Admin-.NET通用权限开发框架</h1></div>
+<div align="center"><h1>Censeq.Admin-.NET通用权限开发框架</h1></div>
 
 ## 🎁框架介绍
 基于.NET6/SqlSugar实现的通用权限开发框架，前端Vue3/Element-plus。整合最新技术，模块插件式开发，前后端分离，开箱即用。

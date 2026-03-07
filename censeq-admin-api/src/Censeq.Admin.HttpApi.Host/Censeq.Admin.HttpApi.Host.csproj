@@ -1,0 +1,35 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <Import Project="..\..\common.props" />
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <RootNamespace>Censeq.Admin</RootNamespace>
+    <PreserveCompilationReferences>true</PreserveCompilationReferences>
+    <UserSecretsId>Censeq.Admin-4681b4fd-151f-4221-84a4-929d86723e4c</UserSecretsId>
+  </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.16">
+          <PrivateAssets>all</PrivateAssets>
+          <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+        </PackageReference>
+        <PackageReference Include="Serilog.AspNetCore" Version="8.0.2" />
+        <PackageReference Include="Serilog.Sinks.Async" Version="2.0.0" />
+        <PackageReference Include="Volo.Abp.Autofac" Version="8.3.4" />
+        <PackageReference Include="Volo.Abp.AspNetCore.Serilog" Version="8.3.4" />
+        <PackageReference Include="Volo.Abp.Identity.AspNetCore" Version="8.3.4" />
+	</ItemGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\Censeq.Admin.Application\Censeq.Admin.Application.csproj" />
+        <ProjectReference Include="..\Censeq.Admin.EntityFrameworkCore\Censeq.Admin.EntityFrameworkCore.csproj" />
+        <ProjectReference Include="..\Censeq.Admin.HttpApi\Censeq.Admin.HttpApi.csproj" />
+    </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="wwwroot\images\logo\" />
+  </ItemGroup>
+
+</Project>
