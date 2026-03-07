@@ -1,0 +1,22 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+	<Import Project="..\..\..\..\common.props" />
+	<PropertyGroup>
+		<TargetFramework>$(NETVersion)</TargetFramework>
+		<WarningsAsErrors>Nullable</WarningsAsErrors>
+		<AssemblyName>Starshine.Abp.Identity.Application</AssemblyName>
+		<PackageId>Starshine.Abp.Identity.Application</PackageId>
+		<GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
+		<GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
+		<GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
+		<RootNamespace />
+	</PropertyGroup>
+	<ItemGroup>
+		<ProjectReference Include="..\Starshine.Abp.Identity.Domain\Starshine.Abp.Identity.Domain.csproj" />
+		<ProjectReference Include="..\Starshine.Abp.Identity.Application.Contracts\Starshine.Abp.Identity.Application.Contracts.csproj" />
+		<!--<ProjectReference Include="..\..\..\permission-management\src\Starshine.Abp.PermissionManagement.Application\Starshine.Abp.PermissionManagement.Application.csproj" />-->
+	</ItemGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Volo.Abp.PermissionManagement.Application" Version="$(AbpVersion)" />
+	</ItemGroup>
+</Project>
