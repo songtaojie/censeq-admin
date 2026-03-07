@@ -1,7 +1,16 @@
 <template>
 	<div class="home-container layout-pd">
 		<el-row :gutter="15" class="home-card-one mb15">
-			<el-col :xs="24" :sm="12" :md="12" :lg="6" :xl="6" v-for="(v, k) in state.homeOne" :key="k" :class="{ 'home-media home-media-lg': k > 1, 'home-media-sm': k === 1 }">
+			<el-col
+				:xs="24"
+				:sm="12"
+				:md="12"
+				:lg="6"
+				:xl="6"
+				v-for="(v, k) in state.homeOne"
+				:key="k"
+				:class="{ 'home-media home-media-lg': k > 1, 'home-media-sm': k === 1 }"
+			>
 				<div class="home-card-item flex">
 					<div class="flex-margin flex w100" :class="` home-one-animation${k}`">
 						<div class="flex-auto">

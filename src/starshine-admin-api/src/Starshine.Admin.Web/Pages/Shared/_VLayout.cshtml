@@ -1,0 +1,52 @@
+﻿@{
+    string appId = "starshine" + Guid.NewGuid().ToString();
+}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewBag.Title - 海·星の博客</title>
+    <partial name="_Styles" />
+    <style>
+        .el-scrollbar__bar.is-horizontal {
+            display: none !important;
+        }
+        .el-scrollbar__wrap {
+            overflow-x: hidden;
+        }
+        .el-select-dropdown .el-scrollbar .el-scrollbar__wrap {
+            overflow: scroll;
+        }
+        .hx-alert {
+            position: relative;
+            padding: 0.75rem 1.25rem;
+            margin-bottom: 1rem;
+            border: 1px solid transparent;
+            border-radius: 0.25rem;
+        }
+        .hx-alert-danger {
+            color: #721c24;
+            background-color: #f8d7da;
+            border-color: #f5c6cb;
+        }
+    </style>
+    @RenderSection("styles", required: false)
+</head>
+<body>
+    <div class="hx-dark" id="app" data-id="@appId">
+        <el-container>
+            <partial name="~/Views/Layout/VAside.cshtml" view-data="ViewData" />
+            <el-container :class="isCollapse?'hx-body hx-aside-mini':'hx-body'">
+                <partial name="~/Views/Layout/VHeader.cshtml" />
+                <el-main> @RenderBody()</el-main>
+            </el-container>
+        </el-container>
+    </div>
+    <partial name="_Scripts" />
+    <script src="~/vuejs/hx.common.js"></script>
+    @RenderSection("scripts", required: false)
+    <script src="~/vuejs/main.js"></script>
+</body>
+
+</html>

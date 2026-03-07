@@ -1,6 +1,6 @@
 import { RouteRecordRaw } from 'vue-router';
+import { storeToRefs } from 'pinia';
 import pinia from '/@/stores/index';
-import { useUserInfo } from '/@/stores/userInfo';
 import { useRequestOldRoutes } from '/@/stores/requestOldRoutes';
 import { Session } from '/@/utils/storage';
 import { NextLoading } from '/@/utils/loading';
@@ -8,12 +8,13 @@ import { dynamicRoutes, notFoundAndNoPower } from '/@/router/route';
 import { formatTwoStageRoutes, formatFlatteningRoutes, router } from '/@/router/index';
 import { useRoutesList } from '/@/stores/routesList';
 import { useTagsViewRoutes } from '/@/stores/tagsViewRoutes';
-
-import { getAPI } from '/@/utils/axios-utils';
-import { SysMenuApi } from '/@/api-services/api';
-// import { ElMessage } from 'element-plus';
+import { useMenuApi } from '/@/api/menu/index';
+import { useUserInfo } from '/@/composables/useUserInfo';
 
 // 后端控制路由
+
+// 引入 api 请求接口
+const menuApi = useMenuApi();
 
 /**
  * 获取目录下的 .vue、.tsx 全部文件
@@ -37,22 +38,23 @@ export async function initBackEndControlRoutes() {
 	if (window.nextLoading === undefined) NextLoading.start();
 	// 无 token 停止执行下一步
 	if (!Session.get('token')) return false;
+	const { setUserInfos } = useUserInfo();
 	// 触发初始化用户信息 pinia
 	// https://gitee.com/lyt-top/vue-next-admin/issues/I5F1HP
-	await useUserInfo().setUserInfos();
+	await setUserInfos();
 	// 获取路由菜单数据
 	const res = await getBackEndControlRoutes();
 	// 无登录权限时，添加判断
 	// https://gitee.com/lyt-top/vue-next-admin/issues/I64HVO
-	if (res == undefined || res.length <= 0) return Promise.resolve(true);
+	if (res.data.length <= 0) return Promise.resolve(true);
 	// 存储接口原始路由（未处理component），根据需求选择使用
-	useRequestOldRoutes().setRequestOldRoutes(res as string[]);
+	useRequestOldRoutes().setRequestOldRoutes(JSON.parse(JSON.stringify(res.data)));
 	// 处理路由（component），替换 dynamicRoutes（/@/router/route）第一个顶级 children 的路由
-	dynamicRoutes[0].children = await backEndComponent(res);
+	dynamicRoutes[0].children = await backEndComponent(res.data);
 	// 添加动态路由
 	await setAddRoute();
 	// 设置路由到 pinia routesList 中（已处理成多级嵌套路由）及缓存多级嵌套数组处理后的一维数组
-	await setFilterMenuAndCacheTagsViewRoutes();
+	setFilterMenuAndCacheTagsViewRoutes();
 }
 
 /**
@@ -105,16 +107,14 @@ export async function setAddRoute() {
  * @description isRequestRoutes 为 true，则开启后端控制路由
  * @returns 返回后端路由菜单数据
  */
-export async function getBackEndControlRoutes() {
-	var res = await getAPI(SysMenuApi).getLoginMenuTree();
-	// if (res.data.result == undefined || res.data.result.length < 1) {
-	// 	ElMessage.error('没有任何菜单权限，请联系管理员！');
-	// 	setTimeout(() => {
-	// 		Session.removeToken();
-	// 		window.location.reload();
-	// 	}, 3000);
-	// }
-	return res.data.data;
+export function getBackEndControlRoutes() {
+	// 模拟 admin 与 test
+	const { userInfos } = useUserInfo();
+	const auth = userInfos.value.roles[0];
+	// 管理员 admin
+	if (auth === 'admin') return menuApi.getAdminMenu();
+	// 其它用户 test
+	else return menuApi.getTestMenu();
 }
 
 /**

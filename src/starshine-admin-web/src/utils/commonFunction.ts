@@ -54,17 +54,9 @@ export default function () {
 			}
 		});
 	};
-	// 去掉Html标签(取前面5个字符)
-	const removeHtmlSub = (value: string) => {
-		var str = value.replace(/<[^>]+>/g, '');
-		if (str.length > 50) return str.substring(0, 50) + '......';
-		else return str;
+	const hasOwnProperty = <T extends object>(object: T, key: string | keyof T): key is keyof T => {
+		return Object.prototype.hasOwnProperty.call(object, key);
 	};
-	// 去掉Html标签
-	const removeHtml = (value: string) => {
-		return value.replace(/<[^>]+>/g, '');
-	};
-
 	return {
 		percentFormat,
 		dateFormatYMD,
@@ -73,9 +65,6 @@ export default function () {
 		scaleFormat,
 		scale2Format,
 		copyText,
-		removeHtmlSub,
-		removeHtml
+		hasOwnProperty,
 	};
 }
-
-

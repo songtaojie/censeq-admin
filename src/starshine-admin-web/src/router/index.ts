@@ -1,4 +1,4 @@
-import { createRouter, createWebHashHistory } from 'vue-router';
+import { createRouter, createWebHistory } from 'vue-router';
 import NProgress from 'nprogress';
 import 'nprogress/nprogress.css';
 import pinia from '/@/stores/index';
@@ -10,6 +10,8 @@ import { Session } from '/@/utils/storage';
 import { staticRoutes, notFoundAndNoPower } from '/@/router/route';
 import { initFrontEndControlRoutes } from '/@/router/frontEnd';
 import { initBackEndControlRoutes } from '/@/router/backEnd';
+import { useOidc } from '/@/composables/useOidc';
+const excludeRoute = ['/login', '/callback', '/logout-callback'];
 
 /**
  * 1、前端控制路由时：isRequestRoutes 为 false，需要写 roles，需要走 setFilterRoute 方法。
@@ -31,7 +33,7 @@ const { isRequestRoutes } = themeConfig.value;
  * @link 参考：https://next.router.vuejs.org/zh/api/#createrouter
  */
 export const router = createRouter({
-	history: createWebHashHistory(),
+	history: createWebHistory(),
 	/**
 	 * 说明：
 	 * 1、notFoundAndNoPower 默认添加 404、401 界面，防止一直提示 No match found for location with path 'xxx'
@@ -68,8 +70,6 @@ export function formatTwoStageRoutes(arr: any) {
 	const newArr: any = [];
 	const cacheList: Array<string> = [];
 	arr.forEach((v: any) => {
-		if (v.path == null || v.path == undefined) return;
-
 		if (v.path === '/') {
 			newArr.push({ component: v.component, name: v.name, path: v.path, redirect: v.redirect, meta: v.meta, children: [] });
 		} else {
@@ -96,17 +96,25 @@ export function formatTwoStageRoutes(arr: any) {
 router.beforeEach(async (to, from, next) => {
 	NProgress.configure({ showSpinner: false });
 	if (to.meta.title) NProgress.start();
-	const token = Session.get('token');
-	if (to.path === '/login' && !token) {
+	const { login, isAuthenticated } = useOidc();
+	var isAuth = await isAuthenticated();
+	if (excludeRoute.includes(to.path) && !isAuth) {
 		next();
 		NProgress.done();
 	} else {
-		if (!token) {
-			next(`/login?redirect=${to.path}&params=${JSON.stringify(to.query ? to.query : to.params)}`);
+		if (!isAuth) {
 			Session.clear();
+			Session.set(
+				'pre_auth_route',
+				JSON.stringify({
+					path: to.path,
+					query: to.query,
+				})
+			);
+			await login();
 			NProgress.done();
-		} else if (token && to.path === '/login') {
-			next('/dashboard/home');
+		} else if (isAuth && excludeRoute.includes(to.path)) {
+			next('/home');
 			NProgress.done();
 		} else {
 			const storesRoutesList = useRoutesList(pinia);

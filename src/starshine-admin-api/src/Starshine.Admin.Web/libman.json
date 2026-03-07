@@ -1,0 +1,34 @@
+{
+  "version": "3.0",
+  "defaultProvider": "cdnjs",
+  "libraries": [
+    {
+      "library": "vue@3.5.13",
+      "destination": "wwwroot/libs/vue/"
+    },
+    {
+      "library": "bootstrap@5.3.3",
+      "destination": "wwwroot/libs/bootstrap/"
+    },
+    {
+      "provider": "cdnjs",
+      "library": "alertify.js@0.3.11",
+      "destination": "wwwroot/libs/alertify.js/"
+    },
+    {
+      "provider": "cdnjs",
+      "library": "font-awesome@6.7.2",
+      "destination": "wwwroot/libs/font-awesome/"
+    },
+    {
+      "provider": "cdnjs",
+      "library": "jquery@3.7.1",
+      "destination": "wwwroot/libs/jquery/"
+    },
+    {
+      "provider": "cdnjs",
+      "library": "jquery-validation-unobtrusive@4.0.0",
+      "destination": "wwwroot/libs/jquery-validation-unobtrusive/"
+    }
+  ]
+}

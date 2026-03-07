@@ -1,0 +1,18 @@
+﻿@using Volo.Abp.AspNetCore.Mvc.UI.Theming
+@inject IThemeManager ThemeManager
+@{
+    Layout = ThemeManager.CurrentTheme.GetAccountLayout();
+}
+@section styles {
+    @await RenderSectionAsync("styles", false)
+}
+<div class="d-flex justify-content-center align-items-center  flex-grow-1" style="background-color:#353e54">
+    @RenderBody()
+</div>
+@section scripts
+{
+    @await RenderSectionAsync("scripts", false)
+}
+@* <div class="abp-account-container">
+    
+</div> *@

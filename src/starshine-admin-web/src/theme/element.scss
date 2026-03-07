@@ -1,4 +1,4 @@
-@import 'mixins/index.scss';
+@use 'mixins/index.scss' as *;
 
 /* Button 按钮
 ------------------------------- */
@@ -69,7 +69,6 @@
 // 鼠标 hover 时颜色
 .el-menu-hover-bg-color {
 	background-color: var(--next-bg-menuBarActiveColor) !important;
-	//background-color: var(--el-color-primary-light-7) !important;
 }
 // 默认样式修改
 .el-menu {
@@ -77,9 +76,8 @@
 	width: 220px;
 }
 .el-menu-item {
-	height: 50px !important;
-	line-height: 50px !important;
-	margin: 0 0 1px 0;
+	height: 56px !important;
+	line-height: 56px !important;
 }
 .el-menu-item,
 .el-sub-menu__title {
@@ -109,19 +107,12 @@
 .el-sub-menu.is-active .el-sub-menu__title,
 .el-sub-menu:not(.is-opened):hover .el-sub-menu__title {
 	@extend .el-menu-hover-bg-color;
-	color: var(--el-color-primary-dark-2);
 }
-// 鼠标 hover 时背景色
 .el-menu-item:hover {
-	//@extend .el-menu-hover-bg-color;
-	background-color: var(--el-color-primary-light-9);
+	@extend .el-menu-hover-bg-color;
 }
 .el-sub-menu.is-active.is-opened .el-sub-menu__title {
 	background-color: unset !important;
-}
-// 当前选中菜单右侧边框
-.el-menu-item.is-active {
-	border-right: solid 3px var(--el-color-primary);
 }
 // 子级菜单背景颜色
 // .el-menu--inline {
@@ -181,16 +172,11 @@
 		.el-sub-menu.is-active .el-sub-menu__title {
 			color: var(--el-menu-active-color);
 		}
-		// 鼠标 hover 时背景色
-		.el-menu-item:hover {
-			background-color: var(--el-color-primary-light-9)
-		}
 	}
 }
 // 横向菜单（经典、横向）布局
 .el-menu.el-menu--horizontal {
 	border-bottom: none !important;
-
 	width: 100% !important;
 	.el-menu-item,
 	.el-sub-menu__title {
@@ -200,15 +186,18 @@
 	.el-menu-item:not(.is-active):hover,
 	.el-sub-menu:not(.is-active):hover .el-sub-menu__title {
 		color: var(--next-bg-topBarColor);
-		//border-right: solid 3px var(--el-color-primary);
 	}
-	// 鼠标 hover 时背景色
-	.el-menu-item:hover {
-		background-color: var(--el-color-primary-light-9)
+}
+// 菜单收起时，图标不居中问题
+.el-menu--collapse {
+	.el-menu-item .iconfont,
+	.el-sub-menu .iconfont,
+	.el-menu-item .fa,
+	.el-sub-menu .fa {
+		margin-right: 0 !important;
 	}
-	// 菜单激活时去掉全局右边框
-	.el-menu-item.is-active{
-		border-right: none;
+	.el-sub-menu__title {
+		padding-right: 0 !important;
 	}
 }
 
@@ -266,30 +255,6 @@
 	overflow-y: auto;
 	overflow-x: hidden;
 }
-.el-dialog__title{
-	font-size: 14px;
-	color: #FFF;
-	font-weight: 700;
-}
-.el-dialog__header {
-	margin-right: 0;
-	padding-top: 10px;
-	background: var(--el-color-primary);
-}
-.el-dialog__footer {
-	border-top: 1px solid var(--el-color-info-light-7);
-	padding-bottom: 10px;
-  }
-.el-dialog__headerbtn{
-	height: 32px;
-	font-weight: 900;
-	.el-dialog__close{
-		color: #FFF;
-	}
-}
-.el-dialog__headerbtn:hover .el-dialog__close{
-	color: var(--el-color-danger) !important;
-}
 
 /* Card 卡片
 ------------------------------- */
@@ -303,37 +268,6 @@
 	.el-button.is-text {
 		padding: 0;
 	}
-	// 表头背景色
-	--el-table-header-bg-color: var(--el-table-tr-bg-color);
-	// 表头字体颜色
-	thead {
-		color: var(--el-text-color-regular);	
-		th {
-			font-weight: 500;
-		}
-	}
-}
-/*防止分栏布局二级菜单很多时，滚动条消失问题*/
-.layout-columns-warp .layout-aside .el-scrollbar__view {
-	height: unset !important;
-}
-
-/* Pagination 分页
-------------------------------- */
-// .el-pagination__editor {
-// 	margin-right: 8px;
-// }
-/*深色模式时分页高亮问题*/
-.el-pagination.is-background .btn-next.is-active,
-.el-pagination.is-background .btn-prev.is-active,
-.el-pagination.is-background .el-pager li.is-active {
-	background-color: var(--el-color-primary) !important;
-	color: var(--el-color-white) !important;
-}
-// 分页组件靠右显示
-.el-pagination {
-	float: right;
-	margin: 10px 0 -10px 0 !important;
 }
 
 /* scrollbar
@@ -360,6 +294,23 @@
 .layout-container-view .el-scrollbar__view {
 	height: 100%;
 }
+/*防止分栏布局二级菜单很多时，滚动条消失问题*/
+.layout-columns-warp .layout-aside .el-scrollbar__view {
+	height: unset !important;
+}
+
+/* Pagination 分页
+------------------------------- */
+.el-pagination__editor {
+	margin-right: 8px;
+}
+/*深色模式时分页高亮问题*/
+.el-pagination.is-background .btn-next.is-active,
+.el-pagination.is-background .btn-prev.is-active,
+.el-pagination.is-background .el-pager li.is-active {
+	background-color: var(--el-color-primary) !important;
+	color: var(--el-color-white) !important;
+}
 
 /* Drawer 抽屉
 ------------------------------- */
@@ -378,53 +329,5 @@
 		width: 100%;
 		height: 100%;
 		overflow: auto;
-	}
-}
-
-$--el-table-text-color: #fb6d49;
-
-// hack列表页
-.layout-parent {
-  height: 0;
-  overflow: auto;
-
-  // 方案一 如果怕影响其他页面，可以直接修改 src/views/home/index.vue 中 .home-container样式。
-  // 方案二 此处修改是为了不修改框架原始页面，方便后期同步升级。
-  // 自行取舍
-  // 工作台 滚动条
-  .home-container {
-    overflow: auto!important;
-  }
-
-  
-	// Table页自动撑满页面
-	>div:first-child {
-	  display: flex;
-	  flex-direction: column;
-	  height: 100%;
-  
-    //放弃使用 .el-card:nth-child(2) ，方便后期页面扩展
-	  .full-table {
-		flex: 1;
-  
-		.el-card__body {
-		  height: 100%;
-		  display: flex;
-		  flex-direction: column;
-  
-		  .el-table {
-			flex: 1;
-		  }
-  
-		  .el-pagination {
-			display: flex;
-  
-			>span:first-child {
-			  flex: 1;
-			  text-align: right;
-			}
-		  }
-		}
-	  }
 	}
 }

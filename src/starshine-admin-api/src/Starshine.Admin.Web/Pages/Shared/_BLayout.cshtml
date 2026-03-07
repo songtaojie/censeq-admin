@@ -1,0 +1,21 @@
+﻿@{
+    bool isLoginPage = ViewBag.IsLoginPage == true;
+}
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewBag.Title - 海·星の博客</title>
+    <partial name="_Styles" />
+    @await RenderSectionAsync("styles", required: false)
+</head>
+<body>
+    <div class="d-flex justify-content-center align-items-center vh-100 vw-100">
+        @RenderBody()
+    </div>
+    <partial name="_Scripts" />
+    @RenderSection("scripts", required: false)
+</body>
+</html>

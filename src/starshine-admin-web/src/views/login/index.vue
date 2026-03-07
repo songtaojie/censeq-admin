@@ -1,6 +1,6 @@
 <template>
 	<div class="login-container flex">
-		<div class="login-left flex-margin">
+		<div class="login-left">
 			<div class="login-left-logo">
 				<img :src="logoMini" />
 				<div class="login-left-logo-text">
@@ -8,24 +8,17 @@
 					<span class="login-left-logo-text-msg">{{ getThemeConfig.globalViceTitleMsg }}</span>
 				</div>
 			</div>
-			<el-carousel height="500px">
-				<el-carousel-item>
-					<img :src="loginIconTwo" class="login-icon-group-icon" />
-				</el-carousel-item>
-				<el-carousel-item>
-					<img :src="loginIconTwo1" class="login-icon-group-icon" />
-				</el-carousel-item>
-				<el-carousel-item>
-					<img :src="loginIconTwo2" class="login-icon-group-icon" />
-				</el-carousel-item>
-			</el-carousel>
+			<div class="login-left-img">
+				<img :src="loginMain" />
+			</div>
+			<img :src="loginBg" class="login-left-waves" />
 		</div>
 		<div class="login-right flex">
 			<div class="login-right-warp flex-margin">
 				<span class="login-right-warp-one"></span>
 				<span class="login-right-warp-two"></span>
-				<div class="login-right-warp-main">
-					<div class="login-right-warp-main-title">{{ getThemeConfig.globalTitle }}</div>
+				<div class="login-right-warp-mian">
+					<div class="login-right-warp-main-title">{{ getThemeConfig.globalTitle }} 欢迎您！</div>
 					<div class="login-right-warp-main-form">
 						<div v-if="!state.isScan">
 							<el-tabs v-model="state.tabsActiveName">
@@ -38,9 +31,9 @@
 							</el-tabs>
 						</div>
 						<Scan v-if="state.isScan" />
-						<div class="login-content-main-scan" @click="state.isScan = !state.isScan">
+						<div class="login-content-main-sacn" @click="state.isScan = !state.isScan">
 							<i class="iconfont" :class="state.isScan ? 'icon-diannao1' : 'icon-barcode-qr'"></i>
-							<div class="login-content-main-scan-delta"></div>
+							<div class="login-content-main-sacn-delta"></div>
 						</div>
 					</div>
 				</div>
@@ -55,21 +48,22 @@ import { storeToRefs } from 'pinia';
 import { useThemeConfig } from '/@/stores/themeConfig';
 import { NextLoading } from '/@/utils/loading';
 import logoMini from '/@/assets/logo-mini.svg';
-import loginIconTwo from '/@/assets/login-icon-two.svg';
-import loginIconTwo1 from '/@/assets/login-icon-two1.svg';
-import loginIconTwo2 from '/@/assets/login-icon-two2.svg';
+import loginMain from '/@/assets/login-main.svg';
+import loginBg from '/@/assets/login-bg.svg';
 
 // 引入组件
 const Account = defineAsyncComponent(() => import('/@/views/login/component/account.vue'));
 const Mobile = defineAsyncComponent(() => import('/@/views/login/component/mobile.vue'));
 const Scan = defineAsyncComponent(() => import('/@/views/login/component/scan.vue'));
 
+// 定义变量内容
 const storesThemeConfig = useThemeConfig();
 const { themeConfig } = storeToRefs(storesThemeConfig);
 const state = reactive({
 	tabsActiveName: 'account',
 	isScan: false,
 });
+
 // 获取布局配置信息
 const getThemeConfig = computed(() => {
 	return themeConfig.value;
@@ -86,9 +80,9 @@ onMounted(() => {
 	background: var(--el-color-white);
 	.login-left {
 		flex: 1;
-		// position: relative;
-		// background-color: rgba(211, 239, 255, 1);
-		// margin-right: 100px;
+		position: relative;
+		background-color: rgba(211, 239, 255, 1);
+		margin-right: 100px;
 		.login-left-logo {
 			display: flex;
 			align-items: center;
@@ -98,31 +92,40 @@ onMounted(() => {
 			z-index: 1;
 			animation: logoAnimation 0.3s ease;
 			img {
-				width: 64px;
-				height: 64px;
+				width: 52px;
+				height: 52px;
 			}
 			.login-left-logo-text {
 				display: flex;
 				flex-direction: column;
 				span {
 					margin-left: 10px;
-					font-size: 30px;
-					font-weight: 700;
-					color: var(--el-color-primary);
+					font-size: 28px;
+					color: #26a59a;
 				}
 				.login-left-logo-text-msg {
 					font-size: 12px;
-					color: var(--el-color-primary);
+					color: #32a99e;
 				}
 			}
 		}
-		.login-icon-group-icon {
-			width: 85%;
-			height: 85%;
+		.login-left-img {
 			position: absolute;
-			left: 10%;
 			top: 50%;
-			transform: translateY(-50%) translate3d(0, 0, 0);
+			left: 50%;
+			transform: translate(-50%, -50%);
+			width: 100%;
+			height: 52%;
+			img {
+				width: 100%;
+				height: 100%;
+				animation: error-num 0.6s ease;
+			}
+		}
+		.login-left-waves {
+			position: absolute;
+			top: 0;
+			right: -100px;
 		}
 	}
 	.login-right {
@@ -131,7 +134,7 @@ onMounted(() => {
 			border: 1px solid var(--el-color-primary-light-3);
 			border-radius: 3px;
 			width: 500px;
-			height: 550px;
+			height: 500px;
 			position: relative;
 			overflow: hidden;
 			background-color: var(--el-color-white);
@@ -154,15 +157,15 @@ onMounted(() => {
 					top: 0px;
 					left: 0;
 					width: 100%;
-					height: 1px;
+					height: 3px;
 					background: linear-gradient(90deg, transparent, var(--el-color-primary));
 					animation: loginLeft 3s linear infinite;
 				}
 				&::after {
-					filter: hue-rotate(0deg);
+					filter: hue-rotate(60deg);
 					top: -100%;
 					right: 2px;
-					width: 1px;
+					width: 3px;
 					height: 100%;
 					background: linear-gradient(180deg, transparent, var(--el-color-primary));
 					animation: loginTop 3s linear infinite;
@@ -171,45 +174,44 @@ onMounted(() => {
 			}
 			.login-right-warp-two {
 				&::before {
-					filter: hue-rotate(0deg);
+					filter: hue-rotate(120deg);
 					bottom: 2px;
 					right: -100%;
 					width: 100%;
-					height: 1px;
+					height: 3px;
 					background: linear-gradient(270deg, transparent, var(--el-color-primary));
 					animation: loginRight 3s linear infinite;
 					animation-delay: 1.4s;
 				}
 				&::after {
-					filter: hue-rotate(0deg);
+					filter: hue-rotate(300deg);
 					bottom: -100%;
 					left: 0px;
-					width: 1px;
+					width: 3px;
 					height: 100%;
 					background: linear-gradient(360deg, transparent, var(--el-color-primary));
 					animation: loginBottom 3s linear infinite;
 					animation-delay: 2.1s;
 				}
 			}
-			.login-right-warp-main {
+			.login-right-warp-mian {
 				display: flex;
 				flex-direction: column;
 				height: 100%;
 				.login-right-warp-main-title {
 					height: 130px;
 					line-height: 130px;
-					font-size: 32px;
-					font-weight: 800;
+					font-size: 27px;
 					text-align: center;
-					//letter-spacing: 3px;
+					letter-spacing: 3px;
 					animation: logoAnimation 0.3s ease;
 					animation-delay: 0.3s;
-					color: var(--el-color-primary);
+					color: var(--el-text-color-primary);
 				}
 				.login-right-warp-main-form {
 					flex: 1;
 					padding: 0 50px 50px;
-					.login-content-main-scan {
+					.login-content-main-sacn {
 						position: absolute;
 						top: 0;
 						right: 0;

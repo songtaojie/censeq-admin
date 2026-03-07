@@ -1,8 +1,8 @@
 <template>
 	<div class="layout-footer pb15">
 		<div class="layout-footer-warp">
-			<div>陕西星海科技有限公司</div>
-			<div class="mt5">Copyright © 2022 Dilon All rights reserved.</div>
+			<div>vue-next-admin，Made by lyt with ❤️</div>
+			<div class="mt5">深圳市 xxx 公司版权所有</div>
 		</div>
 	</div>
 </template>

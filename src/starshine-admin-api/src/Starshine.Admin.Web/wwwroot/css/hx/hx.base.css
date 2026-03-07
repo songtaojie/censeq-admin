@@ -1,0 +1,21 @@
+﻿body {
+    margin:unset;
+    padding:unset;
+}
+/*公共样式*/
+html {
+    height: 100%;
+}
+a {
+    color: #007bff;
+    text-decoration: none;
+    background-color: transparent;
+}
+    a:focus,
+    a:hover,
+    button:focus {
+        outline: none;
+    }
+[type=button]:not(:disabled), [type=reset]:not(:disabled), [type=submit]:not(:disabled), button:not(:disabled) {
+    cursor: pointer;
+}

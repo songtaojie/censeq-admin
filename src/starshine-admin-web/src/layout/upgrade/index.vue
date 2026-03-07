@@ -1,6 +1,13 @@
 <template>
 	<div class="upgrade-dialog">
-		<el-dialog v-model="state.isUpgrade" width="300px" destroy-on-close :show-close="false" :close-on-click-modal="false" :close-on-press-escape="false">
+		<el-dialog
+			v-model="state.isUpgrade"
+			width="300px"
+			destroy-on-close
+			:show-close="false"
+			:close-on-click-modal="false"
+			:close-on-press-escape="false"
+		>
 			<div class="upgrade-title">
 				<div class="upgrade-title-warp">
 					<span class="upgrade-title-warp-txt">{{ $t('message.upgrade.title') }}</span>
@@ -10,9 +17,11 @@
 			<div class="upgrade-content">
 				{{ getThemeConfig.globalTitle }} {{ $t('message.upgrade.msg') }}
 				<div class="mt5">
-					<el-link type="primary" class="font12" href="https://github.com/songtaojie/starshine-admin" target="_black"> CHANGELOG.md </el-link>
+					<el-link type="primary" class="font12" href="https://gitee.com/lyt-top/vue-next-admin/blob/master/CHANGELOG.md" target="_black">
+						CHANGELOG.md
+					</el-link>
 				</div>
-				<!-- <div class="upgrade-content-desc mt5">{{ $t("message.upgrade.desc") }}</div> -->
+				<div class="upgrade-content-desc mt5">{{ $t('message.upgrade.desc') }}</div>
 			</div>
 			<div class="upgrade-btn">
 				<el-button round size="default" type="info" text @click="onCancel">{{ $t('message.upgrade.btnOne') }}</el-button>
@@ -27,6 +36,7 @@ import { reactive, computed, onMounted } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { storeToRefs } from 'pinia';
 import { useThemeConfig } from '/@/stores/themeConfig';
+import { Local } from '/@/utils/storage';
 
 // 定义变量内容
 const { t } = useI18n();
@@ -53,9 +63,9 @@ const onUpgrade = () => {
 	state.isLoading = true;
 	state.btnTxt = t('message.upgrade.btnTwoLoading');
 	setTimeout(() => {
-		// Local.clear();
+		Local.clear();
 		window.location.reload();
-		// Local.set('version', state.version);
+		Local.set('version', state.version);
 	}, 2000);
 };
 // 延迟显示，防止刷新时界面显示太快
@@ -76,6 +86,7 @@ onMounted(() => {
 <style scoped lang="scss">
 .upgrade-dialog {
 	:deep(.el-dialog) {
+		padding: 0 !important;
 		.el-dialog__body {
 			padding: 0 !important;
 		}

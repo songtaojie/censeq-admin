@@ -1,0 +1,19 @@
+<Project Sdk="Microsoft.NET.Sdk">
+	<Import Project="..\..\..\..\common.props" />
+	<PropertyGroup>
+		<TargetFramework>$(NETVersion)</TargetFramework>
+		<WarningsAsErrors>Nullable</WarningsAsErrors>
+		<AssemblyName>Starshine.Abp.PermissionManagement.Domain.Identity</AssemblyName>
+		<PackageId>Starshine.Abp.PermissionManagement.Domain.Identity</PackageId>
+		<GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
+		<GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
+		<GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
+		<RootNamespace />
+	</PropertyGroup>
+	<ItemGroup>
+		<ProjectReference Include="..\Starshine.Abp.Identity.Domain.Shared\Starshine.Abp.Identity.Domain.Shared.csproj" />
+		<ProjectReference Include="..\..\..\users\src\Starshine.Abp.Users.Abstractions\Starshine.Abp.Users.Abstractions.csproj" />
+		<ProjectReference Include="..\..\..\permission-management\src\Starshine.Abp.PermissionManagement.Domain\Starshine.Abp.PermissionManagement.Domain.csproj" />
+	</ItemGroup>
+
+</Project>

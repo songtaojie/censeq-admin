@@ -1,0 +1,18 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+	<Import Project="..\..\..\..\common.props" />
+	<PropertyGroup>
+		<TargetFramework>$(NETVersion)</TargetFramework>
+		<WarningsAsErrors>Nullable</WarningsAsErrors>
+		<AssemblyName>Starshine.Abp.Identity.EntityFrameworkCore</AssemblyName>
+		<PackageId>Starshine.Abp.Identity.EntityFrameworkCore</PackageId>
+		<GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
+		<GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
+		<GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
+		<RootNamespace />
+	</PropertyGroup>
+	<ItemGroup>
+		<ProjectReference Include="..\Starshine.Abp.Identity.Domain\Starshine.Abp.Identity.Domain.csproj" />
+		<ProjectReference Include="..\..\..\users\src\Starshine.Abp.Users.EntityFrameworkCore\Starshine.Abp.Users.EntityFrameworkCore.csproj" />
+	</ItemGroup>
+
+</Project>

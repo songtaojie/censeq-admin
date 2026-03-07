@@ -20,7 +20,7 @@ const initQrcode = () => {
 	nextTick(() => {
 		(<HTMLElement>qrcodeRef.value).innerHTML = '';
 		new QRCode(qrcodeRef.value, {
-			text: `https://github.com/songtaojie/starshine-admin`,
+			text: `https://qm.qq.com/cgi-bin/qm/qr?k=RdUY97Vx0T0vZ_1OOu-X1yFNkWgDwbjC&jump_from=webapi`,
 			width: 260,
 			height: 260,
 			colorDark: '#000000',

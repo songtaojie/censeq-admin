@@ -1,139 +1,122 @@
 <template>
-	<div class="sys-menu-container">
-		<el-card shadow="hover" :body-style="{ paddingBottom: '0' }">
-			<el-form :model="state.queryParams" ref="queryForm" :inline="true">
-				<el-form-item label="菜单名称" prop="title">
-					<el-input placeholder="菜单名称" clearable @keyup.enter="handleQuery" v-model="state.queryParams.title" />
-				</el-form-item>
-				<el-form-item label="类型" prop="type">
-					<el-select v-model="state.queryParams.type" placeholder="类型" clearable>
-						<el-option label="目录" :value="1" />
-						<el-option label="菜单" :value="2" />
-						<el-option label="按钮" :value="3" />
-					</el-select>
-				</el-form-item>
-				<el-form-item>
-					<el-button-group>
-						<el-button type="primary" icon="ele-Search" @click="handleQuery" v-auth="'sysMenu:list'"> 查询 </el-button>
-						<el-button icon="ele-Refresh" @click="resetQuery"> 重置 </el-button>
-					</el-button-group>
-				</el-form-item>
-				<el-form-item>
-					<el-button type="primary" icon="ele-Plus" @click="openAddMenu" v-auth="'sysMenu:add'"> 新增 </el-button>
-				</el-form-item>
-			</el-form>
-		</el-card>
-
-		<el-card class="full-table" shadow="hover" style="margin-top: 8px">
-			<el-table :data="state.menuData" v-loading="state.loading" row-key="id" :tree-props="{ children: 'children', hasChildren: 'hasChildren' }" border>
+	<div class="system-menu-container layout-pd">
+		<el-card shadow="hover">
+			<div class="system-menu-search mb15">
+				<el-input size="default" placeholder="请输入菜单名称" style="max-width: 180px"> </el-input>
+				<el-button size="default" type="primary" class="ml10">
+					<el-icon>
+						<ele-Search />
+					</el-icon>
+					查询
+				</el-button>
+				<el-button size="default" type="success" class="ml10" @click="onOpenAddMenu">
+					<el-icon>
+						<ele-FolderAdd />
+					</el-icon>
+					新增菜单
+				</el-button>
+			</div>
+			<el-table
+				:data="state.tableData.data"
+				v-loading="state.tableData.loading"
+				style="width: 100%"
+				row-key="path"
+				:tree-props="{ children: 'children', hasChildren: 'hasChildren' }"
+			>
 				<el-table-column label="菜单名称" show-overflow-tooltip>
 					<template #default="scope">
-						<SvgIcon :name="scope.row.icon" />
-						<span class="ml10">{{ $t(scope.row.title) }}</span>
+						<SvgIcon :name="scope.row.meta.icon" />
+						<span class="ml10">{{ $t(scope.row.meta.title) }}</span>
 					</template>
 				</el-table-column>
-				<el-table-column label="类型" width="70" align="center" show-overflow-tooltip>
+				<el-table-column prop="path" label="路由路径" show-overflow-tooltip></el-table-column>
+				<el-table-column label="组件路径" show-overflow-tooltip>
 					<template #default="scope">
-						<el-tag type="warning" v-if="scope.row.type === 1">目录</el-tag>
-						<el-tag v-else-if="scope.row.type === 2">菜单</el-tag>
-						<el-tag type="info" v-else>按钮</el-tag>
+						<span>{{ scope.row.component }}</span>
 					</template>
 				</el-table-column>
-				<el-table-column prop="path" label="路由路径" show-overflow-tooltip />
-				<el-table-column prop="component" label="组件路径" show-overflow-tooltip />
-				<el-table-column prop="permission" label="权限标识" show-overflow-tooltip />
-				<el-table-column prop="orderNo" label="排序" width="70" align="center" show-overflow-tooltip />
-				<el-table-column label="状态" width="80" align="center" show-overflow-tooltip>
+				<el-table-column label="权限标识" show-overflow-tooltip>
 					<template #default="scope">
-						<el-tag type="success" v-if="scope.row.status === 1">启用</el-tag>
-						<el-tag type="danger" v-else>禁用</el-tag>
+						<span>{{ scope.row.meta.roles }}</span>
 					</template>
 				</el-table-column>
-				<el-table-column prop="createTime" label="修改时间" align="center" show-overflow-tooltip />
-				<el-table-column label="操作" width="140" fixed="right" align="center" show-overflow-tooltip>
+				<el-table-column label="排序" show-overflow-tooltip width="80">
 					<template #default="scope">
-						<el-button icon="ele-Edit" size="small" text type="primary" @click="openEditMenu(scope.row)" v-auth="'sysMenu:update'"> 编辑 </el-button>
-						<el-button icon="ele-Delete" size="small" text type="danger" @click="delMenu(scope.row)" v-auth="'sysMenu:delete'"> 删除 </el-button>
+						{{ scope.$index }}
+					</template>
+				</el-table-column>
+				<el-table-column label="类型" show-overflow-tooltip width="80">
+					<template #default="scope">
+						<el-tag type="success" size="small">{{ scope.row.xx }}菜单</el-tag>
+					</template>
+				</el-table-column>
+				<el-table-column label="操作" show-overflow-tooltip width="140">
+					<template #default="scope">
+						<el-button size="small" text type="primary" @click="onOpenAddMenu('add')">新增</el-button>
+						<el-button size="small" text type="primary" @click="onOpenEditMenu('edit', scope.row)">修改</el-button>
+						<el-button size="small" text type="primary" @click="onTabelRowDel(scope.row)">删除</el-button>
 					</template>
 				</el-table-column>
 			</el-table>
 		</el-card>
-		<EditMenu ref="editMenuRef" :title="state.editMenuTitle" :menuData="state.menuData" />
+		<MenuDialog ref="menuDialogRef" @refresh="getTableData()" />
 	</div>
 </template>
 
-<script lang="ts" setup name="sysMenu">
-import { onMounted, onUnmounted, reactive, ref } from 'vue';
+<script setup lang="ts" name="systemMenu">
+import { defineAsyncComponent, ref, onMounted, reactive } from 'vue';
+import { RouteRecordRaw } from 'vue-router';
 import { ElMessageBox, ElMessage } from 'element-plus';
-import mittBus from '/@/utils/mitt';
-import EditMenu from '/@/views/system/menu/component/editMenu.vue';
+import { storeToRefs } from 'pinia';
+import { useRoutesList } from '/@/stores/routesList';
+// import { setBackEndControlRefreshRoutes } from "/@/router/backEnd";
 
-import { getAPI } from '/@/utils/axios-utils';
-import { SysMenuApi } from '/@/api-services/api';
-import { SysMenu } from '/@/api-services/models';
+// 引入组件
+const MenuDialog = defineAsyncComponent(() => import('/@/views/system/menu/dialog.vue'));
 
-const editMenuRef = ref<InstanceType<typeof EditMenu>>();
+// 定义变量内容
+const stores = useRoutesList();
+const { routesList } = storeToRefs(stores);
+const menuDialogRef = ref();
 const state = reactive({
-	loading: false,
-	menuData: [] as Array<SysMenu>,
-	queryParams: {
-		title: undefined,
-		type: undefined,
+	tableData: {
+		data: [] as RouteRecordRaw[],
+		loading: true,
 	},
-	editMenuTitle: '',
 });
 
-onMounted(async () => {
-	handleQuery();
-
-	mittBus.on('submitRefresh', () => {
-		handleQuery();
-	});
-});
-
-onUnmounted(() => {
-	mittBus.off('submitRefresh');
-});
-
-// 查询操作
-const handleQuery = async () => {
-	state.loading = true;
-	var res = await getAPI(SysMenuApi).getSysMenuList(state.queryParams.title, state.queryParams.type);
-	state.menuData = res.data.data ?? [];
-	state.loading = false;
+// 获取路由数据，真实请从接口获取
+const getTableData = () => {
+	state.tableData.loading = true;
+	state.tableData.data = routesList.value;
+	setTimeout(() => {
+		state.tableData.loading = false;
+	}, 500);
 };
-
-// 重置操作
-const resetQuery = () => {
-	state.queryParams.title = undefined;
-	state.queryParams.type = undefined;
-	handleQuery();
+// 打开新增菜单弹窗
+const onOpenAddMenu = (type: string) => {
+	menuDialogRef.value.openDialog(type);
 };
-
-// 打开新增页面
-const openAddMenu = () => {
-	state.editMenuTitle = '添加菜单';
-	editMenuRef.value?.openDialog({ type: 2 });
+// 打开编辑菜单弹窗
+const onOpenEditMenu = (type: string, row: RouteRecordRaw) => {
+	menuDialogRef.value.openDialog(type, row);
 };
-
-// 打开编辑页面
-const openEditMenu = (row: any) => {
-	state.editMenuTitle = '编辑菜单';
-	editMenuRef.value?.openDialog(row);
-};
-
 // 删除当前行
-const delMenu = (row: any) => {
-	ElMessageBox.confirm(`确定删除菜单：【${row.title}】?`, '提示', {
-		confirmButtonText: '确定',
+const onTabelRowDel = (row: RouteRecordRaw) => {
+	ElMessageBox.confirm(`此操作将永久删除路由：${row.path}, 是否继续?`, '提示', {
+		confirmButtonText: '删除',
 		cancelButtonText: '取消',
 		type: 'warning',
 	})
-		.then(async () => {
-			await getAPI(SysMenuApi).deleteSysMenu({ id: row.id });
-			handleQuery();
+		.then(() => {
 			ElMessage.success('删除成功');
+			getTableData();
+			//await setBackEndControlRefreshRoutes() // 刷新菜单，未进行后端接口测试
 		})
 		.catch(() => {});
 };
+// 页面加载时
+onMounted(() => {
+	getTableData();
+});
 </script>

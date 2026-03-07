@@ -1,0 +1,17 @@
+<Project Sdk="Microsoft.NET.Sdk">
+	<Import Project="..\..\..\..\common.props" />
+	<PropertyGroup>
+		<WarningsAsErrors>Nullable</WarningsAsErrors>
+		<AssemblyName>Starshine.Abp.Users.Domain.Shared</AssemblyName>
+		<PackageId>Starshine.Abp.Users.Domain.Shared</PackageId>
+		<GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
+		<GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
+		<GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
+		<RootNamespace />
+	</PropertyGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Volo.Abp.Core" Version="$(AbpVersion)" />
+	</ItemGroup>
+
+</Project>

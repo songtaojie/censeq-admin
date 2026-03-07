@@ -1,0 +1,82 @@
+﻿@page "/account/register"
+@using Microsoft.AspNetCore.Mvc.Localization
+@using Starshine.Admin.Localization
+@using Starshine.Admin.Web.Pages.Account
+@model Starshine.Admin.Web.Pages.Account.RegisterModel
+@inject IHtmlLocalizer<AdminResource> L
+<div class="d-flex justify-content-center align-items-center" style="background-color:#353e54">
+    <div class="card shadow-sm rounded vw-sm-80 mb-5 vw-lg-60 vw-xl-50">
+        <div class="card-body p-0 d-flex ">
+            <div class="left-panel d-flex flex-column justify-content-center w-50 p-5 text-white"
+                 style="background: linear-gradient(135deg, #979fa7, #353e54);">
+                <h2 class="fw-bold">企业级 DevOps 研发管理平台</h2>
+                <p>Gitee 已成为开发工作的依赖，从个人私有仓库到企业版，每一项解决方案都旨在流畅。</p>
+            </div>
+            <div class="flex-grow-1  p-5">
+                <partial name="_ValidationSummary" />
+                <div class="d-flex justify-content-between align-items-center">
+                    <h4 class="mb-0">@L["Register"]</h4>
+                    <strong class="text-secondary">
+                        @L["AlreadyRegistered"]
+                        <a href="@Url.Page("./Login", new { returnUrl = Model.ReturnUrl, returnUrlHash = Model.ReturnUrlHash })"
+                           class="text-decoration-none">@L["Login"]</a>
+                    </strong>
+                </div>
+
+                @if (Model.EnableLocalRegister || Model.IsExternalLogin)
+                {
+                    <form method="post" class="mt-4">
+                        <div class="mb-4">
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="fa-solid fa-user"></i></span>
+                                <input asp-for="Input.UserName" placeholder="@Html.DisplayNameFor(m => m.Input.UserName)" class="form-control" />
+                            </div>
+                            <span asp-validation-for="Input.UserName" class="text-danger"></span>
+                        </div>
+
+                        <div class="mb-4">
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="fa-solid fa-envelope"></i></span>
+                                <input asp-for="Input.EmailAddress" placeholder="@Html.DisplayNameFor(m => m.Input.EmailAddress)" class="form-control" />
+                            </div>
+                            <span asp-validation-for="Input.EmailAddress" class="text-danger"></span>
+                        </div>
+
+                        <div class="mb-4">
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="fa-solid fa-lock"></i></span>
+                                <input asp-for="Input.Password" placeholder="@Html.DisplayNameFor(m => m.Input.Password)" class="form-control" />
+                            </div>
+                            <span asp-validation-for="Input.Password" class="text-danger"></span>
+                        </div>
+
+                        <div class="mb-4 d-grid">
+                            <div class="input-group">
+                                <button type="submit" class="btn btn-primary w-100" name="button" value="login">@L["Register"]</button>
+                            </div>
+                        </div>
+                    </form>
+                }
+
+                @if (!Model.IsExternalLogin && Model.VisibleExternalProviders.Any())
+                {
+                    <div class="mt-2">
+                        <h5>@L["OrRegisterWith"]</h5>
+                        <form asp-page="./Login" asp-page-handler="ExternalLogin" asp-route-returnUrl="@Model.ReturnUrl"
+                              asp-route-returnUrlHash="@Model.ReturnUrlHash" method="post">
+                            @foreach (var provider in Model.VisibleExternalProviders)
+                            {
+                                <button type="submit" class="btn btn-primary m-1" name="provider" value="@provider.AuthenticationScheme"
+                                        title="@L["RegisterUsingYourProviderAccount", provider.DisplayName]">
+                                    @provider.DisplayName
+                                </button>
+                            }
+                        </form>
+                    </div>
+                }
+
+            </div>
+        </div>
+    </div>
+</div>
+

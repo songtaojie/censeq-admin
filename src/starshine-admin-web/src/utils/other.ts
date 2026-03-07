@@ -54,6 +54,7 @@ export function setTagsViewNameI18n(item: any) {
 	let tagsViewName: string = '';
 	const { query, params, meta } = item;
 	// 修复tagsViewName匹配到其他含下列单词的路由
+	// https://gitee.com/lyt-top/vue-next-admin/pulls/44/files
 	const pattern = /^\{("(zh-cn|en|zh-tw)":"[^,]+",?){1,3}}$/;
 	if (query?.tagsViewName || params?.tagsViewName) {
 		if (pattern.test(query?.tagsViewName) || pattern.test(params?.tagsViewName)) {
@@ -131,7 +132,11 @@ export function deepClone(obj: EmptyObjectType) {
  * 判断是否是移动端
  */
 export function isMobile() {
-	if (navigator.userAgent.match(/('phone|pad|pod|iPhone|iPod|ios|iPad|Android|Mobile|BlackBerry|IEMobile|MQQBrowser|JUC|Fennec|wOSBrowser|BrowserNG|WebOS|Symbian|Windows Phone')/i)) {
+	if (
+		navigator.userAgent.match(
+			/('phone|pad|pod|iPhone|iPod|ios|iPad|Android|Mobile|BlackBerry|IEMobile|MQQBrowser|JUC|Fennec|wOSBrowser|BrowserNG|WebOS|Symbian|Windows Phone')/i
+		)
+	) {
 		return true;
 	} else {
 		return false;
@@ -169,174 +174,6 @@ export function handleOpenLink(val: RouteItem) {
 	if (verifyUrl(<string>val.meta?.isLink)) window.open(val.meta?.isLink);
 	else window.open(`${origin}${pathname}#${val.meta?.isLink}`);
 }
-
-	/**
-	 * 判断给定值是否是字符串
-	 * @param {any} value 要验证的值
-	 * @returns {Boolean} true代表是字符串，false代表不是字符串
-	 */
-	export const isString = function (value:any) {
-		return typeof value === 'string'
-	}
-	/**
-	 * 如果传递的值是JavaScript数组则返回true，否则返回false。
-	 * @param {Object} value 要测试的目标。
-	 * @returns {Boolean}
-	 */
-	 export const isArray = function (value:any) {
-		if ('isArray' in Array) {
-			return Array.isArray(value)
-		}
-		return toString.call(value) === '[object Array]'
-	}
-	/**
-	 * 判断给定值是否为空
-	 * @param {any} value 要判断的值
-	 * @param {Boolean} allowEmptyString 是否允许空字符串
-	 * @returns {Boolean} true为空，false不为空
-	 */
-	 export const isEmpty = function (value:any, allowEmptyString:boolean = false) {
-		return value === undefined || value === null || (!allowEmptyString ? value === '' : false) || isArray(value) && value.length === 0
-	}
-
-	/**
-	 * 判断给定制是否是对象
-	 * @param {any} value 要验证的值
-	 * @returns {Boolean} true代表是对象，false代表不是对象
-	 */
-	 export const isObject = function (value:any) {
-		// eslint-disable-next-line no-useless-call
-		if (toString.call(null) === '[object Object]') {
-			// 在这里检查ownerDocument以排除DOM节点
-			return value !== null && toString.call(value) === '[object Object]' && value.ownerDocument === undefined
-		}
-		return toString.call(value) === '[object Object]'
-	}
-
-	/**
-	 * 是否是简单地对象
-	 * @param {any} value 要验证的值
-	 * @returns {Boolean} true代表是简单对象，false代表不是简单对象
-	 */
-	export const isSimpleObject = function (value:any) {
-		return value instanceof Object && value.constructor === Object
-	}
-	/**
-	 * 监察对象是否为空
-	 * @param {Object} object 要检查的对象
-	 * @return {Boolean} true不为空
-	 */
-	export const isEmptyObject = function (object:any) {
-		var key
-		for (key in object) {
-			if (object.hasOwnProperty(key)) {
-				return false
-			}
-		}
-	return true
-	}
-	/**
-	 * 是否是boolean
-	 * @param {any} value 要验证的值
-	 * @returns {Boolean} true代表是Bool值，false代表不是Bool值
-	 */
-	export const isBoolean = function (value:any) {
-		return typeof value === 'boolean'
-	}
-	/**
-	 * 如果传递的值是数字，则返回true。 对于非有限数，返回false。
-	 * @param {Object} value 要测试的值。
-	 * @return {Boolean} 如果传递的值是数字，则返回true。 对于非有限数，返回false。
-	 */
-	export const isNumber = function (value:any) {
-		return typeof value === 'number' && isFinite(value)
-	}
-	/**
-	 * 如果传递的值是JavaScript函数则返回“true”，否则返回“false”。
-	 * @param {Object} value 要测试的值.
-	 * @return {Boolean} 如果传递的值是JavaScript函数则返回“true”，否则返回“false”。
-	 */
-	export const isFunction = function (value:any) {
-		if (typeof document !== 'undefined' && typeof document.getElementsByTagName('body') === 'function') {
-			return !!value && toString.call(value) === '[object Function]'
-		}
-
-		return !!value && typeof value === 'function'
-	}
-	/**
-	 * 生成四位随机的十六进制数字
-	 */
-	function s4() {
-		return ((1 + Math.random()) * 0x10000 | 0).toString(16).substring(1)
-	}
-	export const newGuid = function () {
-		return `${s4() + s4()}-${s4()}-${s4()}-${s4() + s4() + s4()}`
-	}
-  
-	export function dateFormat(time:string, format:string) {
-		var date = new Date(time)
-		if (isEmpty(format)) {
-			format = 'yyyy-MM-dd'
-		}
-		var o = {
-			'M+': date.getMonth() + 1, // 月份
-			'd+': date.getDate(), // 日
-			'H+': date.getHours(), // 小时
-			'h+': date.getHours(), // 小时
-			'm+': date.getMinutes(), // 分
-			's+': date.getSeconds(), // 秒
-			'q+': Math.floor((date.getMonth() + 3) / 3), // 季度
-			'S': date.getMilliseconds() // 毫秒
-		}
-		if (/(y+)/.test(format)) {
-			format = format.replace(RegExp.$1, `${date.getFullYear()}`.substr(4 - RegExp.$1.length))
-		}
-		for (var k in o) {
-			if (new RegExp(`(${k})`).test(format)) {
-			format = format.replace(RegExp.$1, RegExp.$1.length === 1 ? o[k] : `00${o[k]}`.substr(`${o[k]}`.length))
-			}
-		}
-		return format
-	}
-  /**
-   * 字符串或者对象
-   * @param {*} value 值
-   * @param {*} isObj 是否是对象
-   * @returns
-   */
-   export function toHex(value:any, isObj:boolean = false) {
-	var result = ''
-	var str = value
-	if (isObj && isObject(value)) {
-		str = JSON.stringify(value)
-	}
-	if (!isEmpty(str)) {
-		str = str.toString()
-		for (var i = 0; i < str.length; i++) {
-			var temp = str.charCodeAt(i).toString(16)
-			if (temp.length === 1) temp = `0${temp}00`
-			else if (temp.length === 2) temp = `${temp}00`
-			else if (temp.length === 3) temp = `${temp.substring(1, 3)}0${temp.substring(0, 1)}`
-			else if (temp.length === 4) temp = temp.substring(2, 4) + temp.substring(0, 2)
-			result += temp
-		}
-	}
-	return result.toLowerCase()
-	}
-	export function formHex(value:any, isObj:boolean = false) {
-	var result = ''
-	if (!isEmpty(value)) {
-		value = value.toString()
-		for (var i = 0; i < value.length; i += 4) {
-			result = result + String.fromCharCode(Number(`0x${value.substring(i + 2, i + 4)}${value.substring(i, i + 2)}`))
-		}
-	}
-	if (!isEmpty(result) && isObj) {
-		return JSON.parse(result)
-	}
-	return result
-	}
-
 
 /**
  * 统一批量导出
