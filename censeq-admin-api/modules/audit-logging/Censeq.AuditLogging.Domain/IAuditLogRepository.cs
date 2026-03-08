@@ -1,4 +1,4 @@
-﻿using Censeq.Admin.Entities;
+﻿using Censeq.AuditLogging.Entities;
 using System;
 using System.Collections.Generic;
 using System.Net;
@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using Volo.Abp.Auditing;
 using Volo.Abp.Domain.Repositories;
 
-namespace Censeq.Admin.AuditLogging;
+namespace Censeq.AuditLogging;
 
 public interface IAuditLogRepository : IRepository<AuditLog, Guid>
 {

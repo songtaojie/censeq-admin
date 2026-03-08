@@ -1,11 +1,10 @@
-﻿using Censeq.Admin.Consts;
-using System;
+﻿using System;
 using Volo.Abp.Auditing;
 using Volo.Abp.Data;
 using Volo.Abp.Domain.Entities;
 using Volo.Abp.MultiTenancy;
 
-namespace Censeq.Admin.Entities;
+namespace Censeq.AuditLogging.Entities;
 
 [DisableAuditing]
 public class AuditLogAction : Entity<Guid>, IMultiTenant, IHasExtraProperties

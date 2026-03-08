@@ -1,6 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Censeq.Admin.AuditLogging;
-using Censeq.Admin.Entities;
+﻿using Censeq.AuditLogging.Entities;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,11 +13,11 @@ using Volo.Abp.Domain.Entities;
 using Volo.Abp.Domain.Repositories.EntityFrameworkCore;
 using Volo.Abp.EntityFrameworkCore;
 
-namespace Censeq.Admin.EntityFrameworkCore.AuditLogging;
+namespace Censeq.AuditLogging.EntityFrameworkCore;
 
-public class EfCoreAuditLogRepository : EfCoreRepository<StarshineAdminDbContext, AuditLog, Guid>, IAuditLogRepository
+public class EfCoreAuditLogRepository : EfCoreRepository<IAuditLoggingDbContext, AuditLog, Guid>, IAuditLogRepository
 {
-    public EfCoreAuditLogRepository(IDbContextProvider<StarshineAdminDbContext> dbContextProvider, 
+    public EfCoreAuditLogRepository(IDbContextProvider<IAuditLoggingDbContext> dbContextProvider, 
         IAbpLazyServiceProvider abpLazyServiceProvider)
         : base(dbContextProvider)
     {

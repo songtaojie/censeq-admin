@@ -29,6 +29,14 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Censeq.Admin.HttpApi", "src
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Censeq.Admin.HttpApi.Host", "src\Censeq.Admin.HttpApi.Host\Censeq.Admin.HttpApi.Host.csproj", "{9C987628-0E09-3DB2-2C5C-E5480A0B99B4}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "audit-logging", "audit-logging", "{7E5528EA-94BB-42A3-ABD0-B4D3F1488B71}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Censeq.AuditLogging.Domain.Shared", "modules\audit-logging\Censeq.AuditLogging.Domain.Shared\Censeq.AuditLogging.Domain.Shared.csproj", "{A730B259-CC7A-6686-08A5-2468D11C4A93}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Censeq.AuditLogging.Domain", "modules\audit-logging\Censeq.AuditLogging.Domain\Censeq.AuditLogging.Domain.csproj", "{41088BBE-5241-361C-E29D-3B146B153F47}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Censeq.AuditLogging.EntityFrameworkCore", "modules\audit-logging\Censeq.AuditLogging.EntityFrameworkCore\Censeq.AuditLogging.EntityFrameworkCore.csproj", "{21D49D21-69CE-02EC-7934-B8485854F929}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -75,6 +83,18 @@ Global
 		{9C987628-0E09-3DB2-2C5C-E5480A0B99B4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9C987628-0E09-3DB2-2C5C-E5480A0B99B4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9C987628-0E09-3DB2-2C5C-E5480A0B99B4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A730B259-CC7A-6686-08A5-2468D11C4A93}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A730B259-CC7A-6686-08A5-2468D11C4A93}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A730B259-CC7A-6686-08A5-2468D11C4A93}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A730B259-CC7A-6686-08A5-2468D11C4A93}.Release|Any CPU.Build.0 = Release|Any CPU
+		{41088BBE-5241-361C-E29D-3B146B153F47}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{41088BBE-5241-361C-E29D-3B146B153F47}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{41088BBE-5241-361C-E29D-3B146B153F47}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{41088BBE-5241-361C-E29D-3B146B153F47}.Release|Any CPU.Build.0 = Release|Any CPU
+		{21D49D21-69CE-02EC-7934-B8485854F929}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{21D49D21-69CE-02EC-7934-B8485854F929}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{21D49D21-69CE-02EC-7934-B8485854F929}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{21D49D21-69CE-02EC-7934-B8485854F929}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -90,6 +110,10 @@ Global
 		{587AE6DA-BF4D-6218-B96A-65DD67542094} = {123C8106-B92F-48DE-BBF4-1C71062E830E}
 		{298916BD-CAA0-E890-B1A0-ABFC0DD8BF13} = {123C8106-B92F-48DE-BBF4-1C71062E830E}
 		{9C987628-0E09-3DB2-2C5C-E5480A0B99B4} = {123C8106-B92F-48DE-BBF4-1C71062E830E}
+		{7E5528EA-94BB-42A3-ABD0-B4D3F1488B71} = {EAF7E666-1E79-48B8-B8EA-3DFD72BF359E}
+		{A730B259-CC7A-6686-08A5-2468D11C4A93} = {7E5528EA-94BB-42A3-ABD0-B4D3F1488B71}
+		{41088BBE-5241-361C-E29D-3B146B153F47} = {7E5528EA-94BB-42A3-ABD0-B4D3F1488B71}
+		{21D49D21-69CE-02EC-7934-B8485854F929} = {7E5528EA-94BB-42A3-ABD0-B4D3F1488B71}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {E23E8388-F169-4F3B-8A0C-AA189D779228}

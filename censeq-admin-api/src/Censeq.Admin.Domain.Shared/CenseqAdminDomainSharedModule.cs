@@ -1,7 +1,8 @@
-﻿using Microsoft.Extensions.DependencyInjection;
-using Censeq.Admin.FeatureManagement;
+﻿using Censeq.Admin.FeatureManagement;
 using Censeq.Admin.FeatureManagement.JsonConverters;
 using Censeq.Admin.Localization;
+using Censeq.AuditLogging;
+using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.BackgroundJobs;
 using Volo.Abp.Identity;
 using Volo.Abp.Json.SystemTextJson;
@@ -22,7 +23,8 @@ namespace Censeq.Admin;
     typeof(AbpOpenIddictDomainSharedModule),
     typeof(AbpPermissionManagementDomainSharedModule),
     typeof(AbpSettingManagementDomainSharedModule),
-    typeof(AbpJsonSystemTextJsonModule)
+    typeof(AbpJsonSystemTextJsonModule),
+    typeof(CenseqAuditLoggingDomainSharedModule)
     )]
 public class StarshineAdminDomainSharedModule : AbpModule
 {
@@ -52,10 +54,6 @@ public class StarshineAdminDomainSharedModule : AbpModule
                 ).AddVirtualJson("/Localization/TenantResources");
             options.DefaultResourceType = typeof(StarshineAdminResource);
 
-            options.Resources.Add<StarshineAuditLoggingResource>("zh-Hans")
-                .AddBaseTypes(typeof(AbpValidationResource))
-                .AddVirtualJson("/Localization/AuditLoggingResources");
-
             options.Resources
                .Add<StarshineFeatureManagementResource>("zh-Hans")
                .AddBaseTypes(typeof(AbpValidationResource))
@@ -66,7 +64,6 @@ public class StarshineAdminDomainSharedModule : AbpModule
         {
             options.MapCodeNamespace("Censeq.Admin", typeof(StarshineAdminResource));
             options.MapCodeNamespace("Censeq.Admin.TenantManagement", typeof(StarshineTenantManagementResource));
-            options.MapCodeNamespace("Censeq.Admin.AbpAuditLogging", typeof(StarshineAuditLoggingResource));
             options.MapCodeNamespace("Censeq.Admin.FeatureManagement", typeof(StarshineFeatureManagementResource));
         });
 

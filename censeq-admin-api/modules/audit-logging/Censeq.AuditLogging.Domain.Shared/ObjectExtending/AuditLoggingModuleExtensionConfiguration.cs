@@ -1,7 +1,7 @@
 ﻿using System;
 using Volo.Abp.ObjectExtending.Modularity;
 
-namespace Censeq.Admin.ObjectExtending;
+namespace Censeq.AuditLogging.ObjectExtending;
 
 public class AuditLoggingModuleExtensionConfiguration : ModuleExtensionConfiguration
 {

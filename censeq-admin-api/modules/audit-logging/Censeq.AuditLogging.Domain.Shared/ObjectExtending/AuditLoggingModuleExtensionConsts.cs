@@ -1,4 +1,4 @@
-﻿namespace Censeq.Admin.ObjectExtending;
+﻿namespace Censeq.AuditLogging.ObjectExtending;
 
 public static class AuditLoggingModuleExtensionConsts
 {

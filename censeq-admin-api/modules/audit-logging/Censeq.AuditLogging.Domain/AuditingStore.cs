@@ -7,7 +7,7 @@ using Volo.Abp.Auditing;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Uow;
 
-namespace Censeq.Admin.AuditLogging;
+namespace Censeq.AuditLogging;
 
 public class AuditingStore : IAuditingStore, ITransientDependency
 {
@@ -51,8 +51,10 @@ public class AuditingStore : IAuditingStore, ITransientDependency
 
     protected virtual async Task SaveLogAsync(AuditLogInfo auditInfo)
     {
-        using var uow = UnitOfWorkManager.Begin(true);
-        await AuditLogRepository.InsertAsync(await Converter.ConvertAsync(auditInfo));
-        await uow.CompleteAsync();
+        using (var uow = UnitOfWorkManager.Begin(true))
+        {
+            await AuditLogRepository.InsertAsync(await Converter.ConvertAsync(auditInfo));
+            await uow.CompleteAsync();
+        }
     }
 }

@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Censeq.AuditLogging.Entities;
 using Microsoft.Extensions.Options;
-using Censeq.Admin.Entities;
 using Volo.Abp.AspNetCore.ExceptionHandling;
 using Volo.Abp.Auditing;
 using Volo.Abp.Data;
@@ -12,7 +12,7 @@ using Volo.Abp.Guids;
 using Volo.Abp.Http;
 using Volo.Abp.Json;
 
-namespace Censeq.Admin.AuditLogging;
+namespace Censeq.AuditLogging;
 
 public class AuditLogInfoToAuditLogConverter : IAuditLogInfoToAuditLogConverter, ITransientDependency
 {

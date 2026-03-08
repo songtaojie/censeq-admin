@@ -1,10 +1,9 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Censeq.Admin.Consts;
-using Censeq.Admin.Entities;
+﻿using Censeq.AuditLogging.Entities;
+using Microsoft.EntityFrameworkCore;
 using Volo.Abp;
 using Volo.Abp.EntityFrameworkCore.Modeling;
 
-namespace Censeq.Admin.EntityFrameworkCore.Modeling
+namespace Censeq.AuditLogging.EntityFrameworkCore
 {
     internal static class StarshineAuditLoggingDbContextModelBuilderExtensions
     {
@@ -14,7 +13,7 @@ namespace Censeq.Admin.EntityFrameworkCore.Modeling
 
             builder.Entity<AuditLog>(b =>
             {
-                b.ToStarshineTable(nameof(AuditLog))
+                b.ToCenseqTable(nameof(AuditLog))
                     .ConfigureStarshineByConvention();
 
                 b.Property(x => x.ApplicationName).HasMaxLength(AuditLogConsts.MaxApplicationNameLength);
@@ -46,7 +45,7 @@ namespace Censeq.Admin.EntityFrameworkCore.Modeling
 
             builder.Entity<AuditLogAction>(b =>
             {
-                b.ToStarshineTable(nameof(AuditLogAction))
+                b.ToCenseqTable(nameof(AuditLogAction))
                     .ConfigureStarshineByConvention();
 
                 b.Property(x => x.AuditLogId);
@@ -64,7 +63,7 @@ namespace Censeq.Admin.EntityFrameworkCore.Modeling
 
             builder.Entity<EntityChange>(b =>
             {
-                b.ToStarshineTable(nameof(EntityChange))
+                b.ToCenseqTable(nameof(EntityChange))
                     .ConfigureStarshineByConvention();
 
                 b.Property(x => x.EntityTypeFullName).HasMaxLength(EntityChangeConsts.MaxEntityTypeFullNameLength).IsRequired();
@@ -81,7 +80,7 @@ namespace Censeq.Admin.EntityFrameworkCore.Modeling
 
             builder.Entity<EntityPropertyChange>(b =>
             {
-                b.ToStarshineTable(nameof(EntityPropertyChange))
+                b.ToCenseqTable(nameof(EntityPropertyChange))
                     .ConfigureStarshineByConvention();
 
                 b.Property(x => x.NewValue).HasMaxLength(EntityPropertyChangeConsts.MaxNewValueLength);

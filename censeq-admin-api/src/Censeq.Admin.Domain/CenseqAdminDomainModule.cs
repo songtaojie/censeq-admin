@@ -1,21 +1,21 @@
-﻿using MailKit.Security;
+﻿using Censeq.Abp.TenantManagement;
+using Censeq.Admin.Entities;
+using Censeq.Admin.FeatureManagement;
+using Censeq.Admin.MultiTenancy;
+using Censeq.AuditLogging;
+using MailKit.Security;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Polly;
-using Censeq.Abp.TenantManagement;
-using Censeq.Admin.Entities;
-using Censeq.Admin.FeatureManagement;
-using Censeq.Admin.MultiTenancy;
-using Censeq.Admin.ObjectExtending;
 using Volo.Abp.Domain.Entities.Events.Distributed;
 using Volo.Abp.Features;
 
 namespace Censeq.Admin;
 
 [DependsOn(
-    typeof(AbpAuditingModule),
+    typeof(CenseqAuditLoggingDomainModule),
     typeof(AbpExceptionHandlingModule),
     typeof(AbpJsonModule),
     typeof(AbpMultiTenancyModule),
@@ -104,25 +104,6 @@ public class StarshineAdminDomainModule : AbpModule
                 TenantManagementModuleExtensionConsts.ModuleName,
                 TenantManagementModuleExtensionConsts.EntityNames.Tenant,
                 typeof(Tenant)
-            );
-
-            //审计日志
-            ModuleExtensionConfigurationHelper.ApplyEntityConfigurationToEntity(
-           AuditLoggingModuleExtensionConsts.ModuleName,
-           AuditLoggingModuleExtensionConsts.EntityNames.AuditLog,
-           typeof(AuditLog)
-           );
-
-            ModuleExtensionConfigurationHelper.ApplyEntityConfigurationToEntity(
-                AuditLoggingModuleExtensionConsts.ModuleName,
-                AuditLoggingModuleExtensionConsts.EntityNames.AuditLogAction,
-                typeof(AuditLogAction)
-            );
-
-            ModuleExtensionConfigurationHelper.ApplyEntityConfigurationToEntity(
-                AuditLoggingModuleExtensionConsts.ModuleName,
-                AuditLoggingModuleExtensionConsts.EntityNames.EntityChange,
-                typeof(EntityChange)
             );
         });
     }

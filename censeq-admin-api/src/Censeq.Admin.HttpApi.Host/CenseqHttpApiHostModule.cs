@@ -22,6 +22,7 @@ using Censeq.Abp.AspNetCore.Mvc.UI.Theme.Basic;
 using Censeq.Abp.Account.Web.Consts;
 using Volo.Abp.OpenIddict;
 using Volo.Abp.AspNetCore.Mvc;
+using Censeq.Admin.EntityFrameworkCore;
 
 namespace Censeq.Admin;
 

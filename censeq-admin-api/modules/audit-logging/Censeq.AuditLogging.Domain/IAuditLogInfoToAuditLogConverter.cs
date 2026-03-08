@@ -1,8 +1,8 @@
-﻿using Censeq.Admin.Entities;
+﻿using Censeq.AuditLogging.Entities;
 using System.Threading.Tasks;
 using Volo.Abp.Auditing;
 
-namespace Censeq.Admin.AuditLogging;
+namespace Censeq.AuditLogging;
 
 public interface IAuditLogInfoToAuditLogConverter
 {
