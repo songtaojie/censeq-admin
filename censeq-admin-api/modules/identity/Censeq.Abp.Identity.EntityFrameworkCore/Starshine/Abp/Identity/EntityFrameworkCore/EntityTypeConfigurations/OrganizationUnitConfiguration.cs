@@ -20,7 +20,7 @@ namespace Censeq.Abp.Identity.EntityFrameworkCore
         /// <param name="builder"></param>
         public void Configure(EntityTypeBuilder<OrganizationUnit> builder)
         {
-            builder.ToTable(StarshineIdentityDbProperties.DbTablePrefix + nameof(OrganizationUnit), StarshineIdentityDbProperties.DbSchema);
+            builder.ToTable(CenseqIdentityDbProperties.DbTablePrefix + nameof(OrganizationUnit), CenseqIdentityDbProperties.DbSchema);
             builder.ConfigureByConvention();
             builder.Property(t => t.Code).IsRequired().HasMaxLength(OrganizationUnitConsts.MaxCodeLength);
             builder.Property(t => t.DisplayName).IsRequired().HasMaxLength(OrganizationUnitConsts.MaxDisplayNameLength);

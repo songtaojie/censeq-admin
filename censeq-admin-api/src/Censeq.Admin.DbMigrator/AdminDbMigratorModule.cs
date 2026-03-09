@@ -5,8 +5,8 @@ namespace Censeq.Admin.DbMigrator;
 
 [DependsOn(
     typeof(AbpAutofacModule),
-    typeof(StarshineAdminEntityFrameworkCoreModule),
-    typeof(StarshineAdminApplicationContractsModule)
+    typeof(CenseqAdminEntityFrameworkCoreModule),
+    typeof(CenseqAdminApplicationContractsModule)
     )]
 public class AdminDbMigratorModule : AbpModule
 {

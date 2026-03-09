@@ -13,7 +13,7 @@ namespace Censeq.Abp.Identity;
 /// <summary>
 /// 身份结果异常
 /// </summary>
-public class StarshineIdentityResultException : BusinessException, ILocalizeErrorMessage
+public class CenseqIdentityResultException : BusinessException, ILocalizeErrorMessage
 {
     /// <summary>
     /// 身份结果
@@ -24,7 +24,7 @@ public class StarshineIdentityResultException : BusinessException, ILocalizeErro
     /// 
     /// </summary>
     /// <param name="identityResult"></param>
-    public StarshineIdentityResultException([NotNull] IdentityResult identityResult)
+    public CenseqIdentityResultException([NotNull] IdentityResult identityResult)
         : base(code: $"Censeq.Abp.Identity:{identityResult.Errors.First().Code}",message: identityResult.Errors.Select(err => err.Description).JoinAsString(", "))
     {
         IdentityResult = Check.NotNull(identityResult, nameof(identityResult));

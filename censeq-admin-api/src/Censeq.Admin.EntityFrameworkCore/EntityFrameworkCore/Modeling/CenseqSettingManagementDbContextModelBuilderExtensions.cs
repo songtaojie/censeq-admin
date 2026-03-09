@@ -1,12 +1,11 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Volo.Abp;
-using Volo.Abp.EntityFrameworkCore.Modeling;
 using Volo.Abp.SettingManagement;
 using Volo.Abp.SettingManagement.EntityFrameworkCore;
 
 namespace Censeq.Admin.EntityFrameworkCore.Modeling
 {
-    internal static class StarshineSettingManagementDbContextModelBuilderExtensions
+    internal static class CenseqSettingManagementDbContextModelBuilderExtensions
     {
         //TODO: Instead of getting parameters, get a action of SettingManagementModelBuilderConfigurationOptions like other modules
         public static void ConfigureSettingManagement(this ModelBuilder builder)
@@ -20,7 +19,7 @@ namespace Censeq.Admin.EntityFrameworkCore.Modeling
 
             builder.Entity<Setting>(b =>
             {
-                b.ToStarshineTable(nameof(Setting));
+                b.ToCenseqTable(nameof(Setting));
 
                 b.Property(x => x.Name).HasMaxLength(SettingConsts.MaxNameLength).IsRequired();
                 if (builder.IsUsingOracle()) { SettingConsts.MaxValueLengthValue = 2000; }
@@ -33,7 +32,7 @@ namespace Censeq.Admin.EntityFrameworkCore.Modeling
 
             builder.Entity<SettingDefinitionRecord>(b =>
             {
-                b.ToStarshineTable(nameof(SettingDefinitionRecord)).ConfigureStarshineByConvention();
+                b.ToCenseqTable(nameof(SettingDefinitionRecord)).ConfigureCenseqByConvention();
 
                 b.Property(x => x.Name).HasMaxLength(SettingDefinitionRecordConsts.MaxNameLength).IsRequired();
                 b.Property(x => x.DisplayName).HasMaxLength(SettingDefinitionRecordConsts.MaxDisplayNameLength).IsRequired();
@@ -45,8 +44,6 @@ namespace Censeq.Admin.EntityFrameworkCore.Modeling
 
                 b.ApplyObjectExtensionMappings();
             });
-
-            builder.TryConfigureObjectExtensions<SettingManagementDbContext>();
         }
     }
 

@@ -12,7 +12,7 @@ using Volo.Abp.EntityFrameworkCore;
 
 namespace Censeq.Admin.Migrations
 {
-    [DbContext(typeof(StarshineAdminDbContext))]
+    [DbContext(typeof(CenseqAdminDbContext))]
     [Migration("20260203131533_InitialDb")]
     partial class InitialDb
     {

@@ -14,7 +14,7 @@ namespace Censeq.Abp.OpenIddict;
     typeof(AbpAspNetCoreMultiTenancyModule),
     typeof(AbpOpenIddictDomainModule)
 )]
-public class StarshineOpenIddictAspNetCoreModule : AbpModule
+public class CenseqOpenIddictAspNetCoreModule : AbpModule
 {
     public override void ConfigureServices(ServiceConfigurationContext context)
     {

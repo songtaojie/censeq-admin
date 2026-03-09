@@ -13,7 +13,7 @@ namespace Censeq.Abp.PermissionManagement;
 [DependsOn(
     typeof(AbpValidationModule)
     )]
-public class StarshinePermissionManagementDomainSharedModule : AbpModule
+public class CenseqPermissionManagementDomainSharedModule : AbpModule
 {
     /// <summary>
     /// 配置服务
@@ -23,13 +23,13 @@ public class StarshinePermissionManagementDomainSharedModule : AbpModule
     {
         Configure<AbpVirtualFileSystemOptions>(options =>
         {
-            options.FileSets.AddEmbedded<StarshinePermissionManagementDomainSharedModule>();
+            options.FileSets.AddEmbedded<CenseqPermissionManagementDomainSharedModule>();
         });
 
         Configure<AbpLocalizationOptions>(options =>
         {
             options.Resources
-                .Add<StarshinePermissionManagementResource>("zh-Hans")
+                .Add<CenseqPermissionManagementResource>("zh-Hans")
                 .AddBaseTypes(
                     typeof(AbpValidationResource)
                 ).AddVirtualJson("/Censeq/Abp/PermissionManagement/Localization/Domain");

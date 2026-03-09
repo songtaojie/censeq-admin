@@ -20,7 +20,7 @@ namespace Censeq.Abp.Identity.EntityFrameworkCore
         /// <param name="builder"></param>
         public void Configure(EntityTypeBuilder<IdentitySession> builder)
         {
-            builder.ToTable(StarshineIdentityDbProperties.DbTablePrefix + nameof(IdentitySession), StarshineIdentityDbProperties.DbSchema);
+            builder.ToTable(CenseqIdentityDbProperties.DbTablePrefix + nameof(IdentitySession), CenseqIdentityDbProperties.DbSchema);
 
             builder.ConfigureByConvention();
             builder.Property(x => x.SessionId).HasMaxLength(IdentitySessionConsts.MaxSessionIdLength).IsRequired();

@@ -12,7 +12,7 @@ using Volo.Abp;
 
 namespace Censeq.Admin.EntityFrameworkCore.Modeling
 {
-    internal static class StarshineOpenIddictDbContextModelCreatingExtensions
+    internal static class CenseqOpenIddictDbContextModelCreatingExtensions
     {
         public static void ConfigureOpenIddict(this ModelBuilder builder)
         {
@@ -25,8 +25,8 @@ namespace Censeq.Admin.EntityFrameworkCore.Modeling
 
             builder.Entity<OpenIddictApplication>(b =>
             {
-                b.ToStarshineTable(nameof(OpenIddictApplication))
-                    .ConfigureStarshineByConvention();
+                b.ToCenseqTable(nameof(OpenIddictApplication))
+                    .ConfigureCenseqByConvention();
 
                 b.HasIndex(x => x.ClientId).IsUnique();
 
@@ -40,8 +40,8 @@ namespace Censeq.Admin.EntityFrameworkCore.Modeling
 
             builder.Entity<OpenIddictAuthorization>(b =>
             {
-                b.ToStarshineTable(nameof(OpenIddictAuthorization))
-                    .ConfigureStarshineByConvention();
+                b.ToCenseqTable(nameof(OpenIddictAuthorization))
+                    .ConfigureCenseqByConvention();
 
                 b.HasIndex(x => new
                 {
@@ -60,8 +60,8 @@ namespace Censeq.Admin.EntityFrameworkCore.Modeling
 
             builder.Entity<OpenIddictScope>(b =>
             {
-                b.ToStarshineTable(nameof(OpenIddictScope))
-                    .ConfigureStarshineByConvention();
+                b.ToCenseqTable(nameof(OpenIddictScope))
+                    .ConfigureCenseqByConvention();
 
                 b.HasIndex(x => x.Name).IsUnique();
                 b.Property(x => x.Name).HasMaxLength(OpenIddictScopeConsts.NameMaxLength);
@@ -70,8 +70,8 @@ namespace Censeq.Admin.EntityFrameworkCore.Modeling
 
             builder.Entity<OpenIddictToken>(b =>
             {
-                b.ToStarshineTable(nameof(OpenIddictToken))
-                    .ConfigureStarshineByConvention();
+                b.ToCenseqTable(nameof(OpenIddictToken))
+                    .ConfigureCenseqByConvention();
 
                 b.HasIndex(x => x.ReferenceId).IsUnique();
 

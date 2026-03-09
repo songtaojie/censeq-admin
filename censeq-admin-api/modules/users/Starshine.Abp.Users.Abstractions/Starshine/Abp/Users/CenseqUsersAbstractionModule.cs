@@ -11,7 +11,7 @@ namespace Censeq.Abp.Users;
     typeof(AbpMultiTenancyModule),
     typeof(AbpEventBusModule)
     )]
-public class StarshineUsersAbstractionModule : AbpModule
+public class CenseqUsersAbstractionModule : AbpModule
 {
 
 }

@@ -11,7 +11,7 @@ namespace Censeq.Abp.Identity.Managers;
 /// <summary>
 /// 身份选项管理器
 /// </summary>
-public class StarshineIdentityOptionsManager : AbpDynamicOptionsManager<IdentityOptions>
+public class CenseqIdentityOptionsManager : AbpDynamicOptionsManager<IdentityOptions>
 {
     /// <summary>
     /// 设置提供者
@@ -23,7 +23,7 @@ public class StarshineIdentityOptionsManager : AbpDynamicOptionsManager<Identity
     /// </summary>
     /// <param name="factory"></param>
     /// <param name="settingProvider"></param>
-    public StarshineIdentityOptionsManager(IOptionsFactory<IdentityOptions> factory,ISettingProvider settingProvider) : base(factory)
+    public CenseqIdentityOptionsManager(IOptionsFactory<IdentityOptions> factory,ISettingProvider settingProvider) : base(factory)
     {
         SettingProvider = settingProvider;
     }

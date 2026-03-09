@@ -1,18 +1,18 @@
 ﻿using Microsoft.Extensions.Localization;
-using Censeq.Abp.AspNetCore.Mvc.UI.Theme.Basic.Branding;
 using Censeq.Admin.Localization;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Ui.Branding;
+using Censeq.Framework.AspNetCore.Mvc.UI.Theme.Basic.Branding;
 
 namespace Censeq.Admin;
 
 [Dependency(ReplaceServices = true)]
-[ExposeServices(typeof(IStarshineBrandingProvider),typeof(IBrandingProvider))]
-public class AdminBrandingProvider : DefaultStarshineBrandingProvider
+[ExposeServices(typeof(ICenseqBrandingProvider),typeof(IBrandingProvider))]
+public class AdminBrandingProvider : DefaultCenseqBrandingProvider
 {
-    private IStringLocalizer<StarshineAdminResource> _localizer;
+    private IStringLocalizer<CenseqAdminResource> _localizer;
 
-    public AdminBrandingProvider(IStringLocalizer<StarshineAdminResource> localizer)
+    public AdminBrandingProvider(IStringLocalizer<CenseqAdminResource> localizer)
     {
         _localizer = localizer;
     }

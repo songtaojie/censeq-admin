@@ -10,7 +10,7 @@ namespace Censeq.Abp.Identity
     /// <summary>
     /// �����û���֤��
     /// </summary>
-    public class StarshineIdentityUserValidator : IUserValidator<IdentityUser>
+    public class CenseqIdentityUserValidator : IUserValidator<IdentityUser>
     {
         /// <summary>
         /// ���ػ�
@@ -21,7 +21,7 @@ namespace Censeq.Abp.Identity
         /// 
         /// </summary>
         /// <param name="localizer"></param>
-        public StarshineIdentityUserValidator(IStringLocalizer<IdentityResource> localizer)
+        public CenseqIdentityUserValidator(IStringLocalizer<IdentityResource> localizer)
         {
             Localizer = localizer;
         }

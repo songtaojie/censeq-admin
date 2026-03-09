@@ -7,11 +7,11 @@ namespace Censeq.Abp.Users;
 /// 用户领域模块
 /// </summary>
 [DependsOn(
-    typeof(StarshineUsersDomainSharedModule),
-    typeof(StarshineUsersAbstractionModule),
+    typeof(CenseqUsersDomainSharedModule),
+    typeof(CenseqUsersAbstractionModule),
     typeof(AbpDddDomainModule)
     )]
-public class StarshineUsersDomainModule : AbpModule
+public class CenseqUsersDomainModule : AbpModule
 {
 
 }

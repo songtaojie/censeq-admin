@@ -8,7 +8,7 @@ public class PermissionManagementRemoteServiceConsts
     /// <summary>
     /// 远程服务名称
     /// </summary>
-    public const string RemoteServiceName = "StarshinePermissionManagement";
+    public const string RemoteServiceName = "CenseqPermissionManagement";
 
     /// <summary>
     /// 模块名称

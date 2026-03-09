@@ -20,7 +20,7 @@ namespace Censeq.Abp.Identity.EntityFrameworkCore
         /// <param name="builder"></param>
         public void Configure(EntityTypeBuilder<IdentityUserClaim> builder)
         {
-            builder.ToTable(StarshineIdentityDbProperties.DbTablePrefix + nameof(IdentityUserClaim), StarshineIdentityDbProperties.DbSchema);
+            builder.ToTable(CenseqIdentityDbProperties.DbTablePrefix + nameof(IdentityUserClaim), CenseqIdentityDbProperties.DbSchema);
 
             builder.ConfigureByConvention();
             builder.Property(t => t.Id).ValueGeneratedNever();

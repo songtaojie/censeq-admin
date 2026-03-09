@@ -26,13 +26,13 @@ namespace Censeq.Admin.Web;
 
 [DependsOn(
     typeof(AdminApplicationContractsModule),
-    typeof(StarshineIdentityAspNetCoreModule),
+    typeof(CenseqIdentityAspNetCoreModule),
     typeof(AbpAutoMapperModule),
-    typeof(StarshineOpenIddictAspNetCoreModule),
+    typeof(CenseqOpenIddictAspNetCoreModule),
     typeof(AbpExceptionHandlingModule)
     //typeof(AbpAspNetCoreMvcUiBasicThemeModule)
     )]
-public class StarshineAdminWebModule : AbpModule
+public class CenseqAdminWebModule : AbpModule
 {
     private readonly static OneTimeRunner OneTimeRunner = new OneTimeRunner();
 
@@ -40,12 +40,12 @@ public class StarshineAdminWebModule : AbpModule
     {
         context.Services.PreConfigure<AbpMvcDataAnnotationsLocalizationOptions>(options =>
         {
-            options.AddAssemblyResource(typeof(AdminResource), typeof(StarshineAdminWebModule).Assembly);
+            options.AddAssemblyResource(typeof(AdminResource), typeof(CenseqAdminWebModule).Assembly);
         });
 
         PreConfigure<IMvcBuilder>(mvcBuilder =>
         {
-            mvcBuilder.AddApplicationPartIfNotExists(typeof(StarshineAdminWebModule).Assembly);
+            mvcBuilder.AddApplicationPartIfNotExists(typeof(CenseqAdminWebModule).Assembly);
         });
     }
 
@@ -53,7 +53,7 @@ public class StarshineAdminWebModule : AbpModule
     {
         Configure<AbpVirtualFileSystemOptions>(options =>
         {
-            options.FileSets.AddEmbedded<StarshineAdminWebModule>();
+            options.FileSets.AddEmbedded<CenseqAdminWebModule>();
         });
 
         Configure<AbpNavigationOptions>(options =>
@@ -68,7 +68,7 @@ public class StarshineAdminWebModule : AbpModule
 
         ConfigureProfileManagementPage();
         context.Services.AddRazorPages();
-        context.Services.AddAutoMapperObjectMapper<StarshineAdminWebModule>();
+        context.Services.AddAutoMapperObjectMapper<CenseqAdminWebModule>();
         Configure<AbpAutoMapperOptions>(options =>
         {
             options.AddProfile<AbpAccountWebAutoMapperProfile>(validate: true);

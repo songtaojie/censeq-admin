@@ -11,17 +11,17 @@ public static class IdentityUserConsts
     /// <summary>
     /// 最大用户名长度
     /// </summary>
-    public static int MaxUserNameLength { get; set; } = StarshineUserConsts.MaxUserNameLength;
+    public static int MaxUserNameLength { get; set; } = CenseqUserConsts.MaxUserNameLength;
 
     /// <summary>
     /// 最大名称长度
     /// </summary>
-    public static int MaxNameLength { get; set; } = StarshineUserConsts.MaxNameLength;
+    public static int MaxNameLength { get; set; } = CenseqUserConsts.MaxNameLength;
 
     /// <summary>
     /// 最大姓氏长度
     /// </summary>
-    public static int MaxSurnameLength { get; set; } = StarshineUserConsts.MaxSurnameLength;
+    public static int MaxSurnameLength { get; set; } = CenseqUserConsts.MaxSurnameLength;
 
     /// <summary>
     /// 最大规范化用户名长度
@@ -31,7 +31,7 @@ public static class IdentityUserConsts
     /// <summary>
     /// 最大电子邮件长度
     /// </summary>
-    public static int MaxEmailLength { get; set; } = StarshineUserConsts.MaxEmailLength;
+    public static int MaxEmailLength { get; set; } = CenseqUserConsts.MaxEmailLength;
 
     /// <summary>
     /// 最大规范化电子邮件长度
@@ -41,7 +41,7 @@ public static class IdentityUserConsts
     /// <summary>
     /// 最大电话号码长度
     /// </summary>
-    public static int MaxPhoneNumberLength { get; set; } = StarshineUserConsts.MaxPhoneNumberLength;
+    public static int MaxPhoneNumberLength { get; set; } = CenseqUserConsts.MaxPhoneNumberLength;
 
     /// <summary>
     /// 最大密码长度

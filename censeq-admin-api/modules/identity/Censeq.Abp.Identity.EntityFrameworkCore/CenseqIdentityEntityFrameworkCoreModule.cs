@@ -8,9 +8,9 @@ namespace Censeq.Abp.Identity.EntityFrameworkCore;
 /// Censeq EntityFrameworkCore模块
 /// </summary>
 [DependsOn(
-    typeof(StarshineIdentityDomainModule),
-    typeof(StarshineUsersEntityFrameworkCoreModule))]
-public class StarshineIdentityEntityFrameworkCoreModule : AbpModule
+    typeof(CenseqIdentityDomainModule),
+    typeof(CenseqUsersEntityFrameworkCoreModule))]
+public class CenseqIdentityEntityFrameworkCoreModule : AbpModule
 {
     /// <summary>
     /// 配置服务

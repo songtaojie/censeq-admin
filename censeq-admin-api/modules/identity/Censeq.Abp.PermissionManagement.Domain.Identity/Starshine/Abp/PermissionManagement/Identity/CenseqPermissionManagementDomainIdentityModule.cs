@@ -10,11 +10,11 @@ namespace Volo.Abp.PermissionManagement.Identity;
 /// 
 /// </summary>
 [DependsOn(
-    typeof(StarshineIdentityDomainSharedModule),
-    typeof(StarshinePermissionManagementDomainModule),
-    typeof(StarshineUsersAbstractionModule)
+    typeof(CenseqIdentityDomainSharedModule),
+    typeof(CenseqPermissionManagementDomainModule),
+    typeof(CenseqUsersAbstractionModule)
 )]
-public class StarshinePermissionManagementDomainIdentityModule : AbpModule
+public class CenseqPermissionManagementDomainIdentityModule : AbpModule
 {
     /// <summary>
     /// 配置服务

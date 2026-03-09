@@ -1,12 +1,16 @@
 ﻿using Censeq.AuditLogging.Entities;
+using Censeq.Framework.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using Volo.Abp.EntityFrameworkCore;
 using Volo.Abp.Modularity;
 
 namespace Censeq.AuditLogging.EntityFrameworkCore;
 
 [DependsOn(typeof(CenseqAuditLoggingDomainModule))]
-[DependsOn(typeof(AbpEntityFrameworkCoreModule))]
+[DependsOn(typeof(CenseqEntityFrameworkCoreModule))]
 public class CenseqAuditLoggingEntityFrameworkCoreModule : AbpModule
 {
     public override void ConfigureServices(ServiceConfigurationContext context)
@@ -15,5 +19,15 @@ public class CenseqAuditLoggingEntityFrameworkCoreModule : AbpModule
         {
             options.AddRepository<AuditLog, EfCoreAuditLogRepository>();
         });
+
+        var configuration = context.Services.GetConfiguration();
+        Configure<AbpDbContextOptions>(options =>
+        {
+            options.Configure<CenseqAuditLoggingDbContext>(dbContext =>
+            {
+                dbContext.UseDynamicSql(configuration);
+            });
+        });
+
     }
 }

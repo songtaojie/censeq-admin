@@ -26,7 +26,7 @@ public abstract class AccountPageModel : AbpPageModel
     protected AccountPageModel()
     {
         LocalizationResourceType = typeof(AdminResource);
-        ObjectMapperContext = typeof(StarshineAdminWebModule);
+        ObjectMapperContext = typeof(CenseqAdminWebModule);
     }
 
     protected virtual void CheckCurrentTenant(Guid? tenantId)

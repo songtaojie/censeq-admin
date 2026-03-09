@@ -9,26 +9,26 @@ using Volo.Abp.VirtualFileSystem;
 namespace Censeq.Admin;
 
 [DependsOn(
-    typeof(StarshineAdminApplicationContractsModule),
+    typeof(CenseqAdminApplicationContractsModule),
     typeof(AbpAccountHttpApiClientModule),
     typeof(AbpIdentityHttpApiClientModule),
     typeof(AbpPermissionManagementHttpApiClientModule),
     typeof(AbpSettingManagementHttpApiClientModule)
 )]
-public class StarshineAdminHttpApiClientModule : AbpModule
+public class CenseqAdminHttpApiClientModule : AbpModule
 {
     public const string RemoteServiceName = "Default";
 
     public override void ConfigureServices(ServiceConfigurationContext context)
     {
         context.Services.AddHttpClientProxies(
-            typeof(StarshineAdminApplicationContractsModule).Assembly,
+            typeof(CenseqAdminApplicationContractsModule).Assembly,
             RemoteServiceName
         );
 
         Configure<AbpVirtualFileSystemOptions>(options =>
         {
-            options.FileSets.AddEmbedded<StarshineAdminHttpApiClientModule>();
+            options.FileSets.AddEmbedded<CenseqAdminHttpApiClientModule>();
         });
        
     }

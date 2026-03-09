@@ -8,7 +8,7 @@ namespace Censeq.Abp.Identity.EntityFrameworkCore;
 /// <summary>
 /// �������ݿ�������
 /// </summary>
-[ConnectionStringName(StarshineIdentityDbProperties.ConnectionStringName)]
+[ConnectionStringName(CenseqIdentityDbProperties.ConnectionStringName)]
 public interface IIdentityDbContext : IEfCoreDbContext
 {
     /// <summary>

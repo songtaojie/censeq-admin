@@ -21,7 +21,7 @@ public class EfCoreAdminDbSchemaMigrator(
          */
 
         await _serviceProvider
-            .GetRequiredService<StarshineAdminDbContext>()
+            .GetRequiredService<CenseqAdminDbContext>()
             .Database
             .MigrateAsync();
     }

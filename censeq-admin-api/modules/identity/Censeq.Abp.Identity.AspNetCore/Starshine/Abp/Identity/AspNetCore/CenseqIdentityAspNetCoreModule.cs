@@ -12,7 +12,7 @@ namespace Censeq.Abp.Identity.AspNetCore;
 [DependsOn(
     typeof(AbpIdentityDomainModule)
     )]
-public class StarshineIdentityAspNetCoreModule : AbpModule
+public class CenseqIdentityAspNetCoreModule : AbpModule
 {
     /// <summary>
     /// 
@@ -25,7 +25,7 @@ public class StarshineIdentityAspNetCoreModule : AbpModule
             builder
                 .AddDefaultTokenProviders()
                 .AddTokenProvider<LinkUserTokenProvider>(LinkUserTokenProviderConsts.LinkUserTokenProviderName)
-                .AddSignInManager<StarshineSignInManager>()
+                .AddSignInManager<CenseqSignInManager>()
                 .AddUserValidator<AbpIdentityUserValidator>();
         });
     }
@@ -36,12 +36,12 @@ public class StarshineIdentityAspNetCoreModule : AbpModule
     /// <param name="context"></param>
     public override void ConfigureServices(ServiceConfigurationContext context)
     {
-        //提取扩展方法，如 IdentityBuilder.AddStarshineSecurityStampValidator()
-        context.Services.AddScoped<StarshineSecurityStampValidator>();
-        context.Services.AddScoped(typeof(SecurityStampValidator<IdentityUser>), provider => provider.GetRequiredService(typeof(StarshineSecurityStampValidator)));
-        context.Services.AddScoped(typeof(ISecurityStampValidator), provider => provider.GetRequiredService(typeof(StarshineSecurityStampValidator)));
+        //提取扩展方法，如 IdentityBuilder.AddCenseqSecurityStampValidator()
+        context.Services.AddScoped<CenseqSecurityStampValidator>();
+        context.Services.AddScoped(typeof(SecurityStampValidator<IdentityUser>), provider => provider.GetRequiredService(typeof(CenseqSecurityStampValidator)));
+        context.Services.AddScoped(typeof(ISecurityStampValidator), provider => provider.GetRequiredService(typeof(CenseqSecurityStampValidator)));
 
-        var options = context.Services.ExecutePreConfiguredActions(new StarshineIdentityAspNetCoreOptions());
+        var options = context.Services.ExecutePreConfiguredActions(new CenseqIdentityAspNetCoreOptions());
 
         if (options.ConfigureAuthentication)
         {
@@ -64,7 +64,7 @@ public class StarshineIdentityAspNetCoreModule : AbpModule
         context.Services.AddOptions<SecurityStampValidatorOptions>()
             .Configure<IServiceProvider>((securityStampValidatorOptions, serviceProvider) =>
             {
-                var abpRefreshingPrincipalOptions = serviceProvider.GetRequiredService<IOptions<StarshineRefreshingPrincipalOptions>>().Value;
+                var abpRefreshingPrincipalOptions = serviceProvider.GetRequiredService<IOptions<CenseqRefreshingPrincipalOptions>>().Value;
                 securityStampValidatorOptions.UpdatePrincipal(abpRefreshingPrincipalOptions);
             });
     }

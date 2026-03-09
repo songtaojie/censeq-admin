@@ -5,7 +5,7 @@ namespace Microsoft.AspNetCore.Extensions.DependencyInjection;
 /// <summary>
 /// 
 /// </summary>
-public static class StarshineIdentityServiceCollectionExtensions
+public static class CenseqIdentityServiceCollectionExtensions
 {
     /// <summary>
     /// 持有者转发身份认证

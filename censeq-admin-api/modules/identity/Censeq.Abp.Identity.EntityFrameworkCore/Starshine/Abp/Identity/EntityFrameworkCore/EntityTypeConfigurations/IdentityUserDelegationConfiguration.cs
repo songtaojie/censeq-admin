@@ -20,7 +20,7 @@ namespace Censeq.Abp.Identity.EntityFrameworkCore
         /// <param name="builder"></param>
         public void Configure(EntityTypeBuilder<IdentityUserDelegation> builder)
         {
-            builder.ToTable(StarshineIdentityDbProperties.DbTablePrefix + nameof(IdentityUserDelegation), StarshineIdentityDbProperties.DbSchema);
+            builder.ToTable(CenseqIdentityDbProperties.DbTablePrefix + nameof(IdentityUserDelegation), CenseqIdentityDbProperties.DbSchema);
             builder.ConfigureByConvention();
             builder.ApplyObjectExtensionMappings();
         }

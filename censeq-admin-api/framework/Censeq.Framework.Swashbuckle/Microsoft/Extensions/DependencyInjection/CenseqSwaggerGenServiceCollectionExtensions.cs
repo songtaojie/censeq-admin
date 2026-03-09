@@ -11,7 +11,7 @@ namespace Microsoft.Extensions.DependencyInjection
     /// <summary>
     /// 规范化接口服务拓展类
     /// </summary>
-    public static class StarshineSwaggerGenServiceCollectionExtensions
+    public static class CenseqSwaggerGenServiceCollectionExtensions
     {
         /// <summary>
         /// 添加规范化文档服务
@@ -19,9 +19,9 @@ namespace Microsoft.Extensions.DependencyInjection
         /// <param name="services">服务集合</param>
         /// <param name="action">swagger配置</param>
         /// <returns>服务集合</returns>
-        public static IServiceCollection AddStarshineSwaggerGen(this IServiceCollection services, Action<SwaggerSettingsOptions>? action = default)
+        public static IServiceCollection AddCenseqSwaggerGen(this IServiceCollection services, Action<SwaggerSettingsOptions>? action = default)
         {
-            services.AddStarshineOptions<SwaggerSettingsOptions>();
+            services.AddCenseqOptions<SwaggerSettingsOptions>();
             if (action != null)services.Configure(action);
             services.Configure<SwaggerGenOptions,ISwaggerDocumentBuilder>((options, builder) =>
             {

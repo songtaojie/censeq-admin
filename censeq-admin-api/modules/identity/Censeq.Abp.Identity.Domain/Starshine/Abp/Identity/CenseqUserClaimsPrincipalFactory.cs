@@ -14,7 +14,7 @@ namespace Censeq.Abp.Identity;
 /// <summary>
 /// 用户声明主体工厂
 /// </summary>
-public class StarshineUserClaimsPrincipalFactory : UserClaimsPrincipalFactory<IdentityUser, IdentityRole>,
+public class CenseqUserClaimsPrincipalFactory : UserClaimsPrincipalFactory<IdentityUser, IdentityRole>,
     ITransientDependency
 {
     /// <summary>
@@ -35,7 +35,7 @@ public class StarshineUserClaimsPrincipalFactory : UserClaimsPrincipalFactory<Id
     /// <param name="options"></param>
     /// <param name="currentPrincipalAccessor"></param>
     /// <param name="abpClaimsPrincipalFactory"></param>
-    public StarshineUserClaimsPrincipalFactory(
+    public CenseqUserClaimsPrincipalFactory(
         UserManager<IdentityUser> userManager,
         RoleManager<IdentityRole> roleManager,
         IOptions<IdentityOptions> options,

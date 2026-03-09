@@ -21,7 +21,7 @@ public class AccountProfilePersonalInfoManagementGroupViewComponent : AbpViewCom
     {
         ProfileAppService = profileAppService;
 
-        ObjectMapperContext = typeof(StarshineAdminWebModule);
+        ObjectMapperContext = typeof(CenseqAdminWebModule);
     }
 
     public virtual async Task<IViewComponentResult> InvokeAsync()

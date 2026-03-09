@@ -15,7 +15,7 @@ namespace Censeq.Abp.Identity.EntityFrameworkCore
         /// <param name="builder"></param>
         public void Configure(EntityTypeBuilder<IdentityLinkUser> builder)
         {
-            builder.ToTable(StarshineIdentityDbProperties.DbTablePrefix + nameof(IdentityLinkUser), StarshineIdentityDbProperties.DbSchema);
+            builder.ToTable(CenseqIdentityDbProperties.DbTablePrefix + nameof(IdentityLinkUser), CenseqIdentityDbProperties.DbSchema);
             builder.ConfigureByConvention();
             builder.HasIndex(x => new
             {

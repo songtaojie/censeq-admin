@@ -9,24 +9,24 @@ using Volo.Abp.VirtualFileSystem;
 namespace Censeq.Admin;
 
 [DependsOn(
-    typeof(StarshineAdminDomainModule),
+    typeof(CenseqAdminDomainModule),
     typeof(AbpAccountApplicationModule),
-    typeof(StarshineAdminApplicationContractsModule),
+    typeof(CenseqAdminApplicationContractsModule),
     typeof(AbpIdentityApplicationModule),
     typeof(AbpPermissionManagementApplicationModule),
     typeof(AbpSettingManagementApplicationModule)
     )]
-public class StarshineAdminApplicationModule : AbpModule
+public class CenseqAdminApplicationModule : AbpModule
 {
     public override void ConfigureServices(ServiceConfigurationContext context)
     {
         Configure<AbpAutoMapperOptions>(options =>
         {
-            options.AddMaps<StarshineAdminApplicationModule>();
+            options.AddMaps<CenseqAdminApplicationModule>();
         });
         Configure<AbpVirtualFileSystemOptions>(options =>
         {
-            options.FileSets.AddEmbedded<StarshineAdminApplicationModule>();
+            options.FileSets.AddEmbedded<CenseqAdminApplicationModule>();
         });
     }
 }

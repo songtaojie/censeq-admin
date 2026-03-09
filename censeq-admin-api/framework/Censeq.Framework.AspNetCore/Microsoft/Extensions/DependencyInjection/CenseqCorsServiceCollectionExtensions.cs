@@ -7,7 +7,7 @@ namespace Microsoft.Extensions.DependencyInjection
     /// <summary>
     /// 跨域访问服务拓展类
     /// </summary>
-    public static class StarshineCorsServiceCollectionExtensions
+    public static class CenseqCorsServiceCollectionExtensions
     {
         /// <summary>
         /// 配置跨域
@@ -15,10 +15,10 @@ namespace Microsoft.Extensions.DependencyInjection
         /// <param name="services">服务集合</param>
         /// <param name="action"></param>
         /// <returns>服务集合</returns>
-        public static IServiceCollection AddStarshineCors(this IServiceCollection services, Action<CorsSettingsOptions>? action = default)
+        public static IServiceCollection AddCenseqCors(this IServiceCollection services, Action<CorsSettingsOptions>? action = default)
         {
             // 添加跨域配置选项
-            services.AddStarshineOptions<CorsSettingsOptions>();
+            services.AddCenseqOptions<CorsSettingsOptions>();
             if (action != null) services.Configure(action);
             services.AddCors();
             services.Configure<CorsOptions, IOptions<CorsSettingsOptions>>((corsOptions, corsSettingsOptions) =>

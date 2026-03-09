@@ -13,7 +13,7 @@ public abstract class IdentityAppServiceBase : ApplicationService
     /// </summary>
     protected IdentityAppServiceBase(IAbpLazyServiceProvider abpLazyServiceProvider)
     {
-        ObjectMapperContext = typeof(StarshineIdentityApplicationModule);
+        ObjectMapperContext = typeof(CenseqIdentityApplicationModule);
         LocalizationResource = typeof(IdentityResource);
         LazyServiceProvider = abpLazyServiceProvider;
     }

@@ -8,7 +8,7 @@ namespace Censeq.Abp.Identity;
 /// <summary>
 /// 身份设置定义提供者
 /// </summary>
-public class StarshineIdentitySettingDefinitionProvider : SettingDefinitionProvider
+public class CenseqIdentitySettingDefinitionProvider : SettingDefinitionProvider
 {
     /// <summary>
     /// 

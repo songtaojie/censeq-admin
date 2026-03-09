@@ -7,11 +7,11 @@ namespace Censeq.Abp.PermissionManagement;
 /// 
 /// </summary>
 [DependsOn(
-    typeof(StarshinePermissionManagementDomainModule),
-    typeof(StarshinePermissionManagementApplicationContractsModule),
-    typeof(StarshineDddApplicationModule)
+    typeof(CenseqPermissionManagementDomainModule),
+    typeof(CenseqPermissionManagementApplicationContractsModule),
+    typeof(CenseqDddApplicationModule)
     )]
-public class StarshinePermissionManagementApplicationModule : AbpModule
+public class CenseqPermissionManagementApplicationModule : AbpModule
 {
 
 }

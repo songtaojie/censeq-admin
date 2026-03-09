@@ -12,6 +12,8 @@ using Volo.Abp.OpenIddict.Scopes;
 using Volo.Abp.OpenIddict.Tokens;
 using Volo.Abp.PermissionManagement;
 using Volo.Abp.SettingManagement;
+using Censeq.Admin.FeatureManagement.EntityFrameworkCore.Modeling;
+using Censeq.Admin.TenantManagement.EntityFrameworkCore.Modeling;
 
 namespace Censeq.Admin.EntityFrameworkCore;
 
@@ -21,7 +23,7 @@ namespace Censeq.Admin.EntityFrameworkCore;
 [ReplaceDbContext(typeof(Volo.Abp.OpenIddict.EntityFrameworkCore.IOpenIddictDbContext))]
 [ReplaceDbContext(typeof(Volo.Abp.BackgroundJobs.EntityFrameworkCore.IBackgroundJobsDbContext))]
 [ConnectionStringName(ConnectionStrings.DefaultConnectionStringName)]
-public class StarshineAdminDbContext(DbContextOptions<StarshineAdminDbContext> options) : AbpDbContext<StarshineAdminDbContext>(options),
+public class CenseqAdminDbContext(DbContextOptions<CenseqAdminDbContext> options) : AbpDbContext<CenseqAdminDbContext>(options),
     Volo.Abp.Identity.EntityFrameworkCore.IIdentityDbContext,
     Volo.Abp.SettingManagement.EntityFrameworkCore.ISettingManagementDbContext,
     Volo.Abp.PermissionManagement.EntityFrameworkCore.IPermissionManagementDbContext,
@@ -42,7 +44,7 @@ public class StarshineAdminDbContext(DbContextOptions<StarshineAdminDbContext> o
     public DbSet<IdentitySession> Sessions { get; set; }
     #endregion
 
-    #region StarshineAdminDbContext
+    #region CenseqAdminDbContext
     // Tenant Management
     public DbSet<Tenant> Tenants { get; set; }
     public DbSet<TenantConnectionString> TenantConnectionStrings { get; set; }
@@ -52,7 +54,6 @@ public class StarshineAdminDbContext(DbContextOptions<StarshineAdminDbContext> o
 
     public DbSet<FeatureValue> FeatureValues { get; set; }
 
-    public DbSet<AuditLog> AuditLogs { get; set; }
     #endregion
 
 
@@ -94,7 +95,6 @@ public class StarshineAdminDbContext(DbContextOptions<StarshineAdminDbContext> o
         builder.ConfigurePermissionManagement();
         builder.ConfigureSettingManagement();
         builder.ConfigureBackgroundJobs();
-        builder.ConfigureAuditLogging();
         builder.ConfigureIdentity();
         builder.ConfigureOpenIddict();
         builder.ConfigureFeatureManagement();

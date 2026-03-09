@@ -6,11 +6,11 @@ namespace Censeq.Abp.Identity;
 /// 身份认证应用模块
 /// </summary>
 [DependsOn(
-    typeof(StarshineIdentityDomainModule),
-    typeof(StarshineIdentityApplicationContractsModule),
+    typeof(CenseqIdentityDomainModule),
+    typeof(CenseqIdentityApplicationContractsModule),
     typeof(AbpPermissionManagementApplicationModule)
     )]
-public class StarshineIdentityApplicationModule : AbpModule
+public class CenseqIdentityApplicationModule : AbpModule
 {
     /// <summary>
     /// 配置服务

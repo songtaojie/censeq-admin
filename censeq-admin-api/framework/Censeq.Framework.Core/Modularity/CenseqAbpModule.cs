@@ -9,9 +9,9 @@ using Volo.Abp.Modularity;
 namespace Censeq.Framework.Core
 {
     /// <summary>
-    /// StarshineAbp模块
+    /// CenseqAbp模块
     /// </summary>
-    public abstract class StarshineAbpModule:AbpModule
+    public abstract class CenseqAbpModule:AbpModule
     {
         /// <summary>
         /// 配置

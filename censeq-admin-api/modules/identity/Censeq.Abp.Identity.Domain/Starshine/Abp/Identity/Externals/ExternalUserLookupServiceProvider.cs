@@ -37,7 +37,7 @@ public class ExternalUserLookupServiceProvider : IExternalUserLookupServiceProvi
     {
         var identityUser = await UserRepository.FindAsync(id, includeDetails: false, cancellationToken: cancellationToken);
         if (identityUser == null) return null;
-        return identityUser.ToStarshineUserData();
+        return identityUser.ToCenseqUserData();
     }
 
     /// <summary>
@@ -50,7 +50,7 @@ public class ExternalUserLookupServiceProvider : IExternalUserLookupServiceProvi
     {
         var identityUser = await UserRepository.FindByNormalizedUserNameAsync(LookupNormalizer.NormalizeName(userName), includeDetails: false, cancellationToken: cancellationToken);
         if (identityUser == null) return null;
-        return identityUser.ToStarshineUserData();
+        return identityUser.ToCenseqUserData();
     }
 
     /// <summary>
@@ -73,7 +73,7 @@ public class ExternalUserLookupServiceProvider : IExternalUserLookupServiceProvi
             cancellationToken: cancellationToken
         );
 
-        return users.Select(u => u.ToStarshineUserData()).ToList();
+        return users.Select(u => u.ToCenseqUserData()).ToList();
     }
 
     /// <summary>

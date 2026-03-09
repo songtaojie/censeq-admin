@@ -11,8 +11,8 @@ using Volo.Abp.EntityFrameworkCore;
 
 namespace Censeq.Admin.Migrations
 {
-    [DbContext(typeof(StarshineAdminDbContext))]
-    partial class StarshineAdminDbContextModelSnapshot : ModelSnapshot
+    [DbContext(typeof(CenseqAdminDbContext))]
+    partial class CenseqAdminDbContextModelSnapshot : ModelSnapshot
     {
         protected override void BuildModel(ModelBuilder modelBuilder)
         {

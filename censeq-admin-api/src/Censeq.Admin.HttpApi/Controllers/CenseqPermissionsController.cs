@@ -4,9 +4,9 @@ using Volo.Abp.PermissionManagement;
 
 namespace Censeq.Admin.Controllers
 {
-    public class StarshinePermissionsController : PermissionsController
+    public class CenseqPermissionsController : PermissionsController
     {
-        public StarshinePermissionsController(IPermissionAppService permissionAppService):base(permissionAppService)
+        public CenseqPermissionsController(IPermissionAppService permissionAppService):base(permissionAppService)
         {
         }
 

@@ -2,18 +2,17 @@
 using Volo.Abp.PermissionManagement.EntityFrameworkCore;
 using Volo.Abp.PermissionManagement;
 using Volo.Abp;
-using Volo.Abp.EntityFrameworkCore.Modeling;
 
 namespace Censeq.Admin.EntityFrameworkCore.Modeling
 {
-    internal static class StarshinePermissionManagementDbContextModelBuilderExtensions
+    internal static class CenseqPermissionManagementDbContextModelBuilderExtensions
     {
         public static void ConfigurePermissionManagement(this ModelBuilder builder)
         {
             Check.NotNull(builder, "builder");
             builder.Entity<PermissionGrant>(b => 
             {
-                b.ToStarshineTable(nameof(PermissionGrant)).ConfigureStarshineByConvention();
+                b.ToCenseqTable(nameof(PermissionGrant)).ConfigureCenseqByConvention();
                 b.Property(x => x.Name).HasMaxLength(PermissionDefinitionRecordConsts.MaxNameLength).IsRequired();
                 b.Property(x => x.ProviderName).HasMaxLength(PermissionGrantConsts.MaxProviderNameLength).IsRequired();
                 b.Property(x => x.ProviderKey).HasMaxLength(PermissionGrantConsts.MaxProviderKeyLength).IsRequired();
@@ -24,7 +23,7 @@ namespace Censeq.Admin.EntityFrameworkCore.Modeling
             {
                 builder.Entity<PermissionGroupDefinitionRecord>(b =>
                 {
-                    b.ToStarshineTable(nameof(PermissionGroupDefinitionRecord)).ConfigureStarshineByConvention();
+                    b.ToCenseqTable(nameof(PermissionGroupDefinitionRecord)).ConfigureCenseqByConvention();
                     b.Property(x => x.Name).HasMaxLength(PermissionGroupDefinitionRecordConsts.MaxNameLength).IsRequired();
                     b.Property(x => x.DisplayName).HasMaxLength(PermissionGroupDefinitionRecordConsts.MaxDisplayNameLength).IsRequired();
                     b.HasIndex(x => new { x.Name }).IsUnique();
@@ -32,7 +31,7 @@ namespace Censeq.Admin.EntityFrameworkCore.Modeling
                 });
                 builder.Entity<PermissionDefinitionRecord>(b =>
                 {
-                    b.ToStarshineTable(nameof(PermissionDefinitionRecord)).ConfigureStarshineByConvention();
+                    b.ToCenseqTable(nameof(PermissionDefinitionRecord)).ConfigureCenseqByConvention();
                     b.Property(x => x.GroupName).HasMaxLength(PermissionGroupDefinitionRecordConsts.MaxNameLength).IsRequired();
                     b.Property(x => x.Name).HasMaxLength(PermissionDefinitionRecordConsts.MaxNameLength).IsRequired();
                     b.Property(x => x.ParentName).HasMaxLength(PermissionDefinitionRecordConsts.MaxNameLength);
@@ -44,8 +43,6 @@ namespace Censeq.Admin.EntityFrameworkCore.Modeling
                     b.ApplyObjectExtensionMappings();
                 });
             }
-
-            builder.TryConfigureObjectExtensions<PermissionManagementDbContext>();
         }
     }
 }

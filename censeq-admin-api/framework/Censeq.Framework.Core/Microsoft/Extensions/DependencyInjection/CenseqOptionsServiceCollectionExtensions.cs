@@ -11,7 +11,7 @@ namespace Microsoft.Extensions.DependencyInjection
     /// <summary>
     /// 可变选项服务拓展类
     /// </summary>
-    public static class StarshineOptionsServiceCollectionExtensions
+    public static class CenseqOptionsServiceCollectionExtensions
     {
         /// <summary>
         /// 添加选项配置
@@ -19,7 +19,7 @@ namespace Microsoft.Extensions.DependencyInjection
         /// <typeparam name="TOptions">选项类型</typeparam>
         /// <param name="services">服务集合</param>
         /// <returns>服务集合</returns>
-        public static IServiceCollection AddStarshineOptions<TOptions>(this IServiceCollection services)
+        public static IServiceCollection AddCenseqOptions<TOptions>(this IServiceCollection services)
             where TOptions : class
         {
             if (services == null) throw new ArgumentNullException(nameof(services));
@@ -66,7 +66,7 @@ namespace Microsoft.Extensions.DependencyInjection
         /// <typeparam name="TDep"></typeparam>
         /// <param name="services">服务集合</param>
         /// <returns>服务集合</returns>
-        public static IServiceCollection AddStarshineOptions<TOptions, TDep>(this IServiceCollection services)
+        public static IServiceCollection AddCenseqOptions<TOptions, TDep>(this IServiceCollection services)
             where TOptions : class
             where TDep : class
         {

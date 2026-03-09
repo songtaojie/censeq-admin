@@ -8,7 +8,7 @@ namespace Censeq.Abp.Identity.AspNetCore;
 /// <summary>
 /// 安全印章验证器
 /// </summary>
-public class StarshineSecurityStampValidator : SecurityStampValidator<IdentityUser>
+public class CenseqSecurityStampValidator : SecurityStampValidator<IdentityUser>
 {
     /// <summary>
     /// 租户配置提供程序
@@ -28,7 +28,7 @@ public class StarshineSecurityStampValidator : SecurityStampValidator<IdentityUs
     /// <param name="loggerFactory"></param>
     /// <param name="tenantConfigurationProvider"></param>
     /// <param name="currentTenant"></param>
-    public StarshineSecurityStampValidator(
+    public CenseqSecurityStampValidator(
         IOptions<SecurityStampValidatorOptions> options,
         SignInManager<IdentityUser> signInManager,
         ILoggerFactory loggerFactory,

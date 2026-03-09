@@ -1,0 +1,24 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+	<Import Project="..\..\common.props" />
+	<PropertyGroup>
+		<AssemblyName>Censeq.Framework.EntityFrameworkCore</AssemblyName>
+		<PackageId>Censeq.Framework.EntityFrameworkCore</PackageId>
+		<GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
+		<GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
+		<GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
+		<RootNamespace />
+	</PropertyGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Volo.Abp.EntityFrameworkCore" Version="$(AbpVersion)" />
+		<PackageReference Include="Volo.Abp.EntityFrameworkCore.PostgreSql" Version="$(AbpVersion)" />
+		<PackageReference Include="Volo.Abp.EntityFrameworkCore.Sqlite" Version="$(AbpVersion)" />
+		<PackageReference Include="Volo.Abp.EntityFrameworkCore.MySQL" Version="$(AbpVersion)" />
+		<PackageReference Include="EFCore.NamingConventions" Version="8.0.3" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <ProjectReference Include="..\Censeq.Framework.Core\Censeq.Framework.Core.csproj" />
+	</ItemGroup>
+
+</Project>

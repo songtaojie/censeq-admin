@@ -12,12 +12,12 @@ namespace Censeq.Abp.Identity;
 /// 模块
 /// </summary>
 [DependsOn(
-    typeof(StarshineIdentityDomainSharedModule),
-    typeof(StarshineUsersAbstractionModule),
+    typeof(CenseqIdentityDomainSharedModule),
+    typeof(CenseqUsersAbstractionModule),
     typeof(AbpAuthorizationModule),
     typeof(AbpPermissionManagementApplicationContractsModule)
     )]
-public class StarshineIdentityApplicationContractsModule : AbpModule
+public class CenseqIdentityApplicationContractsModule : AbpModule
 {
     private static readonly OneTimeRunner OneTimeRunner = new OneTimeRunner();
     /// <summary>

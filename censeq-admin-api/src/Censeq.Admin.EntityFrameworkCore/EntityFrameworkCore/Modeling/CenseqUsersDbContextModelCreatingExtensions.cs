@@ -4,9 +4,9 @@ using Volo.Abp.Users;
 
 namespace Censeq.Admin.EntityFrameworkCore.Modeling
 {
-    internal static class StarshineUsersDbContextModelCreatingExtensions
+    internal static class CenseqUsersDbContextModelCreatingExtensions
     {
-        public static void ConfigureStarshineUser<TUser>(this EntityTypeBuilder<TUser> b)
+        public static void ConfigureCenseqUser<TUser>(this EntityTypeBuilder<TUser> b)
             where TUser : class, IUser
         {
             b.Property(u => u.TenantId);

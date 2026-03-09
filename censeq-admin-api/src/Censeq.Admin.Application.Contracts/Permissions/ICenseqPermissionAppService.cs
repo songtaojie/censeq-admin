@@ -7,7 +7,7 @@ using Volo.Abp.PermissionManagement;
 
 namespace Censeq.Admin.Permissions
 {
-    public interface IStarshinePermissionAppService : IPermissionAppService
+    public interface ICenseqPermissionAppService : IPermissionAppService
     {
         /// <summary>
         /// 添加权限

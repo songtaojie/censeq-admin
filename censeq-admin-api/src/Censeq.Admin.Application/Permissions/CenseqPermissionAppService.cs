@@ -10,9 +10,9 @@ using Volo.Abp.SimpleStateChecking;
 
 namespace Censeq.Admin.Permissions
 {
-    public class StarshinePermissionAppService: PermissionAppService,IStarshinePermissionAppService
+    public class CenseqPermissionAppService: PermissionAppService,ICenseqPermissionAppService
     {
-        public StarshinePermissionAppService(
+        public CenseqPermissionAppService(
             IPermissionManager permissionManager,
             IPermissionDefinitionManager permissionDefinitionManager,
             IOptions<PermissionManagementOptions> options,

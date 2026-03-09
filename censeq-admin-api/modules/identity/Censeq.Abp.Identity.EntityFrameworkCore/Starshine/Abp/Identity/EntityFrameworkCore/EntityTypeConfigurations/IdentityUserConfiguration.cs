@@ -22,9 +22,9 @@ namespace Censeq.Abp.Identity.EntityFrameworkCore
         /// <param name="builder"></param>
         public void Configure(EntityTypeBuilder<IdentityUser> builder)
         {
-           builder.ToTable( StarshineIdentityDbProperties.DbTablePrefix + nameof(IdentityUser), StarshineIdentityDbProperties.DbSchema);
+           builder.ToTable( CenseqIdentityDbProperties.DbTablePrefix + nameof(IdentityUser), CenseqIdentityDbProperties.DbSchema);
            builder.ConfigureByConvention();
-           builder.ConfigureStarshineUser();
+           builder.ConfigureCenseqUser();
 
            builder.Property(u => u.NormalizedUserName).IsRequired().HasMaxLength(IdentityUserConsts.MaxNormalizedUserNameLength);
            builder.Property(u => u.NormalizedEmail).IsRequired().HasMaxLength(IdentityUserConsts.MaxNormalizedEmailLength);

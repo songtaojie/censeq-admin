@@ -8,9 +8,9 @@ namespace Censeq.Abp.PermissionManagement.EntityFrameworkCore;
 /// <summary>
 /// 
 /// </summary>
-[DependsOn(typeof(StarshinePermissionManagementDomainModule))]
-[DependsOn(typeof(StarshineEntityFrameworkCoreModule))]
-public class StarshinePermissionManagementEntityFrameworkCoreModule : AbpModule
+[DependsOn(typeof(CenseqPermissionManagementDomainModule))]
+[DependsOn(typeof(CenseqEntityFrameworkCoreModule))]
+public class CenseqPermissionManagementEntityFrameworkCoreModule : AbpModule
 {
     /// <summary>
     /// 

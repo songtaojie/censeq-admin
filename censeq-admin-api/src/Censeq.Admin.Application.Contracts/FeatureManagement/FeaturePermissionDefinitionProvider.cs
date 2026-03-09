@@ -21,6 +21,6 @@ public class FeaturePermissionDefinitionProvider : PermissionDefinitionProvider
 
     private static LocalizableString L(string name)
     {
-        return LocalizableString.Create<StarshineFeatureManagementResource>(name);
+        return LocalizableString.Create<CenseqFeatureManagementResource>(name);
     }
 }

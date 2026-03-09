@@ -16,11 +16,11 @@ namespace Censeq.Abp.Identity;
 /// DomainShared模块
 /// </summary>
 [DependsOn(
-    typeof(StarshineUsersDomainSharedModule),
+    typeof(CenseqUsersDomainSharedModule),
     typeof(AbpValidationModule),
     typeof(AbpFeaturesModule)
     )]
-public class StarshineIdentityDomainSharedModule : AbpModule
+public class CenseqIdentityDomainSharedModule : AbpModule
 {
     /// <summary>
     /// 配置服务
@@ -30,7 +30,7 @@ public class StarshineIdentityDomainSharedModule : AbpModule
     {
         Configure<AbpVirtualFileSystemOptions>(options =>
         {
-            options.FileSets.AddEmbedded<StarshineIdentityDomainSharedModule>();
+            options.FileSets.AddEmbedded<CenseqIdentityDomainSharedModule>();
         });
 
         Configure<AbpLocalizationOptions>(options =>

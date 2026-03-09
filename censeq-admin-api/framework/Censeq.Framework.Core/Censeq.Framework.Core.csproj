@@ -1,7 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-	<Import Project="..\..\..\common.props" />
+	<Import Project="..\..\common.props" />
 	<PropertyGroup>
-		<TargetFramework>$(NETVersion)</TargetFramework>
 		<AssemblyName>Censeq.Framework.Core</AssemblyName>
 		<PackageId>Censeq.Framework.Core</PackageId>
 		<GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>

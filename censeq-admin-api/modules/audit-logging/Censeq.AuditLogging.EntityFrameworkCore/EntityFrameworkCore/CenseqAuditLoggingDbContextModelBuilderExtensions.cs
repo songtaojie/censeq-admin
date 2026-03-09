@@ -1,11 +1,11 @@
 ﻿using Censeq.AuditLogging.Entities;
+using Censeq.Framework.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Volo.Abp;
-using Volo.Abp.EntityFrameworkCore.Modeling;
 
 namespace Censeq.AuditLogging.EntityFrameworkCore
 {
-    internal static class StarshineAuditLoggingDbContextModelBuilderExtensions
+    internal static class CenseqAuditLoggingDbContextModelBuilderExtensions
     {
         internal static void ConfigureAuditLogging(this ModelBuilder builder)
         {
@@ -14,7 +14,7 @@ namespace Censeq.AuditLogging.EntityFrameworkCore
             builder.Entity<AuditLog>(b =>
             {
                 b.ToCenseqTable(nameof(AuditLog))
-                    .ConfigureStarshineByConvention();
+                    .ConfigureCenseqByConvention();
 
                 b.Property(x => x.ApplicationName).HasMaxLength(AuditLogConsts.MaxApplicationNameLength);
                 b.Property(x => x.ClientIpAddress).HasMaxLength(AuditLogConsts.MaxClientIpAddressLength);
@@ -46,7 +46,7 @@ namespace Censeq.AuditLogging.EntityFrameworkCore
             builder.Entity<AuditLogAction>(b =>
             {
                 b.ToCenseqTable(nameof(AuditLogAction))
-                    .ConfigureStarshineByConvention();
+                    .ConfigureCenseqByConvention();
 
                 b.Property(x => x.AuditLogId);
                 b.Property(x => x.ServiceName).HasMaxLength(AuditLogActionConsts.MaxServiceNameLength);
@@ -64,7 +64,7 @@ namespace Censeq.AuditLogging.EntityFrameworkCore
             builder.Entity<EntityChange>(b =>
             {
                 b.ToCenseqTable(nameof(EntityChange))
-                    .ConfigureStarshineByConvention();
+                    .ConfigureCenseqByConvention();
 
                 b.Property(x => x.EntityTypeFullName).HasMaxLength(EntityChangeConsts.MaxEntityTypeFullNameLength).IsRequired();
                 b.Property(x => x.EntityId).HasMaxLength(EntityChangeConsts.MaxEntityIdLength);
@@ -81,7 +81,7 @@ namespace Censeq.AuditLogging.EntityFrameworkCore
             builder.Entity<EntityPropertyChange>(b =>
             {
                 b.ToCenseqTable(nameof(EntityPropertyChange))
-                    .ConfigureStarshineByConvention();
+                    .ConfigureCenseqByConvention();
 
                 b.Property(x => x.NewValue).HasMaxLength(EntityPropertyChangeConsts.MaxNewValueLength);
                 b.Property(x => x.PropertyName).HasMaxLength(EntityPropertyChangeConsts.MaxPropertyNameLength).IsRequired();

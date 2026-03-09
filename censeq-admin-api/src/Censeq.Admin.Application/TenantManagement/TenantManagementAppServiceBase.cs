@@ -14,6 +14,6 @@ public abstract class TenantManagementAppServiceBase : ApplicationService
     protected TenantManagementAppServiceBase(IAbpLazyServiceProvider abpLazyServiceProvider)
     {
         LazyServiceProvider = abpLazyServiceProvider;
-        LocalizationResource = typeof(StarshineTenantManagementResource);
+        LocalizationResource = typeof(CenseqTenantManagementResource);
     }
 }

@@ -6,14 +6,14 @@ using Localization.Resources.AbpUi;
 
 namespace Censeq.Abp.Identity;
 
-[DependsOn(typeof(StarshineIdentityApplicationContractsModule), typeof(AbpAspNetCoreMvcModule))]
-public class StarshineIdentityHttpApiModule : AbpModule
+[DependsOn(typeof(CenseqIdentityApplicationContractsModule), typeof(AbpAspNetCoreMvcModule))]
+public class CenseqIdentityHttpApiModule : AbpModule
 {
     public override void PreConfigureServices(ServiceConfigurationContext context)
     {
         PreConfigure<IMvcBuilder>(mvcBuilder =>
         {
-            mvcBuilder.AddApplicationPartIfNotExists(typeof(StarshineIdentityHttpApiModule).Assembly);
+            mvcBuilder.AddApplicationPartIfNotExists(typeof(CenseqIdentityHttpApiModule).Assembly);
         });
     }
 

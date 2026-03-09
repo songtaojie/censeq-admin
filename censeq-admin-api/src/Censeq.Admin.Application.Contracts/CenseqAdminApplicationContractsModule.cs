@@ -12,7 +12,7 @@ using Volo.Abp.SettingManagement;
 namespace Censeq.Admin;
 
 [DependsOn(
-    typeof(StarshineAdminDomainSharedModule),
+    typeof(CenseqAdminDomainSharedModule),
     typeof(AbpAccountApplicationContractsModule),
     typeof(AbpIdentityApplicationContractsModule),
     typeof(AbpPermissionManagementApplicationContractsModule),
@@ -21,7 +21,7 @@ namespace Censeq.Admin;
     typeof(AbpAuthorizationAbstractionsModule),
     typeof(AbpJsonModule)
 )]
-public class StarshineAdminApplicationContractsModule : AbpModule
+public class CenseqAdminApplicationContractsModule : AbpModule
 {
     public override void PreConfigureServices(ServiceConfigurationContext context)
     {

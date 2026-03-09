@@ -1,9 +1,3 @@
-using System;
-using System.IO;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
 using Censeq.Admin.MultiTenancy;
 using Volo.Abp;
 using Volo.Abp.AspNetCore.MultiTenancy;
@@ -13,32 +7,31 @@ using Volo.Abp.Modularity;
 using Volo.Abp.Security.Claims;
 using Volo.Abp.UI.Navigation.Urls;
 using Volo.Abp.VirtualFileSystem;
-using Censeq.Abp.Swashbuckle;
-using OpenIddict.Validation.AspNetCore;
-using Censeq.Abp.AspNetCore;
-using Censeq.Abp.Account.Web;
 using Volo.Abp.AspNetCore.Mvc.Libs;
-using Censeq.Abp.AspNetCore.Mvc.UI.Theme.Basic;
-using Censeq.Abp.Account.Web.Consts;
-using Volo.Abp.OpenIddict;
-using Volo.Abp.AspNetCore.Mvc;
 using Censeq.Admin.EntityFrameworkCore;
+using Censeq.Framework.AspNetCore.Mvc.UI.Theme.Basic;
+using Censeq.Framework.Swashbuckle;
+using Censeq.Framework.AspNetCore;
+using Censeq.Account.Web;
+using Volo.Abp.OpenIddict;
+using OpenIddict.Validation.AspNetCore;
+using Censeq.Account.Web.Consts;
 
 namespace Censeq.Admin;
 
 [DependsOn(
-    typeof(StarshineAdminHttpApiModule),
+    typeof(CenseqAdminHttpApiModule),
     typeof(AbpAutofacModule),
     typeof(AbpAspNetCoreMultiTenancyModule),
-    typeof(StarshineAdminApplicationModule),
-    typeof(StarshineAdminEntityFrameworkCoreModule),
-    typeof(StarshineAccountWebOpenIddictModule),
-    typeof(StarshineAspNetCoreMvcUIBasicThemeModule),
+    typeof(CenseqAdminApplicationModule),
+    typeof(CenseqAdminEntityFrameworkCoreModule),
+    typeof(CenseqAccountWebOpenIddictModule),
+    typeof(CenseqAspNetCoreMvcUIBasicThemeModule),
     typeof(AbpAspNetCoreSerilogModule),
-    typeof(StarshineSwashbuckleModule),
-    typeof(StarshineAspNetCoreModule)
+    typeof(CenseqSwashbuckleModule),
+    typeof(CenseqAspNetCoreModule)
 )]
-public class StarshineHttpApiHostModule : AbpModule
+public class CenseqHttpApiHostModule : AbpModule
 {
     public override void PreConfigureServices(ServiceConfigurationContext context)
     {
@@ -107,11 +100,11 @@ public class StarshineHttpApiHostModule : AbpModule
     {
         Configure<AppUrlOptions>(options =>
         {
-            options.Applications[StarshineAccountConsts.AppName].RootUrl = configuration["App:SelfUrl"];
+            options.Applications[CenseqAccountConsts.AppName].RootUrl = configuration["App:SelfUrl"];
             options.RedirectAllowedUrls.AddRange(configuration["App:RedirectAllowedUrls"]?.Split(',') ?? Array.Empty<string>());
 
             options.Applications["Angular"].RootUrl = configuration["App:ClientUrl"];
-            options.Applications[StarshineAccountConsts.AppName].Urls[StarshineAccountConsts.PasswordReset] = "account/reset-password";
+            options.Applications[CenseqAccountConsts.AppName].Urls[CenseqAccountConsts.PasswordReset] = "account/reset-password";
         });
     }
 
@@ -123,16 +116,16 @@ public class StarshineHttpApiHostModule : AbpModule
         {
             Configure<AbpVirtualFileSystemOptions>(options =>
             {
-                options.FileSets.ReplaceEmbeddedByPhysical<StarshineAdminDomainSharedModule>(
+                options.FileSets.ReplaceEmbeddedByPhysical<CenseqAdminDomainSharedModule>(
                     Path.Combine(hostingEnvironment.ContentRootPath,
                         $"..{Path.DirectorySeparatorChar}Censeq.Admin.Domain.Shared"));
-                options.FileSets.ReplaceEmbeddedByPhysical<StarshineAdminDomainModule>(
+                options.FileSets.ReplaceEmbeddedByPhysical<CenseqAdminDomainModule>(
                     Path.Combine(hostingEnvironment.ContentRootPath,
                         $"..{Path.DirectorySeparatorChar}Censeq.Admin.Domain"));
-                options.FileSets.ReplaceEmbeddedByPhysical<StarshineAdminApplicationContractsModule>(
+                options.FileSets.ReplaceEmbeddedByPhysical<CenseqAdminApplicationContractsModule>(
                     Path.Combine(hostingEnvironment.ContentRootPath,
                         $"..{Path.DirectorySeparatorChar}Censeq.Admin.Application.Contracts"));
-                options.FileSets.ReplaceEmbeddedByPhysical<StarshineAdminApplicationModule>(
+                options.FileSets.ReplaceEmbeddedByPhysical<CenseqAdminApplicationModule>(
                     Path.Combine(hostingEnvironment.ContentRootPath,
                         $"..{Path.DirectorySeparatorChar}Censeq.Admin.Application"));
             });

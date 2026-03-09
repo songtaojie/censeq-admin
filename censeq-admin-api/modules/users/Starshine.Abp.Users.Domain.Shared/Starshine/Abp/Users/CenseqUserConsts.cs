@@ -3,7 +3,7 @@ namespace Censeq.Abp.Users;
 /// <summary>
 /// �û�����
 /// </summary>
-public class StarshineUserConsts
+public class CenseqUserConsts
 {
     /// <summary>
     /// �û������ȣ�Ĭ��ֵ: 256

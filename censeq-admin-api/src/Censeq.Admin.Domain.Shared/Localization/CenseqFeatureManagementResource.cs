@@ -2,8 +2,8 @@
 
 namespace Censeq.Admin.Localization;
 
-[LocalizationResourceName("StarshineFeatureManagement")]
-public class StarshineFeatureManagementResource
+[LocalizationResourceName("CenseqFeatureManagement")]
+public class CenseqFeatureManagementResource
 {
 
 }

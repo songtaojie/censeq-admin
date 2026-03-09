@@ -7,7 +7,7 @@ public abstract class FeatureManagementAppServiceBase : ApplicationService
 {
     protected FeatureManagementAppServiceBase()
     {
-        ObjectMapperContext = typeof(StarshineAdminApplicationModule);
-        LocalizationResource = typeof(StarshineFeatureManagementResource);
+        ObjectMapperContext = typeof(CenseqAdminApplicationModule);
+        LocalizationResource = typeof(CenseqFeatureManagementResource);
     }
 }

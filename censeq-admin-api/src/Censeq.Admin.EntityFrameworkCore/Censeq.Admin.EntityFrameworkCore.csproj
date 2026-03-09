@@ -3,7 +3,6 @@
   <Import Project="..\..\common.props" />
 
   <PropertyGroup>
-    <TargetFramework>net8.0</TargetFramework>
     <Nullable>enable</Nullable>
     <RootNamespace>Censeq.Admin</RootNamespace>
   </PropertyGroup>
@@ -11,14 +10,10 @@
   <ItemGroup>
     <ProjectReference Include="..\..\modules\audit-logging\Censeq.AuditLogging.EntityFrameworkCore\Censeq.AuditLogging.EntityFrameworkCore.csproj" />
     <ProjectReference Include="..\Censeq.Admin.Domain\Censeq.Admin.Domain.csproj" />
-    <PackageReference Include="EFCore.NamingConventions" Version="8.0.3" />
-    <PackageReference Include="Volo.Abp.EntityFrameworkCore.MySQL" Version="8.3.4" />
-    <PackageReference Include="Volo.Abp.EntityFrameworkCore.PostgreSql" Version="8.3.4" />
-    <PackageReference Include="Volo.Abp.EntityFrameworkCore.Sqlite" Version="8.3.4" />
-    <PackageReference Include="Volo.Abp.PermissionManagement.EntityFrameworkCore" Version="8.3.4" />
-    <PackageReference Include="Volo.Abp.SettingManagement.EntityFrameworkCore" Version="8.3.4" />
-    <PackageReference Include="Volo.Abp.Identity.EntityFrameworkCore" Version="8.3.4" />
-    <PackageReference Include="Volo.Abp.BackgroundJobs.EntityFrameworkCore" Version="8.3.4" />
-    <PackageReference Include="Volo.Abp.OpenIddict.EntityFrameworkCore" Version="8.3.4" />
+    <PackageReference Include="Volo.Abp.PermissionManagement.EntityFrameworkCore" Version="$(AbpVersion)" />
+    <PackageReference Include="Volo.Abp.SettingManagement.EntityFrameworkCore" Version="$(AbpVersion)" />
+    <PackageReference Include="Volo.Abp.Identity.EntityFrameworkCore" Version="$(AbpVersion)" />
+    <PackageReference Include="Volo.Abp.BackgroundJobs.EntityFrameworkCore" Version="$(AbpVersion)" />
+    <PackageReference Include="Volo.Abp.OpenIddict.EntityFrameworkCore" Version="$(AbpVersion)" />
   </ItemGroup>
 </Project>

@@ -1,17 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Volo.Abp.BackgroundJobs.EntityFrameworkCore;
 using Volo.Abp.BackgroundJobs;
 using Volo.Abp;
-using Volo.Abp.EntityFrameworkCore.Modeling;
 
 namespace Censeq.Admin.EntityFrameworkCore.Modeling
 {
-    internal static class StarshineBackgroundJobsDbContextModelCreatingExtensions
+    internal static class CenseqBackgroundJobsDbContextModelCreatingExtensions
     {
         public static void ConfigureBackgroundJobs(this ModelBuilder builder)
         {
@@ -24,8 +18,8 @@ namespace Censeq.Admin.EntityFrameworkCore.Modeling
 
             builder.Entity<BackgroundJobRecord>(b =>
             {
-                b.ToStarshineTable(nameof(BackgroundJobRecord))
-                    .ConfigureStarshineByConvention();
+                b.ToCenseqTable(nameof(BackgroundJobRecord))
+                    .ConfigureCenseqByConvention();
 
                 b.Property(x => x.JobName).IsRequired().HasMaxLength(BackgroundJobRecordConsts.MaxJobNameLength);
                 b.Property(x => x.JobArgs).IsRequired().HasMaxLength(BackgroundJobRecordConsts.MaxJobArgsLength);
@@ -37,8 +31,6 @@ namespace Censeq.Admin.EntityFrameworkCore.Modeling
                 b.HasIndex(x => new { x.IsAbandoned, x.NextTryTime });
                 b.ApplyObjectExtensionMappings();
             });
-
-            builder.TryConfigureObjectExtensions<BackgroundJobsDbContext>();
         }
     }
 }

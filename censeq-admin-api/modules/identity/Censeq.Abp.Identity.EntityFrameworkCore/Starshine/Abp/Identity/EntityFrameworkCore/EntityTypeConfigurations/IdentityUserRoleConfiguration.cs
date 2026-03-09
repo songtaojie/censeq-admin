@@ -15,7 +15,7 @@ namespace Censeq.Abp.Identity.EntityFrameworkCore
         /// <param name="builder"></param>
         public void Configure(EntityTypeBuilder<IdentityUserRole> builder)
         {
-            builder.ToTable(StarshineIdentityDbProperties.DbTablePrefix + nameof(IdentityUserRole), StarshineIdentityDbProperties.DbSchema);
+            builder.ToTable(CenseqIdentityDbProperties.DbTablePrefix + nameof(IdentityUserRole), CenseqIdentityDbProperties.DbSchema);
 
             builder.ConfigureByConvention();
             builder.HasKey(ur => new { ur.UserId, ur.RoleId });

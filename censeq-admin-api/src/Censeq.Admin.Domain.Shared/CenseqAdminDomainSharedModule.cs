@@ -26,7 +26,7 @@ namespace Censeq.Admin;
     typeof(AbpJsonSystemTextJsonModule),
     typeof(CenseqAuditLoggingDomainSharedModule)
     )]
-public class StarshineAdminDomainSharedModule : AbpModule
+public class CenseqAdminDomainSharedModule : AbpModule
 {
     public override void PreConfigureServices(ServiceConfigurationContext context)
     {
@@ -38,33 +38,33 @@ public class StarshineAdminDomainSharedModule : AbpModule
     {
         Configure<AbpVirtualFileSystemOptions>(options =>
         {
-            options.FileSets.AddEmbedded<StarshineAdminDomainSharedModule>();
+            options.FileSets.AddEmbedded<CenseqAdminDomainSharedModule>();
         });
 
         Configure<AbpLocalizationOptions>(options =>
         {
             options.Resources
-                .Add<StarshineAdminResource>("zh-Hans")
+                .Add<CenseqAdminResource>("zh-Hans")
                 .AddBaseTypes(typeof(AbpValidationResource))
                 .AddVirtualJson("/Localization/Resources");
             options.Resources
-                .Add<StarshineTenantManagementResource>("zh-Hans")
+                .Add<CenseqTenantManagementResource>("zh-Hans")
                 .AddBaseTypes(
                     typeof(AbpValidationResource)
                 ).AddVirtualJson("/Localization/TenantResources");
-            options.DefaultResourceType = typeof(StarshineAdminResource);
+            options.DefaultResourceType = typeof(CenseqAdminResource);
 
             options.Resources
-               .Add<StarshineFeatureManagementResource>("zh-Hans")
+               .Add<CenseqFeatureManagementResource>("zh-Hans")
                .AddBaseTypes(typeof(AbpValidationResource))
                .AddVirtualJson("/Localization/FeatureManagementResources");
         });
 
         Configure<AbpExceptionLocalizationOptions>(options =>
         {
-            options.MapCodeNamespace("Censeq.Admin", typeof(StarshineAdminResource));
-            options.MapCodeNamespace("Censeq.Admin.TenantManagement", typeof(StarshineTenantManagementResource));
-            options.MapCodeNamespace("Censeq.Admin.FeatureManagement", typeof(StarshineFeatureManagementResource));
+            options.MapCodeNamespace("Censeq.Admin", typeof(CenseqAdminResource));
+            options.MapCodeNamespace("Censeq.Admin.TenantManagement", typeof(CenseqTenantManagementResource));
+            options.MapCodeNamespace("Censeq.Admin.FeatureManagement", typeof(CenseqFeatureManagementResource));
         });
 
         var valueValidatorFactoryOptions = context.Services.GetPreConfigureActions<ValueValidatorFactoryOptions>();

@@ -8,7 +8,7 @@ namespace Censeq.Abp.Identity.AspNetCore;
 /// <summary>
 /// 安全标记验证器回调
 /// </summary>
-public class StarshineSecurityStampValidatorCallback
+public class CenseqSecurityStampValidatorCallback
 {
     /// <summary>
     /// 实现 SecurityStampValidator 的 OnRefreshingPrincipal 事件的回调。
@@ -23,7 +23,7 @@ public class StarshineSecurityStampValidatorCallback
         /// <param name="context">The context.</param>
         /// <param name="refreshingPrincipalOptions">The AbpRefreshingPrincipalOptions.</param>
         /// <returns></returns>
-        public static Task UpdatePrincipal(SecurityStampRefreshingPrincipalContext context, StarshineRefreshingPrincipalOptions refreshingPrincipalOptions)
+        public static Task UpdatePrincipal(SecurityStampRefreshingPrincipalContext context, CenseqRefreshingPrincipalOptions refreshingPrincipalOptions)
         {
             if (context.NewPrincipal == null || context.CurrentPrincipal == null) return Task.CompletedTask;
             var newClaimTypes = context.NewPrincipal.Claims.Select(x => x.Type).ToArray();

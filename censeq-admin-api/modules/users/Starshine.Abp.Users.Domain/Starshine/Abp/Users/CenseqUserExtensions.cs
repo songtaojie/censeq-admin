@@ -3,14 +3,14 @@ namespace Censeq.Abp.Users;
 /// <summary>
 /// �û���չ��
 /// </summary>
-public static class StarshineUserExtensions
+public static class CenseqUserExtensions
 {
     /// <summary>
     /// userתUserData
     /// </summary>
     /// <param name="user"></param>
     /// <returns></returns>
-    public static IUserData ToStarshineUserData(this IUser user)
+    public static IUserData ToCenseqUserData(this IUser user)
     {
         return new UserData(
             id: user.Id,

@@ -19,7 +19,7 @@ namespace Censeq.Admin;
     typeof(AbpExceptionHandlingModule),
     typeof(AbpJsonModule),
     typeof(AbpMultiTenancyModule),
-    typeof(StarshineAdminDomainSharedModule),
+    typeof(CenseqAdminDomainSharedModule),
     typeof(AbpBackgroundJobsDomainModule),
     typeof(AbpIdentityDomainModule),
     typeof(AbpOpenIddictDomainModule),
@@ -30,7 +30,7 @@ namespace Censeq.Admin;
     typeof(AbpFeaturesModule),
     typeof(AbpCachingModule)
 )]
-public class StarshineAdminDomainModule : AbpModule
+public class CenseqAdminDomainModule : AbpModule
 {
     private static readonly OneTimeRunner OneTimeRunner = new OneTimeRunner();
 
@@ -212,7 +212,7 @@ public class StarshineAdminDomainModule : AbpModule
                 {
                     // ReSharper disable once AccessToDisposedClosure
                     scope.ServiceProvider
-                        .GetService<ILogger<StarshineAdminDomainModule>>()?
+                        .GetService<ILogger<CenseqAdminDomainModule>>()?
                         .LogException(ex);
 
                     throw; // Polly will catch it
@@ -240,7 +240,7 @@ public class StarshineAdminDomainModule : AbpModule
             // ReSharper disable once AccessToDisposedClosure
             scope
                 .ServiceProvider
-                .GetService<ILogger<StarshineAdminDomainModule>>()?
+                .GetService<ILogger<CenseqAdminDomainModule>>()?
                 .LogException(ex);
 
             throw; // It will be cached in InitializeDynamicFeatures

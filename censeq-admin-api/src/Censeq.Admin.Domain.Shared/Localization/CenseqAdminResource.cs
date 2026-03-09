@@ -3,6 +3,6 @@
 namespace Censeq.Admin.Localization;
 
 [LocalizationResourceName("Admin")]
-public class StarshineAdminResource
+public class CenseqAdminResource
 {
 }

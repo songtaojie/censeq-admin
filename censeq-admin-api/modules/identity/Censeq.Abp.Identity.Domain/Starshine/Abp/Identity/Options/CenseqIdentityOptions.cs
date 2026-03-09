@@ -1,9 +1,9 @@
 ﻿namespace Censeq.Abp.Identity;
 
 /// <summary>
-/// StarshineAbp 身份选项
+/// CenseqAbp 身份选项
 /// </summary>
-public class StarshineIdentityOptions
+public class CenseqIdentityOptions
 {
     /// <summary>
     /// 外部登录提供者词典
@@ -11,9 +11,9 @@ public class StarshineIdentityOptions
     public ExternalLoginProviderDictionary ExternalLoginProviders { get; }
 
     /// <summary>
-    /// StarshineAbp 身份选项
+    /// CenseqAbp 身份选项
     /// </summary>
-    public StarshineIdentityOptions()
+    public CenseqIdentityOptions()
     {
         ExternalLoginProviders = [];
     }

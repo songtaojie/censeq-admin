@@ -7,10 +7,10 @@ namespace Censeq.Abp.PermissionManagement;
 /// <summary>
 /// 权限管理应用契约
 /// </summary>
-[DependsOn(typeof(StarshineDddApplicationContractsModule))]
-[DependsOn(typeof(StarshinePermissionManagementDomainSharedModule))]
+[DependsOn(typeof(CenseqDddApplicationContractsModule))]
+[DependsOn(typeof(CenseqPermissionManagementDomainSharedModule))]
 [DependsOn(typeof(AbpAuthorizationAbstractionsModule))]
-public class StarshinePermissionManagementApplicationContractsModule : AbpModule
+public class CenseqPermissionManagementApplicationContractsModule : AbpModule
 {
 
 }

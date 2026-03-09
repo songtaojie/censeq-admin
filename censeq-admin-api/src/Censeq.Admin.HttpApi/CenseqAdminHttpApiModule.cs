@@ -18,18 +18,18 @@ namespace Censeq.Admin;
 
 [DependsOn(
     typeof(AbpAccountHttpApiModule),
-    typeof(StarshineAdminApplicationContractsModule),
+    typeof(CenseqAdminApplicationContractsModule),
     typeof(AbpIdentityHttpApiModule),
     typeof(AbpPermissionManagementHttpApiModule),
     typeof(AbpSettingManagementHttpApiModule)
     )]
-public class StarshineAdminHttpApiModule : AbpModule
+public class CenseqAdminHttpApiModule : AbpModule
 {
     public override void PreConfigureServices(ServiceConfigurationContext context)
     {
         PreConfigure<IMvcBuilder>(mvcBuilder =>
         {
-            mvcBuilder.AddApplicationPartIfNotExists(typeof(StarshineAdminHttpApiModule).Assembly);
+            mvcBuilder.AddApplicationPartIfNotExists(typeof(CenseqAdminHttpApiModule).Assembly);
         });
     }
 
@@ -54,10 +54,10 @@ public class StarshineAdminHttpApiModule : AbpModule
         Configure<AbpLocalizationOptions>(options =>
         {
             options.Resources
-                .Get<StarshineAdminResource>()
+                .Get<CenseqAdminResource>()
                 .AddBaseTypes(
-                    typeof(StarshineTenantManagementResource),
-                    typeof(StarshineFeatureManagementResource),
+                    typeof(CenseqTenantManagementResource),
+                    typeof(CenseqFeatureManagementResource),
                     typeof(AbpUiResource)
                 );
         });

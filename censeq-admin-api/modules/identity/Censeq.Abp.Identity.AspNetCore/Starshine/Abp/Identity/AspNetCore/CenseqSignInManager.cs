@@ -9,12 +9,12 @@ namespace Censeq.Abp.Identity.AspNetCore;
 /// <summary>
 /// 登录管理器
 /// </summary>
-public class StarshineSignInManager : SignInManager<IdentityUser>
+public class CenseqSignInManager : SignInManager<IdentityUser>
 {
     /// <summary>
     /// 权限配置
     /// </summary>
-    protected AbpIdentityOptions StarshineIdentityOptions { get; }
+    protected AbpIdentityOptions CenseqIdentityOptions { get; }
 
     /// <summary>
     /// 设置
@@ -35,7 +35,7 @@ public class StarshineSignInManager : SignInManager<IdentityUser>
     /// <param name="confirmation"></param>
     /// <param name="options"></param>
     /// <param name="settingProvider"></param>
-    public StarshineSignInManager(
+    public CenseqSignInManager(
         IdentityUserManager userManager,
         IHttpContextAccessor contextAccessor,
         IUserClaimsPrincipalFactory<IdentityUser> claimsFactory,
@@ -54,7 +54,7 @@ public class StarshineSignInManager : SignInManager<IdentityUser>
         confirmation)
     {
         SettingProvider = settingProvider;
-        StarshineIdentityOptions = options.Value;
+        CenseqIdentityOptions = options.Value;
         _identityUserManager = userManager;
     }
 
@@ -69,7 +69,7 @@ public class StarshineSignInManager : SignInManager<IdentityUser>
     /// <returns></returns>
     public async override Task<SignInResult> PasswordSignInAsync(string userName,string password, bool isPersistent,bool lockoutOnFailure)
     {
-        foreach (var externalLoginProviderInfo in StarshineIdentityOptions.ExternalLoginProviders.Values)
+        foreach (var externalLoginProviderInfo in CenseqIdentityOptions.ExternalLoginProviders.Values)
         {
             var externalLoginProvider = (IExternalLoginProvider)Context.RequestServices
                 .GetRequiredService(externalLoginProviderInfo.Type);

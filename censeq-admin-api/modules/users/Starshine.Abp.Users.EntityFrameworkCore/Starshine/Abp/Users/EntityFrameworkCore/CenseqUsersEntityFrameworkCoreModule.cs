@@ -7,10 +7,10 @@ namespace Censeq.Abp.Users.EntityFrameworkCore;
 /// 用户ef模块
 /// </summary>
 [DependsOn(
-    typeof(StarshineUsersDomainModule),
-    typeof(StarshineEntityFrameworkCoreModule)
+    typeof(CenseqUsersDomainModule),
+    typeof(CenseqEntityFrameworkCoreModule)
     )]
-public class StarshineUsersEntityFrameworkCoreModule : AbpModule
+public class CenseqUsersEntityFrameworkCoreModule : AbpModule
 {
 
 }

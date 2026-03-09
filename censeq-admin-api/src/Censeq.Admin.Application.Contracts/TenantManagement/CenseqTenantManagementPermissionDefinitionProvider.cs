@@ -8,7 +8,7 @@ namespace Censeq.Admin.TenantManagement;
 /// <summary>
 /// 租户管理权限定义提供者
 /// </summary>
-public class StarshineTenantManagementPermissionDefinitionProvider : PermissionDefinitionProvider
+public class CenseqTenantManagementPermissionDefinitionProvider : PermissionDefinitionProvider
 {
     /// <summary>
     /// 定义权限
@@ -28,6 +28,6 @@ public class StarshineTenantManagementPermissionDefinitionProvider : PermissionD
 
     private static LocalizableString L(string name)
     {
-        return LocalizableString.Create<StarshineTenantManagementResource>(name);
+        return LocalizableString.Create<CenseqTenantManagementResource>(name);
     }
 }

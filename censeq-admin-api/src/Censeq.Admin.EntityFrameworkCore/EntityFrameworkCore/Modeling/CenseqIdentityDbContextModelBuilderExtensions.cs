@@ -1,12 +1,11 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System;
 using Volo.Abp;
-using Volo.Abp.EntityFrameworkCore.Modeling;
 using Volo.Abp.Identity;
 
 namespace Censeq.Admin.EntityFrameworkCore.Modeling
 {
-    internal static class StarshineIdentityDbContextModelBuilderExtensions
+    internal static class CenseqIdentityDbContextModelBuilderExtensions
     {
         public static void ConfigureIdentity(this ModelBuilder builder)
         {
@@ -14,9 +13,9 @@ namespace Censeq.Admin.EntityFrameworkCore.Modeling
 
             builder.Entity<IdentityUser>(b =>
             {
-                b.ToStarshineTable(nameof(IdentityUser)).ConfigureStarshineByConvention();
+                b.ToCenseqTable(nameof(IdentityUser)).ConfigureCenseqByConvention();
 
-                b.ConfigureStarshineUser();
+                b.ConfigureCenseqUser();
                 b.Property(u => u.NormalizedUserName).IsRequired()
                     .HasMaxLength(IdentityUserConsts.MaxNormalizedUserNameLength);
                 b.Property(u => u.NormalizedEmail).IsRequired()
@@ -40,8 +39,8 @@ namespace Censeq.Admin.EntityFrameworkCore.Modeling
 
             builder.Entity<IdentityUserClaim>(b =>
             {
-                b.ToStarshineTable(nameof(IdentityUserClaim))
-                    .ConfigureStarshineByConvention();
+                b.ToCenseqTable(nameof(IdentityUserClaim))
+                    .ConfigureCenseqByConvention();
 
                 b.Property(x => x.Id).ValueGeneratedNever();
                 b.Property(uc => uc.ClaimType).HasMaxLength(IdentityUserClaimConsts.MaxClaimTypeLength).IsRequired();
@@ -53,8 +52,8 @@ namespace Censeq.Admin.EntityFrameworkCore.Modeling
 
             builder.Entity<IdentityUserRole>(b =>
             {
-                b.ToStarshineTable(nameof(IdentityUserRole))
-                    .ConfigureStarshineByConvention();
+                b.ToCenseqTable(nameof(IdentityUserRole))
+                    .ConfigureCenseqByConvention();
 
                 b.HasKey(ur => new { ur.UserId, ur.RoleId });
                 b.HasIndex(ur => new { ur.RoleId, ur.UserId });
@@ -63,8 +62,8 @@ namespace Censeq.Admin.EntityFrameworkCore.Modeling
 
             builder.Entity<IdentityUserLogin>(b =>
             {
-                b.ToStarshineTable(nameof(IdentityUserLogin))
-                    .ConfigureStarshineByConvention();
+                b.ToCenseqTable(nameof(IdentityUserLogin))
+                    .ConfigureCenseqByConvention();
 
                 b.HasKey(x => new { x.UserId, x.LoginProvider });
                 b.Property(ul => ul.LoginProvider).HasMaxLength(IdentityUserLoginConsts.MaxLoginProviderLength)
@@ -80,8 +79,8 @@ namespace Censeq.Admin.EntityFrameworkCore.Modeling
 
             builder.Entity<IdentityUserToken>(b =>
             {
-                b.ToStarshineTable(nameof(IdentityUserToken))
-                    .ConfigureStarshineByConvention();
+                b.ToCenseqTable(nameof(IdentityUserToken))
+                    .ConfigureCenseqByConvention();
 
                 b.HasKey(l => new { l.UserId, l.LoginProvider, l.Name });
                 b.Property(ul => ul.LoginProvider).HasMaxLength(IdentityUserTokenConsts.MaxLoginProviderLength)
@@ -93,8 +92,8 @@ namespace Censeq.Admin.EntityFrameworkCore.Modeling
 
             builder.Entity<IdentityRole>(b =>
             {
-                b.ToStarshineTable(nameof(IdentityRole))
-                    .ConfigureStarshineByConvention();
+                b.ToCenseqTable(nameof(IdentityRole))
+                    .ConfigureCenseqByConvention();
 
                 b.Property(r => r.Name).IsRequired().HasMaxLength(IdentityRoleConsts.MaxNameLength);
                 b.Property(r => r.NormalizedName).IsRequired().HasMaxLength(IdentityRoleConsts.MaxNormalizedNameLength);
@@ -109,8 +108,8 @@ namespace Censeq.Admin.EntityFrameworkCore.Modeling
 
             builder.Entity<IdentityRoleClaim>(b =>
             {
-                b.ToStarshineTable(nameof(IdentityRoleClaim))
-                    .ConfigureStarshineByConvention();
+                b.ToCenseqTable(nameof(IdentityRoleClaim))
+                    .ConfigureCenseqByConvention();
 
                 b.Property(x => x.Id).ValueGeneratedNever();
                 b.Property(uc => uc.ClaimType).HasMaxLength(IdentityRoleClaimConsts.MaxClaimTypeLength).IsRequired();
@@ -124,8 +123,8 @@ namespace Censeq.Admin.EntityFrameworkCore.Modeling
             {
                 builder.Entity<IdentityClaimType>(b =>
                 {
-                    b.ToStarshineTable(nameof(IdentityClaimType))
-                        .ConfigureStarshineByConvention();
+                    b.ToCenseqTable(nameof(IdentityClaimType))
+                        .ConfigureCenseqByConvention();
 
                     b.Property(uc => uc.Name).HasMaxLength(IdentityClaimTypeConsts.MaxNameLength)
                         .IsRequired(); // make unique
@@ -139,8 +138,8 @@ namespace Censeq.Admin.EntityFrameworkCore.Modeling
 
             builder.Entity<OrganizationUnit>(b =>
             {
-                b.ToStarshineTable(nameof(OrganizationUnit))
-                    .ConfigureStarshineByConvention();
+                b.ToCenseqTable(nameof(OrganizationUnit))
+                    .ConfigureCenseqByConvention();
 
                 b.Property(x => x.Code).IsRequired().HasMaxLength(OrganizationUnitConsts.MaxCodeLength);
                 b.Property(x => x.DisplayName).IsRequired().HasMaxLength(OrganizationUnitConsts.MaxDisplayNameLength);
@@ -151,8 +150,8 @@ namespace Censeq.Admin.EntityFrameworkCore.Modeling
 
             builder.Entity<OrganizationUnitRole>(b =>
             {
-                b.ToStarshineTable(nameof(OrganizationUnitRole))
-                    .ConfigureStarshineByConvention();
+                b.ToCenseqTable(nameof(OrganizationUnitRole))
+                    .ConfigureCenseqByConvention();
                 b.HasKey(x => new { x.OrganizationUnitId, x.RoleId });
                 b.HasIndex(x => new { x.RoleId, x.OrganizationUnitId });
                 b.ApplyObjectExtensionMappings();
@@ -160,8 +159,8 @@ namespace Censeq.Admin.EntityFrameworkCore.Modeling
 
             builder.Entity<IdentityUserOrganizationUnit>(b =>
             {
-                b.ToStarshineTable(nameof(IdentityUserOrganizationUnit))
-                    .ConfigureStarshineByConvention();
+                b.ToCenseqTable(nameof(IdentityUserOrganizationUnit))
+                    .ConfigureCenseqByConvention();
 
                 b.HasKey(x => new { x.OrganizationUnitId, x.UserId });
                 b.HasIndex(x => new { x.UserId, x.OrganizationUnitId });
@@ -170,8 +169,8 @@ namespace Censeq.Admin.EntityFrameworkCore.Modeling
 
             builder.Entity<IdentitySecurityLog>(b =>
             {
-                b.ToStarshineTable(nameof(IdentitySecurityLog))
-                    .ConfigureStarshineByConvention();
+                b.ToCenseqTable(nameof(IdentitySecurityLog))
+                    .ConfigureCenseqByConvention();
 
                 b.Property(x => x.TenantName).HasMaxLength(IdentitySecurityLogConsts.MaxTenantNameLength);
                 b.Property(x => x.ApplicationName).HasMaxLength(IdentitySecurityLogConsts.MaxApplicationNameLength);
@@ -194,7 +193,7 @@ namespace Censeq.Admin.EntityFrameworkCore.Modeling
             {
                 builder.Entity<IdentityLinkUser>(b =>
                 {
-                    b.ToStarshineTable(nameof(IdentityLinkUser));
+                    b.ToCenseqTable(nameof(IdentityLinkUser));
                     b.HasIndex(x => new
                     {
                         UserId = x.SourceUserId,
@@ -209,16 +208,16 @@ namespace Censeq.Admin.EntityFrameworkCore.Modeling
 
             builder.Entity<IdentityUserDelegation>(b =>
             {
-                b.ToStarshineTable(nameof(IdentityUserDelegation))
-                    .ConfigureStarshineByConvention();
+                b.ToCenseqTable(nameof(IdentityUserDelegation))
+                    .ConfigureCenseqByConvention();
 
                 b.ApplyObjectExtensionMappings();
             });
 
             builder.Entity<IdentitySession>(b =>
             {
-                b.ToStarshineTable(nameof(IdentitySession))
-                    .ConfigureStarshineByConvention();
+                b.ToCenseqTable(nameof(IdentitySession))
+                    .ConfigureCenseqByConvention();
 
                 b.Property(x => x.SessionId).HasMaxLength(IdentitySessionConsts.MaxSessionIdLength).IsRequired();
                 b.Property(x => x.Device).HasMaxLength(IdentitySessionConsts.MaxDeviceLength).IsRequired();
@@ -231,7 +230,6 @@ namespace Censeq.Admin.EntityFrameworkCore.Modeling
                 b.ApplyObjectExtensionMappings();
             });
 
-            builder.TryConfigureObjectExtensions<Volo.Abp.Identity.EntityFrameworkCore.IdentityDbContext>();
         }
     }
 }

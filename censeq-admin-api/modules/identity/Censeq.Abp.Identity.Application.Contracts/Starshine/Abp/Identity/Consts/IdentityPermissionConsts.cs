@@ -9,7 +9,7 @@ public static class IdentityPermissionConsts
     /// <summary>
     ///组名
     /// </summary>
-    public const string GroupName = "StarshineIdentity";
+    public const string GroupName = "CenseqIdentity";
 
     /// <summary>
     /// 角色

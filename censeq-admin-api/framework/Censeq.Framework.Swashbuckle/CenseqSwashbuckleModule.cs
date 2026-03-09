@@ -14,7 +14,7 @@ namespace Censeq.Framework.Swashbuckle
     /// Swashbuckle模块入口
     /// </summary>
     [DependsOn(typeof(AbpAspNetCoreMvcModule))]
-    public class StarshineSwashbuckleModule : StarshineAbpModule
+    public class CenseqSwashbuckleModule : CenseqAbpModule
     {
         /// <summary>
         /// 配置服务
@@ -24,9 +24,9 @@ namespace Censeq.Framework.Swashbuckle
         {
             Configure<AbpVirtualFileSystemOptions>(options =>
             {
-                options.FileSets.AddEmbedded<StarshineSwashbuckleModule>();
+                options.FileSets.AddEmbedded<CenseqSwashbuckleModule>();
             });
-            context.Services.AddStarshineSwaggerGen();
+            context.Services.AddCenseqSwaggerGen();
             context.Services.AddEndpointsApiExplorer();
         }
 
@@ -40,11 +40,11 @@ namespace Censeq.Framework.Swashbuckle
             var options = app.ApplicationServices.GetRequiredService<IOptions<SwaggerSettingsOptions>>().Value;
             if (options.SwaggerUI == 2)
             {
-                app.UseStarshineSwaggerKnife4j();
+                app.UseCenseqSwaggerKnife4j();
             }
             else
             {
-                app.UseStarshineSwagger();
+                app.UseCenseqSwagger();
             }
         }
     }

@@ -15,7 +15,7 @@ namespace Censeq.Abp.Identity.EntityFrameworkCore
         /// <param name="builder"></param>
         public void Configure(EntityTypeBuilder<IdentityRoleClaim> builder)
         {
-            builder.ToTable(StarshineIdentityDbProperties.DbTablePrefix + nameof(IdentityRoleClaim), StarshineIdentityDbProperties.DbSchema);
+            builder.ToTable(CenseqIdentityDbProperties.DbTablePrefix + nameof(IdentityRoleClaim), CenseqIdentityDbProperties.DbSchema);
             builder.ConfigureByConvention();
 
             builder.Property(t => t.Id).ValueGeneratedNever();

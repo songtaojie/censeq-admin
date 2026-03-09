@@ -21,9 +21,9 @@ namespace Censeq.Abp.PermissionManagement;
 /// 权限管理领域模型
 /// </summary>
 [DependsOn(typeof(AbpAuthorizationModule))]
-[DependsOn(typeof(StarshineDddDomainModule))]
-[DependsOn(typeof(StarshinePermissionManagementDomainSharedModule))]
-public class StarshinePermissionManagementDomainModule : AbpModule
+[DependsOn(typeof(CenseqDddDomainModule))]
+[DependsOn(typeof(CenseqPermissionManagementDomainSharedModule))]
+public class CenseqPermissionManagementDomainModule : AbpModule
 {
     private readonly CancellationTokenSource _cancellationTokenSource = new();
     private Task? _initializeDynamicPermissionsTask;
@@ -152,7 +152,7 @@ public class StarshinePermissionManagementDomainModule : AbpModule
                 catch (Exception ex)
                 {
                     scope.ServiceProvider
-                        .GetService<ILogger<StarshinePermissionManagementDomainModule>>()?
+                        .GetService<ILogger<CenseqPermissionManagementDomainModule>>()?
                         .LogException(ex);
 
                     throw; 
@@ -178,7 +178,7 @@ public class StarshinePermissionManagementDomainModule : AbpModule
         {
             // ReSharper disable once AccessToDisposedClosure
             scope.ServiceProvider
-                .GetService<ILogger<StarshinePermissionManagementDomainModule>>()?
+                .GetService<ILogger<CenseqPermissionManagementDomainModule>>()?
                 .LogException(ex);
 
             throw; // It will be cached in InitializeDynamicPermissions

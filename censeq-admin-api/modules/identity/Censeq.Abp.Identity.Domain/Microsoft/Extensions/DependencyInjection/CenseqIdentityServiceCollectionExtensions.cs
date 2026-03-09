@@ -9,16 +9,16 @@ namespace Microsoft.Extensions.DependencyInjection;
 /// <summary>
 /// 扩展方法
 /// </summary>
-public static class StarshineIdentityServiceCollectionExtensions
+public static class CenseqIdentityServiceCollectionExtensions
 {
     /// <summary>
     /// 添加身份服务
     /// </summary>
     /// <param name="services"></param>
     /// <returns></returns>
-    public static IdentityBuilder AddStarshineIdentity(this IServiceCollection services)
+    public static IdentityBuilder AddCenseqIdentity(this IServiceCollection services)
     {
-        return services.AddStarshineIdentity(setupAction: options => { });
+        return services.AddCenseqIdentity(setupAction: options => { });
     }
     /// <summary>
     /// 添加身份服务
@@ -26,7 +26,7 @@ public static class StarshineIdentityServiceCollectionExtensions
     /// <param name="services"></param>
     /// <param name="setupAction"></param>
     /// <returns></returns>
-    public static IdentityBuilder AddStarshineIdentity(this IServiceCollection services, Action<IdentityOptions> setupAction)
+    public static IdentityBuilder AddCenseqIdentity(this IServiceCollection services, Action<IdentityOptions> setupAction)
     {
         //AbpRoleManager
         services.TryAddScoped<IdentityRoleManager>();
@@ -47,6 +47,6 @@ public static class StarshineIdentityServiceCollectionExtensions
         return services
             .AddIdentityCore<IdentityUser>(setupAction)
             .AddRoles<IdentityRole>()
-            .AddClaimsPrincipalFactory<StarshineUserClaimsPrincipalFactory>();
+            .AddClaimsPrincipalFactory<CenseqUserClaimsPrincipalFactory>();
     }
 }

@@ -15,7 +15,7 @@ namespace Censeq.Abp.Identity.EntityFrameworkCore
         /// <param name="builder"></param>
         public void Configure(EntityTypeBuilder<IdentityUserLogin> builder)
         {
-            builder.ToTable(StarshineIdentityDbProperties.DbTablePrefix + nameof(IdentityUserLogin), StarshineIdentityDbProperties.DbSchema);
+            builder.ToTable(CenseqIdentityDbProperties.DbTablePrefix + nameof(IdentityUserLogin), CenseqIdentityDbProperties.DbSchema);
             builder.ConfigureByConvention();
             builder.HasKey(u => new { u.UserId, u.LoginProvider });
             builder.Property(u => u.LoginProvider).HasMaxLength(IdentityUserLoginConsts.MaxLoginProviderLength).IsRequired();

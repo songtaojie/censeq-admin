@@ -13,14 +13,14 @@ using Volo.Abp.Threading;
 namespace Censeq.Abp.Identity;
 
 /// <summary>
-/// StarshineAbp 身份域模块
+/// CenseqAbp 身份域模块
 /// </summary>
 [DependsOn(
     typeof(AbpDddDomainModule),
-    typeof(StarshineIdentityDomainSharedModule),
-    typeof(StarshineUsersDomainModule)
+    typeof(CenseqIdentityDomainSharedModule),
+    typeof(CenseqUsersDomainModule)
     )]
-public class StarshineIdentityDomainModule : AbpModule
+public class CenseqIdentityDomainModule : AbpModule
 {
     private static readonly OneTimeRunner OneTimeRunner = new OneTimeRunner();
 
@@ -44,16 +44,16 @@ public class StarshineIdentityDomainModule : AbpModule
     {
         Configure<AbpDistributedEntityEventOptions>(options =>
         {
-            options.EtoMappings.Add<IdentityUser, UserEto>(typeof(StarshineIdentityDomainModule));
-            options.EtoMappings.Add<IdentityClaimType, IdentityClaimTypeEto>(typeof(StarshineIdentityDomainModule));
-            options.EtoMappings.Add<IdentityRole, IdentityRoleEto>(typeof(StarshineIdentityDomainModule));
-            options.EtoMappings.Add<OrganizationUnit, OrganizationUnitEto>(typeof(StarshineIdentityDomainModule));
+            options.EtoMappings.Add<IdentityUser, UserEto>(typeof(CenseqIdentityDomainModule));
+            options.EtoMappings.Add<IdentityClaimType, IdentityClaimTypeEto>(typeof(CenseqIdentityDomainModule));
+            options.EtoMappings.Add<IdentityRole, IdentityRoleEto>(typeof(CenseqIdentityDomainModule));
+            options.EtoMappings.Add<OrganizationUnit, OrganizationUnitEto>(typeof(CenseqIdentityDomainModule));
 
             options.AutoEventSelectors.Add<IdentityUser>();
             options.AutoEventSelectors.Add<IdentityRole>();
         });
 
-        var identityBuilder = context.Services.AddStarshineIdentity(options =>
+        var identityBuilder = context.Services.AddCenseqIdentity(options =>
         {
             options.User.RequireUniqueEmail = true;
         });
@@ -69,7 +69,7 @@ public class StarshineIdentityDomainModule : AbpModule
             options.ClaimsIdentity.EmailClaimType = AbpClaimTypes.Email;
         });
 
-        context.Services.AddAbpDynamicOptions<IdentityOptions, StarshineIdentityOptionsManager>();
+        context.Services.AddAbpDynamicOptions<IdentityOptions, CenseqIdentityOptionsManager>();
     }
 
     /// <summary>

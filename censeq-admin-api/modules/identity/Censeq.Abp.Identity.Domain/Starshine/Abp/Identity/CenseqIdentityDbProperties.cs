@@ -5,7 +5,7 @@ namespace Censeq.Abp.Identity;
 /// <summary>
 /// 身份数据库属性
 /// </summary>
-public static class StarshineIdentityDbProperties
+public static class CenseqIdentityDbProperties
 {
     /// <summary>
     /// 数据库表前缀
@@ -20,5 +20,5 @@ public static class StarshineIdentityDbProperties
     /// <summary>
     /// 连接字符串名称
     /// </summary>
-    public const string ConnectionStringName = "StarshineIdentity";
+    public const string ConnectionStringName = "CenseqIdentity";
 }

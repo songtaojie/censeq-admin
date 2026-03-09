@@ -9,18 +9,18 @@ namespace Censeq.Admin.EntityFrameworkCore;
 
 /* This class is needed for EF Core console commands
  * (like Add-Migration and Update-Database commands) */
-public class AdminDesignTimeDbContextFactory : IDesignTimeDbContextFactory<StarshineAdminDbContext>
+public class AdminDesignTimeDbContextFactory : IDesignTimeDbContextFactory<CenseqAdminDbContext>
 {
-    public StarshineAdminDbContext CreateDbContext(string[] args)
+    public CenseqAdminDbContext CreateDbContext(string[] args)
     {
         // https://www.npgsql.org/efcore/release-notes/6.0.html#opting-out-of-the-new-timestamp-mapping-logic
         //AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
 
-        var builder = new DbContextOptionsBuilder<StarshineAdminDbContext>()
+        var builder = new DbContextOptionsBuilder<CenseqAdminDbContext>()
             .UseDynamicSql(BuildConfiguration())
             .UseSnakeCaseNamingConvention();
 
-        return new StarshineAdminDbContext(builder.Options);
+        return new CenseqAdminDbContext(builder.Options);
     }
 
     private static IConfigurationRoot BuildConfiguration()

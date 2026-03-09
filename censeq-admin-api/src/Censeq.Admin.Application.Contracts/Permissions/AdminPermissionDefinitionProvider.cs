@@ -15,6 +15,6 @@ public class AdminPermissionDefinitionProvider : PermissionDefinitionProvider
 
     private static LocalizableString L(string name)
     {
-        return LocalizableString.Create<StarshineAdminResource>(name);
+        return LocalizableString.Create<CenseqAdminResource>(name);
     }
 }

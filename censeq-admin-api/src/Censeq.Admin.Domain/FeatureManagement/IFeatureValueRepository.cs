@@ -6,7 +6,7 @@ namespace Censeq.Admin.FeatureManagement;
 
 public interface IFeatureValueRepository : IBasicRepository<FeatureValue, Guid>
 {
-    Task<FeatureValue> FindAsync(
+    Task<FeatureValue?> FindAsync(
         string name,
         string providerName,
         string? providerKey,

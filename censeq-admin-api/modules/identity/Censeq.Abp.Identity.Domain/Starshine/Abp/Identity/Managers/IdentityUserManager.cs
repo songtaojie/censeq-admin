@@ -587,7 +587,7 @@ public class IdentityUserManager : UserManager<IdentityUser>, IDomainService
     /// </summary>
     /// <param name="email"></param>
     /// <returns></returns>
-    /// <exception cref="StarshineIdentityResultException"></exception>
+    /// <exception cref="CenseqIdentityResultException"></exception>
     public virtual async Task<string> GetUserNameFromEmailAsync(string email)
     {
         const int maxTryCount = 20;
@@ -668,6 +668,6 @@ public class IdentityUserManager : UserManager<IdentityUser>, IDomainService
         }
 
         Logger.LogError($"无法获取给定电子邮件地址的有效用户名：{email}，允许的字符：{Options.User.AllowedUserNameCharacters}，已尝试 {maxTryCount} 次。");
-        throw new StarshineIdentityResultException(IdentityResult.Failed(new IdentityErrorDescriber().InvalidUserName(userName)));
+        throw new CenseqIdentityResultException(IdentityResult.Failed(new IdentityErrorDescriber().InvalidUserName(userName)));
     }
 }

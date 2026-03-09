@@ -13,11 +13,11 @@ namespace Microsoft.AspNetCore.Identity;
 /// <summary>
 /// 
 /// </summary>
-public static class StarshineIdentityResultExtensions
+public static class CenseqIdentityResultExtensions
 {
     private static readonly Dictionary<string, string> IdentityStrings = new Dictionary<string, string>();
 
-    static StarshineIdentityResultExtensions()
+    static CenseqIdentityResultExtensions()
     {
         var identityResourceManager = new ResourceManager("Microsoft.Extensions.Identity.Core.Resources", typeof(UserManager<>).Assembly);
         var resourceSet = identityResourceManager.GetResourceSet(CultureInfo.InvariantCulture, true, false);
@@ -53,7 +53,7 @@ public static class StarshineIdentityResultExtensions
     /// </summary>
     /// <param name="identityResult"></param>
     /// <exception cref="ArgumentException"></exception>
-    /// <exception cref="StarshineIdentityResultException"></exception>
+    /// <exception cref="CenseqIdentityResultException"></exception>
     public static void CheckErrors(this IdentityResult identityResult)
     {
         if (identityResult.Succeeded)
@@ -66,7 +66,7 @@ public static class StarshineIdentityResultExtensions
             throw new ArgumentException("identityResult.Errors should not be null.");
         }
 
-        throw new StarshineIdentityResultException(identityResult);
+        throw new CenseqIdentityResultException(identityResult);
     }
 
     /// <summary>

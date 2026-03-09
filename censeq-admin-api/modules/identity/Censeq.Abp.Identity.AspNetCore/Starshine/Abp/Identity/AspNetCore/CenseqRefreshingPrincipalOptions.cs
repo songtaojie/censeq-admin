@@ -5,7 +5,7 @@ namespace Censeq.Abp.Identity.AspNetCore;
 /// <summary>
 /// ˢ������ѡ��
 /// </summary>
-public class StarshineRefreshingPrincipalOptions
+public class CenseqRefreshingPrincipalOptions
 {
     /// <summary>
     /// ��ǰ���屣����������
@@ -15,7 +15,7 @@ public class StarshineRefreshingPrincipalOptions
     /// <summary>
     /// 
     /// </summary>
-    public StarshineRefreshingPrincipalOptions()
+    public CenseqRefreshingPrincipalOptions()
     {
         CurrentPrincipalKeepClaimTypes =
         [

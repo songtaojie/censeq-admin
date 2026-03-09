@@ -12,14 +12,14 @@ namespace Microsoft.AspNetCore.Builder;
 /// <summary>
 /// 跨域中间件拓展
 /// </summary>
-public static class StarshineCorsApplicationBuilderExtensions
+public static class CenseqCorsApplicationBuilderExtensions
 {
     /// <summary>
     /// 添加跨域中间件
     /// </summary>
     /// <param name="app"></param>
     /// <returns></returns>
-    public static IApplicationBuilder UseStarshineCors(this IApplicationBuilder app)
+    public static IApplicationBuilder UseCenseqCors(this IApplicationBuilder app)
     {
         // 获取选项
         var options = app.ApplicationServices.GetService<IOptions<CorsSettingsOptions>>();
