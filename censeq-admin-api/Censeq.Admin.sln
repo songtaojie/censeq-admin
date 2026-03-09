@@ -5,11 +5,11 @@ VisualStudioVersion = 17.14.36811.4
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "framework", "framework", "{02EA681E-C7D8-13C7-8484-4AC65E1B71E8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Censeq.Abp.Core", "framework\Censeq.Abp.Core\Censeq.Abp.Core.csproj", "{DB10F8CC-C3DB-9F99-45D5-B93CD6538A22}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Censeq.Framework.Core", "framework\Censeq.Framework.Core\Censeq.Framework.Core.csproj", "{DB10F8CC-C3DB-9F99-45D5-B93CD6538A22}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Censeq.Abp.AspNetCore", "framework\Censeq.Abp.AspNetCore\Censeq.Abp.AspNetCore.csproj", "{6B39588B-5AA9-678B-ABEC-BC153D7B4632}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Censeq.Framework.AspNetCore", "framework\Censeq.Framework.AspNetCore\Censeq.Framework.AspNetCore.csproj", "{6B39588B-5AA9-678B-ABEC-BC153D7B4632}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Censeq.Abp.Swashbuckle", "framework\Censeq.Abp.Swashbuckle\Censeq.Abp.Swashbuckle.csproj", "{2AE033CC-BF5D-9BF6-D760-A36C5D62AD4F}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Censeq.Framework.Swashbuckle", "framework\Censeq.Framework.Swashbuckle\Censeq.Framework.Swashbuckle.csproj", "{2AE033CC-BF5D-9BF6-D760-A36C5D62AD4F}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "modules", "modules", "{EAF7E666-1E79-48B8-B8EA-3DFD72BF359E}"
 EndProject

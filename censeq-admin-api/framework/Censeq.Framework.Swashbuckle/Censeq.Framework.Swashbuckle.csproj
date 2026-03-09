@@ -1,0 +1,44 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+	<Import Project="..\..\..\common.props" />
+	
+	<PropertyGroup>
+		<TargetFramework>$(NETVersion)</TargetFramework>
+		<AssemblyName>Censeq.Framework.Swashbuckle</AssemblyName>
+		<PackageId>Censeq.Framework.Swashbuckle</PackageId>
+		<GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
+		<GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
+		<GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
+		<RootNamespace />
+	</PropertyGroup>
+	
+	<ItemGroup>
+	  <None Remove="wwwroot\swagger\ui\index-mini-profiler.html" />
+	  <None Remove="wwwroot\swagger\ui\index.html" />
+	</ItemGroup>
+	
+	<ItemGroup>
+	  <EmbeddedResource Include="wwwroot\swagger\ui\index-mini-profiler.html" />
+	  <EmbeddedResource Include="wwwroot\swagger\ui\index.html" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<PackageReference Include="IGeekFan.AspNetCore.Knife4jUI" Version="0.0.16" />
+		<PackageReference Include="Swashbuckle.AspNetCore" Version="7.1.0" />
+		<PackageReference Include="Swashbuckle.AspNetCore.Filters" Version="8.0.2" />
+		<PackageReference Include="Volo.Abp.AspNetCore.Mvc" Version="$(AbpVersion)" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <ProjectReference Include="..\Censeq.Framework.Core\Censeq.Framework.Core.csproj" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <None Update="wwwroot\swagger\ui\abp.js">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Update="wwwroot\swagger\ui\abp.swagger.js">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	</ItemGroup>
+
+</Project>
