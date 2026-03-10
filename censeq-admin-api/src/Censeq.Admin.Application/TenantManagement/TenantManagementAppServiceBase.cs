@@ -1,6 +1,6 @@
 ﻿using Volo.Abp.DependencyInjection;
 using Volo.Abp.Application.Services;
-using Censeq.Admin.Localization;
+using Censeq.Admin.TenantManagement;
 
 namespace Censeq.Abp.TenantManagement;
 /// <summary>

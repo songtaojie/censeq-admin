@@ -49,6 +49,22 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Censeq.Account.Web", "modul
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Censeq.Account.Web.OpenIddict", "modules\account\Censeq.Account.Web.OpenIddict\Censeq.Account.Web.OpenIddict.csproj", "{3BB0AA26-0DCA-EA54-F49B-5D78B91C23A3}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "setting-management", "setting-management", "{9DC93C82-4B84-4CA0-8F82-4D8B2D7711D2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Censeq.SettingManagement.Domain.Shared", "modules\setting-management\Censeq.SettingManagement.Domain.Shared\Censeq.SettingManagement.Domain.Shared.csproj", "{2C7288D2-841E-9463-E441-2DF4C7F6CC7A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Censeq.SettingManagement.Domain", "modules\setting-management\Censeq.SettingManagement.Domain\Censeq.SettingManagement.Domain.csproj", "{08673C3C-E724-ABE3-4052-6CC0C2A7BDFD}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Censeq.SettingManagement.Application.Contracts", "modules\setting-management\Censeq.SettingManagement.Application.Contracts\Censeq.SettingManagement.Application.Contracts.csproj", "{DE71E742-6232-BE6A-F257-E814689F7F46}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Censeq.SettingManagement.Application", "modules\setting-management\Censeq.SettingManagement.Application\Censeq.SettingManagement.Application.csproj", "{F6212D43-9B96-93DC-6C25-337CCD367F3E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Censeq.SettingManagement.EntityFrameworkCore", "modules\setting-management\Censeq.SettingManagement.EntityFrameworkCore\Censeq.SettingManagement.EntityFrameworkCore.csproj", "{F6F88237-5780-3C84-DB9D-C6554C0BBC6B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Censeq.SettingManagement.HttpApi", "modules\setting-management\Censeq.SettingManagement.HttpApi\Censeq.SettingManagement.HttpApi.csproj", "{D800798B-4246-07AE-1106-CE62E438936D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Censeq.SettingManagement.HttpApi.Client", "modules\setting-management\Censeq.SettingManagement.HttpApi.Client\Censeq.SettingManagement.HttpApi.Client.csproj", "{25183C4F-3029-0E8A-7B14-0C2400E2C52B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -123,6 +139,34 @@ Global
 		{3BB0AA26-0DCA-EA54-F49B-5D78B91C23A3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3BB0AA26-0DCA-EA54-F49B-5D78B91C23A3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3BB0AA26-0DCA-EA54-F49B-5D78B91C23A3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2C7288D2-841E-9463-E441-2DF4C7F6CC7A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2C7288D2-841E-9463-E441-2DF4C7F6CC7A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2C7288D2-841E-9463-E441-2DF4C7F6CC7A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2C7288D2-841E-9463-E441-2DF4C7F6CC7A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{08673C3C-E724-ABE3-4052-6CC0C2A7BDFD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{08673C3C-E724-ABE3-4052-6CC0C2A7BDFD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{08673C3C-E724-ABE3-4052-6CC0C2A7BDFD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{08673C3C-E724-ABE3-4052-6CC0C2A7BDFD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DE71E742-6232-BE6A-F257-E814689F7F46}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DE71E742-6232-BE6A-F257-E814689F7F46}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DE71E742-6232-BE6A-F257-E814689F7F46}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DE71E742-6232-BE6A-F257-E814689F7F46}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F6212D43-9B96-93DC-6C25-337CCD367F3E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F6212D43-9B96-93DC-6C25-337CCD367F3E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F6212D43-9B96-93DC-6C25-337CCD367F3E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F6212D43-9B96-93DC-6C25-337CCD367F3E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F6F88237-5780-3C84-DB9D-C6554C0BBC6B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F6F88237-5780-3C84-DB9D-C6554C0BBC6B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F6F88237-5780-3C84-DB9D-C6554C0BBC6B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F6F88237-5780-3C84-DB9D-C6554C0BBC6B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D800798B-4246-07AE-1106-CE62E438936D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D800798B-4246-07AE-1106-CE62E438936D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D800798B-4246-07AE-1106-CE62E438936D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D800798B-4246-07AE-1106-CE62E438936D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{25183C4F-3029-0E8A-7B14-0C2400E2C52B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{25183C4F-3029-0E8A-7B14-0C2400E2C52B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{25183C4F-3029-0E8A-7B14-0C2400E2C52B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{25183C4F-3029-0E8A-7B14-0C2400E2C52B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -148,6 +192,14 @@ Global
 		{B91E0CEC-26BB-480D-AD6C-DC219883A432} = {EAF7E666-1E79-48B8-B8EA-3DFD72BF359E}
 		{CF6DD81A-73E6-80D9-53B4-15033E2B8E7B} = {B91E0CEC-26BB-480D-AD6C-DC219883A432}
 		{3BB0AA26-0DCA-EA54-F49B-5D78B91C23A3} = {B91E0CEC-26BB-480D-AD6C-DC219883A432}
+		{9DC93C82-4B84-4CA0-8F82-4D8B2D7711D2} = {EAF7E666-1E79-48B8-B8EA-3DFD72BF359E}
+		{2C7288D2-841E-9463-E441-2DF4C7F6CC7A} = {9DC93C82-4B84-4CA0-8F82-4D8B2D7711D2}
+		{08673C3C-E724-ABE3-4052-6CC0C2A7BDFD} = {9DC93C82-4B84-4CA0-8F82-4D8B2D7711D2}
+		{DE71E742-6232-BE6A-F257-E814689F7F46} = {9DC93C82-4B84-4CA0-8F82-4D8B2D7711D2}
+		{F6212D43-9B96-93DC-6C25-337CCD367F3E} = {9DC93C82-4B84-4CA0-8F82-4D8B2D7711D2}
+		{F6F88237-5780-3C84-DB9D-C6554C0BBC6B} = {9DC93C82-4B84-4CA0-8F82-4D8B2D7711D2}
+		{D800798B-4246-07AE-1106-CE62E438936D} = {9DC93C82-4B84-4CA0-8F82-4D8B2D7711D2}
+		{25183C4F-3029-0E8A-7B14-0C2400E2C52B} = {9DC93C82-4B84-4CA0-8F82-4D8B2D7711D2}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {E23E8388-F169-4F3B-8A0C-AA189D779228}

@@ -1,9 +1,12 @@
 ﻿using Censeq.Admin.FeatureManagement;
 using Censeq.Admin.FeatureManagement.JsonConverters;
+using Censeq.Admin.FeatureManagement.Localization;
 using Censeq.Admin.Localization;
+using Censeq.Admin.TenantManagement;
 using Censeq.AuditLogging;
 using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.BackgroundJobs;
+using Volo.Abp.Features;
 using Volo.Abp.Identity;
 using Volo.Abp.Json.SystemTextJson;
 using Volo.Abp.Localization;
@@ -11,7 +14,6 @@ using Volo.Abp.Localization.ExceptionHandling;
 using Volo.Abp.Modularity;
 using Volo.Abp.OpenIddict;
 using Volo.Abp.PermissionManagement;
-using Volo.Abp.SettingManagement;
 using Volo.Abp.Validation.Localization;
 using Volo.Abp.VirtualFileSystem;
 
@@ -22,9 +24,9 @@ namespace Censeq.Admin;
     typeof(AbpIdentityDomainSharedModule),
     typeof(AbpOpenIddictDomainSharedModule),
     typeof(AbpPermissionManagementDomainSharedModule),
-    typeof(AbpSettingManagementDomainSharedModule),
     typeof(AbpJsonSystemTextJsonModule),
-    typeof(CenseqAuditLoggingDomainSharedModule)
+    typeof(CenseqAuditLoggingDomainSharedModule),
+    typeof(AbpFeaturesModule)
     )]
 public class CenseqAdminDomainSharedModule : AbpModule
 {
@@ -51,13 +53,13 @@ public class CenseqAdminDomainSharedModule : AbpModule
                 .Add<CenseqTenantManagementResource>("zh-Hans")
                 .AddBaseTypes(
                     typeof(AbpValidationResource)
-                ).AddVirtualJson("/Localization/TenantResources");
+                ).AddVirtualJson("/TenantManagement/Localization");
             options.DefaultResourceType = typeof(CenseqAdminResource);
 
             options.Resources
                .Add<CenseqFeatureManagementResource>("zh-Hans")
                .AddBaseTypes(typeof(AbpValidationResource))
-               .AddVirtualJson("/Localization/FeatureManagementResources");
+               .AddVirtualJson("/FeatureManagement/Localization");
         });
 
         Configure<AbpExceptionLocalizationOptions>(options =>

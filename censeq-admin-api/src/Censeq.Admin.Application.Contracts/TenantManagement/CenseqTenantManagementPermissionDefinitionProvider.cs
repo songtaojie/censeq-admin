@@ -1,7 +1,6 @@
 ﻿using Volo.Abp.Authorization.Permissions;
 using Volo.Abp.Localization;
 using Volo.Abp.MultiTenancy;
-using Censeq.Admin.Localization;
 
 namespace Censeq.Admin.TenantManagement;
 

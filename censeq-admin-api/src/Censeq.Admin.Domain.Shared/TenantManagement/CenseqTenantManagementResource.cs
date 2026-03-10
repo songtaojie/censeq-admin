@@ -1,6 +1,6 @@
 ﻿using Volo.Abp.Localization;
 
-namespace Censeq.Admin.Localization;
+namespace Censeq.Admin.TenantManagement;
 
 /// <summary>
 /// 租户管理资源

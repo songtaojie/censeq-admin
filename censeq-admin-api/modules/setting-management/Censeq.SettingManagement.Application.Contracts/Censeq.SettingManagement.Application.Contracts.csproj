@@ -1,0 +1,24 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+	<Import Project="..\..\..\common.props" />
+
+	<PropertyGroup>
+		<Nullable>enable</Nullable>
+		<RootNamespace>Censeq.SettingManagement</RootNamespace>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Volo.Abp.Ddd.Application.Contracts" Version="$(AbpVersion)" />
+		<PackageReference Include="Volo.Abp.Authorization.Abstractions" Version="$(AbpVersion)" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<EmbeddedResource Include="Localization\ApplicationContracts\*.json" />
+		<Content Remove="Localization\ApplicationContracts\*.json" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <ProjectReference Include="..\Censeq.SettingManagement.Domain.Shared\Censeq.SettingManagement.Domain.Shared.csproj" />
+	</ItemGroup>
+
+</Project>

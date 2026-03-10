@@ -13,6 +13,8 @@ using Volo.Abp.Modularity;
 using Volo.Abp.PermissionManagement;
 using Volo.Abp.PermissionManagement.HttpApi;
 using Volo.Abp.SettingManagement;
+using Censeq.Admin.TenantManagement;
+using Censeq.Admin.FeatureManagement.Localization;
 
 namespace Censeq.Admin;
 

@@ -21,7 +21,7 @@ public class CenseqAuditLoggingDomainSharedModule : AbpModule
         {
             options.Resources.Add<CenseqAuditLoggingResource>("zh-Hans")
                 .AddBaseTypes(typeof(AbpValidationResource))
-                .AddVirtualJson("/Localization");
+                .AddVirtualJson("/Localization/Resources");
         });
     }
 }

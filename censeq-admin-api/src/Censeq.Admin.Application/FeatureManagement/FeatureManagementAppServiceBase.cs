@@ -1,4 +1,4 @@
-﻿using Censeq.Admin.Localization;
+﻿using Censeq.Admin.FeatureManagement.Localization;
 using Volo.Abp.Application.Services;
 
 namespace Censeq.Admin.FeatureManagement;

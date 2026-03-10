@@ -1,0 +1,19 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+	<Import Project="..\..\..\common.props" />
+
+	<PropertyGroup>
+		<AssemblyName>Censeq.SettingManagement.EntityFrameworkCore</AssemblyName>
+		<PackageId>Censeq.SettingManagement.EntityFrameworkCore</PackageId>
+		<Nullable>enable</Nullable>
+		<RootNamespace>Censeq.SettingManagement</RootNamespace>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Volo.Abp.EntityFrameworkCore" Version="$(AbpVersion)" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <ProjectReference Include="..\Censeq.SettingManagement.Domain\Censeq.SettingManagement.Domain.csproj" />
+	</ItemGroup>
+</Project>

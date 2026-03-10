@@ -1,4 +1,4 @@
-﻿using Censeq.Admin.Localization;
+﻿using Censeq.Admin.FeatureManagement.Localization;
 using Volo.Abp.Authorization.Permissions;
 using Volo.Abp.Localization;
 using Volo.Abp.MultiTenancy;
