@@ -1,0 +1,21 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+	<Import Project="..\..\..\common.props" />
+
+	<PropertyGroup>
+		<AssemblyName>Censeq.TenantManagement.HttpApi</AssemblyName>
+		<PackageId>Censeq.TenantManagement.HttpApi</PackageId>
+		<Nullable>enable</Nullable>
+		<RootNamespace>Censeq.TenantManagement</RootNamespace>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Volo.Abp.AspNetCore.Mvc" Version="$(AbpVersion)" />
+		<PackageReference Include="Volo.Abp.FeatureManagement.HttpApi" Version="$(AbpVersion)" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\Censeq.TenantManagement.Application.Contracts\Censeq.TenantManagement.Application.Contracts.csproj" />
+	</ItemGroup>
+
+</Project>

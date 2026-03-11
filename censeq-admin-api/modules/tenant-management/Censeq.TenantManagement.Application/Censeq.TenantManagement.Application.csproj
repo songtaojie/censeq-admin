@@ -1,0 +1,23 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+	<Import Project="..\..\..\common.props" />
+
+	<PropertyGroup>
+		<AssemblyName>Censeq.TenantManagement.Application</AssemblyName>
+		<PackageId>Censeq.TenantManagement.Application</PackageId>
+		<Nullable>enable</Nullable>
+		<RootNamespace>Censeq.TenantManagement</RootNamespace>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Volo.Abp.Ddd.Application" Version="$(AbpVersion)" />
+		<PackageReference Include="Volo.Abp.EventBus" Version="$(AbpVersion)" />
+		<PackageReference Include="Volo.Abp.Data" Version="$(AbpVersion)" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\Censeq.TenantManagement.Application.Contracts\Censeq.TenantManagement.Application.Contracts.csproj" />
+		<ProjectReference Include="..\Censeq.TenantManagement.Domain\Censeq.TenantManagement.Domain.csproj" />
+	</ItemGroup>
+
+</Project>
