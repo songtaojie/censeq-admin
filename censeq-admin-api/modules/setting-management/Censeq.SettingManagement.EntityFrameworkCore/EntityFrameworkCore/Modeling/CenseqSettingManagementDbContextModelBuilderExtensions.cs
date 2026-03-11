@@ -1,9 +1,9 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Censeq.SettingManagement.Entities;
+using Microsoft.EntityFrameworkCore;
 using Volo.Abp;
-using Volo.Abp.SettingManagement;
-using Volo.Abp.SettingManagement.EntityFrameworkCore;
+using Censeq.Framework.EntityFrameworkCore;
 
-namespace Censeq.Admin.EntityFrameworkCore.Modeling
+namespace Censeq.SettingManagement.EntityFrameworkCore.Modeling
 {
     internal static class CenseqSettingManagementDbContextModelBuilderExtensions
     {

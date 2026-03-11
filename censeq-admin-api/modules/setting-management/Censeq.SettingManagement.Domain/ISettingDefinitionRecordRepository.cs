@@ -8,5 +8,5 @@ namespace Censeq.SettingManagement;
 
 public interface ISettingDefinitionRecordRepository : IBasicRepository<SettingDefinitionRecord, Guid>
 {
-    Task<SettingDefinitionRecord> FindByNameAsync(string name, CancellationToken cancellationToken = default);
+    Task<SettingDefinitionRecord?> FindByNameAsync(string name, CancellationToken cancellationToken = default);
 }

@@ -16,7 +16,7 @@ public class EfCoreSettingDefinitionRecordRepository : EfCoreRepository<ISetting
     {
     }
 
-    public virtual async Task<SettingDefinitionRecord> FindByNameAsync(string name, CancellationToken cancellationToken = default)
+    public virtual async Task<SettingDefinitionRecord?> FindByNameAsync(string name, CancellationToken cancellationToken = default)
     {
         return await (await GetDbSetAsync())
             .OrderBy(x => x.Id)

@@ -3,7 +3,7 @@ using Censeq.Framework.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Volo.Abp;
 
-namespace Censeq.AuditLogging.EntityFrameworkCore
+namespace Censeq.AuditLogging.EntityFrameworkCore.Modeling
 {
     internal static class CenseqAuditLoggingDbContextModelBuilderExtensions
     {

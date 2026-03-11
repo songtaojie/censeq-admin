@@ -1,9 +1,6 @@
 ﻿using Censeq.AuditLogging.Entities;
 using Censeq.Framework.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
 using Volo.Abp.EntityFrameworkCore;
 using Volo.Abp.Modularity;
 

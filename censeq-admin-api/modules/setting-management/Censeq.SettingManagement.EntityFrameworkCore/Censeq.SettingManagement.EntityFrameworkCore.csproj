@@ -14,6 +14,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <ProjectReference Include="..\..\..\framework\Censeq.Framework.EntityFrameworkCore\Censeq.Framework.EntityFrameworkCore.csproj" />
 	  <ProjectReference Include="..\Censeq.SettingManagement.Domain\Censeq.SettingManagement.Domain.csproj" />
 	</ItemGroup>
 </Project>
