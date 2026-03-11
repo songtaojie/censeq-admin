@@ -7,7 +7,7 @@ namespace Censeq.SettingManagement;
 
 public static class ConfigurationValueSettingManagerExtensions
 {
-    public static Task<string> GetOrNullConfigurationAsync(this ISettingManager settingManager, [NotNull] string name, bool fallback = true)
+    public static Task<string?> GetOrNullConfigurationAsync(this ISettingManager settingManager, [NotNull] string name, bool fallback = true)
     {
         return settingManager.GetOrNullAsync(name, ConfigurationSettingValueProvider.ProviderName, null, fallback);
     }

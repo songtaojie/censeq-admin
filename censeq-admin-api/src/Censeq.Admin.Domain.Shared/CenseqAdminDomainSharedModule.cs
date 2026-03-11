@@ -4,6 +4,7 @@ using Censeq.Admin.FeatureManagement.Localization;
 using Censeq.Admin.Localization;
 using Censeq.Admin.TenantManagement;
 using Censeq.AuditLogging;
+using Censeq.SettingManagement;
 using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.BackgroundJobs;
 using Volo.Abp.Features;
@@ -25,8 +26,9 @@ namespace Censeq.Admin;
     typeof(AbpOpenIddictDomainSharedModule),
     typeof(AbpPermissionManagementDomainSharedModule),
     typeof(AbpJsonSystemTextJsonModule),
+    typeof(AbpFeaturesModule),
     typeof(CenseqAuditLoggingDomainSharedModule),
-    typeof(AbpFeaturesModule)
+    typeof(CenseqSettingManagementDomainSharedModule)
     )]
 public class CenseqAdminDomainSharedModule : AbpModule
 {

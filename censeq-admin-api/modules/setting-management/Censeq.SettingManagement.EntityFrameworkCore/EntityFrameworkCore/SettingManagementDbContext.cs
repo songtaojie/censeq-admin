@@ -1,4 +1,5 @@
 ﻿using Censeq.SettingManagement.Entities;
+using Censeq.SettingManagement.EntityFrameworkCore.Modeling;
 using Microsoft.EntityFrameworkCore;
 using Volo.Abp.Data;
 using Volo.Abp.EntityFrameworkCore;

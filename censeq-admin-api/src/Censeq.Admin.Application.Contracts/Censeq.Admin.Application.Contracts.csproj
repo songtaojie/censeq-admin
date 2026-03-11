@@ -9,6 +9,14 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="FeatureManagements\**" />
+    <Content Remove="FeatureManagements\**" />
+    <EmbeddedResource Remove="FeatureManagements\**" />
+    <None Remove="FeatureManagements\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\modules\setting-management\Censeq.SettingManagement.Application.Contracts\Censeq.SettingManagement.Application.Contracts.csproj" />
     <ProjectReference Include="..\Censeq.Admin.Domain.Shared\Censeq.Admin.Domain.Shared.csproj" />
   </ItemGroup>
 
@@ -17,11 +25,6 @@
     <PackageReference Include="Volo.Abp.Account.Application.Contracts" Version="$(AbpVersion)" />
     <PackageReference Include="Volo.Abp.Identity.Application.Contracts" Version="$(AbpVersion)" />
     <PackageReference Include="Volo.Abp.PermissionManagement.Application.Contracts" Version="$(AbpVersion)" />
-    <PackageReference Include="Volo.Abp.SettingManagement.Application.Contracts" Version="$(AbpVersion)" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="FeatureManagements\" />
   </ItemGroup>
 
 </Project>

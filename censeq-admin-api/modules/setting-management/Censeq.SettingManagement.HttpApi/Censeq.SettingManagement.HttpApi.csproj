@@ -1,16 +1,22 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
-    <Import Project="..\..\..\..\configureawait.props" />
-    <Import Project="..\..\..\..\common.props" />
+	<Import Project="..\..\..\common.props" />
 
-    <PropertyGroup>
-        <TargetFramework>net8.0</TargetFramework>
-        <RootNamespace />
-    </PropertyGroup>
+	<PropertyGroup>
+		<AssemblyName>Censeq.SettingManagement.HttpApi</AssemblyName>
+		<PackageId>Censeq.SettingManagement.HttpApi</PackageId>
+		<Nullable>enable</Nullable>
+		<RootNamespace>Censeq.SettingManagement</RootNamespace>
+	</PropertyGroup>
 
-    <ItemGroup>
-        <ProjectReference Include="..\Volo.Abp.SettingManagement.Application.Contracts\Volo.Abp.SettingManagement.Application.Contracts.csproj" />
-        <ProjectReference Include="..\..\..\..\framework\src\Volo.Abp.AspNetCore.Mvc\Volo.Abp.AspNetCore.Mvc.csproj" />
-    </ItemGroup>
+	
+	<ItemGroup>
+		<PackageReference Include="Volo.Abp.AspNetCore.Mvc" Version="$(AbpVersion)" />
+	</ItemGroup>
+
+	
+	<ItemGroup>
+	  <ProjectReference Include="..\Censeq.SettingManagement.Application.Contracts\Censeq.SettingManagement.Application.Contracts.csproj" />
+	</ItemGroup>
 
 </Project>

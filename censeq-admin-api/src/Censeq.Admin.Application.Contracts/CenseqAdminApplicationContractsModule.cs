@@ -1,4 +1,5 @@
 ﻿using Censeq.Admin.FeatureManagement;
+using Censeq.SettingManagement;
 using Volo.Abp.Account;
 using Volo.Abp.Application;
 using Volo.Abp.Authorization;
@@ -7,7 +8,6 @@ using Volo.Abp.Json;
 using Volo.Abp.Modularity;
 using Volo.Abp.ObjectExtending;
 using Volo.Abp.PermissionManagement;
-using Volo.Abp.SettingManagement;
 
 namespace Censeq.Admin;
 
@@ -16,7 +16,7 @@ namespace Censeq.Admin;
     typeof(AbpAccountApplicationContractsModule),
     typeof(AbpIdentityApplicationContractsModule),
     typeof(AbpPermissionManagementApplicationContractsModule),
-    typeof(AbpSettingManagementApplicationContractsModule),
+    typeof(CenseqSettingManagementApplicationContractsModule),
     typeof(AbpObjectExtendingModule),
     typeof(AbpAuthorizationAbstractionsModule),
     typeof(AbpJsonModule)

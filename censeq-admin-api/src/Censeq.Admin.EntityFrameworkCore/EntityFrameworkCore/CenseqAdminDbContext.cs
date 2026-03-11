@@ -11,21 +11,18 @@ using Volo.Abp.OpenIddict.Authorizations;
 using Volo.Abp.OpenIddict.Scopes;
 using Volo.Abp.OpenIddict.Tokens;
 using Volo.Abp.PermissionManagement;
-using Volo.Abp.SettingManagement;
 using Censeq.Admin.FeatureManagement.EntityFrameworkCore.Modeling;
 using Censeq.Admin.TenantManagement.EntityFrameworkCore.Modeling;
 
 namespace Censeq.Admin.EntityFrameworkCore;
 
 [ReplaceDbContext(typeof(Volo.Abp.Identity.EntityFrameworkCore.IIdentityDbContext))]
-[ReplaceDbContext(typeof(Volo.Abp.SettingManagement.EntityFrameworkCore.ISettingManagementDbContext))]
 [ReplaceDbContext(typeof(Volo.Abp.PermissionManagement.EntityFrameworkCore.IPermissionManagementDbContext))]
 [ReplaceDbContext(typeof(Volo.Abp.OpenIddict.EntityFrameworkCore.IOpenIddictDbContext))]
 [ReplaceDbContext(typeof(Volo.Abp.BackgroundJobs.EntityFrameworkCore.IBackgroundJobsDbContext))]
 [ConnectionStringName(ConnectionStrings.DefaultConnectionStringName)]
 public class CenseqAdminDbContext(DbContextOptions<CenseqAdminDbContext> options) : AbpDbContext<CenseqAdminDbContext>(options),
     Volo.Abp.Identity.EntityFrameworkCore.IIdentityDbContext,
-    Volo.Abp.SettingManagement.EntityFrameworkCore.ISettingManagementDbContext,
     Volo.Abp.PermissionManagement.EntityFrameworkCore.IPermissionManagementDbContext,
     Volo.Abp.OpenIddict.EntityFrameworkCore.IOpenIddictDbContext,
     Volo.Abp.BackgroundJobs.EntityFrameworkCore.IBackgroundJobsDbContext
@@ -53,13 +50,6 @@ public class CenseqAdminDbContext(DbContextOptions<CenseqAdminDbContext> options
     public DbSet<FeatureDefinitionRecord> Features { get; set; }
 
     public DbSet<FeatureValue> FeatureValues { get; set; }
-
-    #endregion
-
-
-    #region ISettingManagementDbContext
-    public DbSet<Setting> Settings { get; set; }
-    public DbSet<SettingDefinitionRecord> SettingDefinitionRecords { get; set; }
 
     #endregion
 
@@ -93,7 +83,6 @@ public class CenseqAdminDbContext(DbContextOptions<CenseqAdminDbContext> options
     {
         base.OnModelCreating(builder);
         builder.ConfigurePermissionManagement();
-        builder.ConfigureSettingManagement();
         builder.ConfigureBackgroundJobs();
         builder.ConfigureIdentity();
         builder.ConfigureOpenIddict();

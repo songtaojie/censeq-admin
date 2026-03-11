@@ -63,8 +63,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Censeq.SettingManagement.En
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Censeq.SettingManagement.HttpApi", "modules\setting-management\Censeq.SettingManagement.HttpApi\Censeq.SettingManagement.HttpApi.csproj", "{D800798B-4246-07AE-1106-CE62E438936D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Censeq.SettingManagement.HttpApi.Client", "modules\setting-management\Censeq.SettingManagement.HttpApi.Client\Censeq.SettingManagement.HttpApi.Client.csproj", "{25183C4F-3029-0E8A-7B14-0C2400E2C52B}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -163,10 +161,6 @@ Global
 		{D800798B-4246-07AE-1106-CE62E438936D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D800798B-4246-07AE-1106-CE62E438936D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D800798B-4246-07AE-1106-CE62E438936D}.Release|Any CPU.Build.0 = Release|Any CPU
-		{25183C4F-3029-0E8A-7B14-0C2400E2C52B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{25183C4F-3029-0E8A-7B14-0C2400E2C52B}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{25183C4F-3029-0E8A-7B14-0C2400E2C52B}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{25183C4F-3029-0E8A-7B14-0C2400E2C52B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -199,7 +193,6 @@ Global
 		{F6212D43-9B96-93DC-6C25-337CCD367F3E} = {9DC93C82-4B84-4CA0-8F82-4D8B2D7711D2}
 		{F6F88237-5780-3C84-DB9D-C6554C0BBC6B} = {9DC93C82-4B84-4CA0-8F82-4D8B2D7711D2}
 		{D800798B-4246-07AE-1106-CE62E438936D} = {9DC93C82-4B84-4CA0-8F82-4D8B2D7711D2}
-		{25183C4F-3029-0E8A-7B14-0C2400E2C52B} = {9DC93C82-4B84-4CA0-8F82-4D8B2D7711D2}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {E23E8388-F169-4F3B-8A0C-AA189D779228}

@@ -3,6 +3,7 @@ using Censeq.Admin.Entities;
 using Censeq.Admin.FeatureManagement;
 using Censeq.Admin.MultiTenancy;
 using Censeq.AuditLogging;
+using Censeq.SettingManagement;
 using MailKit.Security;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -16,6 +17,7 @@ namespace Censeq.Admin;
 
 [DependsOn(
     typeof(CenseqAuditLoggingDomainModule),
+    typeof(CenseqSettingManagementDomainModule),
     typeof(AbpExceptionHandlingModule),
     typeof(AbpJsonModule),
     typeof(AbpMultiTenancyModule),
@@ -25,7 +27,6 @@ namespace Censeq.Admin;
     typeof(AbpOpenIddictDomainModule),
     typeof(AbpPermissionManagementDomainOpenIddictModule),
     typeof(AbpPermissionManagementDomainIdentityModule),
-    typeof(AbpSettingManagementDomainModule),
     typeof(AbpMailKitModule),
     typeof(AbpFeaturesModule),
     typeof(AbpCachingModule)

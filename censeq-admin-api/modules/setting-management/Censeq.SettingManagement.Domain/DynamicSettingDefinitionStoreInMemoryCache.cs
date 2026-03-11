@@ -49,7 +49,7 @@ public class DynamicSettingDefinitionStoreInMemoryCache : IDynamicSettingDefinit
 
             foreach (var property in record.ExtraProperties)
             {
-                settingDefinition.WithProperty(property.Key, property.Value);
+                settingDefinition.WithProperty(property.Key, property.Value!);
             }
 
             SettingDefinitions[record.Name] = settingDefinition;
@@ -58,13 +58,13 @@ public class DynamicSettingDefinitionStoreInMemoryCache : IDynamicSettingDefinit
         return Task.CompletedTask;
     }
 
-    public SettingDefinition GetSettingOrNull(string name)
+    public SettingDefinition? GetSettingOrNull(string name)
     {
         return SettingDefinitions.GetOrDefault(name);
     }
 
     public IReadOnlyList<SettingDefinition> GetSettings()
     {
-        return SettingDefinitions.Values.ToList();
+        return [.. SettingDefinitions.Values];
     }
 }

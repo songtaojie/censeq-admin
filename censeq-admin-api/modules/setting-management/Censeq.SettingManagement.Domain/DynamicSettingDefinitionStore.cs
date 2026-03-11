@@ -53,7 +53,7 @@ public class DynamicSettingDefinitionStore : IDynamicSettingDefinitionStore, ITr
         return setting;
     }
 
-    public virtual async Task<SettingDefinition> GetOrNullAsync(string name)
+    public virtual async Task<SettingDefinition?> GetOrNullAsync(string name)
     {
         if (!SettingManagementOptions.IsDynamicSettingStoreEnabled)
         {
@@ -71,7 +71,7 @@ public class DynamicSettingDefinitionStore : IDynamicSettingDefinitionStore, ITr
     {
         if (!SettingManagementOptions.IsDynamicSettingStoreEnabled)
         {
-            return Array.Empty<SettingDefinition>();
+            return [];
         }
 
         using (await StoreCache.SyncSemaphore.LockAsync())

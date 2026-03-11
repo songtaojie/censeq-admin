@@ -27,7 +27,7 @@ public class SettingCacheItemInvalidator : ILocalEventHandler<EntityChangedEvent
         await Cache.RemoveAsync(cacheKey, considerUow: true);
     }
 
-    protected virtual string CalculateCacheKey(string name, string providerName, string providerKey)
+    protected virtual string CalculateCacheKey(string name, string? providerName, string? providerKey)
     {
         return SettingCacheItem.CalculateCacheKey(name, providerName, providerKey);
     }

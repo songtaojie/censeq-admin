@@ -1,10 +1,12 @@
-﻿using Localization.Resources.AbpUi;
+﻿using Censeq.Admin.FeatureManagement;
+using Censeq.Admin.FeatureManagement.JsonConverters;
+using Censeq.Admin.FeatureManagement.Localization;
+using Censeq.Admin.Localization;
+using Censeq.Admin.TenantManagement;
+using Censeq.SettingManagement;
+using Localization.Resources.AbpUi;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
-using Censeq.Admin.FeatureManagement;
-using Censeq.Admin.FeatureManagement.JsonConverters;
-using Censeq.Admin.Localization;
-using System.Collections.Generic;
 using Volo.Abp.Account;
 using Volo.Abp.AspNetCore.Mvc;
 using Volo.Abp.Identity;
@@ -12,9 +14,6 @@ using Volo.Abp.Localization;
 using Volo.Abp.Modularity;
 using Volo.Abp.PermissionManagement;
 using Volo.Abp.PermissionManagement.HttpApi;
-using Volo.Abp.SettingManagement;
-using Censeq.Admin.TenantManagement;
-using Censeq.Admin.FeatureManagement.Localization;
 
 namespace Censeq.Admin;
 
@@ -23,7 +22,7 @@ namespace Censeq.Admin;
     typeof(CenseqAdminApplicationContractsModule),
     typeof(AbpIdentityHttpApiModule),
     typeof(AbpPermissionManagementHttpApiModule),
-    typeof(AbpSettingManagementHttpApiModule)
+    typeof(CenseqSettingManagementHttpApiModule)
     )]
 public class CenseqAdminHttpApiModule : AbpModule
 {

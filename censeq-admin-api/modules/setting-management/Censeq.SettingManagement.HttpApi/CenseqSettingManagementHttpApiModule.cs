@@ -1,22 +1,22 @@
-﻿using Localization.Resources.AbpUi;
+﻿using Censeq.SettingManagement.Localization;
+using Localization.Resources.AbpUi;
 using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.AspNetCore.Mvc;
 using Volo.Abp.Localization;
 using Volo.Abp.Modularity;
-using Volo.Abp.SettingManagement.Localization;
 
-namespace Volo.Abp.SettingManagement;
+namespace Censeq.SettingManagement;
 
 [DependsOn(
-    typeof(AbpSettingManagementApplicationContractsModule),
+    typeof(CenseqSettingManagementApplicationContractsModule),
     typeof(AbpAspNetCoreMvcModule))]
-public class AbpSettingManagementHttpApiModule : AbpModule
+public class CenseqSettingManagementHttpApiModule : AbpModule
 {
     public override void PreConfigureServices(ServiceConfigurationContext context)
     {
         PreConfigure<IMvcBuilder>(mvcBuilder =>
         {
-            mvcBuilder.AddApplicationPartIfNotExists(typeof(AbpSettingManagementHttpApiModule).Assembly);
+            mvcBuilder.AddApplicationPartIfNotExists(typeof(CenseqSettingManagementHttpApiModule).Assembly);
         });
     }
 
@@ -25,7 +25,7 @@ public class AbpSettingManagementHttpApiModule : AbpModule
         Configure<AbpLocalizationOptions>(options =>
         {
             options.Resources
-                .Get<AbpSettingManagementResource>()
+                .Get<CenseqSettingManagementResource>()
                 .AddBaseTypes(
                     typeof(AbpUiResource)
                 );

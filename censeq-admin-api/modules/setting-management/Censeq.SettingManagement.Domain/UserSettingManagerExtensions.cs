@@ -11,12 +11,12 @@ namespace Censeq.SettingManagement;
 
 public static class UserSettingManagerExtensions
 {
-    public static Task<string> GetOrNullForUserAsync(this ISettingManager settingManager, [NotNull] string name, Guid userId, bool fallback = true)
+    public static Task<string?> GetOrNullForUserAsync(this ISettingManager settingManager, [NotNull] string name, Guid userId, bool fallback = true)
     {
         return settingManager.GetOrNullAsync(name, UserSettingValueProvider.ProviderName, userId.ToString(), fallback);
     }
 
-    public static Task<string> GetOrNullForCurrentUserAsync(this ISettingManager settingManager, [NotNull] string name, bool fallback = true)
+    public static Task<string?> GetOrNullForCurrentUserAsync(this ISettingManager settingManager, [NotNull] string name, bool fallback = true)
     {
         return settingManager.GetOrNullAsync(name, UserSettingValueProvider.ProviderName, null, fallback);
     }

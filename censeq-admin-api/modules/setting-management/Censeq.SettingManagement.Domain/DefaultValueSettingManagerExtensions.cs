@@ -7,7 +7,7 @@ namespace Censeq.SettingManagement;
 
 public static class DefaultValueSettingManagerExtensions
 {
-    public static Task<string> GetOrNullDefaultAsync(this ISettingManager settingManager, [NotNull] string name, bool fallback = true)
+    public static Task<string?> GetOrNullDefaultAsync(this ISettingManager settingManager, [NotNull] string name, bool fallback = true)
     {
         return settingManager.GetOrNullAsync(name, DefaultValueSettingValueProvider.ProviderName, null, fallback);
     }

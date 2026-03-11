@@ -20,13 +20,13 @@ public class SettingDefinitionRecord : BasicAggregateRoot<Guid>, IHasExtraProper
     public string DisplayName { get; set; }
 
     [CanBeNull]
-    public string Description { get; set; }
+    public string? Description { get; set; }
 
     /// <summary>
     /// Default value of the setting.
     /// </summary>
     [CanBeNull]
-    public string DefaultValue { get; set; }
+    public string? DefaultValue { get; set; }
 
     /// <summary>
     /// Can clients see this setting and it's value.
@@ -38,7 +38,7 @@ public class SettingDefinitionRecord : BasicAggregateRoot<Guid>, IHasExtraProper
     /// <summary>
     /// Comma separated list of provider names.
     /// </summary>
-    public string Providers { get; set; }
+    public string? Providers { get; set; }
 
     /// <summary>
     /// Is this setting inherited from parent scopes.
@@ -64,10 +64,10 @@ public class SettingDefinitionRecord : BasicAggregateRoot<Guid>, IHasExtraProper
         Guid id,
         string name,
         string displayName,
-        string description,
-        string defaultValue,
+        string? description,
+        string? defaultValue,
         bool isVisibleToClients,
-        string providers,
+        string? providers,
         bool isInherited,
         bool isEncrypted)
         : base(id)

@@ -7,7 +7,7 @@ namespace Censeq.SettingManagement;
 
 public static class GlobalSettingManagerExtensions
 {
-    public static Task<string> GetOrNullGlobalAsync(this ISettingManager settingManager, [NotNull] string name, bool fallback = true)
+    public static Task<string?> GetOrNullGlobalAsync(this ISettingManager settingManager, [NotNull] string name, bool fallback = true)
     {
         return settingManager.GetOrNullAsync(name, GlobalSettingValueProvider.ProviderName, null, fallback);
     }

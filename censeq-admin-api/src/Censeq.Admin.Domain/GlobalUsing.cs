@@ -19,5 +19,4 @@ global using Volo.Abp.ObjectExtending.Modularity;
 global using Volo.Abp.OpenIddict;
 global using Volo.Abp.PermissionManagement.Identity;
 global using Volo.Abp.PermissionManagement.OpenIddict;
-global using Volo.Abp.SettingManagement;
 global using Volo.Abp.Threading;

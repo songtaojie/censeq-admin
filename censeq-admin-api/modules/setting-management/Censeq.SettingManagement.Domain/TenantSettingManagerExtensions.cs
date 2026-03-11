@@ -8,12 +8,12 @@ namespace Censeq.SettingManagement;
 
 public static class TenantSettingManagerExtensions
 {
-    public static Task<string> GetOrNullForTenantAsync(this ISettingManager settingManager, [NotNull] string name, Guid tenantId, bool fallback = true)
+    public static Task<string?> GetOrNullForTenantAsync(this ISettingManager settingManager, [NotNull] string name, Guid tenantId, bool fallback = true)
     {
         return settingManager.GetOrNullAsync(name, TenantSettingValueProvider.ProviderName, tenantId.ToString(), fallback);
     }
 
-    public static Task<string> GetOrNullForCurrentTenantAsync(this ISettingManager settingManager, [NotNull] string name, bool fallback = true)
+    public static Task<string?> GetOrNullForCurrentTenantAsync(this ISettingManager settingManager, [NotNull] string name, bool fallback = true)
     {
         return settingManager.GetOrNullAsync(name, TenantSettingValueProvider.ProviderName, null, fallback);
     }

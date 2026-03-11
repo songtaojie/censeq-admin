@@ -17,7 +17,7 @@ public interface IDynamicSettingDefinitionStoreInMemoryCache
 
     Task FillAsync(List<SettingDefinitionRecord> settingRecords);
 
-    SettingDefinition GetSettingOrNull(string name);
+    SettingDefinition? GetSettingOrNull(string name);
 
     IReadOnlyList<SettingDefinition> GetSettings();
 }

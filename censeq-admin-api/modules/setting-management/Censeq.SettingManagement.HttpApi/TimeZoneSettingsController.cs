@@ -1,9 +1,10 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Volo.Abp;
 using Volo.Abp.AspNetCore.Mvc;
 
-namespace Volo.Abp.SettingManagement;
+namespace Censeq.SettingManagement;
 
 [RemoteService(Name = SettingManagementRemoteServiceConsts.RemoteServiceName)]
 [Area(SettingManagementRemoteServiceConsts.ModuleName)]

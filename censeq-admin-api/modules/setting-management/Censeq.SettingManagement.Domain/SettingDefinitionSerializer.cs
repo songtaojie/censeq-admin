@@ -1,8 +1,5 @@
 using Censeq.SettingManagement.Entities;
-using System.Collections.Generic;
 using System.Globalization;
-using System.Linq;
-using System.Threading.Tasks;
 using Volo.Abp.Data;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Guids;
@@ -29,8 +26,8 @@ public class SettingDefinitionSerializer : ISettingDefinitionSerializer, ITransi
             var record = new SettingDefinitionRecord(
                 GuidGenerator.Create(),
                 setting.Name,
-                LocalizableStringSerializer.Serialize(setting.DisplayName),
-                LocalizableStringSerializer.Serialize(setting.Description),
+                LocalizableStringSerializer.Serialize(setting.DisplayName)!,
+                setting.Description == null ? null : LocalizableStringSerializer.Serialize(setting.Description),
                 setting.DefaultValue,
                 setting.IsVisibleToClients,
                 SerializeProviders(setting.Providers),
@@ -57,7 +54,7 @@ public class SettingDefinitionSerializer : ISettingDefinitionSerializer, ITransi
         return records;
     }
 
-    protected virtual string SerializeProviders(ICollection<string> providers)
+    protected virtual string? SerializeProviders(ICollection<string> providers)
     {
         return providers.Any()
             ? providers.JoinAsString(",")
