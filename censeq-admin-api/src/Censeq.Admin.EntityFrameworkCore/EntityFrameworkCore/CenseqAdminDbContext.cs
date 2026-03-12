@@ -11,7 +11,6 @@ using Volo.Abp.OpenIddict.Authorizations;
 using Volo.Abp.OpenIddict.Scopes;
 using Volo.Abp.OpenIddict.Tokens;
 using Volo.Abp.PermissionManagement;
-using Censeq.Admin.FeatureManagement.EntityFrameworkCore.Modeling;
 using Censeq.TenantManagement;
 using Censeq.TenantManagement.EntityFrameworkCore.Modeling;
 
@@ -87,7 +86,5 @@ public class CenseqAdminDbContext(DbContextOptions<CenseqAdminDbContext> options
         builder.ConfigureBackgroundJobs();
         builder.ConfigureIdentity();
         builder.ConfigureOpenIddict();
-        builder.ConfigureFeatureManagement();
-        builder.ConfigureTenantManagement();
     }
 }

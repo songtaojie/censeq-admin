@@ -1,7 +1,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.EntityFrameworkCore;
 using Volo.Abp.Modularity;
-using Censeq.PermissionManagement;
+using Censeq.PermissionManagement.Entities;
 
 namespace Censeq.PermissionManagement.EntityFrameworkCore;
 

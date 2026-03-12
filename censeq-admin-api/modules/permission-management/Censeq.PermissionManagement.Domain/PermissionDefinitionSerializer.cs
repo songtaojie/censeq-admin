@@ -1,4 +1,4 @@
-using Censeq.PermissionManagement;
+using Censeq.PermissionManagement.Entities;
 using System.Globalization;
 using Volo.Abp.Authorization.Permissions;
 using Volo.Abp.Data;

@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Volo.Abp.Domain.Repositories.EntityFrameworkCore;
 using Volo.Abp.EntityFrameworkCore;
-using Censeq.PermissionManagement;
+using Censeq.PermissionManagement.Entities;
 
 namespace Censeq.PermissionManagement.EntityFrameworkCore;
 

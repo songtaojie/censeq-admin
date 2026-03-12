@@ -3,7 +3,7 @@ using Volo.Abp;
 using Volo.Abp.Data;
 using Volo.Abp.Domain.Entities;
 
-namespace Censeq.PermissionManagement;
+namespace Censeq.PermissionManagement.Entities;
 
 public class PermissionGroupDefinitionRecord : BasicAggregateRoot<Guid>, IHasExtraProperties
 {

@@ -1,3 +1,4 @@
+using Censeq.PermissionManagement.Entities;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Volo.Abp;

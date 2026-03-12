@@ -4,7 +4,7 @@ using Volo.Abp;
 using Volo.Abp.Domain.Entities;
 using Volo.Abp.MultiTenancy;
 
-namespace Censeq.PermissionManagement;
+namespace Censeq.PermissionManagement.Entities;
 
 public class PermissionGrant : BasicAggregateRoot<Guid>, IMultiTenant
 {

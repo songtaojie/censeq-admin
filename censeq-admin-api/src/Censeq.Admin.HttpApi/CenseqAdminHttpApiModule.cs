@@ -1,7 +1,4 @@
-﻿using Censeq.Admin.FeatureManagement;
-using Censeq.Admin.FeatureManagement.JsonConverters;
-using Censeq.Admin.FeatureManagement.Localization;
-using Censeq.Admin.Localization;
+﻿using Censeq.Admin.Localization;
 using Censeq.SettingManagement;
 using Censeq.TenantManagement;
 using Localization.Resources.AbpUi;

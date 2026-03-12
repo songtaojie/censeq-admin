@@ -3,6 +3,7 @@ using Volo.Abp.Caching;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.EventBus;
 using Volo.Abp.MultiTenancy;
+using Censeq.PermissionManagement.Entities;
 
 namespace Censeq.PermissionManagement;
 

@@ -7,8 +7,6 @@ using System.Text.Json.Serialization.Metadata;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Options;
-using Censeq.PermissionManagement;
-using Censeq.PermissionManagement;
 using Volo.Abp;
 using Volo.Abp.Authorization.Permissions;
 using Volo.Abp.Caching;
@@ -17,6 +15,7 @@ using Volo.Abp.DistributedLocking;
 using Volo.Abp.Json.SystemTextJson.Modifiers;
 using Volo.Abp.Threading;
 using Volo.Abp.Uow;
+using Censeq.PermissionManagement.Entities;
 
 namespace Censeq.PermissionManagement;
 

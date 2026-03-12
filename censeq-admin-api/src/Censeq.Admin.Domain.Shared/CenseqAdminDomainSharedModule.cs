@@ -1,11 +1,8 @@
-﻿using Censeq.Admin.FeatureManagement;
-using Censeq.Admin.FeatureManagement.JsonConverters;
-using Censeq.Admin.FeatureManagement.Localization;
-using Censeq.Admin.Localization;
+﻿using Censeq.Admin.Localization;
 using Censeq.AuditLogging;
+using Censeq.FeatureManagement;
 using Censeq.SettingManagement;
 using Censeq.TenantManagement;
-using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.BackgroundJobs;
 using Volo.Abp.Features;
 using Volo.Abp.Identity;
@@ -29,7 +26,8 @@ namespace Censeq.Admin;
     typeof(AbpFeaturesModule),
     typeof(CenseqAuditLoggingDomainSharedModule),
     typeof(CenseqSettingManagementDomainSharedModule),
-    typeof(CenseqTenantManagementDomainSharedModule)
+    typeof(CenseqTenantManagementDomainSharedModule),
+    typeof(CenseqFeatureManagementDomainSharedModule)
     )]
 public class CenseqAdminDomainSharedModule : AbpModule
 {
@@ -55,28 +53,11 @@ public class CenseqAdminDomainSharedModule : AbpModule
            
             options.DefaultResourceType = typeof(CenseqAdminResource);
 
-            options.Resources
-               .Add<CenseqFeatureManagementResource>("zh-Hans")
-               .AddBaseTypes(typeof(AbpValidationResource))
-               .AddVirtualJson("/FeatureManagement/Localization");
         });
 
         Configure<AbpExceptionLocalizationOptions>(options =>
         {
             options.MapCodeNamespace("Censeq.Admin", typeof(CenseqAdminResource));
-            options.MapCodeNamespace("Censeq.Admin.FeatureManagement", typeof(CenseqFeatureManagementResource));
         });
-
-        var valueValidatorFactoryOptions = context.Services.GetPreConfigureActions<ValueValidatorFactoryOptions>();
-        Configure<ValueValidatorFactoryOptions>(options =>
-        {
-            valueValidatorFactoryOptions.Configure(options);
-        });
-
-        Configure<AbpSystemTextJsonSerializerOptions>(options =>
-        {
-            options.JsonSerializerOptions.Converters.Add(new StringValueTypeJsonConverter(valueValidatorFactoryOptions.Configure()));
-        });
-
     }
 }

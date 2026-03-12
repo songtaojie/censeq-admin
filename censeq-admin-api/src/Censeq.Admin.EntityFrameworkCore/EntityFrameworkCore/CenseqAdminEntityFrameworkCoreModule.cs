@@ -1,4 +1,5 @@
 ﻿using Censeq.AuditLogging.EntityFrameworkCore;
+using Censeq.FeatureManagement.EntityFrameworkCore;
 using Censeq.SettingManagement.EntityFrameworkCore;
 using Censeq.TenantManagement.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
@@ -23,7 +24,8 @@ namespace Censeq.Admin.EntityFrameworkCore;
     typeof(AbpEntityFrameworkCoreSqliteModule),
     typeof(AbpBackgroundJobsEntityFrameworkCoreModule),
     typeof(CenseqSettingManagementEntityFrameworkCoreModule),
-    typeof(CenseqTenantManagementEntityFrameworkCoreModule)
+    typeof(CenseqTenantManagementEntityFrameworkCoreModule),
+    typeof(CenseqFeatureManagementEntityFrameworkCoreModule)
     )]
 public class CenseqAdminEntityFrameworkCoreModule : AbpModule
 {

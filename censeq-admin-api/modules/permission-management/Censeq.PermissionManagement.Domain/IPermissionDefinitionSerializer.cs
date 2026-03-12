@@ -1,8 +1,8 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using JetBrains.Annotations;
-using Censeq.PermissionManagement;
 using Volo.Abp.Authorization.Permissions;
+using Censeq.PermissionManagement.Entities;
 
 namespace Censeq.PermissionManagement;
 

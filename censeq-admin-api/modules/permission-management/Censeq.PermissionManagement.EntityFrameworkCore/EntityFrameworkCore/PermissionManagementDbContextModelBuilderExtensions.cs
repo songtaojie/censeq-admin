@@ -1,8 +1,8 @@
 using JetBrains.Annotations;
 using Microsoft.EntityFrameworkCore;
 using Volo.Abp.EntityFrameworkCore.Modeling;
-using Censeq.PermissionManagement;
 using Volo.Abp;
+using Censeq.PermissionManagement.Entities;
 
 namespace Censeq.PermissionManagement.EntityFrameworkCore;
 

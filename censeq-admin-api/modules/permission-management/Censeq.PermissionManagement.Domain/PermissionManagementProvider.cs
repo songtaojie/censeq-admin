@@ -1,5 +1,6 @@
 using System.Linq;
 using System.Threading.Tasks;
+using Censeq.PermissionManagement.Entities;
 using Volo.Abp.Guids;
 using Volo.Abp.MultiTenancy;
 

@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Censeq.PermissionManagement.Entities;
 using JetBrains.Annotations;
 
 namespace Censeq.PermissionManagement;
