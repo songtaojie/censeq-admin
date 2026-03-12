@@ -1,6 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using Volo.Abp.EntityFrameworkCore.Modeling;
-using Censeq.FeatureManagement;
+using Censeq.FeatureManagement.Entities;
 
 namespace Censeq.FeatureManagement.EntityFrameworkCore;
 

@@ -16,6 +16,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\modules\feature-management\Censeq.FeatureManagement.Application.Contracts\Censeq.FeatureManagement.Application.Contracts.csproj" />
     <ProjectReference Include="..\..\modules\setting-management\Censeq.SettingManagement.Application.Contracts\Censeq.SettingManagement.Application.Contracts.csproj" />
     <ProjectReference Include="..\..\modules\tenant-management\Censeq.TenantManagement.Application.Contracts\Censeq.TenantManagement.Application.Contracts.csproj" />
     <ProjectReference Include="..\Censeq.Admin.Domain.Shared\Censeq.Admin.Domain.Shared.csproj" />

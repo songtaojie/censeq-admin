@@ -1,11 +1,11 @@
-﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using Volo.Abp;
 using Censeq.Framework.EntityFrameworkCore;
 using static Censeq.TenantManagement.TenantConsts;
 
 namespace Censeq.TenantManagement.EntityFrameworkCore.Modeling
 {
-    internal static class CenseqTenantManagementDbContextModelCreatingExtensions
+    public static class CenseqTenantManagementDbContextModelCreatingExtensions
     {
         public static void ConfigureTenantManagement(this ModelBuilder builder)
         {

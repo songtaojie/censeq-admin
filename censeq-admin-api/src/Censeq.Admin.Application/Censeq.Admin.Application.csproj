@@ -9,6 +9,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\modules\feature-management\Censeq.FeatureManagement.Application\Censeq.FeatureManagement.Application.csproj" />
     <ProjectReference Include="..\..\modules\setting-management\Censeq.SettingManagement.Application\Censeq.SettingManagement.Application.csproj" />
     <ProjectReference Include="..\..\modules\tenant-management\Censeq.TenantManagement.Application\Censeq.TenantManagement.Application.csproj" />
     <ProjectReference Include="..\Censeq.Admin.Domain\Censeq.Admin.Domain.csproj" />

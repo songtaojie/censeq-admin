@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Censeq.FeatureManagement.Entities;
 using JetBrains.Annotations;
 using Volo.Abp.Features;
 

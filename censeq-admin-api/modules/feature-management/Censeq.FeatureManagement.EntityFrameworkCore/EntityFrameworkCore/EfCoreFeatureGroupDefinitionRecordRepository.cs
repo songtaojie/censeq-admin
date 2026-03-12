@@ -1,7 +1,7 @@
 using System;
 using Volo.Abp.Domain.Repositories.EntityFrameworkCore;
 using Volo.Abp.EntityFrameworkCore;
-using Censeq.FeatureManagement;
+using Censeq.FeatureManagement.Entities;
 
 namespace Censeq.FeatureManagement.EntityFrameworkCore;
 

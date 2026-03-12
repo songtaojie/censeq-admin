@@ -1,7 +1,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.EntityFrameworkCore;
 using Volo.Abp.Modularity;
-using Censeq.FeatureManagement;
+using Censeq.FeatureManagement.Entities;
 
 namespace Censeq.FeatureManagement.EntityFrameworkCore;
 

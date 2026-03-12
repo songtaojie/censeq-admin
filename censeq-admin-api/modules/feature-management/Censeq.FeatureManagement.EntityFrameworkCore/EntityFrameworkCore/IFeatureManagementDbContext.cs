@@ -2,7 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using Volo.Abp.Data;
 using Volo.Abp.EntityFrameworkCore;
 using Volo.Abp.MultiTenancy;
-using Censeq.FeatureManagement;
+using Censeq.FeatureManagement.Entities;
 
 namespace Censeq.FeatureManagement.EntityFrameworkCore;
 

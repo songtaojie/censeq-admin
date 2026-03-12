@@ -1,9 +1,10 @@
 using System;
 using System.Text.Json.Serialization;
+using Volo.Abp;
 using Volo.Abp.Data;
 using Volo.Abp.Domain.Entities;
 
-namespace Censeq.FeatureManagement;
+namespace Censeq.FeatureManagement.Entities;
 
 public class FeatureDefinitionRecord : BasicAggregateRoot<Guid>, IHasExtraProperties
 {
@@ -187,11 +188,11 @@ public class FeatureDefinitionRecord : BasicAggregateRoot<Guid>, IHasExtraProper
 
         if (!this.HasSameExtraProperties(otherRecord))
         {
-            this.ExtraProperties.Clear();
+            ExtraProperties.Clear();
 
             foreach (var property in otherRecord.ExtraProperties)
             {
-                this.ExtraProperties.Add(property.Key, property.Value);
+                ExtraProperties.Add(property.Key, property.Value);
             }
         }
     }

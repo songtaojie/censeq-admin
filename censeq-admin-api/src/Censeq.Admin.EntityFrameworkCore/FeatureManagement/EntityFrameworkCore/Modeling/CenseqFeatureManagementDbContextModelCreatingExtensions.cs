@@ -1,7 +1,6 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Censeq.Admin.Consts;
+using Microsoft.EntityFrameworkCore;
 using Censeq.Admin.Entities;
-using Volo.Abp;
+using Censeq.FeatureManagement;
 using Censeq.Admin.EntityFrameworkCore.Modeling;
 
 namespace Censeq.Admin.FeatureManagement.EntityFrameworkCore.Modeling
@@ -10,7 +9,7 @@ namespace Censeq.Admin.FeatureManagement.EntityFrameworkCore.Modeling
     {
         public static void ConfigureFeatureManagement(this ModelBuilder builder)
         {
-            Check.NotNull(builder, nameof(builder));
+            ArgumentNullException.ThrowIfNull(builder);
 
             if (builder.IsTenantOnlyDatabase())
             {
