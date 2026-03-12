@@ -1,0 +1,22 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+	<Import Project="..\..\..\common.props" />
+
+	<PropertyGroup>
+		<AssemblyName>Censeq.PermissionManagement.Application.Contracts</AssemblyName>
+		<PackageId>Censeq.PermissionManagement.Application.Contracts</PackageId>
+		<Nullable>enable</Nullable>
+		<RootNamespace>Censeq.PermissionManagement</RootNamespace>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Volo.Abp.Ddd.Application.Contracts" Version="$(AbpVersion)" />
+		<PackageReference Include="Volo.Abp.Authorization.Abstractions" Version="$(AbpVersion)" />
+		<PackageReference Include="Volo.Abp.Json" Version="$(AbpVersion)" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\Censeq.PermissionManagement.Domain.Shared\Censeq.PermissionManagement.Domain.Shared.csproj" />
+	</ItemGroup>
+
+</Project>

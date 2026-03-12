@@ -10,6 +10,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\modules\setting-management\Censeq.SettingManagement.HttpApi\Censeq.SettingManagement.HttpApi.csproj" />
+    <ProjectReference Include="..\..\modules\tenant-management\Censeq.TenantManagement.HttpApi\Censeq.TenantManagement.HttpApi.csproj" />
     <ProjectReference Include="..\Censeq.Admin.Application.Contracts\Censeq.Admin.Application.Contracts.csproj" />
   </ItemGroup>
 

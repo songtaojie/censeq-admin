@@ -1,25 +1,25 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
-  <Import Project="..\..\..\..\configureawait.props" />
-  <Import Project="..\..\..\..\common.props" />
+	<Import Project="..\..\..\common.props" />
 
-  <PropertyGroup>
-    <TargetFrameworks>netstandard2.0;netstandard2.1;net8.0</TargetFrameworks>
-    <RootNamespace />
-  </PropertyGroup>
+	<PropertyGroup>
+		<AssemblyName>Censeq.FeatureManagement.Domain</AssemblyName>
+		<PackageId>Censeq.FeatureManagement.Domain</PackageId>
+		<Nullable>enable</Nullable>
+		<RootNamespace>Censeq.FeatureManagement</RootNamespace>
+		<GenerateEmbeddedFilesManifest>true</GenerateEmbeddedFilesManifest>
+	</PropertyGroup>
 
-  <ItemGroup>
-    <PackageReference Include="Volo.Abp.Ddd.Domain" />
-    <PackageReference Include="Volo.Abp.Features" />
-    <PackageReference Include="Volo.Abp.Caching" />
-  </ItemGroup>
+	<ItemGroup>
+		<PackageReference Include="Volo.Abp" Version="$(AbpVersion)" />
+		<PackageReference Include="Volo.Abp.Ddd.Domain" Version="$(AbpVersion)" />
+		<PackageReference Include="Volo.Abp.Features" Version="$(AbpVersion)" />
+		<PackageReference Include="Volo.Abp.Caching" Version="$(AbpVersion)" />
+		<PackageReference Include="Polly" Version="8.6.6" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\Censeq.FeatureManagement.Domain.Shared\Censeq.FeatureManagement.Domain.Shared.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <PackageReference Include="Polly" />
-  </ItemGroup>
+	<ItemGroup>
+	  <ProjectReference Include="..\Censeq.FeatureManagement.Domain.Shared\Censeq.FeatureManagement.Domain.Shared.csproj" />
+	</ItemGroup>
 
 </Project>

@@ -30,7 +30,7 @@ public class CenseqFeatureManagementDomainSharedModule : AbpModule
                 .Add<CenseqFeatureManagementResource>("en")
                 .AddBaseTypes(
                     typeof(AbpValidationResource)
-                ).AddVirtualJson("Localization/Domain");
+                ).AddVirtualJson("/Localization/Resources");
         });
 
         Configure<AbpExceptionLocalizationOptions>(options =>

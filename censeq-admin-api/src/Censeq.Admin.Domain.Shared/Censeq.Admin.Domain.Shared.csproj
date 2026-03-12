@@ -23,7 +23,9 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\modules\audit-logging\Censeq.AuditLogging.Domain.Shared\Censeq.AuditLogging.Domain.Shared.csproj" />
+    <ProjectReference Include="..\..\modules\feature-management\Censeq.FeatureManagement.Domain.Shared\Censeq.FeatureManagement.Domain.Shared.csproj" />
     <ProjectReference Include="..\..\modules\setting-management\Censeq.SettingManagement.Domain.Shared\Censeq.SettingManagement.Domain.Shared.csproj" />
+    <ProjectReference Include="..\..\modules\tenant-management\Censeq.TenantManagement.Domain.Shared\Censeq.TenantManagement.Domain.Shared.csproj" />
   </ItemGroup>
 
 </Project>

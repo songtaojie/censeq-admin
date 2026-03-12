@@ -2,8 +2,8 @@
 using Censeq.Admin.FeatureManagement.JsonConverters;
 using Censeq.Admin.FeatureManagement.Localization;
 using Censeq.Admin.Localization;
-using Censeq.Admin.TenantManagement;
 using Censeq.SettingManagement;
+using Censeq.TenantManagement;
 using Localization.Resources.AbpUi;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
@@ -22,7 +22,8 @@ namespace Censeq.Admin;
     typeof(CenseqAdminApplicationContractsModule),
     typeof(AbpIdentityHttpApiModule),
     typeof(AbpPermissionManagementHttpApiModule),
-    typeof(CenseqSettingManagementHttpApiModule)
+    typeof(CenseqSettingManagementHttpApiModule),
+    typeof(CenseqTenantManagementHttpApiModule)
     )]
 public class CenseqAdminHttpApiModule : AbpModule
 {
@@ -57,7 +58,6 @@ public class CenseqAdminHttpApiModule : AbpModule
             options.Resources
                 .Get<CenseqAdminResource>()
                 .AddBaseTypes(
-                    typeof(CenseqTenantManagementResource),
                     typeof(CenseqFeatureManagementResource),
                     typeof(AbpUiResource)
                 );

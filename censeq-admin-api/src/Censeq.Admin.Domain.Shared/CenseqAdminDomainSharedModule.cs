@@ -2,9 +2,9 @@
 using Censeq.Admin.FeatureManagement.JsonConverters;
 using Censeq.Admin.FeatureManagement.Localization;
 using Censeq.Admin.Localization;
-using Censeq.Admin.TenantManagement;
 using Censeq.AuditLogging;
 using Censeq.SettingManagement;
+using Censeq.TenantManagement;
 using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.BackgroundJobs;
 using Volo.Abp.Features;
@@ -28,7 +28,8 @@ namespace Censeq.Admin;
     typeof(AbpJsonSystemTextJsonModule),
     typeof(AbpFeaturesModule),
     typeof(CenseqAuditLoggingDomainSharedModule),
-    typeof(CenseqSettingManagementDomainSharedModule)
+    typeof(CenseqSettingManagementDomainSharedModule),
+    typeof(CenseqTenantManagementDomainSharedModule)
     )]
 public class CenseqAdminDomainSharedModule : AbpModule
 {
@@ -51,11 +52,7 @@ public class CenseqAdminDomainSharedModule : AbpModule
                 .Add<CenseqAdminResource>("zh-Hans")
                 .AddBaseTypes(typeof(AbpValidationResource))
                 .AddVirtualJson("/Localization/Resources");
-            options.Resources
-                .Add<CenseqTenantManagementResource>("zh-Hans")
-                .AddBaseTypes(
-                    typeof(AbpValidationResource)
-                ).AddVirtualJson("/TenantManagement/Localization");
+           
             options.DefaultResourceType = typeof(CenseqAdminResource);
 
             options.Resources
@@ -67,7 +64,6 @@ public class CenseqAdminDomainSharedModule : AbpModule
         Configure<AbpExceptionLocalizationOptions>(options =>
         {
             options.MapCodeNamespace("Censeq.Admin", typeof(CenseqAdminResource));
-            options.MapCodeNamespace("Censeq.Admin.TenantManagement", typeof(CenseqTenantManagementResource));
             options.MapCodeNamespace("Censeq.Admin.FeatureManagement", typeof(CenseqFeatureManagementResource));
         });
 

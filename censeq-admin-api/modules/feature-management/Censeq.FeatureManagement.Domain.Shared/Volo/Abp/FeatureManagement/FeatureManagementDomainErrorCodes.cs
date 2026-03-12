@@ -1,6 +1,0 @@
-﻿namespace Censeq.FeatureManagement;
-
-public static class FeatureManagementDomainErrorCodes
-{
-    public const string FeatureValueInvalid = "Volo.Abp.FeatureManagement:InvalidFeatureValue";
-}

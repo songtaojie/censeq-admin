@@ -1,17 +1,21 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
-  <Import Project="..\..\..\..\configureawait.props" />
-  <Import Project="..\..\..\..\common.props" />
+	<Import Project="..\..\..\common.props" />
 
-  <PropertyGroup>
-    <TargetFramework>net8.0</TargetFramework>
-    <RootNamespace />
-  </PropertyGroup>
+	<PropertyGroup>
+		<AssemblyName>Censeq.FeatureManagement.Application</AssemblyName>
+		<PackageId>Censeq.FeatureManagement.Application</PackageId>
+		<Nullable>enable</Nullable>
+		<RootNamespace>Censeq.FeatureManagement</RootNamespace>
+	</PropertyGroup>
 
-  <ItemGroup>
-    <PackageReference Include="Volo.Abp.Ddd.Application" />
-    <ProjectReference Include="..\Censeq.FeatureManagement.Application.Contracts\Censeq.FeatureManagement.Application.Contracts.csproj" />
-    <ProjectReference Include="..\Censeq.FeatureManagement.Domain\Censeq.FeatureManagement.Domain.csproj" />
-  </ItemGroup>
+	<ItemGroup>
+		<PackageReference Include="Volo.Abp.Ddd.Application" Version="$(AbpVersion)" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\Censeq.FeatureManagement.Application.Contracts\Censeq.FeatureManagement.Application.Contracts.csproj" />
+		<ProjectReference Include="..\Censeq.FeatureManagement.Domain\Censeq.FeatureManagement.Domain.csproj" />
+	</ItemGroup>
 
 </Project>

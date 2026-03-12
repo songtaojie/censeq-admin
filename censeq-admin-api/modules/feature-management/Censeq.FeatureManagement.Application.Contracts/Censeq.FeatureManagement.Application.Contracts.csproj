@@ -1,21 +1,22 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
-  <Import Project="..\..\..\..\configureawait.props" />
-  <Import Project="..\..\..\..\common.props" />
+	<Import Project="..\..\..\common.props" />
 
-  <PropertyGroup>
-    <TargetFrameworks>netstandard2.0;netstandard2.1;net8.0</TargetFrameworks>
-    <RootNamespace />
-  </PropertyGroup>
+	<PropertyGroup>
+		<AssemblyName>Censeq.FeatureManagement.Application.Contracts</AssemblyName>
+		<PackageId>Censeq.FeatureManagement.Application.Contracts</PackageId>
+		<Nullable>enable</Nullable>
+		<RootNamespace>Censeq.FeatureManagement</RootNamespace>
+	</PropertyGroup>
 
-  <ItemGroup>
-    <PackageReference Include="Volo.Abp.Ddd.Application.Contracts" />
-    <PackageReference Include="Volo.Abp.Authorization.Abstractions" />
-    <PackageReference Include="Volo.Abp.Json" />
-  </ItemGroup>
+	<ItemGroup>
+		<PackageReference Include="Volo.Abp.Ddd.Application.Contracts" Version="$(AbpVersion)" />
+		<PackageReference Include="Volo.Abp.Authorization.Abstractions" Version="$(AbpVersion)" />
+		<PackageReference Include="Volo.Abp.Json" Version="$(AbpVersion)" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\Censeq.FeatureManagement.Domain.Shared\Censeq.FeatureManagement.Domain.Shared.csproj" />
-  </ItemGroup>
+	<ItemGroup>
+		<ProjectReference Include="..\Censeq.FeatureManagement.Domain.Shared\Censeq.FeatureManagement.Domain.Shared.csproj" />
+	</ItemGroup>
 
 </Project>

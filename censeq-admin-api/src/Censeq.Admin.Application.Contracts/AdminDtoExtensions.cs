@@ -1,4 +1,4 @@
-﻿using Censeq.Admin.TenantManagement.Dtos;
+using Censeq.TenantManagement;
 using Volo.Abp.Identity;
 using Volo.Abp.ObjectExtending;
 using Volo.Abp.ObjectExtending.Modularity;
@@ -25,14 +25,6 @@ public static class AdminDtoExtensions
              * See the documentation for more:
              * https://docs.abp.io/en/abp/latest/Object-Extensions
              */
-            ModuleExtensionConfigurationHelper
-            .ApplyEntityConfigurationToApi(
-                TenantManagementModuleExtensionConsts.ModuleName,
-                TenantManagementModuleExtensionConsts.EntityNames.Tenant,
-                getApiTypes: [typeof(TenantDto)],
-                createApiTypes: [typeof(TenantCreateDto)],
-                updateApiTypes: [typeof(TenantUpdateDto)]
-            );
         });
     }
 }

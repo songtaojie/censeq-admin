@@ -1,0 +1,24 @@
+using System.Linq;
+using System.Threading.Tasks;
+
+namespace Censeq.PermissionManagement;
+
+public static class PermissionFinderExtensions
+{
+    public static async Task<bool> IsGrantedAsync(this IPermissionFinder permissionFinder, Guid userId, string permissionName)
+    {
+        return await permissionFinder.IsGrantedAsync(userId, new[] { permissionName });
+    }
+
+    public static async Task<bool> IsGrantedAsync(this IPermissionFinder permissionFinder, Guid userId, string[] permissionNames)
+    {
+        return (await permissionFinder.IsGrantedAsync(
+        [
+            new IsGrantedRequest
+            {
+                UserId = userId,
+                PermissionNames = permissionNames
+            }
+        ])).Any(x => x.UserId == userId && x.Permissions.All(p => permissionNames.Contains(p.Key) && p.Value));
+    }
+}

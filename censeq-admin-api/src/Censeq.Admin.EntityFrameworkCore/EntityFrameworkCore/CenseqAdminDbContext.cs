@@ -1,4 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using Censeq.Admin.Entities;
 using Censeq.Admin.EntityFrameworkCore.Modeling;
 using Volo.Abp.BackgroundJobs;
@@ -12,7 +12,8 @@ using Volo.Abp.OpenIddict.Scopes;
 using Volo.Abp.OpenIddict.Tokens;
 using Volo.Abp.PermissionManagement;
 using Censeq.Admin.FeatureManagement.EntityFrameworkCore.Modeling;
-using Censeq.Admin.TenantManagement.EntityFrameworkCore.Modeling;
+using Censeq.TenantManagement;
+using Censeq.TenantManagement.EntityFrameworkCore.Modeling;
 
 namespace Censeq.Admin.EntityFrameworkCore;
 

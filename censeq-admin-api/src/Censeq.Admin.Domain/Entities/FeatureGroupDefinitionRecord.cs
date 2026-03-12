@@ -1,4 +1,4 @@
-using Censeq.Admin.Consts;
+using Censeq.FeatureManagement;
 using Volo.Abp.Domain.Entities;
 
 namespace Censeq.Admin.Entities;

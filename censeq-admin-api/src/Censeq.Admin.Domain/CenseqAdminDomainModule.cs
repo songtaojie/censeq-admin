@@ -1,9 +1,9 @@
-﻿using Censeq.Abp.TenantManagement;
-using Censeq.Admin.Entities;
+﻿using Censeq.Admin.Entities;
 using Censeq.Admin.FeatureManagement;
 using Censeq.Admin.MultiTenancy;
 using Censeq.AuditLogging;
 using Censeq.SettingManagement;
+using Censeq.TenantManagement;
 using MailKit.Security;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -16,8 +16,6 @@ using Volo.Abp.Features;
 namespace Censeq.Admin;
 
 [DependsOn(
-    typeof(CenseqAuditLoggingDomainModule),
-    typeof(CenseqSettingManagementDomainModule),
     typeof(AbpExceptionHandlingModule),
     typeof(AbpJsonModule),
     typeof(AbpMultiTenancyModule),
@@ -29,7 +27,9 @@ namespace Censeq.Admin;
     typeof(AbpPermissionManagementDomainIdentityModule),
     typeof(AbpMailKitModule),
     typeof(AbpFeaturesModule),
-    typeof(AbpCachingModule)
+    typeof(AbpCachingModule),
+    typeof(CenseqAuditLoggingDomainModule),
+    typeof(CenseqTenantManagementDomainModule)
 )]
 public class CenseqAdminDomainModule : AbpModule
 {
@@ -68,10 +68,6 @@ public class CenseqAdminDomainModule : AbpModule
             options.SecureSocketOption = SecureSocketOptions.SslOnConnect;
         });
 
-        Configure<AbpDistributedEntityEventOptions>(options =>
-        {
-            options.EtoMappings.Add<Tenant, TenantEto>();
-        });
 
         Configure<FeatureManagementOptions>(options =>
         {
@@ -99,14 +95,7 @@ public class CenseqAdminDomainModule : AbpModule
 
     public override void PostConfigureServices(ServiceConfigurationContext context)
     {
-        OneTimeRunner.Run(() =>
-        {
-            ModuleExtensionConfigurationHelper.ApplyEntityConfigurationToEntity(
-                TenantManagementModuleExtensionConsts.ModuleName,
-                TenantManagementModuleExtensionConsts.EntityNames.Tenant,
-                typeof(Tenant)
-            );
-        });
+       
     }
 
     private readonly CancellationTokenSource _cancellationTokenSource = new();

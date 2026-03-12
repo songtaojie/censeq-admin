@@ -10,6 +10,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\modules\setting-management\Censeq.SettingManagement.Application\Censeq.SettingManagement.Application.csproj" />
+    <ProjectReference Include="..\..\modules\tenant-management\Censeq.TenantManagement.Application\Censeq.TenantManagement.Application.csproj" />
     <ProjectReference Include="..\Censeq.Admin.Domain\Censeq.Admin.Domain.csproj" />
     <ProjectReference Include="..\Censeq.Admin.Application.Contracts\Censeq.Admin.Application.Contracts.csproj" />
   </ItemGroup>

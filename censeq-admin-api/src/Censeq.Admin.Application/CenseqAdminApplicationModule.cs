@@ -1,4 +1,5 @@
 ﻿using Censeq.SettingManagement;
+using Censeq.TenantManagement;
 using Volo.Abp.Account;
 using Volo.Abp.AutoMapper;
 using Volo.Abp.Identity;
@@ -14,7 +15,8 @@ namespace Censeq.Admin;
     typeof(CenseqAdminApplicationContractsModule),
     typeof(AbpIdentityApplicationModule),
     typeof(AbpPermissionManagementApplicationModule),
-    typeof(CenseqSettingManagementApplicationModule)
+    typeof(CenseqSettingManagementApplicationModule),
+    typeof(CenseqTenantManagementApplicationModule)
     )]
 public class CenseqAdminApplicationModule : AbpModule
 {

@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <Import Project="..\..\common.props" />
 
@@ -11,6 +11,8 @@
   <ItemGroup>
     <ProjectReference Include="..\..\modules\audit-logging\Censeq.AuditLogging.Domain\Censeq.AuditLogging.Domain.csproj" />
     <ProjectReference Include="..\..\modules\setting-management\Censeq.SettingManagement.Domain\Censeq.SettingManagement.Domain.csproj" />
+    <ProjectReference Include="..\..\modules\tenant-management\Censeq.TenantManagement.Domain\Censeq.TenantManagement.Domain.csproj" />
+    <ProjectReference Include="..\..\modules\feature-management\Censeq.FeatureManagement.Domain.Shared\Censeq.FeatureManagement.Domain.Shared.csproj" />
     <ProjectReference Include="..\Censeq.Admin.Domain.Shared\Censeq.Admin.Domain.Shared.csproj" />
   </ItemGroup>
 
