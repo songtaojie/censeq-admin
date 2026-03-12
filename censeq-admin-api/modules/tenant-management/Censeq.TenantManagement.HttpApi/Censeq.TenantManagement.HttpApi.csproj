@@ -11,10 +11,10 @@
 
 	<ItemGroup>
 		<PackageReference Include="Volo.Abp.AspNetCore.Mvc" Version="$(AbpVersion)" />
-		<PackageReference Include="Volo.Abp.FeatureManagement.HttpApi" Version="$(AbpVersion)" />
 	</ItemGroup>
 
 	<ItemGroup>
+		<ProjectReference Include="..\..\feature-management\Censeq.FeatureManagement.HttpApi\Censeq.FeatureManagement.HttpApi.csproj" />
 		<ProjectReference Include="..\Censeq.TenantManagement.Application.Contracts\Censeq.TenantManagement.Application.Contracts.csproj" />
 	</ItemGroup>
 

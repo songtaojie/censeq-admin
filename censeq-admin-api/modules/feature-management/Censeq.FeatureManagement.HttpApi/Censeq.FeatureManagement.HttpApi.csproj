@@ -1,0 +1,21 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+	<Import Project="..\..\..\common.props" />
+
+	<PropertyGroup>
+		<AssemblyName>Censeq.FeatureManagement.HttpApi</AssemblyName>
+		<PackageId>Censeq.FeatureManagement.HttpApi</PackageId>
+		<Nullable>enable</Nullable>
+		<RootNamespace>Censeq.FeatureManagement</RootNamespace>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Volo.Abp.AspNetCore.Mvc" Version="$(AbpVersion)" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\Censeq.FeatureManagement.Application.Contracts\Censeq.FeatureManagement.Application.Contracts.csproj" />
+		<ProjectReference Include="..\Censeq.FeatureManagement.Domain.Shared\Censeq.FeatureManagement.Domain.Shared.csproj" />
+	</ItemGroup>
+
+</Project>

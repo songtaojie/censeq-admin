@@ -1,17 +1,17 @@
+using Censeq.FeatureManagement;
+using Censeq.FeatureManagement.Localization;
+using Censeq.TenantManagement.Localization;
 using Localization.Resources.AbpUi;
+using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.AspNetCore.Mvc;
-using Volo.Abp.FeatureManagement;
-using Volo.Abp.FeatureManagement.Localization;
 using Volo.Abp.Localization;
 using Volo.Abp.Modularity;
-using Censeq.TenantManagement.Localization;
-using Microsoft.Extensions.DependencyInjection;
 
 namespace Censeq.TenantManagement;
 
 [DependsOn(
     typeof(CenseqTenantManagementApplicationContractsModule),
-    typeof(AbpFeatureManagementHttpApiModule),
+    typeof(CenseqFeatureManagementHttpApiModule),
     typeof(AbpAspNetCoreMvcModule)
     )]
 public class CenseqTenantManagementHttpApiModule : AbpModule
@@ -31,7 +31,7 @@ public class CenseqTenantManagementHttpApiModule : AbpModule
             options.Resources
                 .Get<CenseqTenantManagementResource>()
                 .AddBaseTypes(
-                    typeof(AbpFeatureManagementResource),
+                    typeof(CenseqFeatureManagementResource),
                     typeof(AbpUiResource));
         });
     }

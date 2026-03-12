@@ -1,4 +1,4 @@
-﻿
+
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.14.36811.4
@@ -88,6 +88,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Censeq.FeatureManagement.Application", "modules\feature-management\Censeq.FeatureManagement.Application\Censeq.FeatureManagement.Application.csproj", "{06B47A55-9615-C469-6130-7F50D53D0AD8}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Censeq.FeatureManagement.EntityFrameworkCore", "modules\feature-management\Censeq.FeatureManagement.EntityFrameworkCore\Censeq.FeatureManagement.EntityFrameworkCore.csproj", "{4FA834F7-D9DC-7DC1-5417-C2A729C55220}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Censeq.FeatureManagement.HttpApi", "modules\feature-management\Censeq.FeatureManagement.HttpApi\Censeq.FeatureManagement.HttpApi.csproj", "{B5C6D7E8-F9A0-4B1C-8D2E-3F4A5B6C7D8E}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "permission-management", "permission-management", "{B335517A-1DCC-445E-9FAC-C6D9BDD5A2C6}"
 EndProject
@@ -243,6 +245,10 @@ Global
 		{4FA834F7-D9DC-7DC1-5417-C2A729C55220}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4FA834F7-D9DC-7DC1-5417-C2A729C55220}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4FA834F7-D9DC-7DC1-5417-C2A729C55220}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B5C6D7E8-F9A0-4B1C-8D2E-3F4A5B6C7D8E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B5C6D7E8-F9A0-4B1C-8D2E-3F4A5B6C7D8E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B5C6D7E8-F9A0-4B1C-8D2E-3F4A5B6C7D8E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B5C6D7E8-F9A0-4B1C-8D2E-3F4A5B6C7D8E}.Release|Any CPU.Build.0 = Release|Any CPU
 		{026AA330-34E9-3BE4-6619-8B89387A9673}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{026AA330-34E9-3BE4-6619-8B89387A9673}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{026AA330-34E9-3BE4-6619-8B89387A9673}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -308,6 +314,7 @@ Global
 		{D2B10F7D-B7F9-3238-8284-2AFDD54CC45C} = {A7339CD4-A941-47E7-866B-27BDDA30E979}
 		{06B47A55-9615-C469-6130-7F50D53D0AD8} = {A7339CD4-A941-47E7-866B-27BDDA30E979}
 		{4FA834F7-D9DC-7DC1-5417-C2A729C55220} = {A7339CD4-A941-47E7-866B-27BDDA30E979}
+		{B5C6D7E8-F9A0-4B1C-8D2E-3F4A5B6C7D8E} = {A7339CD4-A941-47E7-866B-27BDDA30E979}
 		{B335517A-1DCC-445E-9FAC-C6D9BDD5A2C6} = {EAF7E666-1E79-48B8-B8EA-3DFD72BF359E}
 		{026AA330-34E9-3BE4-6619-8B89387A9673} = {B335517A-1DCC-445E-9FAC-C6D9BDD5A2C6}
 		{2DC3B3A9-1F9D-9F96-2E2E-E0AE217BE2AF} = {B335517A-1DCC-445E-9FAC-C6D9BDD5A2C6}

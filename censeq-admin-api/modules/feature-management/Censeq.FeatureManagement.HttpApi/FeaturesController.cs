@@ -1,8 +1,9 @@
-﻿using System.Threading.Tasks;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Volo.Abp;
 using Volo.Abp.AspNetCore.Mvc;
 
-namespace Volo.Abp.FeatureManagement;
+namespace Censeq.FeatureManagement;
 
 [RemoteService(Name = FeatureManagementRemoteServiceConsts.RemoteServiceName)]
 [Area(FeatureManagementRemoteServiceConsts.ModuleName)]

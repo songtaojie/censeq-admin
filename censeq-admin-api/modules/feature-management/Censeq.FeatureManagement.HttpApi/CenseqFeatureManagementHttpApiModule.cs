@@ -1,25 +1,24 @@
-﻿using System.Collections.Generic;
 using Localization.Resources.AbpUi;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.AspNetCore.Mvc;
-using Volo.Abp.FeatureManagement.Localization;
+using Censeq.FeatureManagement.JsonConverters;
+using Censeq.FeatureManagement.Localization;
 using Volo.Abp.Localization;
 using Volo.Abp.Modularity;
-using Microsoft.Extensions.DependencyInjection;
-using Volo.Abp.FeatureManagement.JsonConverters;
 
-namespace Volo.Abp.FeatureManagement;
+namespace Censeq.FeatureManagement;
 
 [DependsOn(
-    typeof(AbpFeatureManagementApplicationContractsModule),
+    typeof(CenseqFeatureManagementApplicationContractsModule),
     typeof(AbpAspNetCoreMvcModule))]
-public class AbpFeatureManagementHttpApiModule : AbpModule
+public class CenseqFeatureManagementHttpApiModule : AbpModule
 {
     public override void PreConfigureServices(ServiceConfigurationContext context)
     {
         PreConfigure<IMvcBuilder>(mvcBuilder =>
         {
-            mvcBuilder.AddApplicationPartIfNotExists(typeof(AbpFeatureManagementHttpApiModule).Assembly);
+            mvcBuilder.AddApplicationPartIfNotExists(typeof(CenseqFeatureManagementHttpApiModule).Assembly);
         });
     }
 
@@ -28,7 +27,7 @@ public class AbpFeatureManagementHttpApiModule : AbpModule
         Configure<AbpLocalizationOptions>(options =>
         {
             options.Resources
-                .Get<AbpFeatureManagementResource>()
+                .Get<CenseqFeatureManagementResource>()
                 .AddBaseTypes(typeof(AbpUiResource));
         });
 
