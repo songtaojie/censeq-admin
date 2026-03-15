@@ -1,6 +1,7 @@
 ﻿using Censeq.Admin.Localization;
 using Censeq.AuditLogging;
 using Censeq.FeatureManagement;
+using Censeq.PermissionManagement;
 using Censeq.SettingManagement;
 using Censeq.TenantManagement;
 using Volo.Abp.BackgroundJobs;
@@ -11,7 +12,6 @@ using Volo.Abp.Localization;
 using Volo.Abp.Localization.ExceptionHandling;
 using Volo.Abp.Modularity;
 using Volo.Abp.OpenIddict;
-using Volo.Abp.PermissionManagement;
 using Volo.Abp.Validation.Localization;
 using Volo.Abp.VirtualFileSystem;
 
@@ -21,13 +21,13 @@ namespace Censeq.Admin;
     typeof(AbpBackgroundJobsDomainSharedModule),
     typeof(AbpIdentityDomainSharedModule),
     typeof(AbpOpenIddictDomainSharedModule),
-    typeof(AbpPermissionManagementDomainSharedModule),
     typeof(AbpJsonSystemTextJsonModule),
     typeof(AbpFeaturesModule),
     typeof(CenseqAuditLoggingDomainSharedModule),
     typeof(CenseqSettingManagementDomainSharedModule),
     typeof(CenseqTenantManagementDomainSharedModule),
-    typeof(CenseqFeatureManagementDomainSharedModule)
+    typeof(CenseqFeatureManagementDomainSharedModule),
+    typeof(CenseqPermissionManagementDomainSharedModule)
     )]
 public class CenseqAdminDomainSharedModule : AbpModule
 {
