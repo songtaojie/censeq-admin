@@ -1,4 +1,4 @@
-
+﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.14.36811.4
@@ -102,6 +102,26 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Censeq.PermissionManagement.Application", "modules\permission-management\Censeq.PermissionManagement.Application\Censeq.PermissionManagement.Application.csproj", "{A6E66954-349F-3418-5CEF-EC9489B0E9CE}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Censeq.PermissionManagement.EntityFrameworkCore", "modules\permission-management\Censeq.PermissionManagement.EntityFrameworkCore\Censeq.PermissionManagement.EntityFrameworkCore.csproj", "{38474EC8-3EBE-84EB-C3DC-E47D227D2CE3}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "identity", "identity", "{2121BC62-619A-478A-ADDC-C5B9C2E219C8}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "openiddict", "openiddict", "{82088286-1357-4414-811A-B92DE5E512C3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Censeq.Identity.Domain.Shared", "modules\identity\Censeq.Identity.Domain.Shared\Censeq.Identity.Domain.Shared.csproj", "{A5ECB562-D03C-A337-658C-5B8E782D2A4B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Censeq.Identity.Domain", "modules\identity\Censeq.Identity.Domain\Censeq.Identity.Domain.csproj", "{09A89AF5-FDC4-C83A-CD37-1EFEB10CC65A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Censeq.Identity.Application.Contracts", "modules\identity\Censeq.Identity.Application.Contracts\Censeq.Identity.Application.Contracts.csproj", "{1FFB8C7A-66B4-A4E1-4BF5-B7B5761C146F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Censeq.Identity.Application", "modules\identity\Censeq.Identity.Application\Censeq.Identity.Application.csproj", "{F35AF77A-418F-4D7A-CCF1-5D6BE2D04C00}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Censeq.Identity.AspNetCore", "modules\identity\Censeq.Identity.AspNetCore\Censeq.Identity.AspNetCore.csproj", "{3FE44EE9-1CF9-840B-CF92-61B1831888EE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Censeq.Identity.EntityFrameworkCore", "modules\identity\Censeq.Identity.EntityFrameworkCore\Censeq.Identity.EntityFrameworkCore.csproj", "{2441E62A-1E29-CCD1-39D5-6954BB795471}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Censeq.Identity.HttpApi", "modules\identity\Censeq.Identity.HttpApi\Censeq.Identity.HttpApi.csproj", "{1A5AD9F9-5FCC-C9BF-E94E-D8F550781D70}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Censeq.PermissionManagement.Domain.Identity", "modules\identity\Censeq.PermissionManagement.Domain.Identity\Censeq.PermissionManagement.Domain.Identity.csproj", "{A69744BE-F26A-4F6C-EBC2-2405DB08A519}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -269,6 +289,38 @@ Global
 		{38474EC8-3EBE-84EB-C3DC-E47D227D2CE3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{38474EC8-3EBE-84EB-C3DC-E47D227D2CE3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{38474EC8-3EBE-84EB-C3DC-E47D227D2CE3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A5ECB562-D03C-A337-658C-5B8E782D2A4B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A5ECB562-D03C-A337-658C-5B8E782D2A4B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A5ECB562-D03C-A337-658C-5B8E782D2A4B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A5ECB562-D03C-A337-658C-5B8E782D2A4B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{09A89AF5-FDC4-C83A-CD37-1EFEB10CC65A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{09A89AF5-FDC4-C83A-CD37-1EFEB10CC65A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{09A89AF5-FDC4-C83A-CD37-1EFEB10CC65A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{09A89AF5-FDC4-C83A-CD37-1EFEB10CC65A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1FFB8C7A-66B4-A4E1-4BF5-B7B5761C146F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1FFB8C7A-66B4-A4E1-4BF5-B7B5761C146F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1FFB8C7A-66B4-A4E1-4BF5-B7B5761C146F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1FFB8C7A-66B4-A4E1-4BF5-B7B5761C146F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F35AF77A-418F-4D7A-CCF1-5D6BE2D04C00}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F35AF77A-418F-4D7A-CCF1-5D6BE2D04C00}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F35AF77A-418F-4D7A-CCF1-5D6BE2D04C00}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F35AF77A-418F-4D7A-CCF1-5D6BE2D04C00}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3FE44EE9-1CF9-840B-CF92-61B1831888EE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3FE44EE9-1CF9-840B-CF92-61B1831888EE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3FE44EE9-1CF9-840B-CF92-61B1831888EE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3FE44EE9-1CF9-840B-CF92-61B1831888EE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2441E62A-1E29-CCD1-39D5-6954BB795471}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2441E62A-1E29-CCD1-39D5-6954BB795471}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2441E62A-1E29-CCD1-39D5-6954BB795471}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2441E62A-1E29-CCD1-39D5-6954BB795471}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1A5AD9F9-5FCC-C9BF-E94E-D8F550781D70}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1A5AD9F9-5FCC-C9BF-E94E-D8F550781D70}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1A5AD9F9-5FCC-C9BF-E94E-D8F550781D70}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1A5AD9F9-5FCC-C9BF-E94E-D8F550781D70}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A69744BE-F26A-4F6C-EBC2-2405DB08A519}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A69744BE-F26A-4F6C-EBC2-2405DB08A519}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A69744BE-F26A-4F6C-EBC2-2405DB08A519}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A69744BE-F26A-4F6C-EBC2-2405DB08A519}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -321,6 +373,16 @@ Global
 		{4D937B2E-9A9E-19B5-DEA4-1BE50BD1B6C2} = {B335517A-1DCC-445E-9FAC-C6D9BDD5A2C6}
 		{A6E66954-349F-3418-5CEF-EC9489B0E9CE} = {B335517A-1DCC-445E-9FAC-C6D9BDD5A2C6}
 		{38474EC8-3EBE-84EB-C3DC-E47D227D2CE3} = {B335517A-1DCC-445E-9FAC-C6D9BDD5A2C6}
+		{2121BC62-619A-478A-ADDC-C5B9C2E219C8} = {EAF7E666-1E79-48B8-B8EA-3DFD72BF359E}
+		{82088286-1357-4414-811A-B92DE5E512C3} = {EAF7E666-1E79-48B8-B8EA-3DFD72BF359E}
+		{A5ECB562-D03C-A337-658C-5B8E782D2A4B} = {2121BC62-619A-478A-ADDC-C5B9C2E219C8}
+		{09A89AF5-FDC4-C83A-CD37-1EFEB10CC65A} = {2121BC62-619A-478A-ADDC-C5B9C2E219C8}
+		{1FFB8C7A-66B4-A4E1-4BF5-B7B5761C146F} = {2121BC62-619A-478A-ADDC-C5B9C2E219C8}
+		{F35AF77A-418F-4D7A-CCF1-5D6BE2D04C00} = {2121BC62-619A-478A-ADDC-C5B9C2E219C8}
+		{3FE44EE9-1CF9-840B-CF92-61B1831888EE} = {2121BC62-619A-478A-ADDC-C5B9C2E219C8}
+		{2441E62A-1E29-CCD1-39D5-6954BB795471} = {2121BC62-619A-478A-ADDC-C5B9C2E219C8}
+		{1A5AD9F9-5FCC-C9BF-E94E-D8F550781D70} = {2121BC62-619A-478A-ADDC-C5B9C2E219C8}
+		{A69744BE-F26A-4F6C-EBC2-2405DB08A519} = {2121BC62-619A-478A-ADDC-C5B9C2E219C8}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {E23E8388-F169-4F3B-8A0C-AA189D779228}
