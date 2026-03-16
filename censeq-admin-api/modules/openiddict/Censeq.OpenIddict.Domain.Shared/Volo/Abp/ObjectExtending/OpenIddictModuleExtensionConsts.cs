@@ -1,4 +1,4 @@
-namespace Censeq.OpenIddict.ObjectExtending;
+namespace Volo.Abp.ObjectExtending;
 
 public class OpenIddictModuleExtensionConsts
 {

@@ -8,7 +8,6 @@
         <GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
         <GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
         <GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
-        <GenerateEmbeddedFilesManifest>true</GenerateEmbeddedFilesManifest>
         <RootNamespace>Censeq.Account.Web</RootNamespace>
         <OutputType>Library</OutputType>
     </PropertyGroup>

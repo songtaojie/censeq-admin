@@ -15,7 +15,7 @@
 
 <ItemGroup>
     <ProjectReference Include="..\Censeq.OpenIddict.Domain.Shared\Censeq.OpenIddict.Domain.Shared.csproj" />
-    <ProjectReference Include="..\..\..\permission-management\src\Volo.Abp.PermissionManagement.Domain\Volo.Abp.PermissionManagement.Domain.csproj" />
+    <ProjectReference Include="..\..\permission-management\Censeq.PermissionManagement.Domain\Censeq.PermissionManagement.Domain.csproj" />
 </ItemGroup>
 
 </Project>

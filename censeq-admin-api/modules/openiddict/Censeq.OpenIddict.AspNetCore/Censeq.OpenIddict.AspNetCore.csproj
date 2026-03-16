@@ -16,13 +16,13 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Volo.Abp.AspNetCore.MultiTenancy" Version="$(AbpVersion)" />
-    <PackageReference Include="Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared" Version="$(AbpVersion)" />
+    <PackageReference Include="Volo.Abp.AspNetCore.MultiTenancy" />
+    <PackageReference Include="Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared" />
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="OpenIddict.Server.AspNetCore" Version="$(OpenIddictServerAspNetCoreVersion)" />
-    <PackageReference Include="OpenIddict.Validation.AspNetCore" Version="$(OpenIddictValidationAspNetCoreVersion)" />
-    <PackageReference Include="OpenIddict.Validation.ServerIntegration" Version="$(OpenIddictValidationServerIntegrationVersion)" />
+    <PackageReference Include="OpenIddict.Server.AspNetCore" />
+    <PackageReference Include="OpenIddict.Validation.AspNetCore" />
+    <PackageReference Include="OpenIddict.Validation.ServerIntegration" />
   </ItemGroup>
 </Project>

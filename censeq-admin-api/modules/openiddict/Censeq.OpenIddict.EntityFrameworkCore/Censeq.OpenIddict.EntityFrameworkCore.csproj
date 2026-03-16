@@ -1,16 +1,15 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <Import Project="..\..\..\common.props" />
 
   <PropertyGroup>
-    <TargetFramework>net8.0</TargetFramework>
     <AssemblyName>Censeq.OpenIddict.EntityFrameworkCore</AssemblyName>
     <PackageId>Censeq.OpenIddict.EntityFrameworkCore</PackageId>
-    <RootNamespace>Censeq.OpenIddict</RootNamespace>
+    <RootNamespace />
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\..\..\framework\src\Volo.Abp.EntityFrameworkCore\Volo.Abp.EntityFrameworkCore.csproj" />
+    <ProjectReference Include="..\..\..\framework\Censeq.Framework.EntityFrameworkCore\Censeq.Framework.EntityFrameworkCore.csproj" />
     <ProjectReference Include="..\Censeq.OpenIddict.Domain\Censeq.OpenIddict.Domain.csproj" />
   </ItemGroup>
 

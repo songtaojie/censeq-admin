@@ -8,7 +8,6 @@ using Volo.Abp.Caching;
 using Volo.Abp.DistributedLocking;
 using Volo.Abp.Domain;
 using Volo.Abp.Guids;
-using Volo.Abp.Identity;
 using Volo.Abp.Modularity;
 using Volo.Abp.ObjectExtending;
 using Volo.Abp.ObjectExtending.Modularity;
@@ -17,6 +16,8 @@ using Censeq.OpenIddict.Authorizations;
 using Censeq.OpenIddict.Scopes;
 using Censeq.OpenIddict.Tokens;
 using Volo.Abp.Threading;
+using Censeq.Identity;
+using Volo.Abp;
 
 namespace Censeq.OpenIddict;
 

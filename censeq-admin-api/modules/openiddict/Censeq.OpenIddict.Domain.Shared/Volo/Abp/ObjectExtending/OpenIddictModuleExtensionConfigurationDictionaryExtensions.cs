@@ -1,7 +1,7 @@
 using System;
 using Volo.Abp.ObjectExtending.Modularity;
 
-namespace Censeq.OpenIddict.ObjectExtending;
+namespace Volo.Abp.ObjectExtending;
 
 public static class OpenIddictModuleExtensionConfigurationDictionaryExtensions
 {

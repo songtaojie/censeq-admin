@@ -1,0 +1,101 @@
+<Project>
+  <PropertyGroup>
+    <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
+    <CentralPackageTransitivePinningEnabled>true</CentralPackageTransitivePinningEnabled>
+  </PropertyGroup>
+  <ItemGroup>
+    <!-- ABP Framework (统一 8.3.4) -->
+    <PackageVersion Include="Volo.Abp" Version="8.3.4" />
+    <PackageVersion Include="Volo.Abp.Account.Application" Version="8.3.4" />
+    <PackageVersion Include="Volo.Abp.Account.Application.Contracts" Version="8.3.4" />
+    <PackageVersion Include="Volo.Abp.Account.HttpApi" Version="8.3.4" />
+    <PackageVersion Include="Volo.Abp.Account.HttpApi.Client" Version="8.3.4" />
+    <PackageVersion Include="Volo.Abp.AspNetCore" Version="8.3.4" />
+    <PackageVersion Include="Volo.Abp.AspNetCore.Mvc" Version="8.3.4" />
+    <PackageVersion Include="Volo.Abp.AspNetCore.Mvc.UI.MultiTenancy" Version="8.3.4" />
+    <PackageVersion Include="Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared" Version="8.3.4" />
+    <PackageVersion Include="Volo.Abp.AspNetCore.Serilog" Version="8.3.4" />
+    <PackageVersion Include="Volo.Abp.AspNetCore.MultiTenancy" Version="8.3.4" />
+    <PackageVersion Include="Volo.Abp.Autofac" Version="8.3.4" />
+    <PackageVersion Include="Volo.Abp.Auditing" Version="8.3.4" />
+    <PackageVersion Include="Volo.Abp.Auditing.Contracts" Version="8.3.4" />
+    <PackageVersion Include="Volo.Abp.Authorization" Version="8.3.4" />
+    <PackageVersion Include="Volo.Abp.Authorization.Abstractions" Version="8.3.4" />
+    <PackageVersion Include="Volo.Abp.BackgroundJobs.Domain" Version="8.3.4" />
+    <PackageVersion Include="Volo.Abp.BackgroundJobs.Domain.Shared" Version="8.3.4" />
+    <PackageVersion Include="Volo.Abp.BackgroundJobs.EntityFrameworkCore" Version="8.3.4" />
+    <PackageVersion Include="Volo.Abp.Caching" Version="8.3.4" />
+    <PackageVersion Include="Volo.Abp.Core" Version="8.3.4" />
+    <PackageVersion Include="Volo.Abp.Data" Version="8.3.4" />
+    <PackageVersion Include="Volo.Abp.Ddd.Application" Version="8.3.4" />
+    <PackageVersion Include="Volo.Abp.Ddd.Application.Contracts" Version="8.3.4" />
+    <PackageVersion Include="Volo.Abp.Ddd.Domain" Version="8.3.4" />
+    <PackageVersion Include="Volo.Abp.DistributedLocking" Version="8.3.4" />
+    <PackageVersion Include="Volo.Abp.DistributedLocking.Abstractions" Version="8.3.4" />
+    <PackageVersion Include="Volo.Abp.Emailing" Version="8.3.4" />
+    <PackageVersion Include="Volo.Abp.EntityFrameworkCore" Version="8.3.4" />
+    <PackageVersion Include="Volo.Abp.EntityFrameworkCore.PostgreSql" Version="8.3.4" />
+    <PackageVersion Include="Volo.Abp.EntityFrameworkCore.Sqlite" Version="8.3.4" />
+    <PackageVersion Include="Volo.Abp.EntityFrameworkCore.MySQL" Version="8.3.4" />
+    <PackageVersion Include="Volo.Abp.EventBus" Version="8.3.4" />
+    <PackageVersion Include="Volo.Abp.Features" Version="8.3.4" />
+    <PackageVersion Include="Volo.Abp.Guids" Version="8.3.4" />
+    <PackageVersion Include="Volo.Abp.Identity.AspNetCore" Version="8.3.4" />
+    <PackageVersion Include="Volo.Abp.Identity.Domain" Version="8.3.4" />
+    <PackageVersion Include="Volo.Abp.Identity.Domain.Shared" Version="8.3.4" />
+    <PackageVersion Include="Volo.Abp.Identity.EntityFrameworkCore" Version="8.3.4" />
+    <PackageVersion Include="Volo.Abp.Identity.Application" Version="8.3.4" />
+    <PackageVersion Include="Volo.Abp.Identity.Application.Contracts" Version="8.3.4" />
+    <PackageVersion Include="Volo.Abp.Identity.HttpApi" Version="8.3.4" />
+    <PackageVersion Include="Volo.Abp.Identity.HttpApi.Client" Version="8.3.4" />
+    <PackageVersion Include="Volo.Abp.Json" Version="8.3.4" />
+    <PackageVersion Include="Volo.Abp.Json.SystemTextJson" Version="8.3.4" />
+    <PackageVersion Include="Volo.Abp.Localization" Version="8.3.4" />
+    <PackageVersion Include="Volo.Abp.MailKit" Version="8.3.4" />
+    <PackageVersion Include="Volo.Abp.MultiTenancy" Version="8.3.4" />
+    <PackageVersion Include="Volo.Abp.ObjectExtending" Version="8.3.4" />
+    <PackageVersion Include="Volo.Abp.OpenIddict.AspNetCore" Version="8.3.4" />
+    <PackageVersion Include="Volo.Abp.OpenIddict.Domain" Version="8.3.4" />
+    <PackageVersion Include="Volo.Abp.OpenIddict.Domain.Shared" Version="8.3.4" />
+    <PackageVersion Include="Volo.Abp.OpenIddict.EntityFrameworkCore" Version="8.3.4" />
+    <PackageVersion Include="Volo.Abp.PermissionManagement.Domain.Identity" Version="8.3.4" />
+    <PackageVersion Include="Volo.Abp.PermissionManagement.Domain.OpenIddict" Version="8.3.4" />
+    <PackageVersion Include="Volo.Abp.PermissionManagement.EntityFrameworkCore" Version="8.3.4" />
+    <PackageVersion Include="Volo.Abp.PermissionManagement.Application" Version="8.3.4" />
+    <PackageVersion Include="Volo.Abp.PermissionManagement.HttpApi" Version="8.3.4" />
+    <PackageVersion Include="Volo.Abp.PermissionManagement.HttpApi.Client" Version="8.3.4" />
+    <PackageVersion Include="Volo.Abp.SettingManagement.HttpApi.Client" Version="8.3.4" />
+    <PackageVersion Include="Volo.Abp.Settings" Version="8.3.4" />
+    <PackageVersion Include="Volo.Abp.Users.Abstractions" Version="8.3.4" />
+    <PackageVersion Include="Volo.Abp.Users.Domain" Version="8.3.4" />
+    <PackageVersion Include="Volo.Abp.Users.Domain.Shared" Version="8.3.4" />
+    <PackageVersion Include="Volo.Abp.Users.EntityFrameworkCore" Version="8.3.4" />
+    <PackageVersion Include="Volo.Abp.Validation" Version="8.3.4" />
+    <PackageVersion Include="Volo.Abp.AutoMapper" Version="8.3.4" />
+    <!-- Microsoft -->
+    <PackageVersion Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.16" />
+    <PackageVersion Include="Microsoft.Extensions.FileProviders.Embedded" Version="8.0.16" />
+    <PackageVersion Include="Microsoft.Extensions.Hosting" Version="8.0.1" />
+    <PackageVersion Include="Microsoft.Extensions.Identity.Core" Version="8.0.25" />
+    <!-- OpenIddict -->
+    <PackageVersion Include="OpenIddict.Abstractions" Version="5.6.0" />
+    <PackageVersion Include="OpenIddict.Core" Version="5.6.0" />
+    <PackageVersion Include="OpenIddict.Server.AspNetCore" Version="5.6.0" />
+    <PackageVersion Include="OpenIddict.Validation.AspNetCore" Version="5.6.0" />
+    <PackageVersion Include="OpenIddict.Validation.ServerIntegration" Version="5.6.0" />
+    <!-- Serilog -->
+    <PackageVersion Include="Serilog.AspNetCore" Version="8.0.2" />
+    <PackageVersion Include="Serilog.Extensions.Logging" Version="8.0.0" />
+    <PackageVersion Include="Serilog.Sinks.Async" Version="2.0.0" />
+    <PackageVersion Include="Serilog.Sinks.Console" Version="6.0.0" />
+    <PackageVersion Include="Serilog.Sinks.File" Version="6.0.0" />
+    <!-- Swashbuckle / Knife4j -->
+    <PackageVersion Include="Swashbuckle.AspNetCore" Version="7.1.0" />
+    <PackageVersion Include="Swashbuckle.AspNetCore.Filters" Version="8.0.2" />
+    <PackageVersion Include="IGeekFan.AspNetCore.Knife4jUI" Version="0.0.16" />
+    <!-- 其他 -->
+    <PackageVersion Include="EFCore.NamingConventions" Version="8.0.3" />
+    <PackageVersion Include="Polly" Version="8.6.6" />
+    <PackageVersion Include="System.Security.Principal.Windows" Version="5.0.0" />
+  </ItemGroup>
+</Project>

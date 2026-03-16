@@ -7,7 +7,6 @@
 		<PackageId>Censeq.PermissionManagement.EntityFrameworkCore</PackageId>
 		<Nullable>enable</Nullable>
 		<RootNamespace>Censeq.PermissionManagement</RootNamespace>
-		<GenerateEmbeddedFilesManifest>true</GenerateEmbeddedFilesManifest>
 	</PropertyGroup>
 
 	<ItemGroup>

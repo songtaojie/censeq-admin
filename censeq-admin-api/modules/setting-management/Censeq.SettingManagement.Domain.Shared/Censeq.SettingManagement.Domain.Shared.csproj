@@ -7,7 +7,6 @@
 		<PackageId>Censeq.SettingManagement.Domain.Shared</PackageId>
 		<Nullable>enable</Nullable>
 		<RootNamespace>Censeq.SettingManagement</RootNamespace>
-		<GenerateEmbeddedFilesManifest>true</GenerateEmbeddedFilesManifest>
 	</PropertyGroup>
 
 	<ItemGroup>

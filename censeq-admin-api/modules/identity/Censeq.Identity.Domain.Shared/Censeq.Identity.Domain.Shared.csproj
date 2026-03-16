@@ -19,14 +19,14 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Volo.Abp.Users.Domain.Shared" Version="$(AbpVersion)" />
-		<PackageReference Include="Volo.Abp.Validation" Version="$(AbpVersion)" />
-		<PackageReference Include="Volo.Abp.Features" Version="$(AbpVersion)" />
-		<PackageReference Include="Volo.Abp.Auditing.Contracts" Version="$(AbpVersion)" />
+		<PackageReference Include="Volo.Abp.Users.Domain.Shared" />
+		<PackageReference Include="Volo.Abp.Validation" />
+		<PackageReference Include="Volo.Abp.Features" />
+		<PackageReference Include="Volo.Abp.Auditing.Contracts" />
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Microsoft.Extensions.FileProviders.Embedded" Version="$(MicrosoftExtensionsFileProvidersEmbeddedVersion)" />
+		<PackageReference Include="Microsoft.Extensions.FileProviders.Embedded" />
 	</ItemGroup>
 
 </Project>

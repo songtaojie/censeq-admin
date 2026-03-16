@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
 	<Import Project="..\..\..\common.props" />
 
@@ -12,7 +12,7 @@
 		<RootNamespace />
 	</PropertyGroup>
 	<ItemGroup>
-		<PackageReference Include="Volo.Abp.Users.EntityFrameworkCore" Version="$(AbpVersion)" />
+		<PackageReference Include="Volo.Abp.Users.EntityFrameworkCore" />
 	</ItemGroup>
 	<ItemGroup>
 		<ProjectReference Include="..\Censeq.Identity.Domain\Censeq.Identity.Domain.csproj" />

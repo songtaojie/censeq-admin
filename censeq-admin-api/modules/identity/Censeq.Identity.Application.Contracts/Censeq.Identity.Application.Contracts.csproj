@@ -13,8 +13,8 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Volo.Abp.Users.Abstractions" Version="$(AbpVersion)" />
-		<PackageReference Include="Volo.Abp.Authorization" Version="$(AbpVersion)" />
+		<PackageReference Include="Volo.Abp.Users.Abstractions" />
+		<PackageReference Include="Volo.Abp.Authorization" />
 	</ItemGroup>
 
 	<ItemGroup>

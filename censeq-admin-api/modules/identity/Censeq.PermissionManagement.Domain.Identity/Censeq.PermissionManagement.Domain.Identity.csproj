@@ -13,7 +13,7 @@
 		<RootNamespace />
 	</PropertyGroup>
 	<ItemGroup>
-		<PackageReference Include="Volo.Abp.Users.Abstractions" Version="$(AbpVersion)" />
+		<PackageReference Include="Volo.Abp.Users.Abstractions" />
 	</ItemGroup>
 	<ItemGroup>
 		<ProjectReference Include="..\Censeq.Identity.Domain.Shared\Censeq.Identity.Domain.Shared.csproj" />
