@@ -22,10 +22,10 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="IGeekFan.AspNetCore.Knife4jUI" Version="$(IGeekFanAspNetCoreKnife4jUIVersion)" />
-		<PackageReference Include="Swashbuckle.AspNetCore" Version="$(SwashbuckleAspNetCoreVersion)" />
-		<PackageReference Include="Swashbuckle.AspNetCore.Filters" Version="$(SwashbuckleAspNetCoreFiltersVersion)" />
-		<PackageReference Include="Volo.Abp.AspNetCore.Mvc" Version="$(AbpVersion)" />
+		<PackageReference Include="IGeekFan.AspNetCore.Knife4jUI" />
+		<PackageReference Include="Swashbuckle.AspNetCore" />
+		<PackageReference Include="Swashbuckle.AspNetCore.Filters" />
+		<PackageReference Include="Volo.Abp.AspNetCore.Mvc" />
 	</ItemGroup>
 
 	<ItemGroup>

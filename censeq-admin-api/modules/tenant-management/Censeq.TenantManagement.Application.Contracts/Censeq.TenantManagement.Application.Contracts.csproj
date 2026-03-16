@@ -10,10 +10,10 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Volo.Abp.Ddd.Application.Contracts" Version="$(AbpVersion)" />
-		<PackageReference Include="Volo.Abp.Authorization.Abstractions" Version="$(AbpVersion)" />
-		<PackageReference Include="Volo.Abp.ObjectExtending" Version="$(AbpVersion)" />
-		<PackageReference Include="Volo.Abp.Validation" Version="$(AbpVersion)" />
+		<PackageReference Include="Volo.Abp.Ddd.Application.Contracts" />
+		<PackageReference Include="Volo.Abp.Authorization.Abstractions" />
+		<PackageReference Include="Volo.Abp.ObjectExtending" />
+		<PackageReference Include="Volo.Abp.Validation" />
 	</ItemGroup>
 
 	<ItemGroup>

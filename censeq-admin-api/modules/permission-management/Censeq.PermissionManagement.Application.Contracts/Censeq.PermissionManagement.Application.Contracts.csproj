@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
 	<Import Project="..\..\..\common.props" />
 
@@ -10,9 +10,9 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Volo.Abp.Ddd.Application.Contracts" Version="$(AbpVersion)" />
-		<PackageReference Include="Volo.Abp.Authorization.Abstractions" Version="$(AbpVersion)" />
-		<PackageReference Include="Volo.Abp.Json" Version="$(AbpVersion)" />
+		<PackageReference Include="Volo.Abp.Ddd.Application.Contracts" />
+		<PackageReference Include="Volo.Abp.Authorization.Abstractions" />
+		<PackageReference Include="Volo.Abp.Json" />
 	</ItemGroup>
 
 	<ItemGroup>

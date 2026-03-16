@@ -11,10 +11,10 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Volo.Abp.Ddd.Domain" Version="$(AbpVersion)" />
-		<PackageReference Include="Volo.Abp.Features" Version="$(AbpVersion)" />
-		<PackageReference Include="Volo.Abp.Caching" Version="$(AbpVersion)" />
-		<PackageReference Include="Polly" Version="$(PollyVersion)" />
+		<PackageReference Include="Volo.Abp.Ddd.Domain" />
+		<PackageReference Include="Volo.Abp.Features" />
+		<PackageReference Include="Volo.Abp.Caching" />
+		<PackageReference Include="Polly" />
 	</ItemGroup>
 
 	<ItemGroup>

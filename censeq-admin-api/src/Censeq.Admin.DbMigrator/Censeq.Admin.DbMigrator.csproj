@@ -22,15 +22,15 @@
   </ItemGroup>
 
   <ItemGroup>    
-    <PackageReference Include="Serilog.Extensions.Logging" Version="$(SerilogExtensionsLoggingVersion)" />
-    <PackageReference Include="Serilog.Sinks.Async" Version="$(SerilogSinksAsyncVersion)" />
-    <PackageReference Include="Serilog.Sinks.File" Version="$(SerilogSinksFileVersion)" />
-    <PackageReference Include="Serilog.Sinks.Console" Version="$(SerilogSinksConsoleVersion)" />
-    <PackageReference Include="Microsoft.Extensions.Hosting" Version="$(MicrosoftExtensionsHostingVersion)" />
+    <PackageReference Include="Serilog.Extensions.Logging" />
+    <PackageReference Include="Serilog.Sinks.Async" />
+    <PackageReference Include="Serilog.Sinks.File" />
+    <PackageReference Include="Serilog.Sinks.Console" />
+    <PackageReference Include="Microsoft.Extensions.Hosting" />
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Volo.Abp.Autofac" Version="8.3.4" />
+    <PackageReference Include="Volo.Abp.Autofac" />
     <ProjectReference Include="..\Censeq.Admin.Application.Contracts\Censeq.Admin.Application.Contracts.csproj" />
     <ProjectReference Include="..\Censeq.Admin.EntityFrameworkCore\Censeq.Admin.EntityFrameworkCore.csproj" />
   </ItemGroup>

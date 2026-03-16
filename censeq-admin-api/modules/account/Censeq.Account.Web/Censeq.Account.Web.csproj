@@ -15,11 +15,11 @@
 		<OutputType>Library</OutputType>
 	</PropertyGroup>
 	<ItemGroup>
-		<PackageReference Include="Volo.Abp.Identity.AspNetCore" Version="$(AbpVersion)" />
-		<PackageReference Include="Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared" Version="$(AbpVersion)" />
-		<PackageReference Include="Volo.Abp.AutoMapper" Version="$(AbpVersion)" />
-		<PackageReference Include="Volo.Abp.Account.Application.Contracts" Version="$(AbpVersion)" />
-		<PackageReference Include="Microsoft.Extensions.FileProviders.Embedded" Version="$(MicrosoftExtensionsFileProvidersEmbeddedVersion)" />
+		<PackageReference Include="Volo.Abp.Identity.AspNetCore" />
+		<PackageReference Include="Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared" />
+		<PackageReference Include="Volo.Abp.AutoMapper" />
+		<PackageReference Include="Volo.Abp.Account.Application.Contracts" />
+		<PackageReference Include="Microsoft.Extensions.FileProviders.Embedded" />
 	</ItemGroup>
 
 	<ItemGroup>

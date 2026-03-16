@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 	<Import Project="..\..\common.props" />
 	<PropertyGroup>
 		<AssemblyName>Censeq.Framework.Core</AssemblyName>
@@ -10,7 +10,7 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Volo.Abp.Core" Version="$(AbpVersion)" />
+		<PackageReference Include="Volo.Abp.Core" />
 	</ItemGroup>
 
 </Project>

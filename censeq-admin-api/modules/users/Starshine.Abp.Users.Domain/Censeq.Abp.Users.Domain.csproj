@@ -16,6 +16,6 @@
 	  <ProjectReference Include="..\Censeq.Abp.Users.Domain.Shared\Censeq.Abp.Users.Domain.Shared.csproj" />
 	</ItemGroup>
 	<ItemGroup>
-		<PackageReference Include="Volo.Abp.Ddd.Domain" Version="$(AbpVersion)" />
+		<PackageReference Include="Volo.Abp.Ddd.Domain" />
 	</ItemGroup>
 </Project>

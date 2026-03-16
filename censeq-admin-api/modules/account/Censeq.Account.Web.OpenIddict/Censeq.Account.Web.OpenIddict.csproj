@@ -16,9 +16,9 @@
     </ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Volo.Abp.OpenIddict.AspNetCore" Version="$(AbpVersion)" />
-<PackageReference Include="System.Security.Principal.Windows" Version="$(SystemSecurityPrincipalWindowsVersion)" />
-  		<PackageReference Include="Microsoft.Extensions.FileProviders.Embedded" Version="$(MicrosoftExtensionsFileProvidersEmbeddedVersion)" />
+		<PackageReference Include="Volo.Abp.OpenIddict.AspNetCore" />
+<PackageReference Include="System.Security.Principal.Windows" />
+  		<PackageReference Include="Microsoft.Extensions.FileProviders.Embedded" />
 	</ItemGroup>
 
 	<ItemGroup>

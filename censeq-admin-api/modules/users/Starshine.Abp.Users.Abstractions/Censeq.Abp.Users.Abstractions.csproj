@@ -12,7 +12,7 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Volo.Abp.EventBus" Version="$(AbpVersion)" />
+		<PackageReference Include="Volo.Abp.EventBus" />
 	</ItemGroup>
 
 </Project>

@@ -10,11 +10,11 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Volo.Abp.EntityFrameworkCore" Version="$(AbpVersion)" />
-		<PackageReference Include="Volo.Abp.EntityFrameworkCore.PostgreSql" Version="$(AbpVersion)" />
-		<PackageReference Include="Volo.Abp.EntityFrameworkCore.Sqlite" Version="$(AbpVersion)" />
-		<PackageReference Include="Volo.Abp.EntityFrameworkCore.MySQL" Version="$(AbpVersion)" />
-		<PackageReference Include="EFCore.NamingConventions" Version="$(EFCoreNamingConventionsVersion)" />
+		<PackageReference Include="Volo.Abp.EntityFrameworkCore" />
+		<PackageReference Include="Volo.Abp.EntityFrameworkCore.PostgreSql" />
+		<PackageReference Include="Volo.Abp.EntityFrameworkCore.Sqlite" />
+		<PackageReference Include="Volo.Abp.EntityFrameworkCore.MySQL" />
+		<PackageReference Include="EFCore.NamingConventions" />
 	</ItemGroup>
 
 	<ItemGroup>

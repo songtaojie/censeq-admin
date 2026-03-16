@@ -11,14 +11,14 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Volo.Abp" Version="$(AbpVersion)" />
-		<PackageReference Include="Volo.Abp.Ddd.Domain" Version="$(AbpVersion)" />
-		<PackageReference Include="Volo.Abp.Guids" Version="$(AbpVersion)" />
-		<PackageReference Include="Volo.Abp.Authorization" Version="$(AbpVersion)" />
-		<PackageReference Include="Volo.Abp.Caching" Version="$(AbpVersion)" />
-		<PackageReference Include="Volo.Abp.DistributedLocking" Version="$(AbpVersion)" />
-		<PackageReference Include="Volo.Abp.Json" Version="$(AbpVersion)" />
-		<PackageReference Include="Polly" Version="$(PollyVersion)" />
+		<PackageReference Include="Volo.Abp" />
+		<PackageReference Include="Volo.Abp.Ddd.Domain" />
+		<PackageReference Include="Volo.Abp.Guids" />
+		<PackageReference Include="Volo.Abp.Authorization" />
+		<PackageReference Include="Volo.Abp.Caching" />
+		<PackageReference Include="Volo.Abp.DistributedLocking" />
+		<PackageReference Include="Volo.Abp.Json" />
+		<PackageReference Include="Polly" />
 	</ItemGroup>
 
 	<ItemGroup>

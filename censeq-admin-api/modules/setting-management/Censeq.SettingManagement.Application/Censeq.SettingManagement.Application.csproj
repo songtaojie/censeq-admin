@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
 	<Import Project="..\..\..\common.props" />
 
@@ -7,9 +7,9 @@
 		<RootNamespace>Censeq.SettingManagement</RootNamespace>
 	</PropertyGroup>
 	<ItemGroup>
-		<PackageReference Include="Volo.Abp.Emailing" Version="$(AbpVersion)" />
-		<PackageReference Include="Volo.Abp.Ddd.Application" Version="$(AbpVersion)" />
-		<PackageReference Include="Volo.Abp.Users.Abstractions" Version="$(AbpVersion)" />
+		<PackageReference Include="Volo.Abp.Emailing" />
+		<PackageReference Include="Volo.Abp.Ddd.Application" />
+		<PackageReference Include="Volo.Abp.Users.Abstractions" />
 	</ItemGroup>
 	<ItemGroup>
 	  <ProjectReference Include="..\Censeq.SettingManagement.Application.Contracts\Censeq.SettingManagement.Application.Contracts.csproj" />

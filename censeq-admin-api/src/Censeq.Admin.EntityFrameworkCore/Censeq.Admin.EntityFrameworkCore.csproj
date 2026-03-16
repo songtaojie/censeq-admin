@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <Import Project="..\..\common.props" />
 
@@ -13,9 +13,9 @@
     <ProjectReference Include="..\..\modules\setting-management\Censeq.SettingManagement.EntityFrameworkCore\Censeq.SettingManagement.EntityFrameworkCore.csproj" />
     <ProjectReference Include="..\..\modules\tenant-management\Censeq.TenantManagement.EntityFrameworkCore\Censeq.TenantManagement.EntityFrameworkCore.csproj" />
     <ProjectReference Include="..\Censeq.Admin.Domain\Censeq.Admin.Domain.csproj" />
-    <PackageReference Include="Volo.Abp.PermissionManagement.EntityFrameworkCore" Version="$(AbpVersion)" />
-    <PackageReference Include="Volo.Abp.Identity.EntityFrameworkCore" Version="$(AbpVersion)" />
-    <PackageReference Include="Volo.Abp.BackgroundJobs.EntityFrameworkCore" Version="$(AbpVersion)" />
-    <PackageReference Include="Volo.Abp.OpenIddict.EntityFrameworkCore" Version="$(AbpVersion)" />
+    <PackageReference Include="Volo.Abp.PermissionManagement.EntityFrameworkCore" />
+    <PackageReference Include="Volo.Abp.Identity.EntityFrameworkCore" />
+    <PackageReference Include="Volo.Abp.BackgroundJobs.EntityFrameworkCore" />
+    <PackageReference Include="Volo.Abp.OpenIddict.EntityFrameworkCore" />
   </ItemGroup>
 </Project>
