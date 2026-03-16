@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <Import Project="..\..\..\common.props" />
 
@@ -10,18 +10,13 @@
     <GenerateEmbeddedFilesManifest>true</GenerateEmbeddedFilesManifest>
   </PropertyGroup>
 
+	<ItemGroup>
+		<PackageReference Include="Volo.Abp.Validation" Version="$(AbpVersion)" />
+	</ItemGroup>
+	
   <ItemGroup>
-    <ProjectReference Include="..\..\..\..\framework\src\Volo.Abp.Validation\Volo.Abp.Validation.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <PackageReference Include="OpenIddict.Abstractions" />
-    <PackageReference Include="Microsoft.Extensions.FileProviders.Embedded" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <EmbeddedResource Include="Volo\Abp\OpenIddict\Localization\OpenIddict\*.json" />
-    <Content Remove="Volo\Abp\OpenIddict\Localization\OpenIddict\*.json" />
+    <PackageReference Include="OpenIddict.Abstractions" Version="$(OpenIddictAbstractionsVersion)" />
+    <PackageReference Include="Microsoft.Extensions.FileProviders.Embedded" Version="$(MicrosoftExtensionsFileProvidersEmbeddedVersion)" />
   </ItemGroup>
 
 </Project>

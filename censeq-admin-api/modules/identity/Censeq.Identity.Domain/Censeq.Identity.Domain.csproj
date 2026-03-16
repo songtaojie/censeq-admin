@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
 	<Import Project="..\..\..\common.props" />
 
@@ -18,7 +18,7 @@
 		<PackageReference Include="Volo.Abp.Ddd.Domain" Version="$(AbpVersion)" />
 	</ItemGroup>
 	<ItemGroup>
-		<PackageReference Include="Microsoft.Extensions.Identity.Core" Version="8.0.25" />
+		<PackageReference Include="Microsoft.Extensions.Identity.Core" Version="$(MicrosoftExtensionsIdentityCoreVersion)" />
 	</ItemGroup>
 	<ItemGroup>
 	  <ProjectReference Include="..\Censeq.Identity.Domain.Shared\Censeq.Identity.Domain.Shared.csproj" />

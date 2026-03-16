@@ -1,0 +1,30 @@
+<Project>
+  <!-- 非 Volo.Abp 的包版本在此统一管理，Volo.Abp.* 仍使用 version.props 的 $(AbpVersion) -->
+  <PropertyGroup>
+    <!-- Microsoft -->
+    <MicrosoftEntityFrameworkCoreDesignVersion>8.0.16</MicrosoftEntityFrameworkCoreDesignVersion>
+    <MicrosoftExtensionsFileProvidersEmbeddedVersion>8.0.16</MicrosoftExtensionsFileProvidersEmbeddedVersion>
+    <MicrosoftExtensionsHostingVersion>8.0.1</MicrosoftExtensionsHostingVersion>
+    <MicrosoftExtensionsIdentityCoreVersion>8.0.25</MicrosoftExtensionsIdentityCoreVersion>
+    <!-- OpenIddict -->
+    <OpenIddictAbstractionsVersion>5.6.0</OpenIddictAbstractionsVersion>
+    <OpenIddictCoreVersion>5.6.0</OpenIddictCoreVersion>
+    <OpenIddictServerAspNetCoreVersion>5.6.0</OpenIddictServerAspNetCoreVersion>
+    <OpenIddictValidationAspNetCoreVersion>5.6.0</OpenIddictValidationAspNetCoreVersion>
+    <OpenIddictValidationServerIntegrationVersion>5.6.0</OpenIddictValidationServerIntegrationVersion>
+    <!-- Serilog -->
+    <SerilogAspNetCoreVersion>8.0.2</SerilogAspNetCoreVersion>
+    <SerilogExtensionsLoggingVersion>8.0.0</SerilogExtensionsLoggingVersion>
+    <SerilogSinksAsyncVersion>2.0.0</SerilogSinksAsyncVersion>
+    <SerilogSinksConsoleVersion>6.0.0</SerilogSinksConsoleVersion>
+    <SerilogSinksFileVersion>6.0.0</SerilogSinksFileVersion>
+    <!-- Swashbuckle / Knife4j -->
+    <SwashbuckleAspNetCoreVersion>7.1.0</SwashbuckleAspNetCoreVersion>
+    <SwashbuckleAspNetCoreFiltersVersion>8.0.2</SwashbuckleAspNetCoreFiltersVersion>
+    <IGeekFanAspNetCoreKnife4jUIVersion>0.0.16</IGeekFanAspNetCoreKnife4jUIVersion>
+    <!-- 其他 -->
+    <EFCoreNamingConventionsVersion>8.0.3</EFCoreNamingConventionsVersion>
+    <PollyVersion>8.6.6</PollyVersion>
+    <SystemSecurityPrincipalWindowsVersion>5.0.0</SystemSecurityPrincipalWindowsVersion>
+  </PropertyGroup>
+</Project>
