@@ -1,11 +1,11 @@
-﻿using Censeq.Identity.Application.Contracts.Censeq.Identity;
-using System;
+﻿using System;
 using System.Threading.Tasks;
+using Volo.Abp;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Application.Services;
 using Volo.Abp.Users;
 
-namespace Censeq.Identity.Application.Contracts.Censeq.Identity.Integration;
+namespace Censeq.Identity.Integration;
 
 [IntegrationService]
 public interface IIdentityUserIntegrationService : IApplicationService

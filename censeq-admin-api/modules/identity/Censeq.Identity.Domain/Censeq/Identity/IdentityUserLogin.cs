@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using JetBrains.Annotations;
 using Microsoft.AspNetCore.Identity;
 using Volo.Abp.Domain.Entities;
@@ -63,7 +63,7 @@ public class IdentityUserLogin : Entity, IMultiTenant
               userId,
               login.LoginProvider,
               login.ProviderKey,
-              login.ProviderDisplayName,
+              login.ProviderDisplayName!,
               tenantId)
     {
     }

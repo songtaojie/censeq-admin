@@ -3,7 +3,7 @@ using Volo.Abp.Auditing;
 using Volo.Abp.Domain.Entities;
 using Volo.Abp.Validation;
 
-namespace Censeq.Identity.Application.Contracts.Censeq.Identity;
+namespace Censeq.Identity;
 
 public class IdentityUserUpdateDto : IdentityUserCreateOrUpdateDtoBase, IHasConcurrencyStamp
 {

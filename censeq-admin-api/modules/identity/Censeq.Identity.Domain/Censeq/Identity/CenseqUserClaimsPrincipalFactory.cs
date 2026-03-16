@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
@@ -40,7 +40,7 @@ public class CenseqUserClaimsPrincipalFactory : UserClaimsPrincipalFactory<Ident
 
         if (user.TenantId.HasValue)
         {
-            identity.AddIfNotContains(new Claim(AbpClaimTypes.TenantId, user.TenantId.ToString()));
+            identity.AddIfNotContains(new Claim(AbpClaimTypes.TenantId, user.TenantId.ToString()!));
         }
 
         if (!user.Name.IsNullOrWhiteSpace())

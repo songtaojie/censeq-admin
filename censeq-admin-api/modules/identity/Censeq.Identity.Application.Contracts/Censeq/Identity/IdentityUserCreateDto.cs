@@ -2,7 +2,7 @@
 using Volo.Abp.Auditing;
 using Volo.Abp.Validation;
 
-namespace Censeq.Identity.Application.Contracts.Censeq.Identity;
+namespace Censeq.Identity;
 
 public class IdentityUserCreateDto : IdentityUserCreateOrUpdateDtoBase
 {

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -77,7 +77,7 @@ public class OrganizationUnit : FullAuditedAggregateRoot<Guid>, IMultiTenant, IH
     {
         if (numbers.IsNullOrEmpty())
         {
-            return null;
+            return null!;
         }
 
         return numbers.Select(number => number.ToString(new string('0', OrganizationUnitConsts.CodeUnitLength))).JoinAsString(".");
@@ -124,7 +124,7 @@ public class OrganizationUnit : FullAuditedAggregateRoot<Guid>, IMultiTenant, IH
 
         if (code.Length == parentCode.Length)
         {
-            return null;
+            return null!;
         }
 
         return code.Substring(parentCode.Length + 1);
@@ -179,7 +179,7 @@ public class OrganizationUnit : FullAuditedAggregateRoot<Guid>, IMultiTenant, IH
         var splittedCode = code.Split('.');
         if (splittedCode.Length == 1)
         {
-            return null;
+            return null!;
         }
 
         return splittedCode.Take(splittedCode.Length - 1).JoinAsString(".");

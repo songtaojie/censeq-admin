@@ -2,7 +2,7 @@
 using Volo.Abp.Localization;
 using Censeq.Identity.Localization;
 
-namespace Censeq.Identity.Application.Contracts.Censeq.Identity;
+namespace Censeq.Identity;
 
 public class IdentityPermissionDefinitionProvider : PermissionDefinitionProvider
 {

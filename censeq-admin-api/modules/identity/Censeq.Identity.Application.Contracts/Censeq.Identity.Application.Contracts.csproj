@@ -1,24 +1,25 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
-  <Import Project="..\..\..\common.props" />
+	<Import Project="..\..\..\common.props" />
 
-  <PropertyGroup>
-    <AssemblyName>Censeq.Identity.Application.Contracts</AssemblyName>
-    <PackageId>Censeq.Identity.Application.Contracts</PackageId>
-    <AssetTargetFallback>$(AssetTargetFallback);portable-net45+win8+wp8+wpa81;</AssetTargetFallback>
-    <GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
-    <GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
-    <GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
-  </PropertyGroup>
+	<PropertyGroup>
+		<AssemblyName>Censeq.Identity.Application.Contracts</AssemblyName>
+		<PackageId>Censeq.Identity.Application.Contracts</PackageId>
+		<AssetTargetFallback>$(AssetTargetFallback);portable-net45+win8+wp8+wpa81;</AssetTargetFallback>
+		<GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
+		<GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
+		<GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
+		<RootNamespace />
+	</PropertyGroup>
 
 	<ItemGroup>
 		<PackageReference Include="Volo.Abp.Users.Abstractions" Version="$(AbpVersion)" />
 		<PackageReference Include="Volo.Abp.Authorization" Version="$(AbpVersion)" />
 	</ItemGroup>
-	
-  <ItemGroup>
-    <ProjectReference Include="..\..\permission-management\Censeq.PermissionManagement.Application.Contracts\Censeq.PermissionManagement.Application.Contracts.csproj" />
-    <ProjectReference Include="..\Censeq.Identity.Domain.Shared\Censeq.Identity.Domain.Shared.csproj" />
-  </ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\..\permission-management\Censeq.PermissionManagement.Application.Contracts\Censeq.PermissionManagement.Application.Contracts.csproj" />
+		<ProjectReference Include="..\Censeq.Identity.Domain.Shared\Censeq.Identity.Domain.Shared.csproj" />
+	</ItemGroup>
 
 </Project>

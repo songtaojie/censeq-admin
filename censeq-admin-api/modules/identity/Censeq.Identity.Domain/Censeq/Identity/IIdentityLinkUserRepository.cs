@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
@@ -15,7 +15,7 @@ public interface IIdentityLinkUserRepository : IBasicRepository<IdentityLinkUser
 
     Task<List<IdentityLinkUser>> GetListAsync(
         IdentityLinkUserInfo linkUserInfo,
-        List<IdentityLinkUserInfo> excludes = null,
+        List<IdentityLinkUserInfo>? excludes = null,
         CancellationToken cancellationToken = default);
 
     Task DeleteAsync(

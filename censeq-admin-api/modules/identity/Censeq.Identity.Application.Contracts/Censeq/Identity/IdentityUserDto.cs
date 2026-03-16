@@ -4,7 +4,7 @@ using Volo.Abp.Auditing;
 using Volo.Abp.Domain.Entities;
 using Volo.Abp.MultiTenancy;
 
-namespace Censeq.Identity.Application.Contracts.Censeq.Identity;
+namespace Censeq.Identity;
 
 public class IdentityUserDto : ExtensibleFullAuditedEntityDto<Guid>, IMultiTenant, IHasConcurrencyStamp, IHasEntityVersion
 {

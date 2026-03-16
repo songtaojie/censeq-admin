@@ -4,7 +4,7 @@ using JetBrains.Annotations;
 using Volo.Abp.ObjectExtending;
 using Volo.Abp.Validation;
 
-namespace Censeq.Identity.Application.Contracts.Censeq.Identity;
+namespace Censeq.Identity;
 
 public abstract class IdentityUserCreateOrUpdateDtoBase : ExtensibleObject
 {

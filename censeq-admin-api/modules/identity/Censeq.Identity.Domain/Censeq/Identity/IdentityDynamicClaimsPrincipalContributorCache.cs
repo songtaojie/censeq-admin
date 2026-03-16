@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -58,7 +58,7 @@ public class IdentityDynamicClaimsPrincipalContributorCache : ITransientDependen
             return emptyCacheItem;
         }
 
-        return await DynamicClaimCache.GetOrAddAsync(AbpDynamicClaimCacheItem.CalculateCacheKey(userId, tenantId), async () =>
+        return (await DynamicClaimCache.GetOrAddAsync(AbpDynamicClaimCacheItem.CalculateCacheKey(userId, tenantId), async () =>
         {
             using (CurrentTenant.Change(tenantId))
             {
@@ -86,7 +86,7 @@ public class IdentityDynamicClaimsPrincipalContributorCache : ITransientDependen
         }, () => new DistributedCacheEntryOptions
         {
             AbsoluteExpirationRelativeToNow = CacheOptions.Value.CacheAbsoluteExpiration
-        });
+        }))!;
     }
 
     public virtual async Task ClearAsync(Guid userId, Guid? tenantId = null)

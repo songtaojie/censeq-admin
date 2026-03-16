@@ -1,18 +1,18 @@
 ﻿using Volo.Abp.Authorization;
 using Volo.Abp.Modularity;
-using Volo.Abp.ObjectExtending;
 using Volo.Abp.ObjectExtending.Modularity;
-using Volo.Abp.PermissionManagement;
 using Volo.Abp.Users;
 using Volo.Abp.Threading;
+using Censeq.PermissionManagement;
+using Censeq.Identity.ObjectExtending;
 
-namespace Censeq.Identity.Application.Contracts.Censeq.Identity;
+namespace Censeq.Identity;
 
 [DependsOn(
     typeof(CenseqIdentityDomainSharedModule),
     typeof(AbpUsersAbstractionModule),
     typeof(AbpAuthorizationModule),
-    typeof(AbpPermissionManagementApplicationContractsModule)
+    typeof(CenseqPermissionManagementApplicationContractsModule)
     )]
 public class CenseqIdentityApplicationContractsModule : AbpModule
 {

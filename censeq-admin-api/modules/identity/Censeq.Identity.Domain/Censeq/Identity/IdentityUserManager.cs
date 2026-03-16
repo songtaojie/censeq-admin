@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
@@ -325,7 +325,7 @@ public class IdentityUserManager : UserManager<IdentityUser>, IDomainService
         await identityUserStore.SetTokenAsync(user, await identityUserStore.GetInternalLoginProviderAsync(), await identityUserStore.GetRecoveryCodeTokenNameAsync(), string.Empty, CancellationToken);
     }
 
-    public async override Task<IdentityResult> SetEmailAsync(IdentityUser user, string email)
+    public async override Task<IdentityResult> SetEmailAsync(IdentityUser user, string? email)
     {
         var oldMail = user.Email;
 
@@ -340,7 +340,7 @@ public class IdentityUserManager : UserManager<IdentityUser>, IDomainService
                 {
                     Id = user.Id,
                     TenantId = user.TenantId,
-                    Email = email,
+                    Email = email!,
                     OldEmail = oldMail
                 });
         }
@@ -348,7 +348,7 @@ public class IdentityUserManager : UserManager<IdentityUser>, IDomainService
         return result;
     }
 
-    public async override Task<IdentityResult> SetUserNameAsync(IdentityUser user, string userName)
+    public async override Task<IdentityResult> SetUserNameAsync(IdentityUser user, string? userName)
     {
         var oldUserName = user.UserName;
 
@@ -363,7 +363,7 @@ public class IdentityUserManager : UserManager<IdentityUser>, IDomainService
                 {
                     Id = user.Id,
                     TenantId = user.TenantId,
-                    UserName = userName,
+                    UserName = userName!,
                     OldUserName = oldUserName
                 });
         }
@@ -383,7 +383,7 @@ public class IdentityUserManager : UserManager<IdentityUser>, IDomainService
         if (targetRole != null)
         {
             Logger.LogDebug($"Remove dynamic claims cache for users of role: {targetRoleId}");
-            userIdList = await UserRepository.GetUserIdListByRoleIdAsync(targetRoleId.Value, cancellationToken: CancellationToken);
+            userIdList = await UserRepository.GetUserIdListByRoleIdAsync(targetRoleId!.Value, cancellationToken: CancellationToken);
             await DynamicClaimCache.RemoveManyAsync(userIdList.Select(userId => AbpDynamicClaimCacheItem.CalculateCacheKey(userId, targetRole.TenantId)), token: CancellationToken);
         }
 
@@ -402,7 +402,7 @@ public class IdentityUserManager : UserManager<IdentityUser>, IDomainService
         if (targetOrganization != null)
         {
             Logger.LogDebug($"Remove dynamic claims cache for users of organization: {targetOrganizationId}");
-            userIdList = await OrganizationUnitRepository.GetMemberIdsAsync(targetOrganizationId.Value, cancellationToken: CancellationToken);
+            userIdList = await OrganizationUnitRepository.GetMemberIdsAsync(targetOrganizationId!.Value, cancellationToken: CancellationToken);
             await DynamicClaimCache.RemoveManyAsync(userIdList.Select(userId => AbpDynamicClaimCacheItem.CalculateCacheKey(userId, targetOrganization.TenantId)), token: CancellationToken);
         }
 

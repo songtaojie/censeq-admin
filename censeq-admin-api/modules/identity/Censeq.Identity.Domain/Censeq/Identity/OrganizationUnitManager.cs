@@ -1,4 +1,4 @@
-﻿using Microsoft.Extensions.Localization;
+using Microsoft.Extensions.Localization;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -66,7 +66,7 @@ public class OrganizationUnitManager : DomainService
             : null;
 
         return OrganizationUnit.AppendCode(
-            parentCode,
+            parentCode!,
             OrganizationUnit.CreateCode(1)
         );
     }
@@ -74,7 +74,7 @@ public class OrganizationUnitManager : DomainService
     public virtual async Task<OrganizationUnit> GetLastChildOrNullAsync(Guid? parentId)
     {
         var children = await OrganizationUnitRepository.GetChildrenAsync(parentId);
-        return children.OrderBy(c => c.Code).LastOrDefault();
+        return children.OrderBy(c => c.Code).LastOrDefault()!;
     }
 
     [UnitOfWork]
@@ -132,7 +132,7 @@ public class OrganizationUnitManager : DomainService
     public virtual async Task<string> GetCodeOrDefaultAsync(Guid id)
     {
         var ou = await OrganizationUnitRepository.FindAsync(id);
-        return ou?.Code;
+        return (ou?.Code)!;
     }
 
     protected virtual async Task ValidateOrganizationUnitAsync(OrganizationUnit organizationUnit)

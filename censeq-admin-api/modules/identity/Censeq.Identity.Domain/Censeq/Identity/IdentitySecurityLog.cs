@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Volo.Abp.Domain.Entities;
 using Volo.Abp.Guids;
 using Volo.Abp.MultiTenancy;
@@ -41,21 +41,21 @@ public class IdentitySecurityLog : AggregateRoot<Guid>, IMultiTenant
         : base(guidGenerator.Create())
     {
         TenantId = securityLogInfo.TenantId;
-        TenantName = securityLogInfo.TenantName.Truncate(IdentitySecurityLogConsts.MaxTenantNameLength);
+        TenantName = securityLogInfo.TenantName.Truncate(IdentitySecurityLogConsts.MaxTenantNameLength)!;
 
-        ApplicationName = securityLogInfo.ApplicationName.Truncate(IdentitySecurityLogConsts.MaxApplicationNameLength);
-        Identity = securityLogInfo.Identity.Truncate(IdentitySecurityLogConsts.MaxIdentityLength);
-        Action = securityLogInfo.Action.Truncate(IdentitySecurityLogConsts.MaxActionLength);
+        ApplicationName = securityLogInfo.ApplicationName.Truncate(IdentitySecurityLogConsts.MaxApplicationNameLength)!;
+        Identity = securityLogInfo.Identity.Truncate(IdentitySecurityLogConsts.MaxIdentityLength)!;
+        Action = securityLogInfo.Action.Truncate(IdentitySecurityLogConsts.MaxActionLength)!;
 
         UserId = securityLogInfo.UserId;
-        UserName = securityLogInfo.UserName.Truncate(IdentitySecurityLogConsts.MaxUserNameLength);
+        UserName = securityLogInfo.UserName.Truncate(IdentitySecurityLogConsts.MaxUserNameLength)!;
 
         CreationTime = securityLogInfo.CreationTime;
 
-        ClientIpAddress = securityLogInfo.ClientIpAddress.Truncate(IdentitySecurityLogConsts.MaxClientIpAddressLength);
-        ClientId = securityLogInfo.ClientId.Truncate(IdentitySecurityLogConsts.MaxClientIdLength);
-        CorrelationId = securityLogInfo.CorrelationId.Truncate(IdentitySecurityLogConsts.MaxCorrelationIdLength);
-        BrowserInfo = securityLogInfo.BrowserInfo.Truncate(IdentitySecurityLogConsts.MaxBrowserInfoLength);
+        ClientIpAddress = securityLogInfo.ClientIpAddress.Truncate(IdentitySecurityLogConsts.MaxClientIpAddressLength)!;
+        ClientId = securityLogInfo.ClientId.Truncate(IdentitySecurityLogConsts.MaxClientIdLength)!;
+        CorrelationId = securityLogInfo.CorrelationId.Truncate(IdentitySecurityLogConsts.MaxCorrelationIdLength)!;
+        BrowserInfo = securityLogInfo.BrowserInfo.Truncate(IdentitySecurityLogConsts.MaxBrowserInfoLength)!;
 
         foreach (var property in securityLogInfo.ExtraProperties)
         {

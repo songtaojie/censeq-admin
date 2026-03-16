@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using Volo.Abp.Domain.Entities;
 using Volo.Abp.MultiTenancy;
@@ -80,7 +80,7 @@ public class IdentitySession : BasicAggregateRoot<Guid>, IMultiTenant
     private static string JoinAsString(IEnumerable<string> list)
     {
         var serialized = string.Join(",", list);
-        return serialized.IsNullOrWhiteSpace() ? null : serialized;
+        return serialized.IsNullOrWhiteSpace() ? null! : serialized;
     }
 
     private string[] GetArrayFromString(string str)

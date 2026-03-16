@@ -1,6 +1,6 @@
 ﻿using Volo.Abp.Reflection;
 
-namespace Censeq.Identity.Application.Contracts.Censeq.Identity;
+namespace Censeq.Identity;
 
 public static class IdentityPermissions
 {

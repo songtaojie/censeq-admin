@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
@@ -17,18 +17,18 @@ public interface IIdentitySessionRepository : IBasicRepository<IdentitySession, 
     Task<bool> ExistAsync(string sessionId, CancellationToken cancellationToken = default);
 
     Task<List<IdentitySession>> GetListAsync(
-        string sorting = null,
+        string? sorting = null,
         int maxResultCount = int.MaxValue,
         int skipCount = 0,
         Guid? userId = null,
-        string device = null,
-        string clientId = null,
+        string? device = null,
+        string? clientId = null,
         CancellationToken cancellationToken = default);
 
     Task<long> GetCountAsync(
         Guid? userId = null,
-        string device = null,
-        string clientId = null,
+        string? device = null,
+        string? clientId = null,
         CancellationToken cancellationToken = default);
 
     Task DeleteAllAsync(Guid userId, Guid? exceptSessionId = null, CancellationToken cancellationToken = default);

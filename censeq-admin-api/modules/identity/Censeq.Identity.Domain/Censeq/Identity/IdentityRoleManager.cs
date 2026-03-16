@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
@@ -64,7 +64,7 @@ public class IdentityRoleManager : RoleManager<IdentityRole>, IDomainService
         return role;
     }
 
-    public async override Task<IdentityResult> SetRoleNameAsync(IdentityRole role, string name)
+    public async override Task<IdentityResult> SetRoleNameAsync(IdentityRole role, string? name)
     {
         if (role.IsStatic && role.Name != name)
         {

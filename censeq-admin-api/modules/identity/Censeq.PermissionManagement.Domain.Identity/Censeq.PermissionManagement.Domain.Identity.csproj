@@ -1,22 +1,23 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
-  <Import Project="..\..\..\common.props" />
+	<Import Project="..\..\..\common.props" />
 
-  <PropertyGroup>
-    <TargetFrameworks>netstandard2.0;netstandard2.1;net8.0</TargetFrameworks>
-    <AssemblyName>Censeq.PermissionManagement.Domain.Identity</AssemblyName>
-    <PackageId>Censeq.PermissionManagement.Domain.Identity</PackageId>
-    <RootNamespace>Censeq.PermissionManagement.Identity</RootNamespace>
-    <AssetTargetFallback>$(AssetTargetFallback);portable-net45+win8+wp8+wpa81;</AssetTargetFallback>
-    <GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
-    <GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
-    <GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
-  </PropertyGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\Censeq.Identity.Domain.Shared\Censeq.Identity.Domain.Shared.csproj" />
-    <ProjectReference Include="..\..\..\users\src\Volo.Abp.Users.Abstractions\Volo.Abp.Users.Abstractions.csproj" />
-    <ProjectReference Include="..\..\..\permission-management\src\Volo.Abp.PermissionManagement.Domain\Volo.Abp.PermissionManagement.Domain.csproj" />
-  </ItemGroup>
+	<PropertyGroup>
+		<AssemblyName>Censeq.PermissionManagement.Domain.Identity</AssemblyName>
+		<PackageId>Censeq.PermissionManagement.Domain.Identity</PackageId>
+		<RootNamespace>Censeq.PermissionManagement.Identity</RootNamespace>
+		<AssetTargetFallback>$(AssetTargetFallback);portable-net45+win8+wp8+wpa81;</AssetTargetFallback>
+		<GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
+		<GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
+		<GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
+		<RootNamespace />
+	</PropertyGroup>
+	<ItemGroup>
+		<PackageReference Include="Volo.Abp.Users.Abstractions" Version="$(AbpVersion)" />
+	</ItemGroup>
+	<ItemGroup>
+		<ProjectReference Include="..\Censeq.Identity.Domain.Shared\Censeq.Identity.Domain.Shared.csproj" />
+		<ProjectReference Include="..\..\permission-management\Censeq.PermissionManagement.Domain\Censeq.PermissionManagement.Domain.csproj" />
+	</ItemGroup>
 
 </Project>

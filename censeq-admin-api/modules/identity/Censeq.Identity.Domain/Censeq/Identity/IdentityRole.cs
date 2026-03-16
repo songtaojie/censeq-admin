@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -95,7 +95,7 @@ public class IdentityRole : AggregateRoot<Guid>, IMultiTenant, IHasEntityVersion
     {
         Check.NotNull(claim, nameof(claim));
 
-        return Claims.FirstOrDefault(c => c.ClaimType == claim.Type && c.ClaimValue == claim.Value);
+        return Claims.FirstOrDefault(c => c.ClaimType == claim.Type && c.ClaimValue == claim.Value)!;
     }
 
     public virtual void RemoveClaim([NotNull] Claim claim)

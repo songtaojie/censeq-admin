@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
@@ -32,7 +32,7 @@ public class IdentityUserRepositoryExternalUserLookupServiceProvider : IExternal
                     includeDetails: false,
                     cancellationToken: cancellationToken
                 )
-            )?.ToAbpUserData();
+            )?.ToAbpUserData()!;
     }
 
     public virtual async Task<IUserData> FindByUserNameAsync(
@@ -45,12 +45,12 @@ public class IdentityUserRepositoryExternalUserLookupServiceProvider : IExternal
                     includeDetails: false,
                     cancellationToken: cancellationToken
                 )
-            )?.ToAbpUserData();
+            )?.ToAbpUserData()!;
     }
 
     public virtual async Task<List<IUserData>> SearchAsync(
-        string sorting = null,
-        string filter = null,
+        string? sorting = null,
+        string? filter = null,
         int maxResultCount = int.MaxValue,
         int skipCount = 0,
         CancellationToken cancellationToken = default)
@@ -68,7 +68,7 @@ public class IdentityUserRepositoryExternalUserLookupServiceProvider : IExternal
     }
 
     public async Task<long> GetCountAsync(
-        string filter = null,
+        string? filter = null,
         CancellationToken cancellationToken = new CancellationToken())
     {
         return await UserRepository.GetCountAsync(filter, cancellationToken: cancellationToken);

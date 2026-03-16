@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Security.Principal;
@@ -24,7 +24,7 @@ public class IdentityDynamicClaimsPrincipalContributor : AbpDynamicClaimsPrincip
         AbpDynamicClaimCacheItem dynamicClaims;
         try
         {
-            dynamicClaims = await dynamicClaimsCache.GetAsync(userId.Value, identity.FindTenantId());
+            dynamicClaims = await dynamicClaimsCache.GetAsync(userId.Value, identity!.FindTenantId());
         }
         catch (EntityNotFoundException e)
         {
@@ -40,6 +40,6 @@ public class IdentityDynamicClaimsPrincipalContributor : AbpDynamicClaimsPrincip
             return;
         }
 
-        await AddDynamicClaimsAsync(context, identity, dynamicClaims.Claims);
+        await AddDynamicClaimsAsync(context, identity!, dynamicClaims.Claims);
     }
 }

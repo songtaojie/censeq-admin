@@ -1,4 +1,4 @@
-﻿using JetBrains.Annotations;
+using JetBrains.Annotations;
 using System;
 using Volo.Abp.Domain.Entities;
 
@@ -12,11 +12,11 @@ public class IdentityClaimType : AggregateRoot<Guid>
 
     public virtual bool IsStatic { get; protected set; }
 
-    public virtual string Regex { get; set; }
+    public virtual string? Regex { get; set; }
 
-    public virtual string RegexDescription { get; set; }
+    public virtual string? RegexDescription { get; set; }
 
-    public virtual string Description { get; set; }
+    public virtual string? Description { get; set; }
 
     public virtual IdentityClaimValueType ValueType { get; set; }
 
@@ -30,9 +30,9 @@ public class IdentityClaimType : AggregateRoot<Guid>
         [NotNull] string name,
         bool required = false,
         bool isStatic = false,
-        [CanBeNull] string regex = null,
-        [CanBeNull] string regexDescription = null,
-        [CanBeNull] string description = null,
+        [CanBeNull] string? regex = null,
+        [CanBeNull] string? regexDescription = null,
+        [CanBeNull] string? description = null,
         IdentityClaimValueType valueType = IdentityClaimValueType.String)
     {
         Id = id;

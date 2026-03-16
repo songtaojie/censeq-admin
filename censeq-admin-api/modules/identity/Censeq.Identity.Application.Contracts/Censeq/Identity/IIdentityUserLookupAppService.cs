@@ -4,7 +4,7 @@ using Volo.Abp.Application.Dtos;
 using Volo.Abp.Application.Services;
 using Volo.Abp.Users;
 
-namespace Censeq.Identity.Application.Contracts.Censeq.Identity;
+namespace Censeq.Identity;
 
 [Obsolete("Use IIdentityUserIntegrationService for module-to-module (or service-to-service) communication.")]
 public interface IIdentityUserLookupAppService : IApplicationService

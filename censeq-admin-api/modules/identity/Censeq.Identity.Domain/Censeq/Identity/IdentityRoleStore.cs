@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
@@ -33,7 +33,7 @@ public class IdentityRoleStore :
         IIdentityRoleRepository roleRepository,
         ILogger<IdentityRoleStore> logger,
         IGuidGenerator guidGenerator,
-        IdentityErrorDescriber describer = null)
+        IdentityErrorDescriber? describer = null)
     {
         RoleRepository = roleRepository;
         Logger = logger;
@@ -143,13 +143,13 @@ public class IdentityRoleStore :
     /// <param name="role">The role whose name should be returned.</param>
     /// <param name="cancellationToken">The <see cref="CancellationToken"/> used to propagate notifications that the operation should be canceled.</param>
     /// <returns>A <see cref="Task{TResult}"/> that contains the name of the role.</returns>
-    public virtual Task<string> GetRoleNameAsync([NotNull] IdentityRole role, CancellationToken cancellationToken = default)
+    public virtual Task<string?> GetRoleNameAsync([NotNull] IdentityRole role, CancellationToken cancellationToken = default)
     {
         cancellationToken.ThrowIfCancellationRequested();
 
         Check.NotNull(role, nameof(role));
 
-        return Task.FromResult(role.Name);
+        return Task.FromResult<string?>(role.Name);
     }
 
     /// <summary>
@@ -159,13 +159,13 @@ public class IdentityRoleStore :
     /// <param name="roleName">The name of the role.</param>
     /// <param name="cancellationToken">The <see cref="CancellationToken"/> used to propagate notifications that the operation should be canceled.</param>
     /// <returns>The <see cref="Task"/> that represents the asynchronous operation.</returns>
-    public virtual Task SetRoleNameAsync([NotNull] IdentityRole role, string roleName, CancellationToken cancellationToken = default)
+    public virtual Task SetRoleNameAsync([NotNull] IdentityRole role, string? roleName, CancellationToken cancellationToken = default)
     {
         cancellationToken.ThrowIfCancellationRequested();
 
         Check.NotNull(role, nameof(role));
 
-        role.ChangeName(roleName);
+        role.ChangeName(roleName!);
         return Task.CompletedTask;
     }
 
@@ -175,11 +175,11 @@ public class IdentityRoleStore :
     /// <param name="id">The role ID to look for.</param>
     /// <param name="cancellationToken">The <see cref="CancellationToken"/> used to propagate notifications that the operation should be canceled.</param>
     /// <returns>A <see cref="Task{TResult}"/> that result of the look up.</returns>
-    public virtual Task<IdentityRole> FindByIdAsync(string id, CancellationToken cancellationToken = default)
+    public virtual async Task<IdentityRole?> FindByIdAsync(string id, CancellationToken cancellationToken = default)
     {
         cancellationToken.ThrowIfCancellationRequested();
 
-        return RoleRepository.FindAsync(Guid.Parse(id), cancellationToken: cancellationToken);
+        return await RoleRepository.FindAsync(Guid.Parse(id), cancellationToken: cancellationToken);
     }
 
     /// <summary>
@@ -188,13 +188,13 @@ public class IdentityRoleStore :
     /// <param name="normalizedName">The normalized role name to look for.</param>
     /// <param name="cancellationToken">The <see cref="CancellationToken"/> used to propagate notifications that the operation should be canceled.</param>
     /// <returns>A <see cref="Task{TResult}"/> that result of the look up.</returns>
-    public virtual Task<IdentityRole> FindByNameAsync([NotNull] string normalizedName, CancellationToken cancellationToken = default)
+    public virtual Task<IdentityRole?> FindByNameAsync([NotNull] string normalizedName, CancellationToken cancellationToken = default)
     {
         cancellationToken.ThrowIfCancellationRequested();
 
         Check.NotNull(normalizedName, nameof(normalizedName));
 
-        return RoleRepository.FindByNormalizedNameAsync(normalizedName, cancellationToken: cancellationToken);
+        return RoleRepository.FindByNormalizedNameAsync(normalizedName, cancellationToken: cancellationToken)!;
     }
 
     /// <summary>
@@ -203,13 +203,13 @@ public class IdentityRoleStore :
     /// <param name="role">The role whose normalized name should be retrieved.</param>
     /// <param name="cancellationToken">The <see cref="CancellationToken"/> used to propagate notifications that the operation should be canceled.</param>
     /// <returns>A <see cref="Task{TResult}"/> that contains the name of the role.</returns>
-    public virtual Task<string> GetNormalizedRoleNameAsync([NotNull] IdentityRole role, CancellationToken cancellationToken = default)
+    public virtual Task<string?> GetNormalizedRoleNameAsync([NotNull] IdentityRole role, CancellationToken cancellationToken = default)
     {
         cancellationToken.ThrowIfCancellationRequested();
 
         Check.NotNull(role, nameof(role));
 
-        return Task.FromResult(role.NormalizedName);
+        return Task.FromResult<string?>(role.NormalizedName);
     }
 
     /// <summary>
@@ -219,13 +219,13 @@ public class IdentityRoleStore :
     /// <param name="normalizedName">The normalized name to set</param>
     /// <param name="cancellationToken">The <see cref="CancellationToken"/> used to propagate notifications that the operation should be canceled.</param>
     /// <returns>The <see cref="Task"/> that represents the asynchronous operation.</returns>
-    public virtual Task SetNormalizedRoleNameAsync([NotNull] IdentityRole role, string normalizedName, CancellationToken cancellationToken = default)
+    public virtual Task SetNormalizedRoleNameAsync([NotNull] IdentityRole role, string? normalizedName, CancellationToken cancellationToken = default)
     {
         cancellationToken.ThrowIfCancellationRequested();
 
         Check.NotNull(role, nameof(role));
 
-        role.NormalizedName = normalizedName;
+        role.NormalizedName = normalizedName!;
 
         return Task.CompletedTask;
     }

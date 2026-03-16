@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
@@ -63,7 +63,7 @@ public class IdentityUserStore :
         IGuidGenerator guidGenerator,
         ILogger<IdentityRoleStore> logger,
         ILookupNormalizer lookupNormalizer,
-        IdentityErrorDescriber describer = null)
+        IdentityErrorDescriber? describer = null)
     {
         UserRepository = userRepository;
         RoleRepository = roleRepository;
@@ -95,13 +95,13 @@ public class IdentityUserStore :
     /// <param name="user">The user whose name should be retrieved.</param>
     /// <param name="cancellationToken">The <see cref="CancellationToken"/> used to propagate notifications that the operation should be canceled.</param>
     /// <returns>The <see cref="Task"/> that represents the asynchronous operation, containing the name for the specified <paramref name="user"/>.</returns>
-    public virtual Task<string> GetUserNameAsync([NotNull] IdentityUser user, CancellationToken cancellationToken = default)
+    public virtual Task<string?> GetUserNameAsync([NotNull] IdentityUser user, CancellationToken cancellationToken = default)
     {
         cancellationToken.ThrowIfCancellationRequested();
 
         Check.NotNull(user, nameof(user));
 
-        return Task.FromResult(user.UserName);
+        return Task.FromResult<string?>(user.UserName);
     }
 
     /// <summary>
@@ -111,13 +111,13 @@ public class IdentityUserStore :
     /// <param name="userName">The user name to set.</param>
     /// <param name="cancellationToken">The <see cref="CancellationToken"/> used to propagate notifications that the operation should be canceled.</param>
     /// <returns>The <see cref="Task"/> that represents the asynchronous operation.</returns>
-    public virtual Task SetUserNameAsync([NotNull] IdentityUser user, string userName, CancellationToken cancellationToken = default)
+    public virtual Task SetUserNameAsync([NotNull] IdentityUser user, string? userName, CancellationToken cancellationToken = default)
     {
         cancellationToken.ThrowIfCancellationRequested();
 
         Check.NotNull(user, nameof(user));
 
-        user.UserName = userName;
+        user.UserName = userName!;
 
         return Task.CompletedTask;
     }
@@ -128,13 +128,13 @@ public class IdentityUserStore :
     /// <param name="user">The user whose normalized name should be retrieved.</param>
     /// <param name="cancellationToken">The <see cref="CancellationToken"/> used to propagate notifications that the operation should be canceled.</param>
     /// <returns>The <see cref="Task"/> that represents the asynchronous operation, containing the normalized user name for the specified <paramref name="user"/>.</returns>
-    public virtual Task<string> GetNormalizedUserNameAsync([NotNull] IdentityUser user, CancellationToken cancellationToken = default)
+    public virtual Task<string?> GetNormalizedUserNameAsync([NotNull] IdentityUser user, CancellationToken cancellationToken = default)
     {
         cancellationToken.ThrowIfCancellationRequested();
 
         Check.NotNull(user, nameof(user));
 
-        return Task.FromResult(user.NormalizedUserName);
+        return Task.FromResult<string?>(user.NormalizedUserName);
     }
 
     /// <summary>
@@ -144,13 +144,13 @@ public class IdentityUserStore :
     /// <param name="normalizedName">The normalized name to set.</param>
     /// <param name="cancellationToken">The <see cref="CancellationToken"/> used to propagate notifications that the operation should be canceled.</param>
     /// <returns>The <see cref="Task"/> that represents the asynchronous operation.</returns>
-    public virtual Task SetNormalizedUserNameAsync([NotNull] IdentityUser user, string normalizedName, CancellationToken cancellationToken = default)
+    public virtual Task SetNormalizedUserNameAsync([NotNull] IdentityUser user, string? normalizedName, CancellationToken cancellationToken = default)
     {
         cancellationToken.ThrowIfCancellationRequested();
 
         Check.NotNull(user, nameof(user));
 
-        user.NormalizedUserName = normalizedName;
+        user.NormalizedUserName = normalizedName!;
 
         return Task.CompletedTask;
     }
@@ -230,11 +230,11 @@ public class IdentityUserStore :
     /// <returns>
     /// The <see cref="Task"/> that represents the asynchronous operation, containing the user matching the specified <paramref name="userId"/> if it exists.
     /// </returns>
-    public virtual Task<IdentityUser> FindByIdAsync(string userId, CancellationToken cancellationToken = default)
+    public virtual async Task<IdentityUser?> FindByIdAsync(string userId, CancellationToken cancellationToken = default)
     {
         cancellationToken.ThrowIfCancellationRequested();
 
-        return UserRepository.FindAsync(Guid.Parse(userId), cancellationToken: cancellationToken);
+        return await UserRepository.FindAsync(Guid.Parse(userId), cancellationToken: cancellationToken);
     }
 
     /// <summary>
@@ -245,13 +245,13 @@ public class IdentityUserStore :
     /// <returns>
     /// The <see cref="Task"/> that represents the asynchronous operation, containing the user matching the specified <paramref name="normalizedUserName"/> if it exists.
     /// </returns>
-    public virtual Task<IdentityUser> FindByNameAsync([NotNull] string normalizedUserName, CancellationToken cancellationToken = default)
+    public virtual Task<IdentityUser?> FindByNameAsync([NotNull] string normalizedUserName, CancellationToken cancellationToken = default)
     {
         cancellationToken.ThrowIfCancellationRequested();
 
         Check.NotNull(normalizedUserName, nameof(normalizedUserName));
 
-        return UserRepository.FindByNormalizedUserNameAsync(normalizedUserName, includeDetails: false, cancellationToken: cancellationToken);
+        return UserRepository.FindByNormalizedUserNameAsync(normalizedUserName, includeDetails: false, cancellationToken: cancellationToken)!;
     }
 
     /// <summary>
@@ -261,13 +261,13 @@ public class IdentityUserStore :
     /// <param name="passwordHash">The password hash to set.</param>
     /// <param name="cancellationToken">The <see cref="CancellationToken"/> used to propagate notifications that the operation should be canceled.</param>
     /// <returns>The <see cref="Task"/> that represents the asynchronous operation.</returns>
-    public virtual Task SetPasswordHashAsync([NotNull] IdentityUser user, string passwordHash, CancellationToken cancellationToken = default)
+    public virtual Task SetPasswordHashAsync([NotNull] IdentityUser user, string? passwordHash, CancellationToken cancellationToken = default)
     {
         cancellationToken.ThrowIfCancellationRequested();
 
         Check.NotNull(user, nameof(user));
 
-        user.PasswordHash = passwordHash;
+        user.PasswordHash = passwordHash!;
 
         user.SetLastPasswordChangeTime(DateTime.UtcNow);
 
@@ -280,13 +280,13 @@ public class IdentityUserStore :
     /// <param name="user">The user to retrieve the password hash for.</param>
     /// <param name="cancellationToken">The <see cref="CancellationToken"/> used to propagate notifications that the operation should be canceled.</param>
     /// <returns>A <see cref="Task{TResult}"/> that contains the password hash for the user.</returns>
-    public virtual Task<string> GetPasswordHashAsync([NotNull] IdentityUser user, CancellationToken cancellationToken = default)
+    public virtual Task<string?> GetPasswordHashAsync([NotNull] IdentityUser user, CancellationToken cancellationToken = default)
     {
         cancellationToken.ThrowIfCancellationRequested();
 
         Check.NotNull(user, nameof(user));
 
-        return Task.FromResult(user.PasswordHash);
+        return Task.FromResult<string?>(user.PasswordHash);
     }
 
     /// <summary>
@@ -550,14 +550,14 @@ public class IdentityUserStore :
     /// <returns>
     /// The <see cref="Task"/> for the asynchronous operation, containing the user, if any which matched the specified login provider and key.
     /// </returns>
-    public virtual Task<IdentityUser> FindByLoginAsync([NotNull] string loginProvider, [NotNull] string providerKey, CancellationToken cancellationToken = default)
+    public virtual Task<IdentityUser?> FindByLoginAsync([NotNull] string loginProvider, [NotNull] string providerKey, CancellationToken cancellationToken = default)
     {
         cancellationToken.ThrowIfCancellationRequested();
 
         Check.NotNull(loginProvider, nameof(loginProvider));
         Check.NotNull(providerKey, nameof(providerKey));
 
-        return UserRepository.FindByLoginAsync(loginProvider, providerKey, cancellationToken: cancellationToken);
+        return UserRepository.FindByLoginAsync(loginProvider, providerKey, cancellationToken: cancellationToken)!;
     }
 
     /// <summary>
@@ -604,7 +604,7 @@ public class IdentityUserStore :
     /// <param name="email">The email to set.</param>
     /// <param name="cancellationToken">The <see cref="CancellationToken"/> used to propagate notifications that the operation should be canceled.</param>
     /// <returns>The task object representing the asynchronous operation.</returns>
-    public virtual Task SetEmailAsync([NotNull] IdentityUser user, [NotNull] string email, CancellationToken cancellationToken = default)
+    public virtual Task SetEmailAsync([NotNull] IdentityUser user, string? email, CancellationToken cancellationToken = default)
     {
         cancellationToken.ThrowIfCancellationRequested();
 
@@ -622,13 +622,13 @@ public class IdentityUserStore :
     /// <param name="user">The user whose email should be returned.</param>
     /// <param name="cancellationToken">The <see cref="CancellationToken"/> used to propagate notifications that the operation should be canceled.</param>
     /// <returns>The task object containing the results of the asynchronous operation, the email address for the specified <paramref name="user"/>.</returns>
-    public virtual Task<string> GetEmailAsync([NotNull] IdentityUser user, CancellationToken cancellationToken = default)
+    public virtual Task<string?> GetEmailAsync([NotNull] IdentityUser user, CancellationToken cancellationToken = default)
     {
         cancellationToken.ThrowIfCancellationRequested();
 
         Check.NotNull(user, nameof(user));
 
-        return Task.FromResult(user.Email);
+        return Task.FromResult<string?>(user.Email);
     }
 
     /// <summary>
@@ -639,13 +639,13 @@ public class IdentityUserStore :
     /// <returns>
     /// The task object containing the results of the asynchronous lookup operation, the normalized email address if any associated with the specified user.
     /// </returns>
-    public virtual Task<string> GetNormalizedEmailAsync([NotNull] IdentityUser user, CancellationToken cancellationToken = default)
+    public virtual Task<string?> GetNormalizedEmailAsync([NotNull] IdentityUser user, CancellationToken cancellationToken = default)
     {
         cancellationToken.ThrowIfCancellationRequested();
 
         Check.NotNull(user, nameof(user));
 
-        return Task.FromResult(user.NormalizedEmail);
+        return Task.FromResult<string?>(user.NormalizedEmail);
     }
 
     /// <summary>
@@ -655,13 +655,13 @@ public class IdentityUserStore :
     /// <param name="normalizedEmail">The normalized email to set for the specified <paramref name="user"/>.</param>
     /// <param name="cancellationToken">The <see cref="CancellationToken"/> used to propagate notifications that the operation should be canceled.</param>
     /// <returns>The task object representing the asynchronous operation.</returns>
-    public virtual Task SetNormalizedEmailAsync([NotNull] IdentityUser user, string normalizedEmail, CancellationToken cancellationToken = default)
+    public virtual Task SetNormalizedEmailAsync([NotNull] IdentityUser user, string? normalizedEmail, CancellationToken cancellationToken = default)
     {
         cancellationToken.ThrowIfCancellationRequested();
 
         Check.NotNull(user, nameof(user));
 
-        user.NormalizedEmail = normalizedEmail;
+        user.NormalizedEmail = normalizedEmail!;
 
         return Task.CompletedTask;
     }
@@ -674,11 +674,11 @@ public class IdentityUserStore :
     /// <returns>
     /// The task object containing the results of the asynchronous lookup operation, the user if any associated with the specified normalized email address.
     /// </returns>
-    public virtual Task<IdentityUser> FindByEmailAsync(string normalizedEmail, CancellationToken cancellationToken = default)
+    public virtual Task<IdentityUser?> FindByEmailAsync(string normalizedEmail, CancellationToken cancellationToken = default)
     {
         cancellationToken.ThrowIfCancellationRequested();
 
-        return UserRepository.FindByNormalizedEmailAsync(normalizedEmail, includeDetails: false, cancellationToken: cancellationToken);
+        return UserRepository.FindByNormalizedEmailAsync(normalizedEmail, includeDetails: false, cancellationToken: cancellationToken)!;
     }
 
     /// <summary>
@@ -810,13 +810,13 @@ public class IdentityUserStore :
     /// <param name="phoneNumber">The telephone number to set.</param>
     /// <param name="cancellationToken">The <see cref="CancellationToken"/> used to propagate notifications that the operation should be canceled.</param>
     /// <returns>The <see cref="Task"/> that represents the asynchronous operation.</returns>
-    public virtual Task SetPhoneNumberAsync([NotNull] IdentityUser user, string phoneNumber, CancellationToken cancellationToken = default)
+    public virtual Task SetPhoneNumberAsync([NotNull] IdentityUser user, string? phoneNumber, CancellationToken cancellationToken = default)
     {
         cancellationToken.ThrowIfCancellationRequested();
 
         Check.NotNull(user, nameof(user));
 
-        user.PhoneNumber = phoneNumber;
+        user.PhoneNumber = phoneNumber!;
 
         return Task.CompletedTask;
     }
@@ -827,13 +827,13 @@ public class IdentityUserStore :
     /// <param name="user">The user whose telephone number should be retrieved.</param>
     /// <param name="cancellationToken">The <see cref="CancellationToken"/> used to propagate notifications that the operation should be canceled.</param>
     /// <returns>The <see cref="Task"/> that represents the asynchronous operation, containing the user's telephone number, if any.</returns>
-    public virtual Task<string> GetPhoneNumberAsync([NotNull] IdentityUser user, CancellationToken cancellationToken = default)
+    public virtual Task<string?> GetPhoneNumberAsync([NotNull] IdentityUser user, CancellationToken cancellationToken = default)
     {
         cancellationToken.ThrowIfCancellationRequested();
 
         Check.NotNull(user, nameof(user));
 
-        return Task.FromResult(user.PhoneNumber);
+        return Task.FromResult<string?>(user.PhoneNumber);
     }
 
     /// <summary>
@@ -896,13 +896,13 @@ public class IdentityUserStore :
     /// <param name="user">The user whose security stamp should be set.</param>
     /// <param name="cancellationToken">The <see cref="CancellationToken"/> used to propagate notifications that the operation should be canceled.</param>
     /// <returns>The <see cref="Task"/> that represents the asynchronous operation, containing the security stamp for the specified <paramref name="user"/>.</returns>
-    public virtual Task<string> GetSecurityStampAsync([NotNull] IdentityUser user, CancellationToken cancellationToken = default)
+    public virtual Task<string?> GetSecurityStampAsync([NotNull] IdentityUser user, CancellationToken cancellationToken = default)
     {
         cancellationToken.ThrowIfCancellationRequested();
 
         Check.NotNull(user, nameof(user));
 
-        return Task.FromResult(user.SecurityStamp);
+        return Task.FromResult<string?>(user.SecurityStamp);
     }
 
     /// <summary>
@@ -989,7 +989,7 @@ public class IdentityUserStore :
     /// <param name="value">The value of the token.</param>
     /// <param name="cancellationToken">The <see cref="CancellationToken"/> used to propagate notifications that the operation should be canceled.</param>
     /// <returns>The <see cref="Task"/> that represents the asynchronous operation.</returns>
-    public virtual async Task SetTokenAsync([NotNull] IdentityUser user, string loginProvider, string name, string value, CancellationToken cancellationToken = default)
+    public virtual async Task SetTokenAsync([NotNull] IdentityUser user, string loginProvider, string name, string? value, CancellationToken cancellationToken = default)
     {
         cancellationToken.ThrowIfCancellationRequested();
 
@@ -997,7 +997,7 @@ public class IdentityUserStore :
 
         await UserRepository.EnsureCollectionLoadedAsync(user, u => u.Tokens, cancellationToken);
 
-        user.SetToken(loginProvider, name, value);
+        user.SetToken(loginProvider, name, value!);
     }
 
     /// <summary>
@@ -1027,7 +1027,7 @@ public class IdentityUserStore :
     /// <param name="name">The name of the token.</param>
     /// <param name="cancellationToken">The <see cref="CancellationToken"/> used to propagate notifications that the operation should be canceled.</param>
     /// <returns>The <see cref="Task"/> that represents the asynchronous operation.</returns>
-    public virtual async Task<string> GetTokenAsync(IdentityUser user, string loginProvider, string name, CancellationToken cancellationToken = default)
+    public virtual async Task<string?> GetTokenAsync(IdentityUser user, string loginProvider, string name, CancellationToken cancellationToken = default)
     {
         cancellationToken.ThrowIfCancellationRequested();
 
@@ -1043,7 +1043,7 @@ public class IdentityUserStore :
         return SetTokenAsync(user, InternalLoginProvider, AuthenticatorKeyTokenName, key, cancellationToken);
     }
 
-    public virtual Task<string> GetAuthenticatorKeyAsync(IdentityUser user, CancellationToken cancellationToken = default)
+    public virtual Task<string?> GetAuthenticatorKeyAsync(IdentityUser user, CancellationToken cancellationToken = default)
     {
         return GetTokenAsync(user, InternalLoginProvider, AuthenticatorKeyTokenName, cancellationToken);
     }

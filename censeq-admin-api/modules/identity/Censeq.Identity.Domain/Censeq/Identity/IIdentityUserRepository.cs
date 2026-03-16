@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Security.Claims;
 using System.Threading;
@@ -62,18 +62,18 @@ public interface IIdentityUserRepository : IBasicRepository<IdentityUser, Guid>
     );
 
     Task<List<IdentityUser>> GetListAsync(
-        string sorting = null,
+        string? sorting = null,
         int maxResultCount = int.MaxValue,
         int skipCount = 0,
-        string filter = null,
+        string? filter = null,
         bool includeDetails = false,
         Guid? roleId = null,
         Guid? organizationUnitId = null,
-        string userName = null,
-        string phoneNumber = null,
-        string emailAddress = null,
-        string name = null,
-        string surname = null,
+        string? userName = null,
+        string? phoneNumber = null,
+        string? emailAddress = null,
+        string? name = null,
+        string? surname = null,
         bool? isLockedOut = null,
         bool? notActive = null,
         bool? emailConfirmed = null,
@@ -111,14 +111,14 @@ public interface IIdentityUserRepository : IBasicRepository<IdentityUser, Guid>
         );
 
     Task<long> GetCountAsync(
-        string filter = null,
+        string? filter = null,
         Guid? roleId = null,
         Guid? organizationUnitId = null,
-        string userName = null,
-        string phoneNumber = null,
-        string emailAddress = null,
-        string name = null,
-        string surname = null,
+        string? userName = null,
+        string? phoneNumber = null,
+        string? emailAddress = null,
+        string? name = null,
+        string? surname = null,
         bool? isLockedOut = null,
         bool? notActive = null,
         bool? emailConfirmed = null,

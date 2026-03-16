@@ -1,4 +1,4 @@
-﻿namespace Censeq.Identity.Application.Contracts.Censeq.Identity;
+﻿namespace Censeq.Identity;
 
 public static class IdentityRemoteServiceConsts
 {
