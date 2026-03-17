@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
@@ -19,37 +19,37 @@ public class EfCoreOpenIddictScopeRepository : EfCoreRepository<ICenseqOpenIddic
 
     }
 
-    public virtual async Task<List<OpenIddictScope>> GetListAsync(string sorting, int skipCount, int maxResultCount, string filter = null,
+    public virtual async Task<List<OpenIddictScope>> GetListAsync(string sorting, int skipCount, int maxResultCount, string? filter = null,
         CancellationToken cancellationToken = default)
     {
         return await (await GetDbSetAsync())
             .WhereIf(!filter.IsNullOrWhiteSpace(), x => 
-                x.Name.Contains(filter) ||
-                x.DisplayName.Contains(filter) ||
-                x.Description.Contains(filter))
+                x.Name.Contains(filter!) ||
+                x.DisplayName.Contains(filter!) ||
+                x.Description.Contains(filter!))
             .OrderBy(sorting.IsNullOrWhiteSpace() ? nameof(OpenIddictScope.Name) : sorting)
             .PageBy(skipCount, maxResultCount)
             .ToListAsync(GetCancellationToken(cancellationToken));
     }
 
-    public virtual async Task<long> GetCountAsync(string filter = null, CancellationToken cancellationToken = default)
+    public virtual async Task<long> GetCountAsync(string? filter = null, CancellationToken cancellationToken = default)
     {
         return await (await GetDbSetAsync())
             .WhereIf(!filter.IsNullOrWhiteSpace(), x => 
-                x.Name.Contains(filter) ||
-                x.DisplayName.Contains(filter) ||
-                x.Description.Contains(filter))
+                x.Name.Contains(filter!) ||
+                x.DisplayName.Contains(filter!) ||
+                x.Description.Contains(filter!))
             .LongCountAsync(GetCancellationToken(cancellationToken));
     }
     
     public virtual async Task<OpenIddictScope> FindByIdAsync(Guid id, CancellationToken cancellationToken = default)
     {
-        return await (await GetQueryableAsync()).FirstOrDefaultAsync(x => x.Id == id, GetCancellationToken(cancellationToken));
+        return (await (await GetQueryableAsync()).FirstOrDefaultAsync(x => x.Id == id, GetCancellationToken(cancellationToken)))!;
     }
 
     public virtual async Task<OpenIddictScope> FindByNameAsync(string name, CancellationToken cancellationToken = default)
     {
-        return await (await GetQueryableAsync()).FirstOrDefaultAsync(x => x.Name == name, GetCancellationToken(cancellationToken));
+        return (await (await GetQueryableAsync()).FirstOrDefaultAsync(x => x.Name == name, GetCancellationToken(cancellationToken)))!;
     }
 
     public virtual async Task<List<OpenIddictScope>> FindByNamesAsync(string[] names, CancellationToken cancellationToken = default)

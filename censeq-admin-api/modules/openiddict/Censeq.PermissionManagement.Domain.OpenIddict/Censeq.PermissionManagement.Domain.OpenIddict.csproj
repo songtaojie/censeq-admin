@@ -1,21 +1,22 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
-<Import Project="..\..\..\common.props" />
+	<PropertyGroup>
+		<TargetFramework>net8.0</TargetFramework>
+		<Nullable>enable</Nullable>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<AssemblyName>Censeq.PermissionManagement.Domain.OpenIddict</AssemblyName>
+		<PackageId>Censeq.PermissionManagement.Domain.OpenIddict</PackageId>
+		<GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
+		<GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
+		<GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
+		<RootNamespace />
+	</PropertyGroup>
 
-<PropertyGroup>
-    <TargetFrameworks>netstandard2.0;netstandard2.1;net8.0</TargetFrameworks>
-    <AssemblyName>Censeq.PermissionManagement.Domain.OpenIddict</AssemblyName>
-    <PackageId>Censeq.PermissionManagement.Domain.OpenIddict</PackageId>
-    <RootNamespace>Censeq.PermissionManagement.OpenIddict</RootNamespace>
-    <AssetTargetFallback>$(AssetTargetFallback);portable-net45+win8+wp8+wpa81;</AssetTargetFallback>
-    <GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
-    <GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
-    <GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
-</PropertyGroup>
+	<Import Project="..\..\..\common.props" />
 
-<ItemGroup>
-    <ProjectReference Include="..\Censeq.OpenIddict.Domain.Shared\Censeq.OpenIddict.Domain.Shared.csproj" />
-    <ProjectReference Include="..\..\permission-management\Censeq.PermissionManagement.Domain\Censeq.PermissionManagement.Domain.csproj" />
-</ItemGroup>
+	<ItemGroup>
+		<ProjectReference Include="..\Censeq.OpenIddict.Domain.Shared\Censeq.OpenIddict.Domain.Shared.csproj" />
+		<ProjectReference Include="..\..\permission-management\Censeq.PermissionManagement.Domain\Censeq.PermissionManagement.Domain.csproj" />
+	</ItemGroup>
 
 </Project>
