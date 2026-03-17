@@ -37,7 +37,7 @@ public class TenantConfigurationCacheItemInvalidator :
         await ClearCacheAsync(eventData.Id, eventData.NormalizedName);
     }
 
-    protected virtual async Task ClearCacheAsync(Guid? id, string normalizedName)
+    protected virtual async Task ClearCacheAsync(Guid? id, string? normalizedName)
     {
         await Cache.RemoveManyAsync(
             new[]

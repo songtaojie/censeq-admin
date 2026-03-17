@@ -50,7 +50,7 @@ public class FeatureDefinitionSerializer : IFeatureDefinitionSerializer, ITransi
             var featureGroupRecord = new FeatureGroupDefinitionRecord(
                 GuidGenerator.Create(),
                 featureGroup.Name,
-                LocalizableStringSerializer.Serialize(featureGroup.DisplayName)
+                LocalizableStringSerializer.Serialize(featureGroup.DisplayName) ?? string.Empty
             );
 
             foreach (var property in featureGroup.Properties)
@@ -68,11 +68,11 @@ public class FeatureDefinitionSerializer : IFeatureDefinitionSerializer, ITransi
         {
             var featureRecord = new FeatureDefinitionRecord(
                 GuidGenerator.Create(),
-                featureGroup?.Name,
+                featureGroup?.Name ?? string.Empty,
                 feature.Name,
                 feature.Parent?.Name,
-                LocalizableStringSerializer.Serialize(feature.DisplayName),
-                LocalizableStringSerializer.Serialize(feature.Description),
+                LocalizableStringSerializer.Serialize(feature.DisplayName!) ?? string.Empty,
+                feature.Description != null ? LocalizableStringSerializer.Serialize(feature.Description) : null,
                 feature.DefaultValue,
                 feature.IsVisibleToClients,
                 feature.IsAvailableToHost,
@@ -89,15 +89,15 @@ public class FeatureDefinitionSerializer : IFeatureDefinitionSerializer, ITransi
         }
     }
 
-    protected virtual string SerializeProviders(ICollection<string> providers)
+    protected virtual string? SerializeProviders(ICollection<string> providers)
     {
         return providers.Any()
             ? providers.JoinAsString(",")
             : null;
     }
 
-    protected virtual string SerializeStringValueType(IStringValueType stringValueType)
+    protected virtual string? SerializeStringValueType(IStringValueType? stringValueType)
     {
-        return StringValueTypeSerializer.Serialize(stringValueType);
+        return stringValueType == null ? null : StringValueTypeSerializer.Serialize(stringValueType);
     }
 }

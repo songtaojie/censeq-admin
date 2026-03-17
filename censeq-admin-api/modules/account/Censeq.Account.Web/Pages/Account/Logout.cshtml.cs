@@ -1,7 +1,7 @@
-﻿using System.Threading.Tasks;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Volo.Abp.Account.Settings;
-using Volo.Abp.Identity;
+using Censeq.Account.Settings;
+using Censeq.Identity;
 using Volo.Abp.Settings;
 
 namespace Censeq.Account.Web.Pages.Account;

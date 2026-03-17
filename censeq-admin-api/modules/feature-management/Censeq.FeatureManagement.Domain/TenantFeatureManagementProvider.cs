@@ -39,11 +39,11 @@ public class TenantFeatureManagementProvider : FeatureManagementProvider, ITrans
         return base.HandleContextAsync(providerName, providerKey);
     }
 
-    protected override Task<string> NormalizeProviderKeyAsync(string providerKey)
+    protected override Task<string?> NormalizeProviderKeyAsync(string? providerKey)
     {
         if (providerKey != null)
         {
-            return Task.FromResult(providerKey);
+            return Task.FromResult<string?>(providerKey);
         }
 
         return Task.FromResult(CurrentTenant.Id?.ToString());

@@ -9,10 +9,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Volo.Abp.Identity.Domain.Shared" />
     <PackageReference Include="Volo.Abp.BackgroundJobs.Domain.Shared" />
     <PackageReference Include="Volo.Abp.Json.SystemTextJson" />
-    <PackageReference Include="Volo.Abp.OpenIddict.Domain.Shared" />
   </ItemGroup>
 
   <ItemGroup>
@@ -22,6 +20,8 @@
   <ItemGroup>
     <ProjectReference Include="..\..\modules\audit-logging\Censeq.AuditLogging.Domain.Shared\Censeq.AuditLogging.Domain.Shared.csproj" />
     <ProjectReference Include="..\..\modules\feature-management\Censeq.FeatureManagement.Domain.Shared\Censeq.FeatureManagement.Domain.Shared.csproj" />
+    <ProjectReference Include="..\..\modules\identity\Censeq.Identity.Domain.Shared\Censeq.Identity.Domain.Shared.csproj" />
+    <ProjectReference Include="..\..\modules\openiddict\Censeq.OpenIddict.Domain.Shared\Censeq.OpenIddict.Domain.Shared.csproj" />
     <ProjectReference Include="..\..\modules\permission-management\Censeq.PermissionManagement.Domain.Shared\Censeq.PermissionManagement.Domain.Shared.csproj" />
     <ProjectReference Include="..\..\modules\setting-management\Censeq.SettingManagement.Domain.Shared\Censeq.SettingManagement.Domain.Shared.csproj" />
     <ProjectReference Include="..\..\modules\tenant-management\Censeq.TenantManagement.Domain.Shared\Censeq.TenantManagement.Domain.Shared.csproj" />

@@ -1,19 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text.Json;
-using System.Threading.Tasks;
+﻿using System.Text.Json;
+using Censeq.OpenIddict.Applications;
+using Censeq.OpenIddict.Scopes;
+using Censeq.PermissionManagement;
 using JetBrains.Annotations;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Localization;
 using OpenIddict.Abstractions;
-using Volo.Abp;
 using Volo.Abp.Authorization.Permissions;
-using Volo.Abp.Data;
-using Volo.Abp.DependencyInjection;
-using Volo.Abp.OpenIddict.Applications;
-using Volo.Abp.OpenIddict.Scopes;
-using Volo.Abp.PermissionManagement;
 using Volo.Abp.Uow;
 
 namespace Censeq.Admin.OpenIddict;
@@ -25,7 +18,7 @@ public class OpenIddictDataSeedContributor : IDataSeedContributor, ITransientDep
 {
     private readonly IConfiguration _configuration;
     private readonly IOpenIddictApplicationRepository _openIddictApplicationRepository;
-    private readonly IAbpApplicationManager _applicationManager;
+    private readonly ICenseqApplicationManager _applicationManager;
     private readonly IOpenIddictScopeRepository _openIddictScopeRepository;
     private readonly IOpenIddictScopeManager _scopeManager;
     private readonly IPermissionDataSeeder _permissionDataSeeder;
@@ -34,7 +27,7 @@ public class OpenIddictDataSeedContributor : IDataSeedContributor, ITransientDep
     public OpenIddictDataSeedContributor(
         IConfiguration configuration,
         IOpenIddictApplicationRepository openIddictApplicationRepository,
-        IAbpApplicationManager applicationManager,
+        ICenseqApplicationManager applicationManager,
         IOpenIddictScopeRepository openIddictScopeRepository,
         IOpenIddictScopeManager scopeManager,
         IPermissionDataSeeder permissionDataSeeder,
@@ -156,7 +149,7 @@ public class OpenIddictDataSeedContributor : IDataSeedContributor, ITransientDep
 
         var client = await _openIddictApplicationRepository.FindByClientIdAsync(name);
 
-        var application = new AbpApplicationDescriptor
+        var application = new CenseqApplicationDescriptor
         {
             ClientId = name,
             ClientType = type,
@@ -341,12 +334,12 @@ public class OpenIddictDataSeedContributor : IDataSeedContributor, ITransientDep
         }
     }
 
-    private bool HasSameRedirectUris(OpenIddictApplication existingClient, AbpApplicationDescriptor application)
+    private bool HasSameRedirectUris(OpenIddictApplication existingClient, CenseqApplicationDescriptor application)
     {
         return existingClient.RedirectUris == JsonSerializer.Serialize(application.RedirectUris.Select(q => q.ToString().TrimEnd('/')));
     }
 
-    private bool HasSameScopes(OpenIddictApplication existingClient, AbpApplicationDescriptor application)
+    private bool HasSameScopes(OpenIddictApplication existingClient, CenseqApplicationDescriptor application)
     {
         return existingClient.Permissions == JsonSerializer.Serialize(application.Permissions.Select(q => q.ToString().TrimEnd('/')));
     }

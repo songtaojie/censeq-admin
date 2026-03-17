@@ -1,8 +1,8 @@
-﻿using System.ComponentModel;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Mvc;
 using Censeq.Account.Web.Consts;
-using Volo.Abp.Identity;
+using Censeq.Identity;
 using Volo.Abp.UI.Navigation.Urls;
 using Volo.Abp.Validation;
 

@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using OpenIddict.Server;
 using OpenIddict.Server.AspNetCore;
 using Volo.Abp.DependencyInjection;
-using Volo.Abp.Identity;
+using Censeq.Identity;
 using Volo.Abp.MultiTenancy;
 using Volo.Abp.OpenIddict;
 

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Volo.Abp.MultiTenancy;
 
 namespace Censeq.FeatureManagement;
@@ -7,14 +7,13 @@ namespace Censeq.FeatureManagement;
 [IgnoreMultiTenancy]
 public class FeatureValueCacheItem
 {
-    public string Value { get; set; }
+    public string? Value { get; set; }
 
     public FeatureValueCacheItem()
     {
-
     }
 
-    public FeatureValueCacheItem(string value)
+    public FeatureValueCacheItem(string? value)
     {
         Value = value;
     }

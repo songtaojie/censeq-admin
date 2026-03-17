@@ -1,8 +1,8 @@
-﻿using System.Threading.Tasks;
+using System.Threading.Tasks;
 using Localization.Resources.AbpUi;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Localization;
-using Volo.Abp.Account.Localization;
+using Censeq.Account.Localization;
 using Volo.Abp.UI.Navigation;
 
 namespace Censeq.Account.Web;

@@ -1,10 +1,10 @@
-﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Volo.Abp.AspNetCore.Mvc;
 using Volo.Abp.AspNetCore.Mvc.UI.Widgets;
 using Volo.Abp.Domain.Entities;
-using Volo.Abp.Identity;
+using Censeq.Identity;
 using Volo.Abp.ObjectExtending;
 using Volo.Abp.Validation;
 

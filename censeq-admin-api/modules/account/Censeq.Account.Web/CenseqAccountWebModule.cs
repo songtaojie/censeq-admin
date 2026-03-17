@@ -1,5 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc.RazorPages;
-using Volo.Abp.Account.Localization;
+using Microsoft.AspNetCore.Mvc.RazorPages;
+using Censeq.Account.Localization;
 using Censeq.Account.Web.Pages.Account;
 using Censeq.Account.Web.Pages.Account.Components.ProfileManagementGroup.PersonalInfo;
 using Censeq.Account.Web.ProfileManagement;
@@ -16,7 +16,7 @@ using Volo.Abp.ObjectExtending.Modularity;
 using Volo.Abp.Threading;
 using Volo.Abp.UI.Navigation;
 using Volo.Abp.VirtualFileSystem;
-using Volo.Abp.Account;
+using Censeq.Account;
 using Volo.Abp.UI.Navigation.Urls;
 using Censeq.Account.Web.Consts;
 using Volo.Abp.Localization;
@@ -24,7 +24,7 @@ using Volo.Abp.Localization;
 namespace Censeq.Account.Web;
 
 [DependsOn(
-    typeof(AbpAccountApplicationContractsModule),
+    typeof(CenseqAccountApplicationContractsModule),
     typeof(AbpIdentityAspNetCoreModule),
     typeof(AbpAutoMapperModule),
     typeof(AbpAspNetCoreMvcUiThemeSharedModule),

@@ -28,7 +28,7 @@ public class CenseqIdentityDomainSharedModule : AbpModule
         Configure<AbpLocalizationOptions>(options =>
         {
             options.Resources
-                .Add<IdentityResource>("en")
+                .Add<IdentityResource>("zh-Hans")
                 .AddBaseTypes(
                     typeof(AbpValidationResource)
                 ).AddVirtualJson("/Localization");

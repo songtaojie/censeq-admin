@@ -1,12 +1,12 @@
-﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Options;
-using Volo.Abp.Account;
-using Volo.Abp.Account.Localization;
+using Censeq.Account;
+using Censeq.Account.Localization;
 using Volo.Abp.AspNetCore.ExceptionHandling;
 using Volo.Abp.AspNetCore.Mvc.UI.RazorPages;
 using Volo.Abp.ExceptionHandling;
-using Volo.Abp.Identity;
-using IdentityUser = Volo.Abp.Identity.IdentityUser;
+using Censeq.Identity;
+using IdentityUser = Censeq.Identity.IdentityUser;
 
 namespace Censeq.Account.Web.Pages.Account;
 

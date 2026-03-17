@@ -1,6 +1,6 @@
-﻿using AutoMapper;
+using AutoMapper;
 using Censeq.Account.Web.Pages.Account.Components.ProfileManagementGroup.PersonalInfo;
-using Volo.Abp.Account;
+using Censeq.Account;
 
 namespace Censeq.Account.Web;
 

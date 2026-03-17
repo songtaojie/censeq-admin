@@ -22,7 +22,7 @@ public class DefaultValueFeatureManagementProvider : IFeatureManagementProvider,
 
     public virtual Task<string> GetOrNullAsync(FeatureDefinition feature, string providerKey)
     {
-        return Task.FromResult(feature.DefaultValue);
+        return Task.FromResult(feature.DefaultValue ?? string.Empty);
     }
 
     public virtual Task SetAsync(FeatureDefinition feature, string value, string providerKey)

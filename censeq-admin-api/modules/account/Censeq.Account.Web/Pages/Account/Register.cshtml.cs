@@ -9,13 +9,13 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using Volo.Abp.Account.Settings;
+using Censeq.Account.Settings;
 using Volo.Abp.Auditing;
-using Volo.Abp.Identity;
+using Censeq.Identity;
 using Volo.Abp.Security.Claims;
 using Volo.Abp.Settings;
 using Volo.Abp.Validation;
-using IdentityUser = Volo.Abp.Identity.IdentityUser;
+using IdentityUser = Censeq.Identity.IdentityUser;
 
 namespace Censeq.Account.Web.Pages.Account;
 

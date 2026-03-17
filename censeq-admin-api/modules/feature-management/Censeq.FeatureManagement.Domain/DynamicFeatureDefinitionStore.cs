@@ -45,7 +45,7 @@ public class DynamicFeatureDefinitionStore : IDynamicFeatureDefinitionStore, ITr
         CacheOptions = cacheOptions.Value;
     }
 
-    public virtual async Task<FeatureDefinition> GetOrNullAsync(string name)
+    public virtual async Task<FeatureDefinition?> GetOrNullAsync(string name)
     {
         if (!FeatureManagementOptions.IsDynamicFeatureStoreEnabled)
         {

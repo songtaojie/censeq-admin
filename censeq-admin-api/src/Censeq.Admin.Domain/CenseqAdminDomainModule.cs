@@ -1,6 +1,10 @@
 ﻿using Censeq.Admin.MultiTenancy;
 using Censeq.AuditLogging;
 using Censeq.FeatureManagement;
+using Censeq.Identity;
+using Censeq.OpenIddict;
+using Censeq.PermissionManagement.Identity;
+using Censeq.PermissionManagement.OpenIddict;
 using Censeq.TenantManagement;
 using MailKit.Security;
 using Volo.Abp.Features;
@@ -13,10 +17,10 @@ namespace Censeq.Admin;
     typeof(AbpMultiTenancyModule),
     typeof(CenseqAdminDomainSharedModule),
     typeof(AbpBackgroundJobsDomainModule),
-    typeof(AbpIdentityDomainModule),
-    typeof(AbpOpenIddictDomainModule),
-    typeof(AbpPermissionManagementDomainOpenIddictModule),
-    typeof(AbpPermissionManagementDomainIdentityModule),
+    typeof(CenseqIdentityDomainModule),
+    typeof(CenseqOpenIddictDomainModule),
+    typeof(CenseqPermissionManagementDomainOpenIddictModule),
+    typeof(CenseqPermissionManagementDomainIdentityModule),
     typeof(AbpMailKitModule),
     typeof(AbpFeaturesModule),
     typeof(AbpCachingModule),

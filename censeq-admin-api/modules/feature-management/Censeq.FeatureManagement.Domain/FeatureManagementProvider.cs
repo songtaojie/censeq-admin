@@ -28,20 +28,21 @@ public abstract class FeatureManagementProvider : IFeatureManagementProvider
 
     public virtual async Task<string> GetOrNullAsync(FeatureDefinition feature, string providerKey)
     {
-        return await Store.GetOrNullAsync(feature.Name, Name, await NormalizeProviderKeyAsync(providerKey));
+        var key = await NormalizeProviderKeyAsync(providerKey);
+        return await Store.GetOrNullAsync(feature.Name, Name, key ?? string.Empty) ?? string.Empty;
     }
 
     public virtual async Task SetAsync(FeatureDefinition feature, string value, string providerKey)
     {
-        await Store.SetAsync(feature.Name, value, Name, await NormalizeProviderKeyAsync(providerKey));
+        await Store.SetAsync(feature.Name, value, Name, (await NormalizeProviderKeyAsync(providerKey)) ?? string.Empty);
     }
 
     public virtual async Task ClearAsync(FeatureDefinition feature, string providerKey)
     {
-        await Store.DeleteAsync(feature.Name, Name, await NormalizeProviderKeyAsync(providerKey));
+        await Store.DeleteAsync(feature.Name, Name, (await NormalizeProviderKeyAsync(providerKey)) ?? string.Empty);
     }
 
-    protected virtual Task<string> NormalizeProviderKeyAsync(string providerKey)
+    protected virtual Task<string?> NormalizeProviderKeyAsync(string? providerKey)
     {
         return Task.FromResult(providerKey);
     }

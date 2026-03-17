@@ -1,10 +1,10 @@
-﻿using System.Threading.Tasks;
+using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Localization;
-using Volo.Abp.Account.Localization;
+using Censeq.Account.Localization;
 using Censeq.Account.Web.Pages.Account.Components.ProfileManagementGroup.Password;
 using Censeq.Account.Web.Pages.Account.Components.ProfileManagementGroup.PersonalInfo;
-using Volo.Abp.Identity;
+using Censeq.Identity;
 using Volo.Abp.Users;
 
 namespace Censeq.Account.Web.ProfileManagement;
@@ -19,7 +19,7 @@ public class AccountProfileManagementPageContributor : IProfileManagementPageCon
         {
             context.Groups.Add(
                 new ProfileManagementPageGroup(
-                    "Volo.Abp.Account.Password",
+                    "Censeq.Account.Password",
                     l["ProfileTab:Password"],
                     typeof(AccountProfilePasswordManagementGroupViewComponent)
                 )
@@ -28,7 +28,7 @@ public class AccountProfileManagementPageContributor : IProfileManagementPageCon
 
         context.Groups.Add(
             new ProfileManagementPageGroup(
-                "Volo.Abp.Account.PersonalInfo",
+                "Censeq.Account.PersonalInfo",
                 l["ProfileTab:PersonalInfo"],
                 typeof(AccountProfilePersonalInfoManagementGroupViewComponent)
             )

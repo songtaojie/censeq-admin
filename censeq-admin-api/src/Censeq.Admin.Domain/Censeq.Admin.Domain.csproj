@@ -11,6 +11,10 @@
   <ItemGroup>
     <ProjectReference Include="..\..\modules\audit-logging\Censeq.AuditLogging.Domain\Censeq.AuditLogging.Domain.csproj" />
     <ProjectReference Include="..\..\modules\feature-management\Censeq.FeatureManagement.Domain\Censeq.FeatureManagement.Domain.csproj" />
+    <ProjectReference Include="..\..\modules\identity\Censeq.Identity.Domain\Censeq.Identity.Domain.csproj" />
+    <ProjectReference Include="..\..\modules\identity\Censeq.PermissionManagement.Domain.Identity\Censeq.PermissionManagement.Domain.Identity.csproj" />
+    <ProjectReference Include="..\..\modules\openiddict\Censeq.OpenIddict.Domain\Censeq.OpenIddict.Domain.csproj" />
+    <ProjectReference Include="..\..\modules\openiddict\Censeq.PermissionManagement.Domain.OpenIddict\Censeq.PermissionManagement.Domain.OpenIddict.csproj" />
     <ProjectReference Include="..\..\modules\setting-management\Censeq.SettingManagement.Domain\Censeq.SettingManagement.Domain.csproj" />
     <ProjectReference Include="..\..\modules\tenant-management\Censeq.TenantManagement.Domain\Censeq.TenantManagement.Domain.csproj" />
     <ProjectReference Include="..\Censeq.Admin.Domain.Shared\Censeq.Admin.Domain.Shared.csproj" />
@@ -18,12 +22,8 @@
 
   <ItemGroup>
     <PackageReference Include="Volo.Abp.Emailing" />
-    <PackageReference Include="Volo.Abp.Identity.Domain" />
     <PackageReference Include="Volo.Abp.MailKit" />
-    <PackageReference Include="Volo.Abp.PermissionManagement.Domain.Identity" />
     <PackageReference Include="Volo.Abp.BackgroundJobs.Domain" />
-    <PackageReference Include="Volo.Abp.OpenIddict.Domain" />
-    <PackageReference Include="Volo.Abp.PermissionManagement.Domain.OpenIddict" />
   </ItemGroup>
 
 </Project>
