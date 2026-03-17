@@ -1,28 +1,18 @@
 using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Diagnostics;
-using System.Linq;
 using System.Security.Claims;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Hosting;
 using Censeq.Account.Settings;
 using Volo.Abp.Auditing;
 using Censeq.Identity;
-using Volo.Abp.Identity.AspNetCore;
 using Volo.Abp.Security.Claims;
 using Volo.Abp.Settings;
 using Volo.Abp.Validation;
 using IdentityUser = Censeq.Identity.IdentityUser;
-using SignInResult = Microsoft.AspNetCore.Identity.SignInResult;
-using Volo.Abp;
 using Censeq.Account.Web.Settings;
+using Censeq.Identity.AspNetCore;
 
 namespace Censeq.Account.Web.Pages.Account;
 
@@ -120,7 +110,7 @@ public class LoginModel : AccountPageModel
         {
             Identity = IdentitySecurityLogIdentityConsts.Identity,
             Action = result.ToIdentitySecurityLogAction(),
-            UserName = LoginInput.UserNameOrEmailAddress
+            UserName = LoginInput.UserNameOrEmailAddress!
         });
 
         if (result.RequiresTwoFactor)
@@ -296,7 +286,7 @@ public class LoginModel : AccountPageModel
         {
             Identity = IdentitySecurityLogIdentityConsts.IdentityExternal,
             Action = result.ToIdentitySecurityLogAction(),
-            UserName = user.Name
+            UserName = user.Name ?? user.UserName ?? string.Empty
         });
 
         // Clear the dynamic claims cache.

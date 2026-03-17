@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
@@ -33,7 +33,7 @@ public class CenseqSecurityStampValidator : SecurityStampValidator<IdentityUser>
     [UnitOfWork]
     public async override Task ValidateAsync(CookieValidatePrincipalContext context)
     {
-        TenantConfiguration tenant = null;
+        TenantConfiguration? tenant = null;
         try
         {
             tenant = await TenantConfigurationProvider.GetAsync(saveResolveResult: false);

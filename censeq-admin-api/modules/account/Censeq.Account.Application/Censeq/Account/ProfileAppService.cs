@@ -77,7 +77,7 @@ public class ProfileAppService : IdentityAppServiceBase, IProfileAppService
 
         (await UserManager.UpdateAsync(user)).CheckErrors();
 
-        await CurrentUnitOfWork.SaveChangesAsync();
+        await CurrentUnitOfWork!.SaveChangesAsync();
 
         return ObjectMapper.Map<IdentityUser, ProfileDto>(user);
     }

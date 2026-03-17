@@ -9,23 +9,22 @@ using Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared;
 using Volo.Abp.AutoMapper;
 using Volo.Abp.ExceptionHandling;
 using Volo.Abp.Http.ProxyScripting.Generators.JQuery;
-using Volo.Abp.Identity.AspNetCore;
 using Volo.Abp.Modularity;
-using Volo.Abp.ObjectExtending;
 using Volo.Abp.ObjectExtending.Modularity;
 using Volo.Abp.Threading;
 using Volo.Abp.UI.Navigation;
 using Volo.Abp.VirtualFileSystem;
-using Censeq.Account;
 using Volo.Abp.UI.Navigation.Urls;
 using Censeq.Account.Web.Consts;
 using Volo.Abp.Localization;
+using Censeq.Identity.AspNetCore;
+using Censeq.Identity.ObjectExtending;
 
 namespace Censeq.Account.Web;
 
 [DependsOn(
     typeof(CenseqAccountApplicationContractsModule),
-    typeof(AbpIdentityAspNetCoreModule),
+    typeof(CenseqIdentityAspNetCoreModule),
     typeof(AbpAutoMapperModule),
     typeof(AbpAspNetCoreMvcUiThemeSharedModule),
     typeof(AbpExceptionHandlingModule)

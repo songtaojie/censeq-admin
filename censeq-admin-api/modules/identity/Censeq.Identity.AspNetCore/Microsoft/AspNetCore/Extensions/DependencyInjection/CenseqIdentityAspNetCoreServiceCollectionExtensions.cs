@@ -11,7 +11,7 @@ public static class CenseqIdentityAspNetCoreServiceCollectionExtensions
         {
             options.ForwardDefaultSelector = ctx =>
             {
-                string authorization = ctx.Request.Headers.Authorization;
+                string? authorization = ctx.Request.Headers.Authorization;
                 if (!authorization.IsNullOrWhiteSpace() && authorization.StartsWith("Bearer ", StringComparison.OrdinalIgnoreCase))
                 {
                     return jwtBearerScheme;

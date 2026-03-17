@@ -8,20 +8,20 @@ using OpenIddict.Server.AspNetCore;
 using Volo.Abp.DependencyInjection;
 using Censeq.Identity;
 using Volo.Abp.MultiTenancy;
-using Volo.Abp.OpenIddict;
+using Censeq.OpenIddict;
 
 namespace Censeq.Account.Web.Pages.Account;
 
 [ExposeServices(typeof(LoginModel))]
 public class OpenIddictSupportedLoginModel : LoginModel
 {
-    protected AbpOpenIddictRequestHelper OpenIddictRequestHelper { get; }
+    protected CenseqOpenIddictRequestHelper OpenIddictRequestHelper { get; }
 
     public OpenIddictSupportedLoginModel(
         IAuthenticationSchemeProvider schemeProvider,
         IOptions<CenseqAccountOptions> accountOptions,
         IdentityDynamicClaimsPrincipalContributorCache identityDynamicClaimsPrincipalContributorCache,
-        AbpOpenIddictRequestHelper openIddictRequestHelper,
+        CenseqOpenIddictRequestHelper openIddictRequestHelper,
         IWebHostEnvironment webHostEnvironment)
         : base(schemeProvider, accountOptions, identityDynamicClaimsPrincipalContributorCache, webHostEnvironment)
     {
@@ -32,7 +32,7 @@ public class OpenIddictSupportedLoginModel : LoginModel
     {
         LoginInput = new LoginInputModel();
 
-        var request = await OpenIddictRequestHelper.GetFromReturnUrlAsync(ReturnUrl);
+        var request = await OpenIddictRequestHelper.GetFromReturnUrlAsync(ReturnUrl ?? string.Empty);
         if (request?.ClientId != null)
         {
             // TODO: Find a proper cancel way.
@@ -56,7 +56,7 @@ public class OpenIddictSupportedLoginModel : LoginModel
     {
         if (action == "Cancel")
         {
-            var request = await OpenIddictRequestHelper.GetFromReturnUrlAsync(ReturnUrl);
+            var request = await OpenIddictRequestHelper.GetFromReturnUrlAsync(ReturnUrl ?? string.Empty);
 
             var transaction = HttpContext.GetOpenIddictServerTransaction();
             if (request?.ClientId != null && transaction != null)

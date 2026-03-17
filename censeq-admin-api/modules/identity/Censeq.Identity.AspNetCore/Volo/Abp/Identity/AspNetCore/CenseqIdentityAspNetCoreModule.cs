@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
@@ -28,8 +28,8 @@ public class CenseqIdentityAspNetCoreModule : AbpModule
     {
         //(TODO: Extract an extension method like IdentityBuilder.AddCenseqSecurityStampValidator())
         context.Services.AddScoped<CenseqSecurityStampValidator>();
-        context.Services.AddScoped(typeof(SecurityStampValidator<IdentityUser>), provider => provider.GetService(typeof(CenseqSecurityStampValidator)));
-        context.Services.AddScoped(typeof(ISecurityStampValidator), provider => provider.GetService(typeof(CenseqSecurityStampValidator)));
+        context.Services.AddScoped(typeof(SecurityStampValidator<IdentityUser>), provider => provider.GetRequiredService(typeof(CenseqSecurityStampValidator)));
+        context.Services.AddScoped(typeof(ISecurityStampValidator), provider => provider.GetRequiredService(typeof(CenseqSecurityStampValidator)));
 
         var options = context.Services.ExecutePreConfiguredActions(new CenseqIdentityAspNetCoreOptions());
 

@@ -32,6 +32,11 @@ public class ForgotPasswordModel : AccountPageModel
 
     public virtual async Task<IActionResult> OnPostAsync()
     {
+        if (string.IsNullOrWhiteSpace(Email))
+        {
+            return Page();
+        }
+
         try
         {
             var AppUrlProvider = LazyServiceProvider.GetRequiredService<IAppUrlProvider>();
@@ -39,7 +44,7 @@ public class ForgotPasswordModel : AccountPageModel
             await AccountAppService.SendPasswordResetCodeAsync(
                 new SendPasswordResetCodeDto
                 {
-                    Email = Email,
+                    Email = Email!,
                     AppName = CenseqAccountConsts.AppName, //TODO: Const!
                     ReturnUrl = ReturnUrl,
                     ReturnUrlHash = ReturnUrlHash

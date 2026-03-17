@@ -128,9 +128,18 @@ public class RegisterModel : AccountPageModel
                 }
                 if (Input.UserName.IsNullOrWhiteSpace())
                 {
+                    if (string.IsNullOrWhiteSpace(Input.EmailAddress))
+                    {
+                        Logger.LogWarning("External login: EmailAddress is required");
+                        return RedirectToPage("./Login");
+                    }
                     Input.UserName = await UserManager.GetUserNameFromEmailAsync(Input.EmailAddress);
                 }
-                await RegisterExternalUserAsync(externalLoginInfo, Input.UserName, Input.EmailAddress!);
+                if (string.IsNullOrWhiteSpace(Input.EmailAddress))
+                {
+                    return RedirectToPage("./Login");
+                }
+                await RegisterExternalUserAsync(externalLoginInfo, Input.UserName!, Input.EmailAddress!);
             }
             else
             {
@@ -154,9 +163,9 @@ public class RegisterModel : AccountPageModel
             new RegisterDto
             {
                 AppName = "MVC",
-                EmailAddress = Input.EmailAddress,
-                Password = Input.Password,
-                UserName = Input.UserName
+                EmailAddress = Input.EmailAddress!,
+                Password = Input.Password!,
+                UserName = Input.UserName!
             }
         );
 
