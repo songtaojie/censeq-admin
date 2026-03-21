@@ -6,7 +6,7 @@ namespace Censeq.PermissionManagement.OpenIddict;
 
 [DependsOn(
     typeof(CenseqOpenIddictDomainSharedModule),
-    typeof(AbpPermissionManagementDomainModule)
+    typeof(CenseqPermissionManagementDomainModule)
 )]
 public class CenseqPermissionManagementDomainOpenIddictModule : AbpModule
 {

@@ -2,9 +2,10 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using JetBrains.Annotations;
+using Volo.Abp;
 using Volo.Abp.Authorization.Permissions;
 
-namespace Volo.Abp.PermissionManagement;
+namespace Censeq.PermissionManagement;
 
 public static class ClientPermissionManagerExtensions
 {
