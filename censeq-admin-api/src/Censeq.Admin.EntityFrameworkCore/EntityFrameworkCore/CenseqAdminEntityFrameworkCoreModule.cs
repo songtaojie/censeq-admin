@@ -1,4 +1,4 @@
-﻿using Censeq.AuditLogging.EntityFrameworkCore;
+using Censeq.AuditLogging.EntityFrameworkCore;
 using Censeq.FeatureManagement.EntityFrameworkCore;
 using Censeq.Identity.EntityFrameworkCore;
 using Censeq.OpenIddict.EntityFrameworkCore;
@@ -10,6 +10,7 @@ using Volo.Abp.EntityFrameworkCore;
 using Volo.Abp.EntityFrameworkCore.PostgreSql;
 using Volo.Abp.EntityFrameworkCore.Sqlite;
 using Volo.Abp.Modularity;
+using Volo.Abp.MultiTenancy;
 
 namespace Censeq.Admin.EntityFrameworkCore;
 
@@ -32,6 +33,13 @@ public class CenseqAdminEntityFrameworkCoreModule : AbpModule
         context.Services.AddAbpDbContext<CenseqAdminDbContext>(options =>
         {
             options.AddDefaultRepositories(includeAllEntities: true);
+            options.ReplaceDbContext<IAuditLoggingDbContext>(MultiTenancySides.Both);
+            options.ReplaceDbContext<ICenseqIdentityDbContext>(MultiTenancySides.Both);
+            options.ReplaceDbContext<ICenseqOpenIddictDbContext>(MultiTenancySides.Both);
+            options.ReplaceDbContext<IFeatureManagementDbContext>(MultiTenancySides.Both);
+            options.ReplaceDbContext<IPermissionManagementDbContext>(MultiTenancySides.Both);
+            options.ReplaceDbContext<ISettingManagementDbContext>(MultiTenancySides.Both);
+            options.ReplaceDbContext<ITenantManagementDbContext>(MultiTenancySides.Both);
         });
 
         var configuration = context.Services.GetConfiguration();

@@ -1,4 +1,4 @@
-﻿using Censeq.OpenIddict.Applications;
+using Censeq.OpenIddict.Applications;
 using Microsoft.EntityFrameworkCore;
 using Censeq.Framework.EntityFrameworkCore;
 using Volo.Abp;
@@ -8,7 +8,7 @@ using Censeq.OpenIddict.Tokens;
 
 namespace Censeq.OpenIddict.EntityFrameworkCore.Modeling
 {
-    internal static class CenseqOpenIddictDbContextModelCreatingExtensions
+    public static class CenseqOpenIddictDbContextModelCreatingExtensions
     {
         public static void ConfigureOpenIddict(this ModelBuilder builder)
         {

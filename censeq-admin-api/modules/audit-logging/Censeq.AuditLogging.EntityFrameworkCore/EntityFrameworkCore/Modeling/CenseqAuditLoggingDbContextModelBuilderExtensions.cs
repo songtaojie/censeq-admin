@@ -1,13 +1,13 @@
-﻿using Censeq.AuditLogging.Entities;
+using Censeq.AuditLogging.Entities;
 using Censeq.Framework.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Volo.Abp;
 
 namespace Censeq.AuditLogging.EntityFrameworkCore.Modeling
 {
-    internal static class CenseqAuditLoggingDbContextModelBuilderExtensions
+    public static class CenseqAuditLoggingDbContextModelBuilderExtensions
     {
-        internal static void ConfigureAuditLogging(this ModelBuilder builder)
+        public static void ConfigureAuditLogging(this ModelBuilder builder)
         {
             Check.NotNull(builder, nameof(builder));
 

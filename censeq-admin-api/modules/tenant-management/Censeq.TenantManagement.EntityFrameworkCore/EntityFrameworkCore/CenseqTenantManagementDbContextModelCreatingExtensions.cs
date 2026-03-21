@@ -3,7 +3,7 @@ using Volo.Abp;
 using Censeq.Framework.EntityFrameworkCore;
 using static Censeq.TenantManagement.TenantConsts;
 
-namespace Censeq.TenantManagement.EntityFrameworkCore.Modeling
+namespace Censeq.TenantManagement.EntityFrameworkCore
 {
     public static class CenseqTenantManagementDbContextModelCreatingExtensions
     {

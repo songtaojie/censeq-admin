@@ -1,11 +1,11 @@
-﻿using Censeq.SettingManagement.Entities;
+using Censeq.SettingManagement.Entities;
 using Microsoft.EntityFrameworkCore;
 using Volo.Abp;
 using Censeq.Framework.EntityFrameworkCore;
 
 namespace Censeq.SettingManagement.EntityFrameworkCore.Modeling
 {
-    internal static class CenseqSettingManagementDbContextModelBuilderExtensions
+    public static class CenseqSettingManagementDbContextModelBuilderExtensions
     {
         //TODO: Instead of getting parameters, get a action of SettingManagementModelBuilderConfigurationOptions like other modules
         public static void ConfigureSettingManagement(this ModelBuilder builder)

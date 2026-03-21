@@ -1,10 +1,10 @@
-﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using Censeq.Framework.EntityFrameworkCore;
 using Volo.Abp;
 
 namespace Censeq.Identity.EntityFrameworkCore.Modeling
 {
-    internal static class CenseqIdentityDbContextModelBuilderExtensions
+    public static class CenseqIdentityDbContextModelBuilderExtensions
     {
         public static void ConfigureIdentity(this ModelBuilder builder)
         {
