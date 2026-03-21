@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
@@ -19,27 +19,27 @@ public class EfCoreOpenIddictApplicationRepository : EfCoreRepository<ICenseqOpe
 
     }
 
-    public virtual async Task<List<OpenIddictApplication>> GetListAsync(string sorting, int skipCount, int maxResultCount, string filter = null,
+    public virtual async Task<List<OpenIddictApplication>> GetListAsync(string sorting, int skipCount, int maxResultCount, string? filter = null,
         CancellationToken cancellationToken = default)
     {
         return await (await GetDbSetAsync())
-            .WhereIf(!filter.IsNullOrWhiteSpace(), x => x.ClientId.Contains(filter))
+            .WhereIf(!filter.IsNullOrWhiteSpace(), x => x.ClientId.Contains(filter!))
             .OrderBy(sorting.IsNullOrWhiteSpace() ? nameof(OpenIddictApplication.ClientId) : sorting)
             .PageBy(skipCount, maxResultCount)
             .ToListAsync(GetCancellationToken(cancellationToken));
     }
 
-    public virtual async Task<long> GetCountAsync(string filter = null, CancellationToken cancellationToken = default)
+    public virtual async Task<long> GetCountAsync(string? filter = null, CancellationToken cancellationToken = default)
     {
         return await (await GetDbSetAsync())
-            .WhereIf(!filter.IsNullOrWhiteSpace(), x => x.ClientId.Contains(filter))
+            .WhereIf(!filter.IsNullOrWhiteSpace(), x => x.ClientId.Contains(filter!))
             .LongCountAsync(GetCancellationToken(cancellationToken));
     }
 
     public virtual async Task<OpenIddictApplication> FindByClientIdAsync(string clientId, CancellationToken cancellationToken = default)
     {
-        return await (await GetDbSetAsync())
-            .FirstOrDefaultAsync(x => x.ClientId == clientId, GetCancellationToken(cancellationToken));
+        return (await (await GetDbSetAsync())
+            .FirstOrDefaultAsync(x => x.ClientId == clientId, GetCancellationToken(cancellationToken)))!;
     }
 
     public virtual async Task<List<OpenIddictApplication>> FindByPostLogoutRedirectUriAsync(string address, CancellationToken cancellationToken = default)

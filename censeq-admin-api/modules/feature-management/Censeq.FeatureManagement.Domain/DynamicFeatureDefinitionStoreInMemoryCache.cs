@@ -71,10 +71,12 @@ public class DynamicFeatureDefinitionStoreInMemoryCache:
         return Task.CompletedTask;
     }
 
-    public FeatureDefinition GetFeatureOrNull(string name)
+#pragma warning disable CS8766
+    public FeatureDefinition? GetFeatureOrNull(string name)
     {
         return FeatureDefinitions.GetOrDefault(name);
     }
+#pragma warning restore CS8766
 
     public IReadOnlyList<FeatureDefinition> GetFeatures()
     {

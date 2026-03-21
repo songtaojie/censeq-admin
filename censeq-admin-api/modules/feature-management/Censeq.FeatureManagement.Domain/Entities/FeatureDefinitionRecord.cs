@@ -48,29 +48,29 @@ public class FeatureDefinitionRecord : BasicAggregateRoot<Guid>, IHasExtraProper
         Guid id,
         string groupName,
         string name,
-        string parentName,
-        string displayName = null,
-        string description = null,
-        string defaultValue = null,
+        string? parentName,
+        string? displayName = null,
+        string? description = null,
+        string? defaultValue = null,
         bool isVisibleToClients = true,
         bool isAvailableToHost = true,
-        string allowedProviders = null,
-        string valueType = null)
+        string? allowedProviders = null,
+        string? valueType = null)
         : base(id)
     {
         GroupName = Check.NotNullOrWhiteSpace(groupName, nameof(groupName), FeatureDefinitionRecordConsts.MaxNameLength);
         Name = Check.NotNullOrWhiteSpace(name, nameof(name), FeatureDefinitionRecordConsts.MaxNameLength);
-        ParentName = Check.Length(parentName, nameof(parentName), FeatureDefinitionRecordConsts.MaxNameLength);
-        DisplayName =  Check.NotNullOrWhiteSpace(displayName, nameof(displayName), FeatureDefinitionRecordConsts.MaxDisplayNameLength);
+        ParentName = Check.Length(parentName, nameof(parentName), FeatureDefinitionRecordConsts.MaxNameLength) ?? string.Empty;
+        DisplayName = Check.NotNullOrWhiteSpace(displayName ?? string.Empty, nameof(displayName), FeatureDefinitionRecordConsts.MaxDisplayNameLength);
 
-        Description = Check.Length(description, nameof(description), FeatureDefinitionRecordConsts.MaxDescriptionLength);
-        DefaultValue =  Check.Length(defaultValue, nameof(defaultValue), FeatureDefinitionRecordConsts.MaxDefaultValueLength);
+        Description = Check.Length(description, nameof(description), FeatureDefinitionRecordConsts.MaxDescriptionLength) ?? string.Empty;
+        DefaultValue = Check.Length(defaultValue, nameof(defaultValue), FeatureDefinitionRecordConsts.MaxDefaultValueLength) ?? string.Empty;
 
         IsVisibleToClients = isVisibleToClients;
         IsAvailableToHost = isAvailableToHost;
 
-        AllowedProviders = Check.Length(allowedProviders, nameof(allowedProviders), FeatureDefinitionRecordConsts.MaxAllowedProvidersLength);
-        ValueType =  Check.NotNullOrWhiteSpace(valueType, nameof(valueType), FeatureDefinitionRecordConsts.MaxValueTypeLength);
+        AllowedProviders = Check.Length(allowedProviders, nameof(allowedProviders), FeatureDefinitionRecordConsts.MaxAllowedProvidersLength) ?? string.Empty;
+        ValueType = Check.NotNullOrWhiteSpace(valueType ?? string.Empty, nameof(valueType), FeatureDefinitionRecordConsts.MaxValueTypeLength);
 
         ExtraProperties = new ExtraPropertyDictionary();
         this.SetDefaultsForExtraProperties();

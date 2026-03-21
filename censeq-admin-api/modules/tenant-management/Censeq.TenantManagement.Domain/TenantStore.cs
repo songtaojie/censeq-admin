@@ -29,12 +29,12 @@ public class TenantStore : ITenantStore, ITransientDependency
         Cache = cache;
     }
 
-    public virtual async Task<TenantConfiguration> FindAsync(string normalizedName)
+    public virtual async Task<TenantConfiguration?> FindAsync(string normalizedName)
     {
         return (await GetCacheItemAsync(null, normalizedName)).Value;
     }
 
-    public virtual async Task<TenantConfiguration> FindAsync(Guid id)
+    public virtual async Task<TenantConfiguration?> FindAsync(Guid id)
     {
         return (await GetCacheItemAsync(id, null)).Value;
     }
@@ -46,18 +46,18 @@ public class TenantStore : ITenantStore, ITransientDependency
     }
 
     [Obsolete("Use FindAsync method.")]
-    public virtual TenantConfiguration Find(string normalizedName)
+    public virtual TenantConfiguration? Find(string normalizedName)
     {
-        return (GetCacheItem(null, normalizedName)).Value;
+        return GetCacheItem(null, normalizedName).Value;
     }
 
     [Obsolete("Use FindAsync method.")]
-    public virtual TenantConfiguration Find(Guid id)
+    public virtual TenantConfiguration? Find(Guid id)
     {
-        return (GetCacheItem(id, null)).Value;
+        return GetCacheItem(id, null).Value;
     }
 
-    protected virtual async Task<TenantConfigurationCacheItem> GetCacheItemAsync(Guid? id, string normalizedName)
+    protected virtual async Task<TenantConfigurationCacheItem> GetCacheItemAsync(Guid? id, string? normalizedName)
     {
         var cacheKey = CalculateCacheKey(id, normalizedName);
 
@@ -88,7 +88,7 @@ public class TenantStore : ITenantStore, ITransientDependency
         throw new AbpException("Both id and normalizedName can't be invalid.");
     }
 
-    protected virtual async Task<TenantConfigurationCacheItem> SetCacheAsync(string cacheKey, [CanBeNull] Tenant tenant)
+    protected virtual async Task<TenantConfigurationCacheItem> SetCacheAsync(string cacheKey, Tenant? tenant)
     {
         var tenantConfiguration = tenant != null ? ObjectMapper.Map<Tenant, TenantConfiguration>(tenant) : null;
         var cacheItem = new TenantConfigurationCacheItem(tenantConfiguration);
@@ -97,7 +97,7 @@ public class TenantStore : ITenantStore, ITransientDependency
     }
 
     [Obsolete("Use GetCacheItemAsync method.")]
-    protected virtual TenantConfigurationCacheItem GetCacheItem(Guid? id, string normalizedName)
+    protected virtual TenantConfigurationCacheItem GetCacheItem(Guid? id, string? normalizedName)
     {
         var cacheKey = CalculateCacheKey(id, normalizedName);
 
@@ -129,7 +129,7 @@ public class TenantStore : ITenantStore, ITransientDependency
     }
 
     [Obsolete("Use SetCacheAsync method.")]
-    protected virtual TenantConfigurationCacheItem SetCache(string cacheKey, [CanBeNull] Tenant tenant)
+    protected virtual TenantConfigurationCacheItem SetCache(string cacheKey, Tenant? tenant)
     {
         var tenantConfiguration = tenant != null ? ObjectMapper.Map<Tenant, TenantConfiguration>(tenant) : null;
         var cacheItem = new TenantConfigurationCacheItem(tenantConfiguration);
@@ -137,7 +137,7 @@ public class TenantStore : ITenantStore, ITransientDependency
         return cacheItem;
     }
 
-    protected virtual string CalculateCacheKey(Guid? id, string normalizedName)
+    protected virtual string CalculateCacheKey(Guid? id, string? normalizedName)
     {
         return TenantConfigurationCacheItem.CalculateCacheKey(id, normalizedName);
     }

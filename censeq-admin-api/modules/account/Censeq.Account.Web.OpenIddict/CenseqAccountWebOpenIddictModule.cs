@@ -1,12 +1,12 @@
-﻿using Volo.Abp.Modularity;
-using Volo.Abp.OpenIddict;
+﻿using Censeq.OpenIddict;
+using Volo.Abp.Modularity;
 using Volo.Abp.VirtualFileSystem;
 
 namespace Censeq.Account.Web;
 
 [DependsOn(
     typeof(CenseqAccountWebModule),
-    typeof(AbpOpenIddictAspNetCoreModule)
+    typeof(CenseqOpenIddictAspNetCoreModule)
 )]
 public class CenseqAccountWebOpenIddictModule : AbpModule
 {

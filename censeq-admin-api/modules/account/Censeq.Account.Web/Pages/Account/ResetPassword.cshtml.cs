@@ -2,7 +2,7 @@ using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Mvc;
 using Volo.Abp.Auditing;
-using Volo.Abp.Identity;
+using Censeq.Identity;
 using Volo.Abp.Validation;
 
 namespace Censeq.Account.Web.Pages.Account;
@@ -52,7 +52,7 @@ public class ResetPasswordModel : AccountPageModel
             new VerifyPasswordResetTokenInput
             {
                 UserId = UserId,
-                ResetToken = ResetToken
+                ResetToken = ResetToken!
             }
         );
 
@@ -69,12 +69,12 @@ public class ResetPasswordModel : AccountPageModel
                 new ResetPasswordDto
                 {
                     UserId = UserId,
-                    ResetToken = ResetToken,
-                    Password = Password
+                    ResetToken = ResetToken!,
+                    Password = Password!
                 }
             );
         }
-        catch (AbpIdentityResultException e)
+        catch (CenseqIdentityResultException e)
         {
             if (!string.IsNullOrWhiteSpace(e.Message))
             {
@@ -84,7 +84,7 @@ public class ResetPasswordModel : AccountPageModel
 
             throw;
         }
-        catch (AbpValidationException e)
+        catch (AbpValidationException)
         {
             return Page();
         }

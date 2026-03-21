@@ -1,8 +1,8 @@
-﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Mvc;
 using Volo.Abp.AspNetCore.Mvc;
 using Volo.Abp.Auditing;
-using Volo.Abp.Identity;
+using Censeq.Identity;
 using Volo.Abp.Validation;
 
 namespace Censeq.Account.Web.Pages.Account.Components.ProfileManagementGroup.Password;

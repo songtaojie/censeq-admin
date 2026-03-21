@@ -1,4 +1,4 @@
-﻿using System.Threading.Tasks;
+using System.Threading.Tasks;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Features;
 
@@ -13,11 +13,11 @@ public class FeatureStore : IFeatureStore, ITransientDependency
         FeatureManagementStore = featureManagementStore;
     }
 
-    public virtual Task<string> GetOrNullAsync(
+    public virtual async Task<string?> GetOrNullAsync(
         string name,
-        string providerName,
-        string providerKey)
+        string? providerName,
+        string? providerKey)
     {
-        return FeatureManagementStore.GetOrNullAsync(name, providerName, providerKey);
+        return await FeatureManagementStore.GetOrNullAsync(name, providerName ?? string.Empty, providerKey ?? string.Empty);
     }
 }

@@ -1,4 +1,4 @@
-﻿using System.Threading.Tasks;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
@@ -86,7 +86,7 @@ public class CenseqSignInManager : SignInManager<IdentityUser>
         return await base.PasswordSignInAsync(userName, password, isPersistent, lockoutOnFailure);
     }
 
-    protected async override Task<SignInResult> PreSignInCheck(IdentityUser user)
+    protected async override Task<SignInResult?> PreSignInCheck(IdentityUser user)
     {
         if (!user.IsActive)
         {
@@ -116,7 +116,7 @@ public class CenseqSignInManager : SignInManager<IdentityUser>
     /// <param name="loginProvider"></param>
     /// <param name="bypassTwoFactor"></param>
     /// <returns></returns>
-    public virtual async Task<SignInResult> CallSignInOrTwoFactorAsync(IdentityUser user, bool isPersistent, string loginProvider = null, bool bypassTwoFactor = false)
+    public virtual async Task<SignInResult> CallSignInOrTwoFactorAsync(IdentityUser user, bool isPersistent, string? loginProvider = null, bool bypassTwoFactor = false)
     {
         return await base.SignInOrTwoFactorAsync(user, isPersistent, loginProvider, bypassTwoFactor);
     }

@@ -31,13 +31,13 @@ public class IdentityUser : FullAuditedAggregateRoot<Guid>, IUser, IHasEntityVer
     /// Gets or sets the Name for the user.
     /// </summary>
     [CanBeNull]
-    public virtual string Name { get; set; }
+    public virtual string? Name { get; set; }
 
     /// <summary>
     /// Gets or sets the Surname for the user.
     /// </summary>
     [CanBeNull]
-    public virtual string Surname { get; set; }
+    public virtual string? Surname { get; set; }
 
     /// <summary>
     /// Gets or sets the email address for this user.

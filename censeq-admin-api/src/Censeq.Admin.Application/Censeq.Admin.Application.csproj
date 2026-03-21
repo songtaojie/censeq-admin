@@ -17,7 +17,7 @@
   </ItemGroup>
 
   <ItemGroup>
-	  <PackageReference Include="Volo.Abp.Account.Application" />
+    <ProjectReference Include="..\..\modules\account\Censeq.Account.Application\Censeq.Account.Application.csproj" />
     <PackageReference Include="Volo.Abp.Identity.Application" />
     <PackageReference Include="Volo.Abp.PermissionManagement.Application" />
   </ItemGroup>

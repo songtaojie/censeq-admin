@@ -89,6 +89,7 @@
     <PackageVersion Include="Volo.Abp.Users.Domain" Version="$(AbpVersion)" />
     <PackageVersion Include="Volo.Abp.Users.Domain.Shared" Version="$(AbpVersion)" />
     <PackageVersion Include="Volo.Abp.Users.EntityFrameworkCore" Version="$(AbpVersion)" />
+    <PackageVersion Include="Volo.Abp.UI.Navigation" Version="$(AbpVersion)" />
     <PackageVersion Include="Volo.Abp.Validation" Version="$(AbpVersion)" />
     <PackageVersion Include="Volo.Abp.AutoMapper" Version="$(AbpVersion)" />
     <!-- Microsoft -->
@@ -96,6 +97,7 @@
     <PackageVersion Include="Microsoft.Extensions.FileProviders.Embedded" Version="$(MicrosoftExtensionsVersion)" />
     <PackageVersion Include="Microsoft.Extensions.Hosting" Version="$(MicrosoftExtensionsHostingVersion)" />
     <PackageVersion Include="Microsoft.Extensions.Identity.Core" Version="$(MicrosoftExtensionsIdentityCoreVersion)" />
+    <PackageVersion Include="System.Text.Encodings.Web" Version="8.0.0" />
     <!-- OpenIddict -->
     <PackageVersion Include="OpenIddict.Abstractions" Version="$(OpenIddictVersion)" />
     <PackageVersion Include="OpenIddict.Core" Version="$(OpenIddictVersion)" />

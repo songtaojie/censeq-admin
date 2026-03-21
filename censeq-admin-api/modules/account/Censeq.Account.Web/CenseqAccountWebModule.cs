@@ -1,5 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc.RazorPages;
-using Volo.Abp.Account.Localization;
+using Microsoft.AspNetCore.Mvc.RazorPages;
+using Censeq.Account.Localization;
 using Censeq.Account.Web.Pages.Account;
 using Censeq.Account.Web.Pages.Account.Components.ProfileManagementGroup.PersonalInfo;
 using Censeq.Account.Web.ProfileManagement;
@@ -9,23 +9,22 @@ using Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared;
 using Volo.Abp.AutoMapper;
 using Volo.Abp.ExceptionHandling;
 using Volo.Abp.Http.ProxyScripting.Generators.JQuery;
-using Volo.Abp.Identity.AspNetCore;
 using Volo.Abp.Modularity;
-using Volo.Abp.ObjectExtending;
 using Volo.Abp.ObjectExtending.Modularity;
 using Volo.Abp.Threading;
 using Volo.Abp.UI.Navigation;
 using Volo.Abp.VirtualFileSystem;
-using Volo.Abp.Account;
 using Volo.Abp.UI.Navigation.Urls;
 using Censeq.Account.Web.Consts;
 using Volo.Abp.Localization;
+using Censeq.Identity.AspNetCore;
+using Censeq.Identity.ObjectExtending;
 
 namespace Censeq.Account.Web;
 
 [DependsOn(
-    typeof(AbpAccountApplicationContractsModule),
-    typeof(AbpIdentityAspNetCoreModule),
+    typeof(CenseqAccountApplicationContractsModule),
+    typeof(CenseqIdentityAspNetCoreModule),
     typeof(AbpAutoMapperModule),
     typeof(AbpAspNetCoreMvcUiThemeSharedModule),
     typeof(AbpExceptionHandlingModule)

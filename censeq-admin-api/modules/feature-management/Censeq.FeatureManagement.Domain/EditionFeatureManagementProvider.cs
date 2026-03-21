@@ -1,4 +1,4 @@
-﻿using System.Security.Principal;
+using System.Security.Principal;
 using System.Threading.Tasks;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Features;
@@ -20,11 +20,11 @@ public class EditionFeatureManagementProvider : FeatureManagementProvider, ITran
         PrincipalAccessor = principalAccessor;
     }
 
-    protected override Task<string> NormalizeProviderKeyAsync(string providerKey)
+    protected override Task<string?> NormalizeProviderKeyAsync(string? providerKey)
     {
         if (providerKey != null)
         {
-            return Task.FromResult(providerKey);
+            return Task.FromResult<string?>(providerKey);
         }
 
         return Task.FromResult(PrincipalAccessor.Principal?.FindEditionId()?.ToString("N"));

@@ -34,9 +34,9 @@ public class StringValueTypeJsonConverter : JsonConverter<IStringValueType>
 
             return name switch
             {
-                "SelectionStringValueType" =>  rootElement.Deserialize<SelectionStringValueType>(_readJsonSerializerOptions),
-                "FreeTextStringValueType" => rootElement.Deserialize<FreeTextStringValueType>(_readJsonSerializerOptions),
-                "ToggleStringValueType" => rootElement.Deserialize<ToggleStringValueType>(_readJsonSerializerOptions),
+                "SelectionStringValueType" => rootElement.Deserialize<SelectionStringValueType>(_readJsonSerializerOptions)!,
+                "FreeTextStringValueType" => rootElement.Deserialize<FreeTextStringValueType>(_readJsonSerializerOptions)!,
+                "ToggleStringValueType" => rootElement.Deserialize<ToggleStringValueType>(_readJsonSerializerOptions)!,
                 _ => throw new ArgumentException($"{nameof(IStringValueType)} named {name} was not found!")
             };
         }

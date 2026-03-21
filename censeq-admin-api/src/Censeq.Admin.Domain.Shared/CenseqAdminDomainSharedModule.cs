@@ -1,17 +1,17 @@
 ﻿using Censeq.Admin.Localization;
 using Censeq.AuditLogging;
 using Censeq.FeatureManagement;
+using Censeq.Identity;
+using Censeq.OpenIddict;
 using Censeq.PermissionManagement;
 using Censeq.SettingManagement;
 using Censeq.TenantManagement;
 using Volo.Abp.BackgroundJobs;
 using Volo.Abp.Features;
-using Volo.Abp.Identity;
 using Volo.Abp.Json.SystemTextJson;
 using Volo.Abp.Localization;
 using Volo.Abp.Localization.ExceptionHandling;
 using Volo.Abp.Modularity;
-using Volo.Abp.OpenIddict;
 using Volo.Abp.Validation.Localization;
 using Volo.Abp.VirtualFileSystem;
 
@@ -19,8 +19,8 @@ namespace Censeq.Admin;
 
 [DependsOn(
     typeof(AbpBackgroundJobsDomainSharedModule),
-    typeof(AbpIdentityDomainSharedModule),
-    typeof(AbpOpenIddictDomainSharedModule),
+    typeof(CenseqIdentityDomainSharedModule),
+    typeof(CenseqOpenIddictDomainSharedModule),
     typeof(AbpJsonSystemTextJsonModule),
     typeof(AbpFeaturesModule),
     typeof(CenseqAuditLoggingDomainSharedModule),

@@ -1,4 +1,4 @@
-﻿using Volo.Abp.Account.Localization;
+using Censeq.Account.Localization;
 using Volo.Abp.Localization;
 using Volo.Abp.Settings;
 

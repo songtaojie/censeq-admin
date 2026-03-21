@@ -33,13 +33,13 @@ public class Tenant : FullAuditedAggregateRoot<Guid>, IHasEntityVersion
     }
 
     [CanBeNull]
-    public virtual string FindDefaultConnectionString()
+    public virtual string? FindDefaultConnectionString()
     {
         return FindConnectionString(Volo.Abp.Data.ConnectionStrings.DefaultConnectionStringName);
     }
 
     [CanBeNull]
-    public virtual string FindConnectionString(string name)
+    public virtual string? FindConnectionString(string name)
     {
         return ConnectionStrings.FirstOrDefault(c => c.Name == name)?.Value;
     }

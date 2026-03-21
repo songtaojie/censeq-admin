@@ -9,24 +9,17 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="FeatureManagements\**" />
-    <Content Remove="FeatureManagements\**" />
-    <EmbeddedResource Remove="FeatureManagements\**" />
-    <None Remove="FeatureManagements\**" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\..\modules\feature-management\Censeq.FeatureManagement.Application.Contracts\Censeq.FeatureManagement.Application.Contracts.csproj" />
+    <ProjectReference Include="..\..\modules\identity\Censeq.Identity.Application.Contracts\Censeq.Identity.Application.Contracts.csproj" />
+    <ProjectReference Include="..\..\modules\permission-management\Censeq.PermissionManagement.Application.Contracts\Censeq.PermissionManagement.Application.Contracts.csproj" />
     <ProjectReference Include="..\..\modules\setting-management\Censeq.SettingManagement.Application.Contracts\Censeq.SettingManagement.Application.Contracts.csproj" />
     <ProjectReference Include="..\..\modules\tenant-management\Censeq.TenantManagement.Application.Contracts\Censeq.TenantManagement.Application.Contracts.csproj" />
+    <ProjectReference Include="..\..\modules\account\Censeq.Account.Application.Contracts\Censeq.Account.Application.Contracts.csproj" />
     <ProjectReference Include="..\Censeq.Admin.Domain.Shared\Censeq.Admin.Domain.Shared.csproj" />
   </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Volo.Abp.ObjectExtending" />
-    <PackageReference Include="Volo.Abp.Account.Application.Contracts" />
-    <PackageReference Include="Volo.Abp.Identity.Application.Contracts" />
-    <PackageReference Include="Volo.Abp.PermissionManagement.Application.Contracts" />
   </ItemGroup>
 
 </Project>

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
@@ -50,8 +50,8 @@ public class EfCoreOpenIddictAuthorizationRepository : EfCoreRepository<ICenseqO
 
     public virtual async Task<OpenIddictAuthorization> FindByIdAsync(Guid id, CancellationToken cancellationToken = default)
     {
-        return await (await GetDbSetAsync())
-            .FirstOrDefaultAsync(x => x.Id == id, GetCancellationToken(cancellationToken));
+        return (await (await GetDbSetAsync())
+            .FirstOrDefaultAsync(x => x.Id == id, GetCancellationToken(cancellationToken)))!;
     }
 
     public virtual async Task<List<OpenIddictAuthorization>> FindBySubjectAsync(string subject, CancellationToken cancellationToken = default)

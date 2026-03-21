@@ -36,7 +36,8 @@ public class FeatureManager : IFeatureManager, ISingletonDependency
             () => Options
                 .Providers
                 .Select(c => serviceProvider.GetRequiredService(c) as IFeatureManagementProvider)
-                .ToList(),
+                .Where(c => c != null)
+                .ToList()!,
             true
         );
     }
@@ -50,7 +51,7 @@ public class FeatureManager : IFeatureManager, ISingletonDependency
         Check.NotNull(name, nameof(name));
         Check.NotNull(providerName, nameof(providerName));
 
-        return (await GetOrNullInternalAsync(name, providerName, providerKey, fallback)).Value;
+        return (await GetOrNullInternalAsync(name, providerName, providerKey, fallback)).Value ?? string.Empty;
     }
 
     public virtual async Task<List<FeatureNameValue>> GetAllAsync(
@@ -94,20 +95,20 @@ public class FeatureManager : IFeatureManager, ISingletonDependency
 
         foreach (var feature in featureDefinitions)
         {
-            var featureNameValueWithGrantedProvider = new FeatureNameValueWithGrantedProvider(feature.Name, null);
+            var featureNameValueWithGrantedProvider = new FeatureNameValueWithGrantedProvider(feature.Name, null!);
             foreach (var provider in providerList)
             {
-                string pk = null;
+                string? pk = null;
                 if (provider.Compatible(providerName))
                 {
                     pk = providerKey;
                 }
 
-                var value = await provider.GetOrNullAsync(feature, pk);
+                var value = await provider.GetOrNullAsync(feature, pk ?? string.Empty);
                 if (value != null)
                 {
                     featureNameValueWithGrantedProvider.Value = value;
-                    featureNameValueWithGrantedProvider.Provider = new FeatureValueProviderInfo(provider.Name, pk);
+                    featureNameValueWithGrantedProvider.Provider = new FeatureValueProviderInfo(provider.Name, pk ?? string.Empty);
                     break;
                 }
             }
@@ -123,9 +124,9 @@ public class FeatureManager : IFeatureManager, ISingletonDependency
 
     public virtual async Task SetAsync(
         string name,
-        string value,
+        string? value,
         string providerName,
-        string providerKey,
+        string? providerKey,
         bool forceToSet = false)
     {
         Check.NotNull(name, nameof(name));
@@ -150,9 +151,9 @@ public class FeatureManager : IFeatureManager, ISingletonDependency
 
         if (providers.Count > 1 && !forceToSet && value != null)
         {
-            await using (await providers[0].HandleContextAsync(providerName, providerKey))
+            await using (await providers[0].HandleContextAsync(providerName, providerKey ?? string.Empty))
             {
-                var fallbackValue = await GetOrNullInternalAsync(name, providers[1].Name, null);
+                var fallbackValue = await GetOrNullInternalAsync(name, providers[1].Name, null!);
                 if (fallbackValue.Value == value)
                 {
                     //Clear the value if it's same as it's fallback value
@@ -169,22 +170,22 @@ public class FeatureManager : IFeatureManager, ISingletonDependency
         {
             foreach (var provider in providers)
             {
-                await provider.ClearAsync(feature, providerKey);
+                await provider.ClearAsync(feature, providerKey ?? string.Empty);
             }
         }
         else
         {
             foreach (var provider in providers)
             {
-                await provider.SetAsync(feature, value, providerKey);
+                await provider.SetAsync(feature, value, providerKey ?? string.Empty);
             }
         }
     }
 
     protected virtual async Task<FeatureNameValueWithGrantedProvider> GetOrNullInternalAsync(
         string name,
-        string providerName,
-        string providerKey,
+        string? providerName,
+        string? providerKey,
         bool fallback = true) //TODO: Fallback is not used
     {
         var feature = await FeatureDefinitionManager.GetAsync(name);
@@ -196,20 +197,20 @@ public class FeatureManager : IFeatureManager, ISingletonDependency
             providers = providers.SkipWhile(c => c.Name != providerName);
         }
 
-        var featureNameValueWithGrantedProvider = new FeatureNameValueWithGrantedProvider(name, null);
+        var featureNameValueWithGrantedProvider = new FeatureNameValueWithGrantedProvider(name, null!);
         foreach (var provider in providers)
         {
-            string pk = null;
-            if (provider.Compatible(providerName))
+            string? pk = null;
+            if (provider.Compatible(providerName!))
             {
                 pk = providerKey;
             }
 
-            var value = await provider.GetOrNullAsync(feature, pk);
+            var value = await provider.GetOrNullAsync(feature, pk ?? string.Empty);
             if (value != null)
             {
                 featureNameValueWithGrantedProvider.Value = value;
-                featureNameValueWithGrantedProvider.Provider = new FeatureValueProviderInfo(provider.Name, pk);
+                featureNameValueWithGrantedProvider.Provider = new FeatureValueProviderInfo(provider.Name, pk ?? string.Empty);
                 break;
             }
         }

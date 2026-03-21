@@ -1,4 +1,4 @@
-﻿using System.Linq;
+using System.Linq;
 using System.Security.Principal;
 using System.Threading.Tasks;
 using JetBrains.Annotations;
@@ -23,6 +23,11 @@ public class CenseqSecurityStampValidatorCallback
         /// <returns></returns>
         public static Task UpdatePrincipal(SecurityStampRefreshingPrincipalContext context, CenseqRefreshingPrincipalOptions refreshingPrincipalOptions)
         {
+            if (context.NewPrincipal == null || context.CurrentPrincipal == null)
+            {
+                return Task.CompletedTask;
+            }
+
             var newClaimTypes = context.NewPrincipal.Claims.Select(x => x.Type).ToArray();
             var currentClaimsToKeep = context.CurrentPrincipal.Claims.Where(x => !newClaimTypes.Contains(x.Type)).ToArray();
 

@@ -4,6 +4,7 @@ using Censeq.OpenIddict.Applications;
 using Censeq.OpenIddict.Authorizations;
 using Censeq.OpenIddict.Scopes;
 using Censeq.OpenIddict.Tokens;
+using Volo.Abp;
 
 namespace Censeq.OpenIddict.EntityFrameworkCore;
 

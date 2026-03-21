@@ -1,21 +1,18 @@
-using System;
-using System.Threading.Tasks;
 using Asp.Versioning;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
-using Volo.Abp.Account.Localization;
-using Volo.Abp.Account.Settings;
+using Censeq.Account.Localization;
+using Censeq.Account.Settings;
 using Censeq.Account.Web.Areas.Account.Controllers.Models;
 using Volo.Abp.AspNetCore.Mvc;
-using Volo.Abp.Identity;
-using Volo.Abp.Identity.AspNetCore;
+using Censeq.Identity;
 using Volo.Abp.Settings;
 using Volo.Abp.Validation;
 using SignInResult = Microsoft.AspNetCore.Identity.SignInResult;
 using UserLoginInfo = Censeq.Account.Web.Areas.Account.Controllers.Models.UserLoginInfo;
-using IdentityUser = Volo.Abp.Identity.IdentityUser;
-using Volo.Abp.Account;
+using IdentityUser = Censeq.Identity.IdentityUser;
+using Censeq.Identity.AspNetCore;
 
 namespace Censeq.Account.Web.Areas.Account.Controllers;
 
@@ -74,7 +71,7 @@ public class AccountController : AbpControllerBase
         {
             Identity = IdentitySecurityLogIdentityConsts.Identity,
             Action = signInResult.ToIdentitySecurityLogAction(),
-            UserName = login.UserNameOrEmailAddress
+            UserName = login.UserNameOrEmailAddress!
         });
 
         if (signInResult.Succeeded)

@@ -29,7 +29,7 @@ public class ValueValidatorJsonConverter : JsonConverter<IValueValidator>
         var nameJsonProperty = rootElement.EnumerateObject().FirstOrDefault(x => x.Name.Equals(nameof(IValueValidator.Name), StringComparison.OrdinalIgnoreCase));
         if (nameJsonProperty.Value.ValueKind == JsonValueKind.String)
         {
-            var valueValidator = CreateValueValidatorByName(nameJsonProperty.Value.GetString());
+            var valueValidator = CreateValueValidatorByName(nameJsonProperty.Value.GetString()!);
 
             var propertiesJsonProperty = rootElement.EnumerateObject().FirstOrDefault(x => x.Name.Equals(nameof(IValueValidator.Properties), StringComparison.OrdinalIgnoreCase));
             if (propertiesJsonProperty.Value.ValueKind == JsonValueKind.Object)

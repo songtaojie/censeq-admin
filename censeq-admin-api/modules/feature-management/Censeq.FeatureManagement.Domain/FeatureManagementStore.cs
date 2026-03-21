@@ -1,4 +1,4 @@
-﻿using Censeq.FeatureManagement.Entities;
+using Censeq.FeatureManagement.Entities;
 using Volo.Abp.Caching;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Features;
@@ -31,7 +31,7 @@ public class FeatureManagementStore : IFeatureManagementStore, ITransientDepende
     public virtual async Task<string> GetOrNullAsync(string name, string providerName, string providerKey)
     {
         var cacheItem = await GetCacheItemAsync(name, providerName, providerKey);
-        return cacheItem.Value;
+        return cacheItem.Value ?? string.Empty;
     }
 
     [UnitOfWork]
@@ -73,7 +73,7 @@ public class FeatureManagementStore : IFeatureManagementStore, ITransientDepende
             return cacheItem;
         }
 
-        cacheItem = new FeatureValueCacheItem(null);
+        cacheItem = new FeatureValueCacheItem((string?)null);
 
         await SetCacheItemsAsync(providerName, providerKey, name, cacheItem);
 
