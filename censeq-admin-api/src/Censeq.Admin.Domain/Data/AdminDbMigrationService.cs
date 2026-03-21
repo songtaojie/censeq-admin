@@ -2,7 +2,6 @@
 using System.Runtime.InteropServices;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
-using Censeq.Admin.Entities;
 using Censeq.TenantManagement;
 using Censeq.Identity;
 

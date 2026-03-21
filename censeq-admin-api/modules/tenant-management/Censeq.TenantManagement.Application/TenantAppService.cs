@@ -70,7 +70,7 @@ public class TenantAppService : TenantManagementAppServiceBase, ITenantAppServic
 
         await TenantRepository.InsertAsync(tenant);
 
-        await CurrentUnitOfWork.SaveChangesAsync();
+        await CurrentUnitOfWork!.SaveChangesAsync();
 
         await DistributedEventBus.PublishAsync(
             new TenantCreatedEto
@@ -129,7 +129,7 @@ public class TenantAppService : TenantManagementAppServiceBase, ITenantAppServic
     public virtual async Task<string> GetDefaultConnectionStringAsync(Guid id)
     {
         var tenant = await TenantRepository.GetAsync(id);
-        return tenant?.FindDefaultConnectionString();
+        return tenant?.FindDefaultConnectionString() ?? string.Empty;
     }
 
     [Authorize(TenantManagementPermissions.Tenants.ManageConnectionStrings)]

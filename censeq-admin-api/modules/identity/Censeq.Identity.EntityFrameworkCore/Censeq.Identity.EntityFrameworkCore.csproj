@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<Import Project="..\..\..\common.props" />
 
@@ -15,6 +15,7 @@
 		<PackageReference Include="Volo.Abp.Users.EntityFrameworkCore" />
 	</ItemGroup>
 	<ItemGroup>
+		<ProjectReference Include="..\..\feature-management\Censeq.FeatureManagement.EntityFrameworkCore\Censeq.FeatureManagement.EntityFrameworkCore.csproj" />
 		<ProjectReference Include="..\Censeq.Identity.Domain\Censeq.Identity.Domain.csproj" />
 	</ItemGroup>
 

@@ -11,15 +11,15 @@
 	<ItemGroup>
 		<ProjectReference Include="..\..\modules\feature-management\Censeq.FeatureManagement.Domain.Shared\Censeq.FeatureManagement.Domain.Shared.csproj" />
 		<ProjectReference Include="..\..\modules\feature-management\Censeq.FeatureManagement.HttpApi\Censeq.FeatureManagement.HttpApi.csproj" />
+		<ProjectReference Include="..\..\modules\identity\Censeq.Identity.HttpApi\Censeq.Identity.HttpApi.csproj" />
 		<ProjectReference Include="..\..\modules\setting-management\Censeq.SettingManagement.HttpApi\Censeq.SettingManagement.HttpApi.csproj" />
     <ProjectReference Include="..\..\modules\tenant-management\Censeq.TenantManagement.HttpApi\Censeq.TenantManagement.HttpApi.csproj" />
+    <ProjectReference Include="..\..\modules\permission-management\Censeq.PermissionManagement.HttpApi\Censeq.PermissionManagement.HttpApi.csproj" />
     <ProjectReference Include="..\Censeq.Admin.Application.Contracts\Censeq.Admin.Application.Contracts.csproj" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\..\modules\account\Censeq.Account.HttpApi\Censeq.Account.HttpApi.csproj" />
-    <PackageReference Include="Volo.Abp.Identity.HttpApi" />
-    <PackageReference Include="Volo.Abp.PermissionManagement.HttpApi" />
   </ItemGroup>
 
 </Project>

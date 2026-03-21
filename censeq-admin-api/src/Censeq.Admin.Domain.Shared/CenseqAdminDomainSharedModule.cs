@@ -6,7 +6,6 @@ using Censeq.OpenIddict;
 using Censeq.PermissionManagement;
 using Censeq.SettingManagement;
 using Censeq.TenantManagement;
-using Volo.Abp.BackgroundJobs;
 using Volo.Abp.Features;
 using Volo.Abp.Json.SystemTextJson;
 using Volo.Abp.Localization;
@@ -18,7 +17,6 @@ using Volo.Abp.VirtualFileSystem;
 namespace Censeq.Admin;
 
 [DependsOn(
-    typeof(AbpBackgroundJobsDomainSharedModule),
     typeof(CenseqIdentityDomainSharedModule),
     typeof(CenseqOpenIddictDomainSharedModule),
     typeof(AbpJsonSystemTextJsonModule),

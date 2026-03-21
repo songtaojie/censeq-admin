@@ -1,11 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Volo.Abp.Data;
-
-namespace Censeq.Framework.EntityFrameworkCore
+﻿namespace Censeq.Framework.EntityFrameworkCore
 {
     public class CenseqCommonDbProperties
     {
@@ -21,7 +14,7 @@ namespace Censeq.Framework.EntityFrameworkCore
         /// This schema is shared by most of the ABP modules.
         /// You can change it to set schema for all modules using this.
         /// </summary>
-        public static string? DbSchema { get; set; } = AbpCommonDbProperties.DbSchema;
+        public static string? DbSchema { get; set; } =  null;
 
         /// <summary>
         ///  数据库链接字符串

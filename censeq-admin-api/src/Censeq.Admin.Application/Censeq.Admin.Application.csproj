@@ -10,6 +10,8 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\modules\feature-management\Censeq.FeatureManagement.Application\Censeq.FeatureManagement.Application.csproj" />
+    <ProjectReference Include="..\..\modules\identity\Censeq.Identity.Application\Censeq.Identity.Application.csproj" />
+    <ProjectReference Include="..\..\modules\permission-management\Censeq.PermissionManagement.Application\Censeq.PermissionManagement.Application.csproj" />
     <ProjectReference Include="..\..\modules\setting-management\Censeq.SettingManagement.Application\Censeq.SettingManagement.Application.csproj" />
     <ProjectReference Include="..\..\modules\tenant-management\Censeq.TenantManagement.Application\Censeq.TenantManagement.Application.csproj" />
     <ProjectReference Include="..\Censeq.Admin.Domain\Censeq.Admin.Domain.csproj" />
@@ -18,7 +20,5 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\modules\account\Censeq.Account.Application\Censeq.Account.Application.csproj" />
-    <PackageReference Include="Volo.Abp.Identity.Application" />
-    <PackageReference Include="Volo.Abp.PermissionManagement.Application" />
   </ItemGroup>
 </Project>

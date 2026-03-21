@@ -1,21 +1,21 @@
-﻿using Censeq.FeatureManagement;
+﻿using Censeq.Account;
+using Censeq.FeatureManagement;
+using Censeq.Identity;
+using Censeq.PermissionManagement;
 using Censeq.SettingManagement;
 using Censeq.TenantManagement;
-using Volo.Abp.Account;
 using Volo.Abp.AutoMapper;
-using Volo.Abp.Identity;
 using Volo.Abp.Modularity;
-using Volo.Abp.PermissionManagement;
 using Volo.Abp.VirtualFileSystem;
 
 namespace Censeq.Admin;
 
 [DependsOn(
     typeof(CenseqAdminDomainModule),
-    typeof(AbpAccountApplicationModule),
+    typeof(CenseqAccountApplicationModule),
     typeof(CenseqAdminApplicationContractsModule),
-    typeof(AbpIdentityApplicationModule),
-    typeof(AbpPermissionManagementApplicationModule),
+    typeof(CenseqIdentityApplicationModule),
+    typeof(CenseqPermissionManagementApplicationModule),
     typeof(CenseqSettingManagementApplicationModule),
     typeof(CenseqTenantManagementApplicationModule),
     typeof(CenseqFeatureManagementApplicationModule)

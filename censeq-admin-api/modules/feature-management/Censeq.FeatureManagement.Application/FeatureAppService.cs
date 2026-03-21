@@ -49,7 +49,10 @@ public class FeatureAppService : FeatureManagementAppServiceBase, IFeatureAppSer
                     continue;
                 }
 
-                var feature = await FeatureManager.GetOrNullWithProviderAsync(featureDefinition.Name, providerName, providerKey);
+                var feature = await FeatureManager.GetOrNullWithProviderAsync(
+                    featureDefinition.Name,
+                    providerName,
+                    providerKey ?? string.Empty);
                 groupDto.Features.Add(CreateFeatureDto(feature, featureDefinition));
             }
 
@@ -69,7 +72,9 @@ public class FeatureAppService : FeatureManagementAppServiceBase, IFeatureAppSer
         return new FeatureGroupDto
         {
             Name = groupDefinition.Name,
-            DisplayName = groupDefinition.DisplayName?.Localize(StringLocalizerFactory),
+            DisplayName = groupDefinition.DisplayName != null
+                ? (string)groupDefinition.DisplayName.Localize(StringLocalizerFactory)! ?? string.Empty
+                : string.Empty,
             Features = new List<FeatureDto>()
         };
     }
@@ -79,17 +84,21 @@ public class FeatureAppService : FeatureManagementAppServiceBase, IFeatureAppSer
         return new FeatureDto
         {
             Name = featureDefinition.Name,
-            DisplayName = featureDefinition.DisplayName?.Localize(StringLocalizerFactory),
-            Description = featureDefinition.Description?.Localize(StringLocalizerFactory),
+            DisplayName = featureDefinition.DisplayName != null
+                ? (string)featureDefinition.DisplayName.Localize(StringLocalizerFactory)! ?? string.Empty
+                : string.Empty,
+            Description = featureDefinition.Description != null
+                ? (string)featureDefinition.Description.Localize(StringLocalizerFactory)! ?? string.Empty
+                : string.Empty,
 
-            ValueType = featureDefinition.ValueType,
+            ValueType = featureDefinition.ValueType!,
 
-            ParentName = featureDefinition.Parent?.Name,
-            Value = featureNameValueWithGrantedProvider.Value,
+            ParentName = featureDefinition.Parent?.Name ?? string.Empty,
+            Value = featureNameValueWithGrantedProvider.Value ?? string.Empty,
             Provider = new FeatureProviderDto
             {
-                Name = featureNameValueWithGrantedProvider.Provider?.Name,
-                Key = featureNameValueWithGrantedProvider.Provider?.Key
+                Name = featureNameValueWithGrantedProvider.Provider?.Name ?? string.Empty,
+                Key = featureNameValueWithGrantedProvider.Provider?.Key ?? string.Empty
             }
         };
     }
@@ -100,12 +109,12 @@ public class FeatureAppService : FeatureManagementAppServiceBase, IFeatureAppSer
 
         foreach (var feature in input.Features)
         {
-            await FeatureManager.SetAsync(feature.Name, feature.Value, providerName, providerKey);
+            await FeatureManager.SetAsync(feature.Name, feature.Value, providerName, providerKey ?? string.Empty);
         }
     }
 
-    protected virtual void SetFeatureDepth(List<FeatureDto> features, string providerName, string providerKey,
-        FeatureDto parentFeature = null, int depth = 0)
+    protected virtual void SetFeatureDepth(List<FeatureDto> features, string providerName, string? providerKey,
+        FeatureDto? parentFeature = null, int depth = 0)
     {
         foreach (var feature in features)
         {
@@ -126,7 +135,7 @@ public class FeatureAppService : FeatureManagementAppServiceBase, IFeatureAppSer
         }
         else
         {
-            policyName = Options.ProviderPolicies.GetOrDefault(providerName);
+            policyName = Options.ProviderPolicies.GetOrDefault(providerName) ?? string.Empty;
             if (policyName.IsNullOrEmpty())
             {
                 throw new AbpException($"No policy defined to get/set permissions for the provider '{providerName}'. Use {nameof(FeatureManagementOptions)} to map the policy.");
@@ -138,6 +147,6 @@ public class FeatureAppService : FeatureManagementAppServiceBase, IFeatureAppSer
 
     public virtual async Task DeleteAsync([NotNull] string providerName, string providerKey)
     {
-        await FeatureManager.DeleteAsync(providerName, providerKey);
+        await FeatureManager.DeleteAsync(providerName, providerKey ?? string.Empty);
     }
 }

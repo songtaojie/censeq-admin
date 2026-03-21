@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
@@ -9,7 +9,7 @@ namespace Censeq.FeatureManagement;
 
 public interface IFeatureValueRepository : IBasicRepository<FeatureValue, Guid>
 {
-    Task<FeatureValue> FindAsync(
+    Task<FeatureValue?> FindAsync(
         string name,
         string providerName,
         string providerKey,

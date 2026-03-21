@@ -2,6 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using Volo.Abp.Data;
 using Volo.Abp.EntityFrameworkCore;
 using Censeq.PermissionManagement.Entities;
+using Censeq.PermissionManagement.EntityFrameworkCore.Modeling;
 
 namespace Censeq.PermissionManagement.EntityFrameworkCore;
 

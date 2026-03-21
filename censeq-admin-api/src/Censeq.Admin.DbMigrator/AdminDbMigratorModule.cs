@@ -1,4 +1,5 @@
-﻿using Volo.Abp.Autofac;
+﻿using Censeq.Admin.EntityFrameworkCore;
+using Volo.Abp.Autofac;
 using Volo.Abp.Modularity;
 
 namespace Censeq.Admin.DbMigrator;

@@ -14,6 +14,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <ProjectReference Include="..\..\..\framework\Censeq.Framework.Core\Censeq.Framework.Core.csproj" />
 	  <ProjectReference Include="..\Censeq.AuditLogging.Domain.Shared\Censeq.AuditLogging.Domain.Shared.csproj" />
 	</ItemGroup>
 

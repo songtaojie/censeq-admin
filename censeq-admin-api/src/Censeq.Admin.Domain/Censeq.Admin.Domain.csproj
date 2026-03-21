@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <Import Project="..\..\common.props" />
 
@@ -21,9 +21,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Volo.Abp.Emailing" />
     <PackageReference Include="Volo.Abp.MailKit" />
-    <PackageReference Include="Volo.Abp.BackgroundJobs.Domain" />
   </ItemGroup>
 
 </Project>

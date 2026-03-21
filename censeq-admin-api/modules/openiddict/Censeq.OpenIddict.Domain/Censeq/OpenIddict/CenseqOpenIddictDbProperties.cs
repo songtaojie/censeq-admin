@@ -1,12 +1,12 @@
-using Volo.Abp.Data;
+using Censeq.Framework.EntityFrameworkCore;
 
 namespace Censeq.OpenIddict;
 
 public static class CenseqOpenIddictDbProperties
 {
-    public static string DbTablePrefix { get; set; } = "OpenIddict";
+    public static string DbTablePrefix { get; set; } = CenseqCommonDbProperties.DbTablePrefix;
 
-    public static string DbSchema { get; set; } = AbpCommonDbProperties.DbSchema;
+    public static string DbSchema { get; set; } = CenseqCommonDbProperties.DbSchema;
 
-    public const string ConnectionStringName = "CenseqOpenIddict";
+    public const string ConnectionStringName = CenseqCommonDbProperties.ConnectionStringName;
 }

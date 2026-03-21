@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Volo.Abp.Users;
 
-namespace Censeq.Admin.EntityFrameworkCore.Modeling
+namespace Censeq.Identity.EntityFrameworkCore.Modeling
 {
     internal static class CenseqUsersDbContextModelCreatingExtensions
     {

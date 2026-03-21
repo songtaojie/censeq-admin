@@ -1,21 +1,21 @@
+using Censeq.Account.Web;
+using Censeq.Account.Web.Consts;
+using Censeq.Admin.EntityFrameworkCore;
 using Censeq.Admin.MultiTenancy;
+using Censeq.Framework.AspNetCore;
+using Censeq.Framework.AspNetCore.Mvc.UI.Theme.Basic;
+using Censeq.Framework.Swashbuckle;
+using Censeq.OpenIddict;
+using OpenIddict.Validation.AspNetCore;
 using Volo.Abp;
 using Volo.Abp.AspNetCore.MultiTenancy;
+using Volo.Abp.AspNetCore.Mvc.Libs;
 using Volo.Abp.AspNetCore.Serilog;
 using Volo.Abp.Autofac;
 using Volo.Abp.Modularity;
 using Volo.Abp.Security.Claims;
 using Volo.Abp.UI.Navigation.Urls;
 using Volo.Abp.VirtualFileSystem;
-using Volo.Abp.AspNetCore.Mvc.Libs;
-using Censeq.Admin.EntityFrameworkCore;
-using Censeq.Framework.AspNetCore.Mvc.UI.Theme.Basic;
-using Censeq.Framework.Swashbuckle;
-using Censeq.Framework.AspNetCore;
-using Censeq.Account.Web;
-using Volo.Abp.OpenIddict;
-using OpenIddict.Validation.AspNetCore;
-using Censeq.Account.Web.Consts;
 
 namespace Censeq.Admin;
 
@@ -48,7 +48,7 @@ public class CenseqHttpApiHostModule : AbpModule
         });
         if (!hostingEnvironment.IsDevelopment())
         {
-            PreConfigure<AbpOpenIddictAspNetCoreOptions>(options =>
+            PreConfigure<CenseqOpenIddictAspNetCoreOptions>(options =>
             {
                 options.AddDevelopmentEncryptionAndSigningCertificate = false;
             });

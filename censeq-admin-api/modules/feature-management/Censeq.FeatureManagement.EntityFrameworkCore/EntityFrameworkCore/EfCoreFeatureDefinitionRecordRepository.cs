@@ -19,7 +19,7 @@ public class EfCoreFeatureDefinitionRecordRepository :
     {
     }
 
-    public virtual async Task<FeatureDefinitionRecord> FindByNameAsync(string name, CancellationToken cancellationToken = default)
+    public virtual async Task<FeatureDefinitionRecord?> FindByNameAsync(string name, CancellationToken cancellationToken = default)
     {
         return await (await GetDbSetAsync())
             .OrderBy(x => x.Id)

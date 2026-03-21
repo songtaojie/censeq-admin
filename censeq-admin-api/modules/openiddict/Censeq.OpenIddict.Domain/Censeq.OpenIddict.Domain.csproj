@@ -11,6 +11,7 @@
 	</PropertyGroup>
 
 	<ItemGroup>
+		<ProjectReference Include="..\..\..\framework\Censeq.Framework.Core\Censeq.Framework.Core.csproj" />
 		<ProjectReference Include="..\..\identity\Censeq.Identity.Domain\Censeq.Identity.Domain.csproj" />
 		<ProjectReference Include="..\Censeq.OpenIddict.Domain.Shared\Censeq.OpenIddict.Domain.Shared.csproj" />
 	</ItemGroup>

@@ -18,7 +18,7 @@ public class EfCoreFeatureValueRepository : EfCoreRepository<IFeatureManagementD
     {
     }
 
-    public virtual async Task<FeatureValue> FindAsync(
+    public virtual async Task<FeatureValue?> FindAsync(
         string name,
         string providerName,
         string providerKey,

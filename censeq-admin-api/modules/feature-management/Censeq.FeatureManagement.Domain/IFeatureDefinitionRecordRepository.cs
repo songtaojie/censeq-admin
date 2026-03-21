@@ -8,7 +8,7 @@ namespace Censeq.FeatureManagement;
 
 public interface IFeatureDefinitionRecordRepository : IBasicRepository<FeatureDefinitionRecord, Guid>
 {
-    Task<FeatureDefinitionRecord> FindByNameAsync(
+    Task<FeatureDefinitionRecord?> FindByNameAsync(
         string name,
         CancellationToken cancellationToken = default);
 }

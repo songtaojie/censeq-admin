@@ -23,10 +23,10 @@ public class TimeZoneSettingsAppService : SettingManagementAppServiceBase, ITime
     {
         if (CurrentTenant.GetMultiTenancySide() == MultiTenancySides.Host)
         {
-            return await SettingManager.GetOrNullGlobalAsync(TimingSettingNames.TimeZone);
+            return await SettingManager.GetOrNullGlobalAsync(TimingSettingNames.TimeZone) ?? string.Empty;
         }
 
-        return await SettingManager.GetOrNullForCurrentTenantAsync(TimingSettingNames.TimeZone);
+        return await SettingManager.GetOrNullForCurrentTenantAsync(TimingSettingNames.TimeZone) ?? string.Empty;
     }
 
     public virtual Task<List<NameValue>> GetTimezonesAsync()

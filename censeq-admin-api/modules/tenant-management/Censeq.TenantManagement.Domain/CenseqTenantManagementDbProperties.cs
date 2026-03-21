@@ -1,12 +1,12 @@
-using Volo.Abp.Data;
+using Censeq.Framework.EntityFrameworkCore;
 
 namespace Censeq.TenantManagement;
 
 public static class CenseqTenantManagementDbProperties
 {
-    public static string? DbTablePrefix { get; set; } = AbpCommonDbProperties.DbTablePrefix;
+    public static string? DbTablePrefix { get; set; } = CenseqCommonDbProperties.DbTablePrefix;
 
-    public static string? DbSchema { get; set; } = AbpCommonDbProperties.DbSchema;
+    public static string? DbSchema { get; set; } = CenseqCommonDbProperties.DbSchema;
 
-    public const string ConnectionStringName = "AbpTenantManagement";
+    public const string ConnectionStringName = CenseqCommonDbProperties.ConnectionStringName;
 }

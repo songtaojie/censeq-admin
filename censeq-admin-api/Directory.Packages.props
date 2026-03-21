@@ -81,7 +81,6 @@
     <PackageVersion Include="Volo.Abp.PermissionManagement.EntityFrameworkCore" Version="$(AbpVersion)" />
     <PackageVersion Include="Volo.Abp.PermissionManagement.Application" Version="$(AbpVersion)" />
     <PackageVersion Include="Volo.Abp.PermissionManagement.Application.Contracts" Version="$(AbpVersion)" />
-    <PackageVersion Include="Volo.Abp.PermissionManagement.HttpApi" Version="$(AbpVersion)" />
     <PackageVersion Include="Volo.Abp.PermissionManagement.HttpApi.Client" Version="$(AbpVersion)" />
     <PackageVersion Include="Volo.Abp.SettingManagement.HttpApi.Client" Version="$(AbpVersion)" />
     <PackageVersion Include="Volo.Abp.Settings" Version="$(AbpVersion)" />

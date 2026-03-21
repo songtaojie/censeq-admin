@@ -1,9 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using System;
+using Censeq.Framework.EntityFrameworkCore;
 using Volo.Abp;
-using Volo.Abp.Identity;
 
-namespace Censeq.Admin.EntityFrameworkCore.Modeling
+namespace Censeq.Identity.EntityFrameworkCore.Modeling
 {
     internal static class CenseqIdentityDbContextModelBuilderExtensions
     {

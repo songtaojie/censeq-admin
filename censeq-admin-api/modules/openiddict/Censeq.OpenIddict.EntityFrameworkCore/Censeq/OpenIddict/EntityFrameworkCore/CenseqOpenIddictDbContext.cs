@@ -6,6 +6,7 @@ using Censeq.OpenIddict.Applications;
 using Censeq.OpenIddict.Authorizations;
 using Censeq.OpenIddict.Scopes;
 using Censeq.OpenIddict.Tokens;
+using Censeq.OpenIddict.EntityFrameworkCore.Modeling;
 
 namespace Censeq.OpenIddict.EntityFrameworkCore;
 

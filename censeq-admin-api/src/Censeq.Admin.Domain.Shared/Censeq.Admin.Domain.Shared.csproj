@@ -9,7 +9,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Volo.Abp.BackgroundJobs.Domain.Shared" />
     <PackageReference Include="Volo.Abp.Json.SystemTextJson" />
   </ItemGroup>
 

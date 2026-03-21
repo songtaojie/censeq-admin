@@ -18,6 +18,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <ProjectReference Include="..\..\..\framework\Censeq.Framework.Core\Censeq.Framework.Core.csproj" />
 	  <ProjectReference Include="..\Censeq.FeatureManagement.Domain.Shared\Censeq.FeatureManagement.Domain.Shared.csproj" />
 	</ItemGroup>
 

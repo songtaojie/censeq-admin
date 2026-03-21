@@ -20,6 +20,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <ProjectReference Include="..\..\..\framework\Censeq.Framework.Core\Censeq.Framework.Core.csproj" />
 	  <ProjectReference Include="..\Censeq.SettingManagement.Domain.Shared\Censeq.SettingManagement.Domain.Shared.csproj" />
 	</ItemGroup>
 </Project>

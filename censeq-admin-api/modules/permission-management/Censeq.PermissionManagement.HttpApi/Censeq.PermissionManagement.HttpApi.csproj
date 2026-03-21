@@ -1,0 +1,21 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+	<Import Project="..\..\..\common.props" />
+
+	<PropertyGroup>
+		<AssemblyName>Censeq.PermissionManagement.HttpApi</AssemblyName>
+		<PackageId>Censeq.PermissionManagement.HttpApi</PackageId>
+		<Nullable>enable</Nullable>
+		<RootNamespace>Censeq.PermissionManagement</RootNamespace>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Volo.Abp.AspNetCore.Mvc" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\Censeq.PermissionManagement.Application.Contracts\Censeq.PermissionManagement.Application.Contracts.csproj" />
+		<ProjectReference Include="..\Censeq.PermissionManagement.Domain.Shared\Censeq.PermissionManagement.Domain.Shared.csproj" />
+	</ItemGroup>
+
+</Project>

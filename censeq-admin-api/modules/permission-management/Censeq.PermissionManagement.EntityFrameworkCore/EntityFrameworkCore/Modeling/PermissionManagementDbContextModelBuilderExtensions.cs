@@ -1,11 +1,11 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Volo.Abp.PermissionManagement.EntityFrameworkCore;
-using Volo.Abp.PermissionManagement;
+﻿using Censeq.PermissionManagement.Entities;
+using Microsoft.EntityFrameworkCore;
+using Censeq.Framework.EntityFrameworkCore;
 using Volo.Abp;
 
-namespace Censeq.Admin.EntityFrameworkCore.Modeling
+namespace Censeq.PermissionManagement.EntityFrameworkCore.Modeling
 {
-    internal static class CenseqPermissionManagementDbContextModelBuilderExtensions
+    internal static class PermissionManagementDbContextModelBuilderExtensions
     {
         public static void ConfigurePermissionManagement(this ModelBuilder builder)
         {

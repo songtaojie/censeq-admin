@@ -1,16 +1,12 @@
-﻿using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Volo.Abp.OpenIddict.Applications;
-using Volo.Abp.OpenIddict.Authorizations;
-using Volo.Abp.OpenIddict.Scopes;
-using Volo.Abp.OpenIddict.Tokens;
+﻿using Censeq.OpenIddict.Applications;
+using Microsoft.EntityFrameworkCore;
+using Censeq.Framework.EntityFrameworkCore;
 using Volo.Abp;
+using Censeq.OpenIddict.Authorizations;
+using Censeq.OpenIddict.Scopes;
+using Censeq.OpenIddict.Tokens;
 
-namespace Censeq.Admin.EntityFrameworkCore.Modeling
+namespace Censeq.OpenIddict.EntityFrameworkCore.Modeling
 {
     internal static class CenseqOpenIddictDbContextModelCreatingExtensions
     {
