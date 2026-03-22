@@ -1,4 +1,4 @@
-﻿using Censeq.Framework.EntityFrameworkCore;
+using Censeq.Framework.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.Extensions.Configuration;

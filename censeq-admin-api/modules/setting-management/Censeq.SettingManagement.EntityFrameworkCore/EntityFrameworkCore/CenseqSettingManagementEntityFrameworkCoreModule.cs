@@ -19,15 +19,5 @@ public class CenseqSettingManagementEntityFrameworkCoreModule : AbpModule
             options.AddRepository<Setting, EfCoreSettingRepository>();
             options.AddRepository<SettingDefinitionRecord, EfCoreSettingDefinitionRecordRepository>();
         });
-
-        var configuration = context.Services.GetConfiguration();
-        Configure<AbpDbContextOptions>(options =>
-        {
-            options.Configure<SettingManagementDbContext>(dbContext =>
-            {
-                dbContext.UseDynamicSql(configuration);
-            });
-        });
-
     }
 }

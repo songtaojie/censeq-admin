@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Censeq.Framework.EntityFrameworkCore;
 using Volo.Abp;
 
-namespace Censeq.PermissionManagement.EntityFrameworkCore.Modeling
+namespace Censeq.PermissionManagement.EntityFrameworkCore
 {
     public static class PermissionManagementDbContextModelBuilderExtensions
     {

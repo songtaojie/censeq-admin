@@ -8,10 +8,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Volo.Abp.EntityFrameworkCore" />
-  </ItemGroup>
-
-  <ItemGroup>
+    <ProjectReference Include="..\..\framework\Censeq.Framework.EntityFrameworkCore\Censeq.Framework.EntityFrameworkCore.csproj" />
     <ProjectReference Include="..\..\modules\audit-logging\Censeq.AuditLogging.EntityFrameworkCore\Censeq.AuditLogging.EntityFrameworkCore.csproj" />
     <ProjectReference Include="..\..\modules\feature-management\Censeq.FeatureManagement.EntityFrameworkCore\Censeq.FeatureManagement.EntityFrameworkCore.csproj" />
     <ProjectReference Include="..\..\modules\identity\Censeq.Identity.EntityFrameworkCore\Censeq.Identity.EntityFrameworkCore.csproj" />

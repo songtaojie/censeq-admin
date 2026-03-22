@@ -46,6 +46,57 @@ namespace Censeq.Admin.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "censeq_feature_definition_record",
+                columns: table => new
+                {
+                    id = table.Column<Guid>(type: "uuid", nullable: false),
+                    group_name = table.Column<string>(type: "character varying(128)", maxLength: 128, nullable: false),
+                    name = table.Column<string>(type: "character varying(128)", maxLength: 128, nullable: false),
+                    parent_name = table.Column<string>(type: "character varying(128)", maxLength: 128, nullable: false),
+                    display_name = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: false),
+                    description = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: false),
+                    default_value = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: false),
+                    is_visible_to_clients = table.Column<bool>(type: "boolean", nullable: false),
+                    is_available_to_host = table.Column<bool>(type: "boolean", nullable: false),
+                    allowed_providers = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: false),
+                    value_type = table.Column<string>(type: "character varying(2048)", maxLength: 2048, nullable: false),
+                    extra_properties = table.Column<string>(type: "text", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("pk_censeq_feature_definition_record", x => x.id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "censeq_feature_group_definition_record",
+                columns: table => new
+                {
+                    id = table.Column<Guid>(type: "uuid", nullable: false),
+                    name = table.Column<string>(type: "character varying(128)", maxLength: 128, nullable: false),
+                    display_name = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: false),
+                    extra_properties = table.Column<string>(type: "text", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("pk_censeq_feature_group_definition_record", x => x.id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "censeq_feature_value",
+                columns: table => new
+                {
+                    id = table.Column<Guid>(type: "uuid", nullable: false),
+                    name = table.Column<string>(type: "character varying(128)", maxLength: 128, nullable: false),
+                    value = table.Column<string>(type: "character varying(128)", maxLength: 128, nullable: false),
+                    provider_name = table.Column<string>(type: "character varying(64)", maxLength: 64, nullable: false),
+                    provider_key = table.Column<string>(type: "character varying(64)", maxLength: 64, nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("pk_censeq_feature_value", x => x.id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "censeq_identity_claim_type",
                 columns: table => new
                 {
@@ -161,7 +212,7 @@ namespace Censeq.Admin.Migrations
                     password_hash = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: false),
                     security_stamp = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: false),
                     is_external = table.Column<bool>(type: "boolean", nullable: false, defaultValue: false),
-                    phone_number = table.Column<string>(type: "character varying(16)", maxLength: 16, nullable: false),
+                    phone_number = table.Column<string>(type: "character varying(16)", maxLength: 16, nullable: true),
                     phone_number_confirmed = table.Column<bool>(type: "boolean", nullable: false, defaultValue: false),
                     is_active = table.Column<bool>(type: "boolean", nullable: false),
                     two_factor_enabled = table.Column<bool>(type: "boolean", nullable: false, defaultValue: false),
@@ -456,57 +507,6 @@ namespace Censeq.Admin.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "CenseqFeatureGroups",
-                columns: table => new
-                {
-                    id = table.Column<Guid>(type: "uuid", nullable: false),
-                    name = table.Column<string>(type: "character varying(128)", maxLength: 128, nullable: false),
-                    display_name = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: false),
-                    ExtraProperties = table.Column<string>(type: "text", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("pk_censeq_feature_groups", x => x.id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "CenseqFeatures",
-                columns: table => new
-                {
-                    id = table.Column<Guid>(type: "uuid", nullable: false),
-                    group_name = table.Column<string>(type: "character varying(128)", maxLength: 128, nullable: false),
-                    name = table.Column<string>(type: "character varying(128)", maxLength: 128, nullable: false),
-                    parent_name = table.Column<string>(type: "character varying(128)", maxLength: 128, nullable: false),
-                    display_name = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: false),
-                    description = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: false),
-                    default_value = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: false),
-                    is_visible_to_clients = table.Column<bool>(type: "boolean", nullable: false),
-                    is_available_to_host = table.Column<bool>(type: "boolean", nullable: false),
-                    allowed_providers = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: false),
-                    value_type = table.Column<string>(type: "character varying(2048)", maxLength: 2048, nullable: false),
-                    ExtraProperties = table.Column<string>(type: "text", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("pk_censeq_features", x => x.id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "CenseqFeatureValues",
-                columns: table => new
-                {
-                    id = table.Column<Guid>(type: "uuid", nullable: false),
-                    name = table.Column<string>(type: "character varying(128)", maxLength: 128, nullable: false),
-                    value = table.Column<string>(type: "character varying(128)", maxLength: 128, nullable: false),
-                    provider_name = table.Column<string>(type: "character varying(64)", maxLength: 64, nullable: false),
-                    provider_key = table.Column<string>(type: "character varying(64)", maxLength: 64, nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("pk_censeq_feature_values", x => x.id);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "censeq_audit_log_action",
                 columns: table => new
                 {
@@ -779,6 +779,29 @@ namespace Censeq.Admin.Migrations
                 column: "entity_change_id");
 
             migrationBuilder.CreateIndex(
+                name: "ix_censeq_feature_definition_record_group_name",
+                table: "censeq_feature_definition_record",
+                column: "group_name");
+
+            migrationBuilder.CreateIndex(
+                name: "ix_censeq_feature_definition_record_name",
+                table: "censeq_feature_definition_record",
+                column: "name",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "ix_censeq_feature_group_definition_record_name",
+                table: "censeq_feature_group_definition_record",
+                column: "name",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "ix_censeq_feature_value_name_provider_name_provider_key",
+                table: "censeq_feature_value",
+                columns: new[] { "name", "provider_name", "provider_key" },
+                unique: true);
+
+            migrationBuilder.CreateIndex(
                 name: "ix_censeq_identity_link_user_source_user_id_source_tenant_id_t",
                 table: "censeq_identity_link_user",
                 columns: new[] { "source_user_id", "source_tenant_id", "target_user_id", "target_tenant_id" },
@@ -981,29 +1004,6 @@ namespace Censeq.Admin.Migrations
                 name: "ix_censeq_tenant_normalized_name",
                 table: "censeq_tenant",
                 column: "normalized_name");
-
-            migrationBuilder.CreateIndex(
-                name: "ix_censeq_feature_groups_name",
-                table: "CenseqFeatureGroups",
-                column: "name",
-                unique: true);
-
-            migrationBuilder.CreateIndex(
-                name: "ix_censeq_features_group_name",
-                table: "CenseqFeatures",
-                column: "group_name");
-
-            migrationBuilder.CreateIndex(
-                name: "ix_censeq_features_name",
-                table: "CenseqFeatures",
-                column: "name",
-                unique: true);
-
-            migrationBuilder.CreateIndex(
-                name: "ix_censeq_feature_values_name_provider_name_provider_key",
-                table: "CenseqFeatureValues",
-                columns: new[] { "name", "provider_name", "provider_key" },
-                unique: true);
         }
 
         /// <inheritdoc />
@@ -1014,6 +1014,15 @@ namespace Censeq.Admin.Migrations
 
             migrationBuilder.DropTable(
                 name: "censeq_entity_property_change");
+
+            migrationBuilder.DropTable(
+                name: "censeq_feature_definition_record");
+
+            migrationBuilder.DropTable(
+                name: "censeq_feature_group_definition_record");
+
+            migrationBuilder.DropTable(
+                name: "censeq_feature_value");
 
             migrationBuilder.DropTable(
                 name: "censeq_identity_claim_type");
@@ -1080,15 +1089,6 @@ namespace Censeq.Admin.Migrations
 
             migrationBuilder.DropTable(
                 name: "censeq_tenant_connection_string");
-
-            migrationBuilder.DropTable(
-                name: "CenseqFeatureGroups");
-
-            migrationBuilder.DropTable(
-                name: "CenseqFeatures");
-
-            migrationBuilder.DropTable(
-                name: "CenseqFeatureValues");
 
             migrationBuilder.DropTable(
                 name: "censeq_entity_change");

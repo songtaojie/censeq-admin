@@ -14,7 +14,6 @@ using Censeq.OpenIddict.Scopes;
 using Censeq.OpenIddict.Tokens;
 using Censeq.PermissionManagement.Entities;
 using Censeq.PermissionManagement.EntityFrameworkCore;
-using Censeq.PermissionManagement.EntityFrameworkCore.Modeling;
 using Censeq.SettingManagement.Entities;
 using Censeq.SettingManagement.EntityFrameworkCore;
 using Censeq.SettingManagement.EntityFrameworkCore.Modeling;

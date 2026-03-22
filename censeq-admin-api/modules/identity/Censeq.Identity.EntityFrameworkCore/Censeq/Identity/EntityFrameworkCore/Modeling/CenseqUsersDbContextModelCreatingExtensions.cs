@@ -1,4 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Volo.Abp.Users;
 
@@ -15,7 +15,9 @@ namespace Censeq.Identity.EntityFrameworkCore.Modeling
             b.Property(u => u.Name).HasMaxLength(AbpUserConsts.MaxNameLength);
             b.Property(u => u.Surname).HasMaxLength(AbpUserConsts.MaxSurnameLength);
             b.Property(u => u.EmailConfirmed).HasDefaultValue(false);
-            b.Property(u => u.PhoneNumber).HasMaxLength(AbpUserConsts.MaxPhoneNumberLength);
+            b.Property(u => u.PhoneNumber)
+                .HasMaxLength(AbpUserConsts.MaxPhoneNumberLength)
+                .IsRequired(false);
             b.Property(u => u.PhoneNumberConfirmed).HasDefaultValue(false);
             b.Property(u => u.IsActive);
         }

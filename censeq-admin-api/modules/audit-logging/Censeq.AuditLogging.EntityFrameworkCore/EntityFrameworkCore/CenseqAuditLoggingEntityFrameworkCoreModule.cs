@@ -16,15 +16,5 @@ public class CenseqAuditLoggingEntityFrameworkCoreModule : AbpModule
         {
             options.AddRepository<AuditLog, EfCoreAuditLogRepository>();
         });
-
-        var configuration = context.Services.GetConfiguration();
-        Configure<AbpDbContextOptions>(options =>
-        {
-            options.Configure<CenseqAuditLoggingDbContext>(dbContext =>
-            {
-                dbContext.UseDynamicSql(configuration);
-            });
-        });
-
     }
 }

@@ -5,6 +5,7 @@ using Censeq.OpenIddict.EntityFrameworkCore;
 using Censeq.PermissionManagement.EntityFrameworkCore;
 using Censeq.SettingManagement.EntityFrameworkCore;
 using Censeq.TenantManagement.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.EntityFrameworkCore;
 using Volo.Abp.EntityFrameworkCore.PostgreSql;
@@ -48,6 +49,8 @@ public class CenseqAdminEntityFrameworkCoreModule : AbpModule
             options.Configure<CenseqAdminDbContext>(dbContext =>
             {
                 dbContext.UseDynamicSql(configuration);
+                // 与 AdminDesignTimeDbContextFactory 一致：UseNpgsql 等会重建 options，需再应用 snake_case，否则 SQL 为 "Id" 而库列为 id。
+                dbContext.DbContextOptions.UseSnakeCaseNamingConvention();
             });
         });
     }

@@ -13,7 +13,7 @@ using Volo.Abp.EntityFrameworkCore;
 namespace Censeq.Admin.Migrations
 {
     [DbContext(typeof(CenseqAdminDbContext))]
-    [Migration("20260321145811_InitialDb")]
+    [Migration("20260322135030_InitialDb")]
     partial class InitialDb
     {
         /// <inheritdoc />
@@ -340,7 +340,7 @@ namespace Censeq.Admin.Migrations
                     b.Property<string>("ExtraProperties")
                         .IsRequired()
                         .HasColumnType("text")
-                        .HasColumnName("ExtraProperties");
+                        .HasColumnName("extra_properties");
 
                     b.Property<string>("GroupName")
                         .IsRequired()
@@ -375,16 +375,16 @@ namespace Censeq.Admin.Migrations
                         .HasColumnName("value_type");
 
                     b.HasKey("Id")
-                        .HasName("pk_censeq_features");
+                        .HasName("pk_censeq_feature_definition_record");
 
                     b.HasIndex("GroupName")
-                        .HasDatabaseName("ix_censeq_features_group_name");
+                        .HasDatabaseName("ix_censeq_feature_definition_record_group_name");
 
                     b.HasIndex("Name")
                         .IsUnique()
-                        .HasDatabaseName("ix_censeq_features_name");
+                        .HasDatabaseName("ix_censeq_feature_definition_record_name");
 
-                    b.ToTable("CenseqFeatures", (string)null);
+                    b.ToTable("censeq_feature_definition_record", (string)null);
                 });
 
             modelBuilder.Entity("Censeq.FeatureManagement.Entities.FeatureGroupDefinitionRecord", b =>
@@ -402,7 +402,7 @@ namespace Censeq.Admin.Migrations
                     b.Property<string>("ExtraProperties")
                         .IsRequired()
                         .HasColumnType("text")
-                        .HasColumnName("ExtraProperties");
+                        .HasColumnName("extra_properties");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -411,13 +411,13 @@ namespace Censeq.Admin.Migrations
                         .HasColumnName("name");
 
                     b.HasKey("Id")
-                        .HasName("pk_censeq_feature_groups");
+                        .HasName("pk_censeq_feature_group_definition_record");
 
                     b.HasIndex("Name")
                         .IsUnique()
-                        .HasDatabaseName("ix_censeq_feature_groups_name");
+                        .HasDatabaseName("ix_censeq_feature_group_definition_record_name");
 
-                    b.ToTable("CenseqFeatureGroups", (string)null);
+                    b.ToTable("censeq_feature_group_definition_record", (string)null);
                 });
 
             modelBuilder.Entity("Censeq.FeatureManagement.Entities.FeatureValue", b =>
@@ -451,13 +451,13 @@ namespace Censeq.Admin.Migrations
                         .HasColumnName("value");
 
                     b.HasKey("Id")
-                        .HasName("pk_censeq_feature_values");
+                        .HasName("pk_censeq_feature_value");
 
                     b.HasIndex("Name", "ProviderName", "ProviderKey")
                         .IsUnique()
-                        .HasDatabaseName("ix_censeq_feature_values_name_provider_name_provider_key");
+                        .HasDatabaseName("ix_censeq_feature_value_name_provider_name_provider_key");
 
-                    b.ToTable("CenseqFeatureValues", (string)null);
+                    b.ToTable("censeq_feature_value", (string)null);
                 });
 
             modelBuilder.Entity("Censeq.Identity.IdentityClaimType", b =>
@@ -937,7 +937,6 @@ namespace Censeq.Admin.Migrations
                         .HasColumnName("password_hash");
 
                     b.Property<string>("PhoneNumber")
-                        .IsRequired()
                         .HasMaxLength(16)
                         .HasColumnType("character varying(16)")
                         .HasColumnName("phone_number");

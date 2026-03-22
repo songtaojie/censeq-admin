@@ -1,6 +1,6 @@
 using Microsoft.EntityFrameworkCore;
-using Volo.Abp.EntityFrameworkCore.Modeling;
 using Censeq.FeatureManagement.Entities;
+using Censeq.Framework.EntityFrameworkCore;
 using Volo.Abp;
 
 namespace Censeq.FeatureManagement.EntityFrameworkCore;
@@ -19,9 +19,7 @@ public static class FeatureManagementDbContextModelCreatingExtensions
 
         builder.Entity<FeatureValue>(b =>
         {
-            b.ToTable(CenseqFeatureManagementDbProperties.DbTablePrefix + "FeatureValues", CenseqFeatureManagementDbProperties.DbSchema);
-
-            b.ConfigureByConvention();
+            b.ToCenseqTable(nameof(FeatureValue)).ConfigureCenseqByConvention();
 
             b.Property(x => x.Name).HasMaxLength(FeatureValueConsts.MaxNameLength).IsRequired();
             b.Property(x => x.Value).HasMaxLength(FeatureValueConsts.MaxValueLength).IsRequired();
@@ -34,9 +32,7 @@ public static class FeatureManagementDbContextModelCreatingExtensions
         });
         builder.Entity<FeatureGroupDefinitionRecord>(b =>
         {
-            b.ToTable(CenseqFeatureManagementDbProperties.DbTablePrefix + "FeatureGroups", CenseqFeatureManagementDbProperties.DbSchema);
-
-            b.ConfigureByConvention();
+            b.ToCenseqTable(nameof(FeatureGroupDefinitionRecord)).ConfigureCenseqByConvention();
 
             b.Property(x => x.Name).HasMaxLength(FeatureGroupDefinitionRecordConsts.MaxNameLength).IsRequired();
             b.Property(x => x.DisplayName).HasMaxLength(FeatureGroupDefinitionRecordConsts.MaxDisplayNameLength).IsRequired();
@@ -48,9 +44,7 @@ public static class FeatureManagementDbContextModelCreatingExtensions
 
         builder.Entity<FeatureDefinitionRecord>(b =>
         {
-            b.ToTable(CenseqFeatureManagementDbProperties.DbTablePrefix + "Features", CenseqFeatureManagementDbProperties.DbSchema);
-
-            b.ConfigureByConvention();
+            b.ToCenseqTable(nameof(FeatureDefinitionRecord)).ConfigureCenseqByConvention();
 
             b.Property(x => x.GroupName).HasMaxLength(FeatureGroupDefinitionRecordConsts.MaxNameLength).IsRequired();
             b.Property(x => x.Name).HasMaxLength(FeatureDefinitionRecordConsts.MaxNameLength).IsRequired();
@@ -67,6 +61,5 @@ public static class FeatureManagementDbContextModelCreatingExtensions
             b.ApplyObjectExtensionMappings();
         });
 
-        builder.TryConfigureObjectExtensions<FeatureManagementDbContext>();
     }
 }
