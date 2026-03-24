@@ -10,13 +10,13 @@
 
 <script setup lang="ts">
 import { ref, onMounted } from 'vue';
-import { useRouter } from 'vue-router';
+import { useOidc } from '/@/composables/useOidc';
 
 const countdown = ref(5);
-const router = useRouter();
+const { login } = useOidc();
 
-const redirectToLogin = () => {
-	router.replace({ path: '/login' });
+const redirectToOpenIdLogin = async () => {
+	await login();
 };
 
 onMounted(() => {
@@ -24,7 +24,7 @@ onMounted(() => {
 		countdown.value--;
 		if (countdown.value <= 0) {
 			clearInterval(timer);
-			redirectToLogin();
+			redirectToOpenIdLogin();
 		}
 	}, 1000);
 });

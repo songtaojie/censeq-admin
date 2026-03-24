@@ -1,4 +1,4 @@
-﻿using System.Text.Json;
+using System.Text.Json;
 using Censeq.OpenIddict.Applications;
 using Censeq.OpenIddict.Scopes;
 using Censeq.PermissionManagement;
@@ -83,6 +83,7 @@ public class OpenIddictDataSeedContributor : IDataSeedContributor, ITransientDep
             var consoleAndAngularClientRedirectUri = configurationSection["Admin_App:RedirectUri"]?.TrimEnd('/');
             var consoleAndAngularClientClientUri = configurationSection["Admin_App:ClientUri"]?.TrimEnd('/');
             var consoleAndAngularClientRootUrl = configurationSection["Admin_App:RootUrl"]?.TrimEnd('/');
+            var consoleAndAngularClientPostLogoutRedirectUri = configurationSection["Admin_App:PostLogoutRedirectUri"]?.TrimEnd('/');
             await CreateApplicationAsync(
                 name: consoleAndAngularClientId!,
                 type: OpenIddictConstants.ClientTypes.Public,
@@ -98,7 +99,7 @@ public class OpenIddictDataSeedContributor : IDataSeedContributor, ITransientDep
                 scopes: commonScopes,
                 redirectUri: consoleAndAngularClientRedirectUri ?? consoleAndAngularClientRootUrl,
                 clientUri: consoleAndAngularClientClientUri ?? consoleAndAngularClientRootUrl,
-                postLogoutRedirectUri: consoleAndAngularClientRootUrl
+                postLogoutRedirectUri: consoleAndAngularClientPostLogoutRedirectUri ?? consoleAndAngularClientRootUrl
             );
         }
 
@@ -176,7 +177,7 @@ public class OpenIddictDataSeedContributor : IDataSeedContributor, ITransientDep
 
         if (!redirectUri.IsNullOrWhiteSpace() || !postLogoutRedirectUri.IsNullOrWhiteSpace())
         {
-            //application.Permissions.Add(OpenIddictConstants.Permissions.Endpoints.EndSession);
+            application.Permissions.Add(OpenIddictConstants.Permissions.Endpoints.Logout);
         }
 
         var buildInGrantTypes = new[] {
@@ -319,7 +320,7 @@ public class OpenIddictDataSeedContributor : IDataSeedContributor, ITransientDep
             return;
         }
 
-        if (!HasSameRedirectUris(client, application))
+        if (!HasSameRedirectUris(client, application) || !HasSamePostLogoutRedirectUris(client, application))
         {
             client.RedirectUris = JsonSerializer.Serialize(application.RedirectUris.Select(q => q.ToString().TrimEnd('/')));
             client.PostLogoutRedirectUris = JsonSerializer.Serialize(application.PostLogoutRedirectUris.Select(q => q.ToString().TrimEnd('/')));
@@ -337,6 +338,12 @@ public class OpenIddictDataSeedContributor : IDataSeedContributor, ITransientDep
     private bool HasSameRedirectUris(OpenIddictApplication existingClient, CenseqApplicationDescriptor application)
     {
         return existingClient.RedirectUris == JsonSerializer.Serialize(application.RedirectUris.Select(q => q.ToString().TrimEnd('/')));
+    }
+
+    private bool HasSamePostLogoutRedirectUris(OpenIddictApplication existingClient, CenseqApplicationDescriptor application)
+    {
+        return existingClient.PostLogoutRedirectUris ==
+               JsonSerializer.Serialize(application.PostLogoutRedirectUris.Select(q => q.ToString().TrimEnd('/')));
     }
 
     private bool HasSameScopes(OpenIddictApplication existingClient, CenseqApplicationDescriptor application)
