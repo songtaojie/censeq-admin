@@ -153,6 +153,21 @@ export const dynamicRoutes: Array<RouteRecordRaw> = [
 							icon: 'ele-SetUp',
 						},
 					},
+					{
+						path: '/system/tenant',
+						name: 'systemTenant',
+						component: () => import('/@/views/system/tenant/index.vue'),
+						meta: {
+							title: 'message.router.systemTenant',
+							isLink: '',
+							isHide: false,
+							isKeepAlive: true,
+							isAffix: false,
+							isIframe: false,
+							roles: ['admin'],
+							icon: 'ele-HomeFilled',
+						},
+					},
 				],
 			},
 			{

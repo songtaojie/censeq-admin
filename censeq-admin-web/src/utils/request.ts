@@ -1,4 +1,4 @@
-import axios, { AxiosInstance, AxiosResponse } from 'axios';
+import axios, { AxiosError, AxiosInstance, AxiosResponse } from 'axios';
 import { ElMessage, ElMessageBox } from 'element-plus';
 import { Session } from '/@/utils/storage';
 import qs from 'qs';
@@ -8,6 +8,63 @@ export interface ApiResponse<T = any> {
 	code: number;
 	message: string;
 	data: T;
+}
+
+/**
+ * 从 ABP RemoteServiceErrorResponse（body 多为 `{ error: { message, details, validationErrors } }`）
+ * 或直连字段中解析可读错误文案；避免 HTTP/2 下 `statusText` 为空导致 ElMessage 只有图标无文字。
+ */
+function getHttpErrorMessage(error: AxiosError | any): string {
+	if (error?.message === 'canceled' || axios.isCancel?.(error)) {
+		return '请求已取消';
+	}
+
+	const response = error?.response as AxiosResponse<any> | undefined;
+	const status = response?.status;
+
+	if (error?.message?.indexOf?.('timeout') !== -1) {
+		return '网络超时';
+	}
+	if (error?.message === 'Network Error') {
+		return '网络连接错误';
+	}
+
+	if (!response) {
+		return error?.message && typeof error.message === 'string' ? error.message : '请求失败';
+	}
+
+	const data = response.data;
+	const errObj = data?.error && typeof data.error === 'object' ? data.error : data;
+
+	if (errObj && typeof errObj === 'object') {
+		const pieces: string[] = [];
+		if (typeof errObj.message === 'string' && errObj.message.trim()) {
+			pieces.push(errObj.message.trim());
+		}
+		if (typeof errObj.details === 'string' && errObj.details.trim()) {
+			pieces.push(errObj.details.trim());
+		}
+		if (Array.isArray(errObj.validationErrors)) {
+			for (const ve of errObj.validationErrors) {
+				if (ve?.message) pieces.push(String(ve.message).trim());
+			}
+		}
+		if (pieces.length > 0) {
+			const combined = pieces.join('；').replace(/\r\n/g, ' ');
+			return combined.length > 800 ? `${combined.slice(0, 800)}…` : combined;
+		}
+	}
+
+	if (typeof data === 'string' && data.trim()) {
+		return data.trim().length > 800 ? `${data.trim().slice(0, 800)}…` : data.trim();
+	}
+
+	const statusText = typeof response.statusText === 'string' ? response.statusText.trim() : '';
+	if (statusText) return statusText;
+
+	if (status === 404) return '接口路径找不到';
+
+	return typeof status === 'number' ? `请求失败（${status}）` : '请求失败';
 }
 
 // 定义请求中止控制器映射表
@@ -78,16 +135,8 @@ service.interceptors.response.use(
 		}
 		return response.data;
 	},
-	(error) => {
-		// 对响应错误做点什么
-		if (error.message.indexOf('timeout') != -1) {
-			ElMessage.error('网络超时');
-		} else if (error.message == 'Network Error') {
-			ElMessage.error('网络连接错误');
-		} else {
-			if (error.response.data) ElMessage.error(error.response.statusText);
-			else ElMessage.error('接口路径找不到');
-		}
+	(error: AxiosError) => {
+		ElMessage.error(getHttpErrorMessage(error));
 		return Promise.reject(error);
 	}
 );
