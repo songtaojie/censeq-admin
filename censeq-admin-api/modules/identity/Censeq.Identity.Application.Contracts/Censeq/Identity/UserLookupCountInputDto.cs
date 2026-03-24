@@ -1,6 +1,6 @@
-﻿namespace Censeq.Identity;
+namespace Censeq.Identity;
 
 public class UserLookupCountInputDto
 {
-    public string Filter { get; set; }
+    public string? Filter { get; set; }
 }

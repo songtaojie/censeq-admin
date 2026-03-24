@@ -13,7 +13,7 @@ using Volo.Abp.EntityFrameworkCore;
 namespace Censeq.Admin.Migrations
 {
     [DbContext(typeof(CenseqAdminDbContext))]
-    [Migration("20260322135030_InitialDb")]
+    [Migration("20260324060350_InitialDb")]
     partial class InitialDb
     {
         /// <inheritdoc />
@@ -663,25 +663,21 @@ namespace Censeq.Admin.Migrations
                         .HasColumnName("action");
 
                     b.Property<string>("ApplicationName")
-                        .IsRequired()
                         .HasMaxLength(96)
                         .HasColumnType("character varying(96)")
                         .HasColumnName("application_name");
 
                     b.Property<string>("BrowserInfo")
-                        .IsRequired()
                         .HasMaxLength(512)
                         .HasColumnType("character varying(512)")
                         .HasColumnName("browser_info");
 
                     b.Property<string>("ClientId")
-                        .IsRequired()
                         .HasMaxLength(64)
                         .HasColumnType("character varying(64)")
                         .HasColumnName("client_id");
 
                     b.Property<string>("ClientIpAddress")
-                        .IsRequired()
                         .HasMaxLength(64)
                         .HasColumnType("character varying(64)")
                         .HasColumnName("client_ip_address");
@@ -694,7 +690,6 @@ namespace Censeq.Admin.Migrations
                         .HasColumnName("concurrency_stamp");
 
                     b.Property<string>("CorrelationId")
-                        .IsRequired()
                         .HasMaxLength(64)
                         .HasColumnType("character varying(64)")
                         .HasColumnName("correlation_id");
@@ -709,7 +704,6 @@ namespace Censeq.Admin.Migrations
                         .HasColumnName("extra_properties");
 
                     b.Property<string>("Identity")
-                        .IsRequired()
                         .HasMaxLength(96)
                         .HasColumnType("character varying(96)")
                         .HasColumnName("identity");
@@ -719,7 +713,6 @@ namespace Censeq.Admin.Migrations
                         .HasColumnName("tenant_id");
 
                     b.Property<string>("TenantName")
-                        .IsRequired()
                         .HasMaxLength(64)
                         .HasColumnType("character varying(64)")
                         .HasColumnName("tenant_name");
@@ -729,7 +722,6 @@ namespace Censeq.Admin.Migrations
                         .HasColumnName("user_id");
 
                     b.Property<string>("UserName")
-                        .IsRequired()
                         .HasMaxLength(256)
                         .HasColumnType("character varying(256)")
                         .HasColumnName("user_name");

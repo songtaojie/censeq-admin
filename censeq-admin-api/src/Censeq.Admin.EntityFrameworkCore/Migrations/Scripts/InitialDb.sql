@@ -107,16 +107,16 @@ CREATE TABLE censeq_identity_role (
 CREATE TABLE censeq_identity_security_log (
     id uuid NOT NULL,
     tenant_id uuid,
-    application_name character varying(96) NOT NULL,
-    identity character varying(96) NOT NULL,
+    application_name character varying(96),
+    identity character varying(96),
     action character varying(96) NOT NULL,
     user_id uuid,
-    user_name character varying(256) NOT NULL,
-    tenant_name character varying(64) NOT NULL,
-    client_id character varying(64) NOT NULL,
-    correlation_id character varying(64) NOT NULL,
-    client_ip_address character varying(64) NOT NULL,
-    browser_info character varying(512) NOT NULL,
+    user_name character varying(256),
+    tenant_name character varying(64),
+    client_id character varying(64),
+    correlation_id character varying(64),
+    client_ip_address character varying(64),
+    browser_info character varying(512),
     creation_time timestamp without time zone NOT NULL,
     extra_properties text NOT NULL,
     concurrency_stamp character varying(40) NOT NULL,
@@ -593,7 +593,7 @@ CREATE INDEX ix_censeq_tenant_name ON censeq_tenant (name);
 CREATE INDEX ix_censeq_tenant_normalized_name ON censeq_tenant (normalized_name);
 
 INSERT INTO ef_migrations_history (migration_id, product_version)
-VALUES ('20260322135030_InitialDb', '8.0.16');
+VALUES ('20260324060350_InitialDb', '8.0.16');
 
 COMMIT;
 

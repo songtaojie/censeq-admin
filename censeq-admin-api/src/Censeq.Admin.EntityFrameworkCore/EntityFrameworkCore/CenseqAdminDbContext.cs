@@ -1,6 +1,5 @@
 using Censeq.AuditLogging.Entities;
 using Censeq.AuditLogging.EntityFrameworkCore;
-using Censeq.AuditLogging.EntityFrameworkCore.Modeling;
 using Censeq.FeatureManagement.Entities;
 using Censeq.FeatureManagement.EntityFrameworkCore;
 using Censeq.Identity;

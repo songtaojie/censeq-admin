@@ -1,8 +1,8 @@
-﻿using Volo.Abp.Application.Dtos;
+using Volo.Abp.Application.Dtos;
 
 namespace Censeq.Identity;
 
 public class GetIdentityRolesInput : ExtensiblePagedAndSortedResultRequestDto
 {
-    public string Filter { get; set; }
+    public string? Filter { get; set; }
 }
