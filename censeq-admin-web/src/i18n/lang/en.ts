@@ -9,6 +9,7 @@ export default {
 		systemDept: 'systemDept',
 		systemDic: 'systemDic',
 		systemTenant: 'Tenant management',
+		systemFeature: 'Features',
 		limits: 'limits',
 		limitsFrontEnd: 'FrontEnd',
 		limitsFrontEndPage: 'FrontEndPage',

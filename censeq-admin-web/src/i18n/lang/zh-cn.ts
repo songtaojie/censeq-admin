@@ -9,6 +9,7 @@ export default {
 		systemDept: '部门管理',
 		systemDic: '字典管理',
 		systemTenant: '租户管理',
+		systemFeature: '特性管理',
 		limits: '权限管理',
 		limitsFrontEnd: '前端控制',
 		limitsFrontEndPage: '页面权限',

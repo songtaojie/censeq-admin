@@ -18,19 +18,19 @@ public class FeaturesController : AbpControllerBase, IFeatureAppService
     }
 
     [HttpGet]
-    public virtual Task<GetFeatureListResultDto> GetAsync(string providerName, string providerKey)
+    public virtual Task<GetFeatureListResultDto> GetAsync(string providerName, string? providerKey)
     {
         return FeatureAppService.GetAsync(providerName, providerKey);
     }
 
     [HttpPut]
-    public virtual Task UpdateAsync(string providerName, string providerKey, UpdateFeaturesDto input)
+    public virtual Task UpdateAsync(string providerName, string? providerKey, UpdateFeaturesDto input)
     {
         return FeatureAppService.UpdateAsync(providerName, providerKey, input);
     }
 
     [HttpDelete]
-    public virtual Task DeleteAsync(string providerName, string providerKey)
+    public virtual Task DeleteAsync(string providerName, string? providerKey)
     {
         return FeatureAppService.DeleteAsync(providerName, providerKey);
     }

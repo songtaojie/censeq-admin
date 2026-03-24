@@ -26,9 +26,23 @@ public class FeatureAppService : FeatureManagementAppServiceBase, IFeatureAppSer
         Options = options.Value;
     }
 
-    public virtual async Task<GetFeatureListResultDto> GetAsync([NotNull] string providerName, string providerKey)
+    /// <summary>
+    /// 将查询串中的空 / 空白 providerKey 视为未指定，与 ABP 宿主侧「租户默认特性」语义一致，并避免非空 string 触发的隐式 Required 校验。
+    /// </summary>
+    protected static string? NormalizeFeatureProviderKey(string? providerKey)
     {
-        await CheckProviderPolicy(providerName, providerKey);
+        return string.IsNullOrWhiteSpace(providerKey) ? null : providerKey;
+    }
+
+    protected static string ProviderKeyForStore(string? providerKey)
+    {
+        return NormalizeFeatureProviderKey(providerKey) ?? string.Empty;
+    }
+
+    public virtual async Task<GetFeatureListResultDto> GetAsync([NotNull] string providerName, string? providerKey)
+    {
+        var pk = NormalizeFeatureProviderKey(providerKey);
+        await CheckProviderPolicy(providerName, pk);
 
         var result = new GetFeatureListResultDto
         {
@@ -43,7 +57,7 @@ public class FeatureAppService : FeatureManagementAppServiceBase, IFeatureAppSer
             {
                 if (providerName == TenantFeatureValueProvider.ProviderName &&
                     CurrentTenant.Id == null &&
-                    providerKey == null &&
+                    pk == null &&
                     !featureDefinition.IsAvailableToHost)
                 {
                     continue;
@@ -52,11 +66,11 @@ public class FeatureAppService : FeatureManagementAppServiceBase, IFeatureAppSer
                 var feature = await FeatureManager.GetOrNullWithProviderAsync(
                     featureDefinition.Name,
                     providerName,
-                    providerKey ?? string.Empty);
+                    ProviderKeyForStore(providerKey));
                 groupDto.Features.Add(CreateFeatureDto(feature, featureDefinition));
             }
 
-            SetFeatureDepth(groupDto.Features, providerName, providerKey);
+            SetFeatureDepth(groupDto.Features, providerName, pk);
 
             if (groupDto.Features.Any())
             {
@@ -103,13 +117,14 @@ public class FeatureAppService : FeatureManagementAppServiceBase, IFeatureAppSer
         };
     }
 
-    public virtual async Task UpdateAsync([NotNull] string providerName, string providerKey, UpdateFeaturesDto input)
+    public virtual async Task UpdateAsync([NotNull] string providerName, string? providerKey, UpdateFeaturesDto input)
     {
-        await CheckProviderPolicy(providerName, providerKey);
+        var pk = NormalizeFeatureProviderKey(providerKey);
+        await CheckProviderPolicy(providerName, pk);
 
         foreach (var feature in input.Features)
         {
-            await FeatureManager.SetAsync(feature.Name, feature.Value, providerName, providerKey ?? string.Empty);
+            await FeatureManager.SetAsync(feature.Name, feature.Value, providerName, ProviderKeyForStore(providerKey));
         }
     }
 
@@ -126,7 +141,7 @@ public class FeatureAppService : FeatureManagementAppServiceBase, IFeatureAppSer
         }
     }
 
-    protected virtual async Task CheckProviderPolicy(string providerName, string providerKey)
+    protected virtual async Task CheckProviderPolicy(string providerName, string? providerKey)
     {
         string policyName;
         if (providerName == TenantFeatureValueProvider.ProviderName && CurrentTenant.Id == null && providerKey == null)
@@ -145,8 +160,10 @@ public class FeatureAppService : FeatureManagementAppServiceBase, IFeatureAppSer
         await AuthorizationService.CheckAsync(policyName);
     }
 
-    public virtual async Task DeleteAsync([NotNull] string providerName, string providerKey)
+    public virtual async Task DeleteAsync([NotNull] string providerName, string? providerKey)
     {
-        await FeatureManager.DeleteAsync(providerName, providerKey ?? string.Empty);
+        var pk = NormalizeFeatureProviderKey(providerKey);
+        await CheckProviderPolicy(providerName, pk);
+        await FeatureManager.DeleteAsync(providerName, ProviderKeyForStore(providerKey));
     }
 }

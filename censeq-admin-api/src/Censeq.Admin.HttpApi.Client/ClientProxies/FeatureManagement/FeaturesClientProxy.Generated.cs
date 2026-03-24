@@ -16,7 +16,7 @@ namespace Censeq.Admin.FeatureManagement;
 [ExposeServices(typeof(IFeatureAppService), typeof(FeaturesClientProxy))]
 public partial class FeaturesClientProxy : ClientProxyBase<IFeatureAppService>, IFeatureAppService
 {
-    public virtual async Task<GetFeatureListResultDto> GetAsync(string providerName, string providerKey)
+    public virtual async Task<GetFeatureListResultDto> GetAsync(string providerName, string? providerKey)
     {
         return await RequestAsync<GetFeatureListResultDto>(nameof(GetAsync), new ClientProxyRequestTypeValue
         {
@@ -25,7 +25,7 @@ public partial class FeaturesClientProxy : ClientProxyBase<IFeatureAppService>, 
         });
     }
 
-    public virtual async Task UpdateAsync(string providerName, string providerKey, UpdateFeaturesDto input)
+    public virtual async Task UpdateAsync(string providerName, string? providerKey, UpdateFeaturesDto input)
     {
         await RequestAsync(nameof(UpdateAsync), new ClientProxyRequestTypeValue
         {
@@ -35,7 +35,7 @@ public partial class FeaturesClientProxy : ClientProxyBase<IFeatureAppService>, 
         });
     }
 
-    public virtual async Task DeleteAsync(string providerName, string providerKey)
+    public virtual async Task DeleteAsync(string providerName, string? providerKey)
     {
         await RequestAsync(nameof(DeleteAsync), new ClientProxyRequestTypeValue
         {

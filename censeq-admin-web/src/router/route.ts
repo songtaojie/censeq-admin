@@ -168,6 +168,21 @@ export const dynamicRoutes: Array<RouteRecordRaw> = [
 							icon: 'ele-HomeFilled',
 						},
 					},
+					{
+						path: '/system/feature',
+						name: 'systemFeature',
+						component: () => import('/@/views/system/feature/index.vue'),
+						meta: {
+							title: 'message.router.systemFeature',
+							isLink: '',
+							isHide: false,
+							isKeepAlive: true,
+							isAffix: false,
+							isIframe: false,
+							roles: ['admin'],
+							icon: 'iconfont icon-crew_feature',
+						},
+					},
 				],
 			},
 			{
