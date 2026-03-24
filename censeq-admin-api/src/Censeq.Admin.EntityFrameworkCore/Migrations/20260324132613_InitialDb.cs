@@ -254,7 +254,7 @@ namespace Censeq.Admin.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "censeq_open_iddict_application",
+                name: "censeq_openiddict_application",
                 columns: table => new
                 {
                     id = table.Column<Guid>(type: "uuid", nullable: false),
@@ -286,11 +286,11 @@ namespace Censeq.Admin.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("pk_censeq_open_iddict_application", x => x.id);
+                    table.PrimaryKey("pk_censeq_openiddict_application", x => x.id);
                 });
 
             migrationBuilder.CreateTable(
-                name: "censeq_open_iddict_authorization",
+                name: "censeq_openiddict_authorization",
                 columns: table => new
                 {
                     id = table.Column<Guid>(type: "uuid", nullable: false),
@@ -313,11 +313,11 @@ namespace Censeq.Admin.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("pk_censeq_open_iddict_authorization", x => x.id);
+                    table.PrimaryKey("pk_censeq_openiddict_authorization", x => x.id);
                 });
 
             migrationBuilder.CreateTable(
-                name: "censeq_open_iddict_scope",
+                name: "censeq_openiddict_scope",
                 columns: table => new
                 {
                     id = table.Column<Guid>(type: "uuid", nullable: false),
@@ -340,11 +340,11 @@ namespace Censeq.Admin.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("pk_censeq_open_iddict_scope", x => x.id);
+                    table.PrimaryKey("pk_censeq_openiddict_scope", x => x.id);
                 });
 
             migrationBuilder.CreateTable(
-                name: "censeq_open_iddict_token",
+                name: "censeq_openiddict_token",
                 columns: table => new
                 {
                     id = table.Column<Guid>(type: "uuid", nullable: false),
@@ -371,7 +371,7 @@ namespace Censeq.Admin.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("pk_censeq_open_iddict_token", x => x.id);
+                    table.PrimaryKey("pk_censeq_openiddict_token", x => x.id);
                 });
 
             migrationBuilder.CreateTable(
@@ -923,30 +923,30 @@ namespace Censeq.Admin.Migrations
                 column: "identity_user_id");
 
             migrationBuilder.CreateIndex(
-                name: "ix_censeq_open_iddict_application_client_id",
-                table: "censeq_open_iddict_application",
+                name: "ix_censeq_openiddict_application_client_id",
+                table: "censeq_openiddict_application",
                 column: "client_id",
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "ix_censeq_open_iddict_authorization_application_id_status_subj",
-                table: "censeq_open_iddict_authorization",
+                name: "ix_censeq_openiddict_authorization_application_id_status_subje",
+                table: "censeq_openiddict_authorization",
                 columns: new[] { "application_id", "status", "subject", "type" });
 
             migrationBuilder.CreateIndex(
-                name: "ix_censeq_open_iddict_scope_name",
-                table: "censeq_open_iddict_scope",
+                name: "ix_censeq_openiddict_scope_name",
+                table: "censeq_openiddict_scope",
                 column: "name",
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "ix_censeq_open_iddict_token_application_id_status_subject_type",
-                table: "censeq_open_iddict_token",
+                name: "ix_censeq_openiddict_token_application_id_status_subject_type",
+                table: "censeq_openiddict_token",
                 columns: new[] { "application_id", "status", "subject", "type" });
 
             migrationBuilder.CreateIndex(
-                name: "ix_censeq_open_iddict_token_reference_id",
-                table: "censeq_open_iddict_token",
+                name: "ix_censeq_openiddict_token_reference_id",
+                table: "censeq_openiddict_token",
                 column: "reference_id",
                 unique: true);
 
@@ -1058,16 +1058,16 @@ namespace Censeq.Admin.Migrations
                 name: "censeq_identity_user_token");
 
             migrationBuilder.DropTable(
-                name: "censeq_open_iddict_application");
+                name: "censeq_openiddict_application");
 
             migrationBuilder.DropTable(
-                name: "censeq_open_iddict_authorization");
+                name: "censeq_openiddict_authorization");
 
             migrationBuilder.DropTable(
-                name: "censeq_open_iddict_scope");
+                name: "censeq_openiddict_scope");
 
             migrationBuilder.DropTable(
-                name: "censeq_open_iddict_token");
+                name: "censeq_openiddict_token");
 
             migrationBuilder.DropTable(
                 name: "censeq_organization_unit_role");

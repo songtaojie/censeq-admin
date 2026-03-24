@@ -182,7 +182,7 @@ CREATE TABLE censeq_identity_user_delegation (
     CONSTRAINT pk_censeq_identity_user_delegation PRIMARY KEY (id)
 );
 
-CREATE TABLE censeq_open_iddict_application (
+CREATE TABLE censeq_openiddict_application (
     id uuid NOT NULL,
     application_type character varying(50),
     client_id character varying(100),
@@ -209,10 +209,10 @@ CREATE TABLE censeq_open_iddict_application (
     is_deleted boolean NOT NULL DEFAULT FALSE,
     deleter_id uuid,
     deletion_time timestamp without time zone,
-    CONSTRAINT pk_censeq_open_iddict_application PRIMARY KEY (id)
+    CONSTRAINT pk_censeq_openiddict_application PRIMARY KEY (id)
 );
 
-CREATE TABLE censeq_open_iddict_authorization (
+CREATE TABLE censeq_openiddict_authorization (
     id uuid NOT NULL,
     application_id uuid,
     creation_date timestamp without time zone,
@@ -230,10 +230,10 @@ CREATE TABLE censeq_open_iddict_authorization (
     is_deleted boolean NOT NULL DEFAULT FALSE,
     deleter_id uuid,
     deletion_time timestamp without time zone,
-    CONSTRAINT pk_censeq_open_iddict_authorization PRIMARY KEY (id)
+    CONSTRAINT pk_censeq_openiddict_authorization PRIMARY KEY (id)
 );
 
-CREATE TABLE censeq_open_iddict_scope (
+CREATE TABLE censeq_openiddict_scope (
     id uuid NOT NULL,
     description text,
     descriptions text,
@@ -251,10 +251,10 @@ CREATE TABLE censeq_open_iddict_scope (
     is_deleted boolean NOT NULL DEFAULT FALSE,
     deleter_id uuid,
     deletion_time timestamp without time zone,
-    CONSTRAINT pk_censeq_open_iddict_scope PRIMARY KEY (id)
+    CONSTRAINT pk_censeq_openiddict_scope PRIMARY KEY (id)
 );
 
-CREATE TABLE censeq_open_iddict_token (
+CREATE TABLE censeq_openiddict_token (
     id uuid NOT NULL,
     application_id uuid,
     authorization_id uuid,
@@ -276,7 +276,7 @@ CREATE TABLE censeq_open_iddict_token (
     is_deleted boolean NOT NULL DEFAULT FALSE,
     deleter_id uuid,
     deletion_time timestamp without time zone,
-    CONSTRAINT pk_censeq_open_iddict_token PRIMARY KEY (id)
+    CONSTRAINT pk_censeq_openiddict_token PRIMARY KEY (id)
 );
 
 CREATE TABLE censeq_organization_unit (
@@ -562,15 +562,15 @@ CREATE INDEX ix_censeq_identity_user_role_role_id_user_id ON censeq_identity_use
 
 CREATE INDEX ix_censeq_identity_user_token_identity_user_id ON censeq_identity_user_token (identity_user_id);
 
-CREATE UNIQUE INDEX ix_censeq_open_iddict_application_client_id ON censeq_open_iddict_application (client_id);
+CREATE UNIQUE INDEX ix_censeq_openiddict_application_client_id ON censeq_openiddict_application (client_id);
 
-CREATE INDEX ix_censeq_open_iddict_authorization_application_id_status_subj ON censeq_open_iddict_authorization (application_id, status, subject, type);
+CREATE INDEX ix_censeq_openiddict_authorization_application_id_status_subje ON censeq_openiddict_authorization (application_id, status, subject, type);
 
-CREATE UNIQUE INDEX ix_censeq_open_iddict_scope_name ON censeq_open_iddict_scope (name);
+CREATE UNIQUE INDEX ix_censeq_openiddict_scope_name ON censeq_openiddict_scope (name);
 
-CREATE INDEX ix_censeq_open_iddict_token_application_id_status_subject_type ON censeq_open_iddict_token (application_id, status, subject, type);
+CREATE INDEX ix_censeq_openiddict_token_application_id_status_subject_type ON censeq_openiddict_token (application_id, status, subject, type);
 
-CREATE UNIQUE INDEX ix_censeq_open_iddict_token_reference_id ON censeq_open_iddict_token (reference_id);
+CREATE UNIQUE INDEX ix_censeq_openiddict_token_reference_id ON censeq_openiddict_token (reference_id);
 
 CREATE INDEX ix_censeq_organization_unit_code ON censeq_organization_unit (code);
 
@@ -593,7 +593,7 @@ CREATE INDEX ix_censeq_tenant_name ON censeq_tenant (name);
 CREATE INDEX ix_censeq_tenant_normalized_name ON censeq_tenant (normalized_name);
 
 INSERT INTO ef_migrations_history (migration_id, product_version)
-VALUES ('20260324060350_InitialDb', '8.0.16');
+VALUES ('20260324132613_InitialDb', '8.0.16');
 
 COMMIT;
 

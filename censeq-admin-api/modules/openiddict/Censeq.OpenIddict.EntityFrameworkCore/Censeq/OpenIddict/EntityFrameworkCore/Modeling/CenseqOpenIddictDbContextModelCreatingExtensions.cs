@@ -21,7 +21,7 @@ namespace Censeq.OpenIddict.EntityFrameworkCore.Modeling
 
             builder.Entity<OpenIddictApplication>(b =>
             {
-                b.ToCenseqTable(nameof(OpenIddictApplication))
+                b.ToCenseqTable("OpeniddictApplication")
                     .ConfigureCenseqByConvention();
 
                 b.HasIndex(x => x.ClientId).IsUnique();
@@ -36,7 +36,7 @@ namespace Censeq.OpenIddict.EntityFrameworkCore.Modeling
 
             builder.Entity<OpenIddictAuthorization>(b =>
             {
-                b.ToCenseqTable(nameof(OpenIddictAuthorization))
+                b.ToCenseqTable("OpeniddictAuthorization")
                     .ConfigureCenseqByConvention();
 
                 b.HasIndex(x => new
@@ -56,7 +56,7 @@ namespace Censeq.OpenIddict.EntityFrameworkCore.Modeling
 
             builder.Entity<OpenIddictScope>(b =>
             {
-                b.ToCenseqTable(nameof(OpenIddictScope))
+                b.ToCenseqTable("OpeniddictScope")
                     .ConfigureCenseqByConvention();
 
                 b.HasIndex(x => x.Name).IsUnique();
@@ -66,7 +66,7 @@ namespace Censeq.OpenIddict.EntityFrameworkCore.Modeling
 
             builder.Entity<OpenIddictToken>(b =>
             {
-                b.ToCenseqTable(nameof(OpenIddictToken))
+                b.ToCenseqTable("OpeniddictToken")
                     .ConfigureCenseqByConvention();
 
                 b.HasIndex(x => x.ReferenceId).IsUnique();

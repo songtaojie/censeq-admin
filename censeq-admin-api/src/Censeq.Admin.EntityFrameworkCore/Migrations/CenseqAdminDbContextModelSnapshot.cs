@@ -457,7 +457,7 @@ namespace Censeq.Admin.Migrations
                     b.ToTable("censeq_feature_value", (string)null);
                 });
 
-            modelBuilder.Entity("Censeq.Identity.IdentityClaimType", b =>
+            modelBuilder.Entity("Censeq.Identity.Entities.IdentityClaimType", b =>
                 {
                     b.Property<Guid>("Id")
                         .HasColumnType("uuid")
@@ -514,7 +514,7 @@ namespace Censeq.Admin.Migrations
                     b.ToTable("censeq_identity_claim_type", (string)null);
                 });
 
-            modelBuilder.Entity("Censeq.Identity.IdentityLinkUser", b =>
+            modelBuilder.Entity("Censeq.Identity.Entities.IdentityLinkUser", b =>
                 {
                     b.Property<Guid>("Id")
                         .HasColumnType("uuid")
@@ -546,7 +546,7 @@ namespace Censeq.Admin.Migrations
                     b.ToTable("censeq_identity_link_user", (string)null);
                 });
 
-            modelBuilder.Entity("Censeq.Identity.IdentityRole", b =>
+            modelBuilder.Entity("Censeq.Identity.Entities.IdentityRole", b =>
                 {
                     b.Property<Guid>("Id")
                         .HasColumnType("uuid")
@@ -605,7 +605,7 @@ namespace Censeq.Admin.Migrations
                     b.ToTable("censeq_identity_role", (string)null);
                 });
 
-            modelBuilder.Entity("Censeq.Identity.IdentityRoleClaim", b =>
+            modelBuilder.Entity("Censeq.Identity.Entities.IdentityRoleClaim", b =>
                 {
                     b.Property<Guid>("Id")
                         .HasColumnType("uuid")
@@ -647,7 +647,7 @@ namespace Censeq.Admin.Migrations
                     b.ToTable("censeq_identity_role_claim", (string)null);
                 });
 
-            modelBuilder.Entity("Censeq.Identity.IdentitySecurityLog", b =>
+            modelBuilder.Entity("Censeq.Identity.Entities.IdentitySecurityLog", b =>
                 {
                     b.Property<Guid>("Id")
                         .HasColumnType("uuid")
@@ -741,7 +741,7 @@ namespace Censeq.Admin.Migrations
                     b.ToTable("censeq_identity_security_log", (string)null);
                 });
 
-            modelBuilder.Entity("Censeq.Identity.IdentitySession", b =>
+            modelBuilder.Entity("Censeq.Identity.Entities.IdentitySession", b =>
                 {
                     b.Property<Guid>("Id")
                         .HasColumnType("uuid")
@@ -808,7 +808,7 @@ namespace Censeq.Admin.Migrations
                     b.ToTable("censeq_identity_session", (string)null);
                 });
 
-            modelBuilder.Entity("Censeq.Identity.IdentityUser", b =>
+            modelBuilder.Entity("Censeq.Identity.Entities.IdentityUser", b =>
                 {
                     b.Property<Guid>("Id")
                         .HasColumnType("uuid")
@@ -985,7 +985,7 @@ namespace Censeq.Admin.Migrations
                     b.ToTable("censeq_identity_user", (string)null);
                 });
 
-            modelBuilder.Entity("Censeq.Identity.IdentityUserClaim", b =>
+            modelBuilder.Entity("Censeq.Identity.Entities.IdentityUserClaim", b =>
                 {
                     b.Property<Guid>("Id")
                         .HasColumnType("uuid")
@@ -1027,7 +1027,7 @@ namespace Censeq.Admin.Migrations
                     b.ToTable("censeq_identity_user_claim", (string)null);
                 });
 
-            modelBuilder.Entity("Censeq.Identity.IdentityUserDelegation", b =>
+            modelBuilder.Entity("Censeq.Identity.Entities.IdentityUserDelegation", b =>
                 {
                     b.Property<Guid>("Id")
                         .HasColumnType("uuid")
@@ -1059,7 +1059,7 @@ namespace Censeq.Admin.Migrations
                     b.ToTable("censeq_identity_user_delegation", (string)null);
                 });
 
-            modelBuilder.Entity("Censeq.Identity.IdentityUserLogin", b =>
+            modelBuilder.Entity("Censeq.Identity.Entities.IdentityUserLogin", b =>
                 {
                     b.Property<Guid>("UserId")
                         .HasColumnType("uuid")
@@ -1102,7 +1102,7 @@ namespace Censeq.Admin.Migrations
                     b.ToTable("censeq_identity_user_login", (string)null);
                 });
 
-            modelBuilder.Entity("Censeq.Identity.IdentityUserOrganizationUnit", b =>
+            modelBuilder.Entity("Censeq.Identity.Entities.IdentityUserOrganizationUnit", b =>
                 {
                     b.Property<Guid>("OrganizationUnitId")
                         .HasColumnType("uuid")
@@ -1140,7 +1140,7 @@ namespace Censeq.Admin.Migrations
                     b.ToTable("censeq_identity_user_organization_unit", (string)null);
                 });
 
-            modelBuilder.Entity("Censeq.Identity.IdentityUserRole", b =>
+            modelBuilder.Entity("Censeq.Identity.Entities.IdentityUserRole", b =>
                 {
                     b.Property<Guid>("UserId")
                         .HasColumnType("uuid")
@@ -1170,7 +1170,7 @@ namespace Censeq.Admin.Migrations
                     b.ToTable("censeq_identity_user_role", (string)null);
                 });
 
-            modelBuilder.Entity("Censeq.Identity.IdentityUserToken", b =>
+            modelBuilder.Entity("Censeq.Identity.Entities.IdentityUserToken", b =>
                 {
                     b.Property<Guid>("UserId")
                         .HasColumnType("uuid")
@@ -1208,7 +1208,7 @@ namespace Censeq.Admin.Migrations
                     b.ToTable("censeq_identity_user_token", (string)null);
                 });
 
-            modelBuilder.Entity("Censeq.Identity.OrganizationUnit", b =>
+            modelBuilder.Entity("Censeq.Identity.Entities.OrganizationUnit", b =>
                 {
                     b.Property<Guid>("Id")
                         .HasColumnType("uuid")
@@ -1289,7 +1289,7 @@ namespace Censeq.Admin.Migrations
                     b.ToTable("censeq_organization_unit", (string)null);
                 });
 
-            modelBuilder.Entity("Censeq.Identity.OrganizationUnitRole", b =>
+            modelBuilder.Entity("Censeq.Identity.Entities.OrganizationUnitRole", b =>
                 {
                     b.Property<Guid>("OrganizationUnitId")
                         .HasColumnType("uuid")
@@ -1437,13 +1437,13 @@ namespace Censeq.Admin.Migrations
                         .HasColumnName("settings");
 
                     b.HasKey("Id")
-                        .HasName("pk_censeq_open_iddict_application");
+                        .HasName("pk_censeq_openiddict_application");
 
                     b.HasIndex("ClientId")
                         .IsUnique()
-                        .HasDatabaseName("ix_censeq_open_iddict_application_client_id");
+                        .HasDatabaseName("ix_censeq_openiddict_application_client_id");
 
-                    b.ToTable("censeq_open_iddict_application", (string)null);
+                    b.ToTable("censeq_openiddict_application", (string)null);
                 });
 
             modelBuilder.Entity("Censeq.OpenIddict.Authorizations.OpenIddictAuthorization", b =>
@@ -1526,12 +1526,12 @@ namespace Censeq.Admin.Migrations
                         .HasColumnName("type");
 
                     b.HasKey("Id")
-                        .HasName("pk_censeq_open_iddict_authorization");
+                        .HasName("pk_censeq_openiddict_authorization");
 
                     b.HasIndex("ApplicationId", "Status", "Subject", "Type")
-                        .HasDatabaseName("ix_censeq_open_iddict_authorization_application_id_status_subj");
+                        .HasDatabaseName("ix_censeq_openiddict_authorization_application_id_status_subje");
 
-                    b.ToTable("censeq_open_iddict_authorization", (string)null);
+                    b.ToTable("censeq_openiddict_authorization", (string)null);
                 });
 
             modelBuilder.Entity("Censeq.OpenIddict.Scopes.OpenIddictScope", b =>
@@ -1612,13 +1612,13 @@ namespace Censeq.Admin.Migrations
                         .HasColumnName("resources");
 
                     b.HasKey("Id")
-                        .HasName("pk_censeq_open_iddict_scope");
+                        .HasName("pk_censeq_openiddict_scope");
 
                     b.HasIndex("Name")
                         .IsUnique()
-                        .HasDatabaseName("ix_censeq_open_iddict_scope_name");
+                        .HasDatabaseName("ix_censeq_openiddict_scope_name");
 
-                    b.ToTable("censeq_open_iddict_scope", (string)null);
+                    b.ToTable("censeq_openiddict_scope", (string)null);
                 });
 
             modelBuilder.Entity("Censeq.OpenIddict.Tokens.OpenIddictToken", b =>
@@ -1718,16 +1718,16 @@ namespace Censeq.Admin.Migrations
                         .HasColumnName("type");
 
                     b.HasKey("Id")
-                        .HasName("pk_censeq_open_iddict_token");
+                        .HasName("pk_censeq_openiddict_token");
 
                     b.HasIndex("ReferenceId")
                         .IsUnique()
-                        .HasDatabaseName("ix_censeq_open_iddict_token_reference_id");
+                        .HasDatabaseName("ix_censeq_openiddict_token_reference_id");
 
                     b.HasIndex("ApplicationId", "Status", "Subject", "Type")
-                        .HasDatabaseName("ix_censeq_open_iddict_token_application_id_status_subject_type");
+                        .HasDatabaseName("ix_censeq_openiddict_token_application_id_status_subject_type");
 
-                    b.ToTable("censeq_open_iddict_token", (string)null);
+                    b.ToTable("censeq_openiddict_token", (string)null);
                 });
 
             modelBuilder.Entity("Censeq.PermissionManagement.Entities.PermissionDefinitionRecord", b =>
@@ -2094,57 +2094,57 @@ namespace Censeq.Admin.Migrations
                         .HasConstraintName("fk_censeq_entity_property_change_censeq_entity_change_entity_c");
                 });
 
-            modelBuilder.Entity("Censeq.Identity.IdentityRoleClaim", b =>
+            modelBuilder.Entity("Censeq.Identity.Entities.IdentityRoleClaim", b =>
                 {
-                    b.HasOne("Censeq.Identity.IdentityRole", null)
+                    b.HasOne("Censeq.Identity.Entities.IdentityRole", null)
                         .WithMany("Claims")
                         .HasForeignKey("IdentityRoleId")
                         .HasConstraintName("fk_censeq_identity_role_claim_censeq_identity_role_identity_ro");
                 });
 
-            modelBuilder.Entity("Censeq.Identity.IdentityUserClaim", b =>
+            modelBuilder.Entity("Censeq.Identity.Entities.IdentityUserClaim", b =>
                 {
-                    b.HasOne("Censeq.Identity.IdentityUser", null)
+                    b.HasOne("Censeq.Identity.Entities.IdentityUser", null)
                         .WithMany("Claims")
                         .HasForeignKey("IdentityUserId")
                         .HasConstraintName("fk_censeq_identity_user_claim_censeq_identity_user_identity_us");
                 });
 
-            modelBuilder.Entity("Censeq.Identity.IdentityUserLogin", b =>
+            modelBuilder.Entity("Censeq.Identity.Entities.IdentityUserLogin", b =>
                 {
-                    b.HasOne("Censeq.Identity.IdentityUser", null)
+                    b.HasOne("Censeq.Identity.Entities.IdentityUser", null)
                         .WithMany("Logins")
                         .HasForeignKey("IdentityUserId")
                         .HasConstraintName("fk_censeq_identity_user_login_censeq_identity_user_identity_us");
                 });
 
-            modelBuilder.Entity("Censeq.Identity.IdentityUserOrganizationUnit", b =>
+            modelBuilder.Entity("Censeq.Identity.Entities.IdentityUserOrganizationUnit", b =>
                 {
-                    b.HasOne("Censeq.Identity.IdentityUser", null)
+                    b.HasOne("Censeq.Identity.Entities.IdentityUser", null)
                         .WithMany("OrganizationUnits")
                         .HasForeignKey("IdentityUserId")
                         .HasConstraintName("fk_censeq_identity_user_organization_unit_censeq_identity_user");
                 });
 
-            modelBuilder.Entity("Censeq.Identity.IdentityUserRole", b =>
+            modelBuilder.Entity("Censeq.Identity.Entities.IdentityUserRole", b =>
                 {
-                    b.HasOne("Censeq.Identity.IdentityUser", null)
+                    b.HasOne("Censeq.Identity.Entities.IdentityUser", null)
                         .WithMany("Roles")
                         .HasForeignKey("IdentityUserId")
                         .HasConstraintName("fk_censeq_identity_user_role_censeq_identity_user_identity_use");
                 });
 
-            modelBuilder.Entity("Censeq.Identity.IdentityUserToken", b =>
+            modelBuilder.Entity("Censeq.Identity.Entities.IdentityUserToken", b =>
                 {
-                    b.HasOne("Censeq.Identity.IdentityUser", null)
+                    b.HasOne("Censeq.Identity.Entities.IdentityUser", null)
                         .WithMany("Tokens")
                         .HasForeignKey("IdentityUserId")
                         .HasConstraintName("fk_censeq_identity_user_token_censeq_identity_user_identity_us");
                 });
 
-            modelBuilder.Entity("Censeq.Identity.OrganizationUnitRole", b =>
+            modelBuilder.Entity("Censeq.Identity.Entities.OrganizationUnitRole", b =>
                 {
-                    b.HasOne("Censeq.Identity.OrganizationUnit", null)
+                    b.HasOne("Censeq.Identity.Entities.OrganizationUnit", null)
                         .WithMany("Roles")
                         .HasForeignKey("OrganizationUnitId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -2174,12 +2174,12 @@ namespace Censeq.Admin.Migrations
                     b.Navigation("PropertyChanges");
                 });
 
-            modelBuilder.Entity("Censeq.Identity.IdentityRole", b =>
+            modelBuilder.Entity("Censeq.Identity.Entities.IdentityRole", b =>
                 {
                     b.Navigation("Claims");
                 });
 
-            modelBuilder.Entity("Censeq.Identity.IdentityUser", b =>
+            modelBuilder.Entity("Censeq.Identity.Entities.IdentityUser", b =>
                 {
                     b.Navigation("Claims");
 
@@ -2192,7 +2192,7 @@ namespace Censeq.Admin.Migrations
                     b.Navigation("Tokens");
                 });
 
-            modelBuilder.Entity("Censeq.Identity.OrganizationUnit", b =>
+            modelBuilder.Entity("Censeq.Identity.Entities.OrganizationUnit", b =>
                 {
                     b.Navigation("Roles");
                 });
