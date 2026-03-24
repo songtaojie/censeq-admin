@@ -10,7 +10,7 @@ using Censeq.Identity;
 using Volo.Abp.Security.Claims;
 using Volo.Abp.Settings;
 using Volo.Abp.Validation;
-using IdentityUser = Censeq.Identity.IdentityUser;
+using IdentityUser = Censeq.Identity.Entities.IdentityUser;
 using Censeq.Account.Web.Settings;
 using Censeq.Identity.AspNetCore;
 

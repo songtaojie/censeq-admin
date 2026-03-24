@@ -2,6 +2,7 @@ using System;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Censeq.Identity;
+using Censeq.Identity.Entities;
 
 namespace Microsoft.Extensions.DependencyInjection;
 

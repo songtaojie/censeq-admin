@@ -1,4 +1,5 @@
 using System;
+using Censeq.Identity;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -9,7 +10,7 @@ using Volo.Abp.Domain.Entities;
 using Volo.Abp.Guids;
 using Volo.Abp.MultiTenancy;
 
-namespace Censeq.Identity;
+namespace Censeq.Identity.Entities;
 
 /// <summary>
 /// Represents a role in the identity system

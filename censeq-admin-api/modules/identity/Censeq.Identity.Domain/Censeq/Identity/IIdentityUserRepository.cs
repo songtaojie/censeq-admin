@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Security.Claims;
 using System.Threading;
 using System.Threading.Tasks;
+using Censeq.Identity.Entities;
 using JetBrains.Annotations;
 using Volo.Abp.Domain.Repositories;
 

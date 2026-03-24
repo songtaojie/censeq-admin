@@ -1,5 +1,6 @@
 using System;
 using System.Threading.Tasks;
+using IdentityUser = Censeq.Identity.Entities.IdentityUser;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Identity;

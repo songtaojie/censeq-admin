@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Identity;
 using Volo.Abp.Domain.Entities;
 using Volo.Abp.MultiTenancy;
 
-namespace Censeq.Identity;
+namespace Censeq.Identity.Entities;
 
 /// <summary>
 /// Represents a login and its associated provider for a user.

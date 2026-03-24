@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
+using Censeq.Identity.Entities;
 using Microsoft.AspNetCore.Identity;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Security.Claims;

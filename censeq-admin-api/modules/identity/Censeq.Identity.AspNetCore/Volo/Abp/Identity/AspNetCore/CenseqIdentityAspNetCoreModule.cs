@@ -1,4 +1,5 @@
 using System;
+using IdentityUser = Censeq.Identity.Entities.IdentityUser;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;

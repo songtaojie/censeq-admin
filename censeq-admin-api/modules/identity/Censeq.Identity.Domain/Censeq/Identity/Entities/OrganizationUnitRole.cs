@@ -1,8 +1,8 @@
-﻿using System;
+using System;
 using Volo.Abp.Domain.Entities.Auditing;
 using Volo.Abp.MultiTenancy;
 
-namespace Censeq.Identity;
+namespace Censeq.Identity.Entities;
 
 /// <summary>
 /// Represents the link between a role and an organization unit.

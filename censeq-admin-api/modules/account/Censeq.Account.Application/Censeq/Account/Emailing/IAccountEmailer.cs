@@ -1,5 +1,5 @@
 using System.Threading.Tasks;
-using Censeq.Identity;
+using Censeq.Identity.Entities;
 
 namespace Censeq.Account.Emailing;
 

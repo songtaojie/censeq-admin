@@ -6,7 +6,7 @@ using Volo.Abp.AspNetCore.Mvc;
 using Censeq.OpenIddict.Localization;
 using Volo.Abp.Security.Claims;
 using Censeq.Identity;
-using IdentityUser = Censeq.Identity.IdentityUser;
+using IdentityUser = Censeq.Identity.Entities.IdentityUser;
 
 namespace Censeq.OpenIddict.Controllers;
 

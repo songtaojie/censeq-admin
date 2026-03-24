@@ -4,7 +4,7 @@ using Volo.Abp.Guids;
 using Volo.Abp.MultiTenancy;
 using Volo.Abp.SecurityLog;
 
-namespace Censeq.Identity;
+namespace Censeq.Identity.Entities;
 
 public class IdentitySecurityLog : AggregateRoot<Guid>, IMultiTenant
 {

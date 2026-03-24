@@ -9,6 +9,7 @@ using Censeq.Identity;
 using Censeq.Account.Emailing;
 using Censeq.Account.Localization;
 using Censeq.Account.Settings;
+using Censeq.Identity.Entities;
 
 namespace Censeq.Account;
 

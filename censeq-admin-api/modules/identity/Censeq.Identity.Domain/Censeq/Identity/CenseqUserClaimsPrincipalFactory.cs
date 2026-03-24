@@ -8,6 +8,7 @@ using System.Security.Principal;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Security.Claims;
 using Volo.Abp.Uow;
+using Censeq.Identity.Entities;
 
 namespace Censeq.Identity;
 

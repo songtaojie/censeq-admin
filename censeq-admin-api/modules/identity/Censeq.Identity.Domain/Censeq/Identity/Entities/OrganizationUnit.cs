@@ -6,7 +6,7 @@ using Volo.Abp.Auditing;
 using Volo.Abp.Domain.Entities.Auditing;
 using Volo.Abp.MultiTenancy;
 
-namespace Censeq.Identity;
+namespace Censeq.Identity.Entities;
 
 /// <summary>
 /// Represents an organization unit (OU).

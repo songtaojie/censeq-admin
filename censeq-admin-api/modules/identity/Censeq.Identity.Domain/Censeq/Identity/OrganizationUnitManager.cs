@@ -10,6 +10,7 @@ using Censeq.Identity.Localization;
 using Volo.Abp.Security.Claims;
 using Volo.Abp.Threading;
 using Volo.Abp.Uow;
+using Censeq.Identity.Entities;
 
 namespace Censeq.Identity;
 

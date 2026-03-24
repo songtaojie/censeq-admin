@@ -10,7 +10,7 @@ using Volo.Abp.Domain.Entities.Auditing;
 using Volo.Abp.Guids;
 using Volo.Abp.Users;
 
-namespace Censeq.Identity;
+namespace Censeq.Identity.Entities;
 
 public class IdentityUser : FullAuditedAggregateRoot<Guid>, IUser, IHasEntityVersion
 {

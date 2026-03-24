@@ -1,8 +1,8 @@
-﻿using System;
+using System;
 using System.Security.Claims;
 using JetBrains.Annotations;
 
-namespace Censeq.Identity;
+namespace Censeq.Identity.Entities;
 
 /// <summary>
 /// Represents a claim that a user possesses. 

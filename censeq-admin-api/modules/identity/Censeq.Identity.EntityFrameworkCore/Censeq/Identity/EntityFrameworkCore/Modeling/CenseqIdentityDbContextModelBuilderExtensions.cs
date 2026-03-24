@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using Censeq.Framework.EntityFrameworkCore;
 using Volo.Abp;
+using Censeq.Identity.Entities;
 
 namespace Censeq.Identity.EntityFrameworkCore.Modeling
 {

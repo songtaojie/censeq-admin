@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
+using Censeq.Identity.Entities;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using Volo.Abp.Caching;

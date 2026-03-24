@@ -1,7 +1,8 @@
-﻿using System;
+using System;
+using Censeq.Identity;
 using Volo.Abp.Domain.Entities;
 
-namespace Censeq.Identity;
+namespace Censeq.Identity.Entities;
 
 public class IdentityLinkUser : BasicAggregateRoot<Guid>
 {

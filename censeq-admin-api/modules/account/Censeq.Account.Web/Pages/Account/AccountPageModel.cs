@@ -6,7 +6,7 @@ using Volo.Abp.AspNetCore.ExceptionHandling;
 using Volo.Abp.AspNetCore.Mvc.UI.RazorPages;
 using Volo.Abp.ExceptionHandling;
 using Censeq.Identity;
-using IdentityUser = Censeq.Identity.IdentityUser;
+using IdentityUser = Censeq.Identity.Entities.IdentityUser;
 
 namespace Censeq.Account.Web.Pages.Account;
 

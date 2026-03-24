@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Censeq.Identity.Entities;
 using Microsoft.AspNetCore.Authorization;
 using Volo.Abp.Application.Dtos;
 

@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
+using Censeq.Identity.Entities;
 using Volo.Abp.Domain.Repositories;
 
 namespace Censeq.Identity;

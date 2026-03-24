@@ -1,4 +1,5 @@
 using AutoMapper;
+using Censeq.Identity.Entities;
 
 namespace Censeq.Identity;
 

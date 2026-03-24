@@ -3,6 +3,7 @@ using Censeq.AuditLogging.EntityFrameworkCore;
 using Censeq.FeatureManagement.Entities;
 using Censeq.FeatureManagement.EntityFrameworkCore;
 using Censeq.Identity;
+using Censeq.Identity.Entities;
 using Censeq.Identity.EntityFrameworkCore;
 using Censeq.Identity.EntityFrameworkCore.Modeling;
 using Censeq.OpenIddict.Applications;

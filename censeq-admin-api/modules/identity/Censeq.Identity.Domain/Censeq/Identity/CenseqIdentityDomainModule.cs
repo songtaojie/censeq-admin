@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Censeq.Identity.Entities;
 using Censeq.Identity.ObjectExtending;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;

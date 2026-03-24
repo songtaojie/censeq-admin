@@ -9,6 +9,7 @@ using Volo.Abp.Settings;
 using Volo.Abp.Users;
 using Censeq.Identity;
 using Censeq.Identity.Settings;
+using Censeq.Identity.Entities;
 
 namespace Censeq.Account;
 

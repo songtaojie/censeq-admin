@@ -8,6 +8,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Volo.Abp.Domain.Repositories.EntityFrameworkCore;
 using Volo.Abp.EntityFrameworkCore;
+using Censeq.Identity.Entities;
 
 namespace Censeq.Identity.EntityFrameworkCore;
 

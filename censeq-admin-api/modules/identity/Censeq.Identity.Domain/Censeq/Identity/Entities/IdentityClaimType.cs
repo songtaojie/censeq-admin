@@ -1,8 +1,9 @@
+using Censeq.Identity;
 using JetBrains.Annotations;
 using System;
 using Volo.Abp.Domain.Entities;
 
-namespace Censeq.Identity;
+namespace Censeq.Identity.Entities;
 
 public class IdentityClaimType : AggregateRoot<Guid>
 {

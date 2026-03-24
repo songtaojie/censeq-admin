@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Censeq.Identity.Entities;
 using Volo.Abp.Users;
 
 namespace Censeq.Identity;

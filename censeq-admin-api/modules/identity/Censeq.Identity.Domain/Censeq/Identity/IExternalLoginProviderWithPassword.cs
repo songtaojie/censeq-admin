@@ -1,4 +1,5 @@
 ﻿using System.Threading.Tasks;
+using Censeq.Identity.Entities;
 
 namespace Censeq.Identity
 {

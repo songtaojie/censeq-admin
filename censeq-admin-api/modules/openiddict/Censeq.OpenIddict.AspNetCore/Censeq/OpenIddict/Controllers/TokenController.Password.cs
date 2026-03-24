@@ -11,7 +11,7 @@ using Volo.Abp.Security.Claims;
 using Volo.Abp.Settings;
 using Volo.Abp.Uow;
 using Volo.Abp.Validation;
-using IdentityUser = Censeq.Identity.IdentityUser;
+using IdentityUser = Censeq.Identity.Entities.IdentityUser;
 using SignInResult = Microsoft.AspNetCore.Identity.SignInResult;
 
 namespace Censeq.OpenIddict.Controllers;

@@ -11,7 +11,7 @@ using Volo.Abp.Settings;
 using Volo.Abp.Validation;
 using SignInResult = Microsoft.AspNetCore.Identity.SignInResult;
 using UserLoginInfo = Censeq.Account.Web.Areas.Account.Controllers.Models.UserLoginInfo;
-using IdentityUser = Censeq.Identity.IdentityUser;
+using IdentityUser = Censeq.Identity.Entities.IdentityUser;
 using Censeq.Identity.AspNetCore;
 
 namespace Censeq.Account.Web.Areas.Account.Controllers;

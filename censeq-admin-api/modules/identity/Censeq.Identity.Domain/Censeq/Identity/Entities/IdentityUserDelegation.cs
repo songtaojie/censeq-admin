@@ -1,8 +1,8 @@
-﻿using System;
+using System;
 using Volo.Abp.Domain.Entities;
 using Volo.Abp.MultiTenancy;
 
-namespace Censeq.Identity;
+namespace Censeq.Identity.Entities;
 
 public class IdentityUserDelegation : BasicAggregateRoot<Guid>, IMultiTenant
 {

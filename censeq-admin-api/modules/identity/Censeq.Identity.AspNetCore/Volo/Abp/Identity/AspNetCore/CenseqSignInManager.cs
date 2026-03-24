@@ -8,6 +8,7 @@ using Microsoft.Extensions.Options;
 using Censeq.Identity.Settings;
 using Volo.Abp.Settings;
 using Volo.Abp.Timing;
+using IdentityUser = Censeq.Identity.Entities.IdentityUser;
 
 namespace Censeq.Identity.AspNetCore;
 

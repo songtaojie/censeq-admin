@@ -9,9 +9,9 @@ using Volo.Abp.Emailing;
 using Volo.Abp.MultiTenancy;
 using Volo.Abp.TextTemplating;
 using Volo.Abp.UI.Navigation.Urls;
-using Censeq.Identity;
 using Censeq.Account.Emailing.Templates;
 using Censeq.Account.Localization;
+using Censeq.Identity.Entities;
 
 namespace Censeq.Account.Emailing;
 

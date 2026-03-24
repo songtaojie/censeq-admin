@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Localization;
 using Censeq.Identity.Localization;
 using Volo.Abp;
+using Censeq.Identity.Entities;
 
 namespace Censeq.Identity
 {

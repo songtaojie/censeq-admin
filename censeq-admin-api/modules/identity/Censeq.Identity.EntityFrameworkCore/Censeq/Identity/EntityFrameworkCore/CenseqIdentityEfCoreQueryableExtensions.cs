@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using Censeq.Identity.Entities;
 using Microsoft.EntityFrameworkCore;
 
 namespace Censeq.Identity.EntityFrameworkCore;

@@ -1,10 +1,10 @@
-﻿using System;
+using System;
 using System.Security.Claims;
 using JetBrains.Annotations;
 using Volo.Abp.Domain.Entities;
 using Volo.Abp.MultiTenancy;
 
-namespace Censeq.Identity;
+namespace Censeq.Identity.Entities;
 
 public abstract class IdentityClaim : Entity<Guid>, IMultiTenant
 {
