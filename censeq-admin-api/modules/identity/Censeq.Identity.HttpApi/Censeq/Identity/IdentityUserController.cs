@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Threading.Tasks;
 using Asp.Versioning;
 using Microsoft.AspNetCore.Mvc;
@@ -73,6 +73,20 @@ public class IdentityUserController : AbpControllerBase, IIdentityUserAppService
     public virtual Task UpdateRolesAsync(Guid id, IdentityUserUpdateRolesDto input)
     {
         return UserAppService.UpdateRolesAsync(id, input);
+    }
+
+    [HttpGet]
+    [Route("{id}/organization-units")]
+    public virtual Task<ListResultDto<OrganizationUnitDto>> GetOrganizationUnitsAsync(Guid id)
+    {
+        return UserAppService.GetOrganizationUnitsAsync(id);
+    }
+
+    [HttpPut]
+    [Route("{id}/organization-units")]
+    public virtual Task UpdateOrganizationUnitsAsync(Guid id, IdentityUserOrganizationUnitsDto input)
+    {
+        return UserAppService.UpdateOrganizationUnitsAsync(id, input);
     }
 
     [HttpGet]

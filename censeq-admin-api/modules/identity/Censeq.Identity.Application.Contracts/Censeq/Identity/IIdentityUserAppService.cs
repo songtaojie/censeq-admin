@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Threading.Tasks;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Application.Services;
@@ -18,6 +18,10 @@ public interface IIdentityUserAppService
     Task<ListResultDto<IdentityRoleDto>> GetAssignableRolesAsync();
 
     Task UpdateRolesAsync(Guid id, IdentityUserUpdateRolesDto input);
+
+    Task<ListResultDto<OrganizationUnitDto>> GetOrganizationUnitsAsync(Guid id);
+
+    Task UpdateOrganizationUnitsAsync(Guid id, IdentityUserOrganizationUnitsDto input);
 
     Task<IdentityUserDto> FindByUsernameAsync(string userName);
 

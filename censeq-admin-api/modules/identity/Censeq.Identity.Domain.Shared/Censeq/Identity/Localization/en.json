@@ -87,6 +87,7 @@
     "Permission:ChangePermissions": "Change permissions",
     "Permission:ManageRoles": "Manage roles",
     "Permission:UserManagement": "User management",
+    "Permission:OrganizationUnitManagement": "Organization units",
     "Permission:UserLookup": "User lookup",
     "DisplayName:Abp.Identity.Password.RequiredLength": "Required length",
     "DisplayName:Abp.Identity.Password.RequiredUniqueChars": "Required unique characters number",

@@ -1,135 +1,134 @@
 <template>
 	<div class="system-dept-container layout-padding">
-		<el-card shadow="hover" class="layout-padding-auto">
-			<div class="system-dept-search mb15">
-				<el-input size="default" placeholder="请输入部门名称" style="max-width: 180px"> </el-input>
-				<el-button size="default" type="primary" class="ml10">
-					<el-icon>
-						<ele-Search />
-					</el-icon>
-					查询
+		<div class="system-dept-padding layout-padding-auto layout-padding-view">
+			<div class="system-dept-toolbar mb15">
+				<el-button size="default" type="primary" @click="onRefresh">
+					<el-icon><ele-Refresh /></el-icon>
+					刷新
 				</el-button>
-				<el-button size="default" type="success" class="ml10" @click="onOpenAddDept('add')">
-					<el-icon>
-						<ele-FolderAdd />
-					</el-icon>
-					新增部门
+				<el-button size="default" type="success" class="ml10" @click="onOpenAddRoot">
+					<el-icon><ele-FolderAdd /></el-icon>
+					新增根节点
 				</el-button>
 			</div>
 			<el-table
-				:data="state.tableData.data"
-				v-loading="state.tableData.loading"
-				style="width: 100%"
+				v-loading="state.loading"
+				:data="state.treeData"
 				row-key="id"
 				default-expand-all
 				:tree-props="{ children: 'children', hasChildren: 'hasChildren' }"
+				style="width: 100%"
 			>
-				<el-table-column prop="deptName" label="部门名称" show-overflow-tooltip> </el-table-column>
-				<el-table-column label="排序" show-overflow-tooltip width="80">
-					<template #default="scope">
-						{{ scope.$index }}
-					</template>
-				</el-table-column>
-				<el-table-column prop="status" label="部门状态" show-overflow-tooltip>
-					<template #default="scope">
-						<el-tag type="success" v-if="scope.row.status">启用</el-tag>
-						<el-tag type="info" v-else>禁用</el-tag>
-					</template>
-				</el-table-column>
-				<el-table-column prop="describe" label="部门描述" show-overflow-tooltip></el-table-column>
-				<el-table-column prop="createTime" label="创建时间" show-overflow-tooltip></el-table-column>
-				<el-table-column label="操作" show-overflow-tooltip width="140">
-					<template #default="scope">
-						<el-button size="small" text type="primary" @click="onOpenAddDept('add')">新增</el-button>
-						<el-button size="small" text type="primary" @click="onOpenEditDept('edit', scope.row)">修改</el-button>
-						<el-button size="small" text type="primary" @click="onTabelRowDel(scope.row)">删除</el-button>
+				<el-table-column prop="displayName" label="显示名称" min-width="200" show-overflow-tooltip />
+				<el-table-column prop="code" label="编码（层级）" min-width="200" show-overflow-tooltip />
+				<el-table-column label="操作" width="200" fixed="right">
+					<template #default="{ row }">
+						<el-button size="small" text type="primary" @click="onAddChild(row)">新增子级</el-button>
+						<el-button size="small" text type="primary" @click="onEdit(row)">编辑</el-button>
+						<el-button size="small" text type="primary" @click="onDel(row)">删除</el-button>
 					</template>
 				</el-table-column>
 			</el-table>
-		</el-card>
-		<DeptDialog ref="deptDialogRef" @refresh="getTableData()" />
+		</div>
+		<DeptDialog ref="deptDialogRef" @refresh="loadTree()" />
 	</div>
 </template>
 
 <script setup lang="ts" name="systemDept">
-import { defineAsyncComponent, ref, reactive, onMounted } from 'vue';
+import { defineAsyncComponent, reactive, ref, onMounted } from 'vue';
 import { ElMessageBox, ElMessage } from 'element-plus';
+import { useIdentityApi } from '/@/api/apis';
+import type { OrganizationUnitDto } from '/@/api/models/identity';
 
-// 引入组件
+type OuNode = OrganizationUnitDto & { children?: OuNode[] };
+
 const DeptDialog = defineAsyncComponent(() => import('/@/views/system/dept/dialog.vue'));
 
-// 定义变量内容
 const deptDialogRef = ref();
-const state = reactive<SysDeptState>({
-	tableData: {
-		data: [],
-		total: 0,
-		loading: false,
-		param: {
-			pageNum: 1,
-			pageSize: 10,
-		},
-	},
+const state = reactive({
+	loading: false,
+	flat: [] as OrganizationUnitDto[],
+	treeData: [] as OuNode[],
 });
 
-// 初始化表格数据
-const getTableData = () => {
-	state.tableData.loading = true;
-	state.tableData.data = [];
-	state.tableData.data.push({
-		deptName: 'vueNextAdmin',
-		createTime: new Date().toLocaleString(),
-		status: true,
-		sort: Math.random(),
-		describe: '顶级部门',
-		id: Math.random(),
-		children: [
-			{
-				deptName: 'IT外包服务',
-				createTime: new Date().toLocaleString(),
-				status: true,
-				sort: Math.random(),
-				describe: '总部',
-				id: Math.random(),
-			},
-			{
-				deptName: '资本控股',
-				createTime: new Date().toLocaleString(),
-				status: true,
-				sort: Math.random(),
-				describe: '分部',
-				id: Math.random(),
-			},
-		],
+function buildOuTree(items: OrganizationUnitDto[]): OuNode[] {
+	const byId = new Map<string, OuNode>();
+	items.forEach((i) => {
+		if (!i.id) return;
+		byId.set(i.id, { ...i, children: [] });
 	});
-	state.tableData.total = state.tableData.data.length;
-	setTimeout(() => {
-		state.tableData.loading = false;
-	}, 500);
+	const roots: OuNode[] = [];
+	byId.forEach((node) => {
+		const pid = node.parentId;
+		if (pid && byId.has(pid)) {
+			byId.get(pid)!.children!.push(node);
+		} else {
+			roots.push(node);
+		}
+	});
+	const sortTree = (nodes: OuNode[]) => {
+		nodes.sort((a, b) => (a.code ?? '').localeCompare(b.code ?? '', undefined, { numeric: true }));
+		nodes.forEach((n) => {
+			if (n.children?.length) sortTree(n.children);
+		});
+	};
+	sortTree(roots);
+	return roots;
+}
+
+const loadTree = async () => {
+	state.loading = true;
+	try {
+		const { getOrganizationUnitAllList } = useIdentityApi();
+		const res = await getOrganizationUnitAllList();
+		state.flat = res.items ?? [];
+		state.treeData = buildOuTree(state.flat);
+	} catch {
+		state.flat = [];
+		state.treeData = [];
+	} finally {
+		state.loading = false;
+	}
 };
-// 打开新增菜单弹窗
-const onOpenAddDept = (type: string) => {
-	deptDialogRef.value.openDialog(type);
+
+const onRefresh = () => loadTree();
+
+const onOpenAddRoot = () => {
+	deptDialogRef.value.openDialog('add', null, null);
 };
-// 打开编辑菜单弹窗
-const onOpenEditDept = (type: string, row: DeptTreeType) => {
-	deptDialogRef.value.openDialog(type, row);
+
+const onAddChild = (row: OrganizationUnitDto) => {
+	deptDialogRef.value.openDialog('add', null, row.id ?? null);
 };
-// 删除当前行
-const onTabelRowDel = (row: DeptTreeType) => {
-	ElMessageBox.confirm(`此操作将永久删除部门：${row.deptName}, 是否继续?`, '提示', {
+
+const onEdit = (row: OrganizationUnitDto) => {
+	deptDialogRef.value.openDialog('edit', row, null);
+};
+
+const onDel = (row: OrganizationUnitDto) => {
+	ElMessageBox.confirm(`将删除组织机构「${row.displayName}」及其子节点（若存在），是否继续？`, '提示', {
+		type: 'warning',
 		confirmButtonText: '删除',
 		cancelButtonText: '取消',
-		type: 'warning',
 	})
-		.then(() => {
-			getTableData();
-			ElMessage.success('删除成功');
+		.then(async () => {
+			const { deleteOrganizationUnit } = useIdentityApi();
+			await deleteOrganizationUnit(row.id!);
+			ElMessage.success('已删除');
+			await loadTree();
 		})
 		.catch(() => {});
 };
-// 页面加载时
+
 onMounted(() => {
-	getTableData();
+	loadTree();
 });
 </script>
+
+<style scoped lang="scss">
+.system-dept-container {
+	.system-dept-padding {
+		padding: 15px;
+	}
+}
+</style>

@@ -1,4 +1,4 @@
-﻿using Volo.Abp.Reflection;
+using Volo.Abp.Reflection;
 
 namespace Censeq.Identity;
 
@@ -28,6 +28,14 @@ public static class IdentityPermissions
     public static class UserLookup
     {
         public const string Default = GroupName + ".UserLookup";
+    }
+
+    public static class OrganizationUnits
+    {
+        public const string Default = GroupName + ".OrganizationUnits";
+        public const string Create = Default + ".Create";
+        public const string Update = Default + ".Update";
+        public const string Delete = Default + ".Delete";
     }
 
     public static string[] GetAll()

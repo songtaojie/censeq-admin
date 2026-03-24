@@ -46,9 +46,8 @@
 <script setup lang="ts" name="systemRoleDialog">
 import { reactive, ref } from 'vue';
 import type { ElTree } from 'element-plus';
-import { IdentityRoleDto, IdentityRoleCreateDto } from '/@/api/models/identity';
+import { IdentityRoleDto } from '/@/api/models/identity';
 import { usePermissionApi, useIdentityApi } from '/@/api/apis';
-import { useUserInfo } from '/@/composables/useUserInfo';
 import { PermissionGroupDto, UpdatePermissionDto } from '/@/api/models/permission';
 // 定义子组件向父组件传值/事件
 const emit = defineEmits(['refresh']);
@@ -68,25 +67,23 @@ const state = reactive({
 	},
 	dialog: {
 		isShowDialog: false,
-		type: '',
+		type: '' as 'add' | 'edit' | '',
 		title: '',
 		submitTxt: '',
 	},
 });
 
 // 打开弹窗
-const openDialog = (type: string, row: IdentityRoleDto) => {
-	if (type === 'edit') {
-		state.ruleForm = row;
+const openDialog = (type: string, row?: IdentityRoleDto) => {
+	state.dialog.type = type === 'edit' ? 'edit' : 'add';
+	if (type === 'edit' && row) {
+		state.ruleForm = { ...row };
 		state.dialog.title = '修改角色';
 		state.dialog.submitTxt = '修 改';
 	} else {
+		state.ruleForm = { isDefault: false, isPublic: false, isStatic: false, name: '' } as IdentityRoleDto;
 		state.dialog.title = '新增角色';
 		state.dialog.submitTxt = '新 增';
-		// 清空表单，此项需加表单验证才能使用
-		// nextTick(() => {
-		// 	roleDialogFormRef.value.resetFields();
-		// });
 	}
 	state.dialog.isShowDialog = true;
 	getMenuData();
@@ -101,25 +98,39 @@ const onCancel = () => {
 };
 // 提交
 const onSubmit = () => {
-	const { createRole } = useIdentityApi();
+	const { createRole, updateRole } = useIdentityApi();
 	const { updatePermission } = usePermissionApi();
 	roleDialogFormRef.value.validate(async (valid: boolean) => {
 		if (!valid) return;
-		var data = await createRole({
-			name: state.ruleForm.name,
-			isDefault: state.ruleForm.isDefault,
-			isPublic: state.ruleForm.isPublic,
-		});
-		if (data.id) {
+		if (state.dialog.type === 'edit' && state.ruleForm.id) {
+			await updateRole(state.ruleForm.id, {
+				name: state.ruleForm.name,
+				isDefault: state.ruleForm.isDefault,
+				isPublic: state.ruleForm.isPublic,
+				concurrencyStamp: state.ruleForm.concurrencyStamp,
+			});
 			const updatePermissions: UpdatePermissionDto[] = state.menuData.flatMap((group) =>
 				group.permissions.map((p) => ({
 					name: p.name,
 					isGranted: p.isGranted,
 				}))
 			);
-			updatePermission('R', data.id, {
-				permissions: updatePermissions,
+			await updatePermission('R', state.ruleForm.id, { permissions: updatePermissions });
+		} else {
+			const data = await createRole({
+				name: state.ruleForm.name,
+				isDefault: state.ruleForm.isDefault,
+				isPublic: state.ruleForm.isPublic,
 			});
+			if (data.id) {
+				const updatePermissions: UpdatePermissionDto[] = state.menuData.flatMap((group) =>
+					group.permissions.map((p) => ({
+						name: p.name,
+						isGranted: p.isGranted,
+					}))
+				);
+				await updatePermission('R', data.id, { permissions: updatePermissions });
+			}
 		}
 		closeDialog();
 		emit('refresh');
@@ -129,7 +140,8 @@ const onSubmit = () => {
 const getMenuData = async () => {
 	const { userInfos } = useUserInfo();
 	const { getPermissionList } = usePermissionApi();
-	var permissionList = await getPermissionList('R', '');
+	const providerKey = state.dialog.type === 'edit' && state.ruleForm.id ? state.ruleForm.id : '';
+	const permissionList = await getPermissionList('R', providerKey);
 	state.menuData = permissionList.groups;
 	treeRef.value?.setCheckedKeys([]); // 清空选中值
 	var selectNames = extractGrantedPermissionNames(state.menuData);

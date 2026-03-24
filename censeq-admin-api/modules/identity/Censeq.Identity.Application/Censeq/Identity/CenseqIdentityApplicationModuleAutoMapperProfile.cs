@@ -1,4 +1,4 @@
-﻿using AutoMapper;
+using AutoMapper;
 
 namespace Censeq.Identity;
 
@@ -10,6 +10,9 @@ public class CenseqIdentityApplicationModuleAutoMapperProfile : Profile
             .MapExtraProperties();
 
         CreateMap<IdentityRole, IdentityRoleDto>()
+            .MapExtraProperties();
+
+        CreateMap<OrganizationUnit, OrganizationUnitDto>()
             .MapExtraProperties();
     }
 }

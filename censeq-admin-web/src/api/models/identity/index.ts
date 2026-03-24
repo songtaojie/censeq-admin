@@ -8,6 +8,28 @@ export interface GetIdentityUsersRequest extends PagedAndSortedRequestDto {
 	filter?: string;
 }
 
+/** 与后端 OrganizationUnitDto 一致（组织机构 / 部门） */
+export interface OrganizationUnitDto extends ExtensibleEntityDto<string> {
+	parentId?: string | null;
+	code?: string;
+	displayName?: string;
+	entityVersion?: number;
+}
+
+export interface OrganizationUnitCreateDto {
+	displayName: string;
+	parentId?: string | null;
+}
+
+export interface OrganizationUnitUpdateDto {
+	displayName: string;
+}
+
+/** 用户所属组织机构 Id 列表 */
+export interface IdentityUserOrganizationUnitsDto {
+	organizationUnitIds: string[];
+}
+
 export interface IdentityRoleCreateDto extends IdentityRoleCreateOrUpdateDtoBase {}
 
 export interface IdentityRoleCreateOrUpdateDtoBase extends ExtensibleObject {
@@ -44,6 +66,7 @@ export interface IdentityUserCreateOrUpdateDtoBase extends ExtensibleObject {
 }
 
 export interface IdentityUserDto extends ExtensibleFullAuditedEntityDto<string> {
+	creationTime?: string;
 	tenantId?: string;
 	userName?: string;
 	name?: string;

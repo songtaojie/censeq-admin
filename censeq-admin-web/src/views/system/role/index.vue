@@ -89,17 +89,18 @@ const state = reactive({
 // 初始化表格数据
 const getTableData = async () => {
 	state.tableData.loading = true;
-	const { getRolePage } = useIdentityApi();
-    var data = await getRolePage({
-		skipCount:(state.tableData.param.pageIndex - 1) * state.tableData.param.pageSize,
-		maxResultCount: state.tableData.param.pageSize,
-		filter:state.tableData.param.search
-	});
-	state.tableData.data = data.items ?? [];
-	state.tableData.total = data.totalCount  ?? 0;
-	setTimeout(() => {
+	try {
+		const { getRolePage } = useIdentityApi();
+		const data = await getRolePage({
+			skipCount: (state.tableData.param.pageIndex - 1) * state.tableData.param.pageSize,
+			maxResultCount: state.tableData.param.pageSize,
+			filter: state.tableData.param.search || undefined,
+		});
+		state.tableData.data = data.items ?? [];
+		state.tableData.total = data.totalCount ?? 0;
+	} finally {
 		state.tableData.loading = false;
-	}, 500);
+	}
 };
 // 打开新增角色弹窗
 const onOpenAddRole = (type: string) => {
@@ -110,15 +111,17 @@ const onOpenEditRole = (type: string, row: Object) => {
 	roleDialogRef.value.openDialog(type, row);
 };
 // 删除角色
-const onRowDel = (row: RowRoleType) => {
-	ElMessageBox.confirm(`此操作将永久删除角色名称：“${row.roleName}”，是否继续?`, '提示', {
+const onRowDel = (row: IdentityRoleDto) => {
+	ElMessageBox.confirm(`此操作将永久删除角色「${row.name}」，是否继续?`, '提示', {
 		confirmButtonText: '确认',
 		cancelButtonText: '取消',
 		type: 'warning',
 	})
-		.then(() => {
-			getTableData();
+		.then(async () => {
+			const { deleteRole } = useIdentityApi();
+			await deleteRole(row.id!);
 			ElMessage.success('删除成功');
+			await getTableData();
 		})
 		.catch(() => {});
 };

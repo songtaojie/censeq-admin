@@ -1,4 +1,4 @@
-﻿using Volo.Abp.Authorization.Permissions;
+using Volo.Abp.Authorization.Permissions;
 using Volo.Abp.Localization;
 using Censeq.Identity.Localization;
 
@@ -22,6 +22,11 @@ public class IdentityPermissionDefinitionProvider : PermissionDefinitionProvider
         editPermission.AddChild(IdentityPermissions.Users.ManageRoles, L("Permission:ManageRoles"));
         usersPermission.AddChild(IdentityPermissions.Users.Delete, L("Permission:Delete"));
         usersPermission.AddChild(IdentityPermissions.Users.ManagePermissions, L("Permission:ChangePermissions"));
+
+        var organizationUnitsPermission = identityGroup.AddPermission(IdentityPermissions.OrganizationUnits.Default, L("Permission:OrganizationUnitManagement"));
+        organizationUnitsPermission.AddChild(IdentityPermissions.OrganizationUnits.Create, L("Permission:Create"));
+        organizationUnitsPermission.AddChild(IdentityPermissions.OrganizationUnits.Update, L("Permission:Edit"));
+        organizationUnitsPermission.AddChild(IdentityPermissions.OrganizationUnits.Delete, L("Permission:Delete"));
 
         identityGroup
             .AddPermission(IdentityPermissions.UserLookup.Default, L("Permission:UserLookup"))

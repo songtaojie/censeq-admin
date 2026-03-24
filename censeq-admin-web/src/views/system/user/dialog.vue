@@ -1,187 +1,260 @@
 <template>
 	<div class="system-user-dialog-container">
-		<el-dialog :title="state.dialog.title" v-model="state.dialog.isShowDialog" width="769px">
-			<el-form ref="userDialogFormRef" :model="state.ruleForm" size="default" label-width="90px">
-				<el-row :gutter="35">
-					<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12" class="mb20">
-						<el-form-item label="账户名称">
-							<el-input v-model="state.ruleForm.userName" placeholder="请输入账户名称" clearable></el-input>
+		<el-dialog :title="state.dialog.title" v-model="state.dialog.isShowDialog" width="720px" destroy-on-close @closed="onClosed">
+			<el-form ref="formRef" :model="state.ruleForm" :rules="formRules" label-width="108px" size="default">
+				<el-divider content-position="left">基本信息</el-divider>
+				<el-row :gutter="16">
+					<el-col :span="12">
+						<el-form-item label="用户名" prop="userName">
+							<el-input v-model="state.ruleForm.userName" placeholder="登录名" :disabled="state.dialog.type === 'edit'" clearable />
 						</el-form-item>
 					</el-col>
-					<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12" class="mb20">
-						<el-form-item label="用户昵称">
-							<el-input v-model="state.ruleForm.userNickname" placeholder="请输入用户昵称" clearable></el-input>
+					<el-col :span="12">
+						<el-form-item :label="state.dialog.type === 'add' ? '密码' : '新密码'" prop="password">
+							<el-input v-model="state.ruleForm.password" type="password" show-password clearable placeholder="编辑留空则不修改" />
 						</el-form-item>
 					</el-col>
-					<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12" class="mb20">
-						<el-form-item label="关联角色">
-							<el-select v-model="state.ruleForm.roleSign" placeholder="请选择" clearable class="w100">
-								<el-option label="超级管理员" value="admin"></el-option>
-								<el-option label="普通用户" value="common"></el-option>
-							</el-select>
+					<el-col :span="12">
+						<el-form-item label="名" prop="name">
+							<el-input v-model="state.ruleForm.name" placeholder="Name" clearable />
 						</el-form-item>
 					</el-col>
-					<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12" class="mb20">
-						<el-form-item label="部门">
-							<el-cascader
-								:options="state.deptData"
-								:props="{ checkStrictly: true, value: 'deptName', label: 'deptName' }"
-								placeholder="请选择部门"
-								clearable
-								class="w100"
-								v-model="state.ruleForm.department"
-							>
-								<template #default="{ node, data }">
-									<span>{{ data.deptName }}</span>
-									<span v-if="!node.isLeaf"> ({{ data.children.length }}) </span>
-								</template>
-							</el-cascader>
+					<el-col :span="12">
+						<el-form-item label="姓" prop="surname">
+							<el-input v-model="state.ruleForm.surname" placeholder="Surname" clearable />
 						</el-form-item>
 					</el-col>
-					<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12" class="mb20">
-						<el-form-item label="手机号">
-							<el-input v-model="state.ruleForm.phone" placeholder="请输入手机号" clearable></el-input>
+					<el-col :span="12">
+						<el-form-item label="邮箱" prop="email">
+							<el-input v-model="state.ruleForm.email" type="email" clearable />
 						</el-form-item>
 					</el-col>
-					<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12" class="mb20">
-						<el-form-item label="邮箱">
-							<el-input v-model="state.ruleForm.email" placeholder="请输入" clearable></el-input>
+					<el-col :span="12">
+						<el-form-item label="手机">
+							<el-input v-model="state.ruleForm.phoneNumber" clearable />
 						</el-form-item>
 					</el-col>
-					<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12" class="mb20">
-						<el-form-item label="性别">
-							<el-select v-model="state.ruleForm.sex" placeholder="请选择" clearable class="w100">
-								<el-option label="男" value="男"></el-option>
-								<el-option label="女" value="女"></el-option>
-							</el-select>
+					<el-col :span="12">
+						<el-form-item label="启用">
+							<el-switch v-model="state.ruleForm.isActive" inline-prompt active-text="是" inactive-text="否" />
 						</el-form-item>
 					</el-col>
-					<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12" class="mb20">
-						<el-form-item label="账户密码">
-							<el-input v-model="state.ruleForm.password" placeholder="请输入" type="password" clearable></el-input>
-						</el-form-item>
-					</el-col>
-					<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12" class="mb20">
-						<el-form-item label="账户过期">
-							<el-date-picker v-model="state.ruleForm.overdueTime" type="date" placeholder="请选择" class="w100"> </el-date-picker>
-						</el-form-item>
-					</el-col>
-					<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12" class="mb20">
-						<el-form-item label="用户状态">
-							<el-switch v-model="state.ruleForm.status" inline-prompt active-text="启" inactive-text="禁"></el-switch>
-						</el-form-item>
-					</el-col>
-					<el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24" class="mb20">
-						<el-form-item label="用户描述">
-							<el-input v-model="state.ruleForm.describe" type="textarea" placeholder="请输入用户描述" maxlength="150"></el-input>
+					<el-col :span="12">
+						<el-form-item label="登录失败锁定">
+							<el-switch v-model="state.ruleForm.lockoutEnabled" inline-prompt active-text="开" inactive-text="关" />
 						</el-form-item>
 					</el-col>
 				</el-row>
+
+				<el-divider content-position="left">角色（ABP 角色名）</el-divider>
+				<el-form-item label="角色">
+					<el-select v-model="state.roleNames" multiple filterable collapse-tags collapse-tags-tooltip placeholder="请选择角色" class="w100">
+						<el-option v-for="r in state.roleOptions" :key="r.id" :label="r.name ?? ''" :value="r.name ?? ''" />
+					</el-select>
+				</el-form-item>
+
+				<el-divider content-position="left">组织机构</el-divider>
+				<el-form-item label="所属部门">
+					<el-select
+						v-model="state.organizationUnitIds"
+						multiple
+						filterable
+						collapse-tags
+						collapse-tags-tooltip
+						placeholder="可选多个组织单元"
+						class="w100"
+					>
+						<el-option v-for="ou in state.ouOptions" :key="ou.id" :label="ouLabel(ou)" :value="ou.id!" />
+					</el-select>
+				</el-form-item>
 			</el-form>
 			<template #footer>
-				<span class="dialog-footer">
-					<el-button @click="onCancel" size="default">取 消</el-button>
-					<el-button type="primary" @click="onSubmit" size="default">{{ state.dialog.submitTxt }}</el-button>
-				</span>
+				<el-button size="default" @click="onCancel">取 消</el-button>
+				<el-button type="primary" size="default" :loading="state.submitting" @click="onSubmit">{{ state.dialog.submitTxt }}</el-button>
 			</template>
 		</el-dialog>
 	</div>
 </template>
 
 <script setup lang="ts" name="systemUserDialog">
-import { reactive, ref } from 'vue';
+import { reactive, ref, nextTick, computed } from 'vue';
+import type { FormInstance, FormRules } from 'element-plus';
+import { ElMessage } from 'element-plus';
+import { useIdentityApi } from '/@/api/apis';
+import type { IdentityRoleDto, IdentityUserDto, OrganizationUnitDto } from '/@/api/models/identity';
 
-// 定义子组件向父组件传值/事件
 const emit = defineEmits(['refresh']);
 
-// 定义变量内容
-const userDialogFormRef = ref();
+const formRef = ref<FormInstance>();
+
+interface RuleForm {
+	userId: string;
+	userName: string;
+	password: string;
+	name: string;
+	surname: string;
+	email: string;
+	phoneNumber: string;
+	isActive: boolean;
+	lockoutEnabled: boolean;
+	concurrencyStamp: string;
+}
+
+const emptyForm = (): RuleForm => ({
+	userId: '',
+	userName: '',
+	password: '',
+	name: '',
+	surname: '',
+	email: '',
+	phoneNumber: '',
+	isActive: true,
+	lockoutEnabled: true,
+	concurrencyStamp: '',
+});
+
 const state = reactive({
-	ruleForm: {
-		userName: '', // 账户名称
-		userNickname: '', // 用户昵称
-		roleSign: '', // 关联角色
-		department: [] as string[], // 部门
-		phone: '', // 手机号
-		email: '', // 邮箱
-		sex: '', // 性别
-		password: '', // 账户密码
-		overdueTime: '', // 账户过期
-		status: true, // 用户状态
-		describe: '', // 用户描述
-	},
-	deptData: [] as DeptTreeType[], // 部门数据
+	ruleForm: emptyForm(),
+	roleNames: [] as string[],
+	organizationUnitIds: [] as string[],
+	roleOptions: [] as IdentityRoleDto[],
+	ouOptions: [] as OrganizationUnitDto[],
 	dialog: {
 		isShowDialog: false,
-		type: '',
+		type: '' as 'add' | 'edit' | '',
 		title: '',
 		submitTxt: '',
 	},
+	submitting: false,
 });
 
-// 打开弹窗
-const openDialog = (type: string, row: RowUserType) => {
-	if (type === 'edit') {
-		state.ruleForm = row;
-		state.dialog.title = '修改用户';
-		state.dialog.submitTxt = '修 改';
+const formRules = computed<FormRules>(() => {
+	const rules: FormRules = {
+		userName: [{ required: true, message: '请输入用户名', trigger: 'blur' }],
+		email: [
+			{ required: true, message: '请输入邮箱', trigger: 'blur' },
+			{ type: 'email', message: '邮箱格式不正确', trigger: 'blur' },
+		],
+	};
+	if (state.dialog.type === 'add') {
+		rules.password = [
+			{ required: true, message: '请输入初始密码', trigger: 'blur' },
+			{ min: 6, message: '至少 6 位', trigger: 'blur' },
+		];
 	} else {
-		state.dialog.title = '新增用户';
-		state.dialog.submitTxt = '新 增';
-		// 清空表单，此项需加表单验证才能使用
-		// nextTick(() => {
-		// 	userDialogFormRef.value.resetFields();
-		// });
+		rules.password = [{ validator: validateOptionalPassword, trigger: 'blur' }];
 	}
-	state.dialog.isShowDialog = true;
-	getMenuData();
+	return rules;
+});
+
+function validateOptionalPassword(_: unknown, val: string, cb: (e?: Error) => void) {
+	if (val && val.length > 0 && val.length < 6) {
+		cb(new Error('若填写新密码须至少 6 位'));
+	} else {
+		cb();
+	}
+}
+
+function ouLabel(ou: OrganizationUnitDto): string {
+	const code = ou.code ? ` [${ou.code}]` : '';
+	return `${ou.displayName ?? ''}${code}`;
+}
+
+const loadRolesAndOus = async () => {
+	const api = useIdentityApi();
+	const [rolesRes, ouRes] = await Promise.all([api.getAllRoles(), api.getOrganizationUnitAllList()]);
+	state.roleOptions = rolesRes.items ?? [];
+	state.ouOptions = ouRes.items ?? [];
 };
-// 关闭弹窗
+
+const openDialog = async (type: string, row?: IdentityUserDto) => {
+	state.dialog.type = type as 'add' | 'edit';
+	state.ruleForm = emptyForm();
+	state.roleNames = [];
+	state.organizationUnitIds = [];
+	state.dialog.isShowDialog = true;
+	state.dialog.title = type === 'edit' ? '修改用户' : '新增用户';
+	state.dialog.submitTxt = type === 'edit' ? '保 存' : '新 增';
+	await loadRolesAndOus();
+	if (type === 'edit' && row?.id) {
+		state.ruleForm.userId = row.id;
+		state.ruleForm.userName = row.userName ?? '';
+		state.ruleForm.name = row.name ?? '';
+		state.ruleForm.surname = row.surname ?? '';
+		state.ruleForm.email = row.email ?? '';
+		state.ruleForm.phoneNumber = row.phoneNumber ?? '';
+		state.ruleForm.isActive = row.isActive ?? true;
+		state.ruleForm.lockoutEnabled = row.lockoutEnabled ?? true;
+		state.ruleForm.concurrencyStamp = row.concurrencyStamp ?? '';
+		state.ruleForm.password = '';
+		const api = useIdentityApi();
+		const [roleRes, ouRes] = await Promise.all([api.getUserRoles(row.id), api.getUserOrganizationUnits(row.id)]);
+		state.roleNames = (roleRes.items ?? []).map((r: IdentityRoleDto) => r.name).filter(Boolean) as string[];
+		state.organizationUnitIds = (ouRes.items ?? []).map((o) => o.id!).filter(Boolean);
+	}
+	await nextTick();
+	formRef.value?.clearValidate();
+};
+
+function onClosed() {
+	state.dialog.type = '';
+}
+
 const closeDialog = () => {
 	state.dialog.isShowDialog = false;
 };
-// 取消
-const onCancel = () => {
-	closeDialog();
-};
-// 提交
-const onSubmit = () => {
-	closeDialog();
-	emit('refresh');
-	// if (state.dialog.type === 'add') { }
-};
-// 初始化部门数据
-const getMenuData = () => {
-	state.deptData.push({
-		deptName: 'vueNextAdmin',
-		createTime: new Date().toLocaleString(),
-		status: true,
-		sort: Math.random(),
-		describe: '顶级部门',
-		id: Math.random(),
-		children: [
-			{
-				deptName: 'IT外包服务',
-				createTime: new Date().toLocaleString(),
-				status: true,
-				sort: Math.random(),
-				describe: '总部',
-				id: Math.random(),
-			},
-			{
-				deptName: '资本控股',
-				createTime: new Date().toLocaleString(),
-				status: true,
-				sort: Math.random(),
-				describe: '分部',
-				id: Math.random(),
-			},
-		],
+
+const onCancel = () => closeDialog();
+
+const onSubmit = async () => {
+	if (!formRef.value) return;
+	await formRef.value.validate(async (valid) => {
+		if (!valid) return;
+		state.submitting = true;
+		const api = useIdentityApi();
+		try {
+			const phone = state.ruleForm.phoneNumber?.trim() || undefined;
+			if (state.dialog.type === 'add') {
+				const created = await api.createUser({
+					userName: state.ruleForm.userName.trim(),
+					password: state.ruleForm.password,
+					name: state.ruleForm.name?.trim() || undefined,
+					surname: state.ruleForm.surname?.trim() || undefined,
+					email: state.ruleForm.email.trim(),
+					phoneNumber: phone,
+					isActive: state.ruleForm.isActive,
+					lockoutEnabled: state.ruleForm.lockoutEnabled,
+					roleNames: [...state.roleNames],
+				});
+				if (created.id && state.organizationUnitIds.length) {
+					await api.updateUserOrganizationUnits(created.id, { organizationUnitIds: [...state.organizationUnitIds] });
+				}
+				ElMessage.success('创建成功');
+			} else if (state.dialog.type === 'edit' && state.ruleForm.userId) {
+				const id = state.ruleForm.userId;
+				const pwd = state.ruleForm.password?.trim();
+				await api.updateUser(id, {
+					userName: state.ruleForm.userName.trim(),
+					name: state.ruleForm.name?.trim() || undefined,
+					surname: state.ruleForm.surname?.trim() || undefined,
+					email: state.ruleForm.email.trim(),
+					phoneNumber: phone,
+					isActive: state.ruleForm.isActive,
+					lockoutEnabled: state.ruleForm.lockoutEnabled,
+					roleNames: [...state.roleNames],
+					concurrencyStamp: state.ruleForm.concurrencyStamp,
+					...(pwd ? { password: pwd } : {}),
+				});
+				await api.updateUserOrganizationUnits(id, { organizationUnitIds: [...state.organizationUnitIds] });
+				ElMessage.success('保存成功');
+			}
+			closeDialog();
+			emit('refresh');
+		} finally {
+			state.submitting = false;
+		}
 	});
 };
 
-// 暴露变量
-defineExpose({
-	openDialog,
-});
+defineExpose({ openDialog });
 </script>

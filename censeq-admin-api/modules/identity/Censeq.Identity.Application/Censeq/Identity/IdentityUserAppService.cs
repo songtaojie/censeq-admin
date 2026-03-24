@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -155,6 +156,34 @@ public class IdentityUserAppService : IdentityAppServiceBase, IIdentityUserAppSe
             throw new Volo.Abp.Domain.Entities.EntityNotFoundException(typeof(IdentityUser), id);
         }
         (await UserManager.SetRolesAsync(user, input.RoleNames)).CheckErrors();
+        await UserRepository.UpdateAsync(user);
+    }
+
+    [Authorize(IdentityPermissions.Users.Default)]
+    public virtual async Task<ListResultDto<OrganizationUnitDto>> GetOrganizationUnitsAsync(Guid id)
+    {
+        var list = await UserRepository.GetOrganizationUnitsAsync(id, includeDetails: true);
+        return new ListResultDto<OrganizationUnitDto>(
+            ObjectMapper.Map<List<OrganizationUnit>, List<OrganizationUnitDto>>(list));
+    }
+
+    [Authorize(IdentityPermissions.Users.Update)]
+    public virtual async Task UpdateOrganizationUnitsAsync(Guid id, IdentityUserOrganizationUnitsDto input)
+    {
+        var user = await UserRepository.GetAsync(id, includeDetails: true);
+        var target = new HashSet<Guid>(input.OrganizationUnitIds ?? new List<Guid>());
+        var current = user.OrganizationUnits.Select(x => x.OrganizationUnitId).ToHashSet();
+
+        foreach (var ouId in current.Except(target).ToList())
+        {
+            user.RemoveOrganizationUnit(ouId);
+        }
+
+        foreach (var ouId in target.Except(current).ToList())
+        {
+            user.AddOrganizationUnit(ouId);
+        }
+
         await UserRepository.UpdateAsync(user);
     }
 

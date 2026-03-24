@@ -5100,3 +5100,485 @@ System.InvalidOperationException: The AuthorizationPolicy named: 'AbpTenantManag
 2026-03-24 14:33:27.763 +08:00 [INF] Executed action Censeq.Identity.IdentityRoleController.GetListAsync (Censeq.Identity.HttpApi) in 718.3684ms
 2026-03-24 14:33:27.763 +08:00 [INF] Executed endpoint 'Censeq.Identity.IdentityRoleController.GetListAsync (Censeq.Identity.HttpApi)'
 2026-03-24 14:33:27.764 +08:00 [INF] Request finished HTTP/2 GET https://localhost:5001/api/identity/roles?skipCount=0&maxResultCount=10&filter= - 200 null application/json; charset=utf-8 734.5363ms
+2026-03-24 14:40:45.857 +08:00 [INF] Request starting HTTP/2 OPTIONS https://localhost:5001/api/identity/organization-units - null null
+2026-03-24 14:40:45.858 +08:00 [INF] CORS policy execution successful.
+2026-03-24 14:40:45.858 +08:00 [INF] Request finished HTTP/2 OPTIONS https://localhost:5001/api/identity/organization-units - 204 null null 0.673ms
+2026-03-24 14:40:45.861 +08:00 [INF] Request starting HTTP/2 GET https://localhost:5001/api/identity/organization-units - null null
+2026-03-24 14:40:45.861 +08:00 [INF] CORS policy execution successful.
+2026-03-24 14:40:45.862 +08:00 [DBG] The event OpenIddict.Validation.OpenIddictValidationEvents+ProcessRequestContext was successfully processed by OpenIddict.Validation.AspNetCore.OpenIddictValidationAspNetCoreHandlers+ResolveRequestUri.
+2026-03-24 14:40:45.862 +08:00 [DBG] The event OpenIddict.Server.OpenIddictServerEvents+ProcessRequestContext was successfully processed by OpenIddict.Server.AspNetCore.OpenIddictServerAspNetCoreHandlers+ResolveRequestUri.
+2026-03-24 14:40:45.862 +08:00 [DBG] The event OpenIddict.Server.OpenIddictServerEvents+ProcessRequestContext was successfully processed by OpenIddict.Server.OpenIddictServerHandlers+InferEndpointType.
+2026-03-24 14:40:45.862 +08:00 [DBG] The event OpenIddict.Server.OpenIddictServerEvents+ProcessRequestContext was successfully processed by OpenIddict.Server.AspNetCore.OpenIddictServerAspNetCoreHandlers+ValidateTransportSecurityRequirement.
+2026-03-24 14:40:45.862 +08:00 [DBG] The event OpenIddict.Server.OpenIddictServerEvents+ProcessRequestContext was successfully processed by OpenIddict.Server.AspNetCore.OpenIddictServerAspNetCoreHandlers+ValidateHostHeader.
+2026-03-24 14:40:45.863 +08:00 [DBG] The event OpenIddict.Validation.OpenIddictValidationEvents+ProcessAuthenticationContext was successfully processed by OpenIddict.Validation.AspNetCore.OpenIddictValidationAspNetCoreHandlers+ValidateHostHeader.
+2026-03-24 14:40:45.863 +08:00 [DBG] The event OpenIddict.Validation.OpenIddictValidationEvents+ProcessAuthenticationContext was successfully processed by OpenIddict.Validation.OpenIddictValidationHandlers+EvaluateValidatedTokens.
+2026-03-24 14:40:45.863 +08:00 [DBG] The event OpenIddict.Validation.OpenIddictValidationEvents+ProcessAuthenticationContext was successfully processed by OpenIddict.Validation.AspNetCore.OpenIddictValidationAspNetCoreHandlers+ExtractAccessTokenFromAuthorizationHeader.
+2026-03-24 14:40:45.863 +08:00 [DBG] The event OpenIddict.Validation.OpenIddictValidationEvents+ProcessAuthenticationContext was successfully processed by OpenIddict.Validation.AspNetCore.OpenIddictValidationAspNetCoreHandlers+ExtractAccessTokenFromBodyForm.
+2026-03-24 14:40:45.863 +08:00 [DBG] The event OpenIddict.Validation.OpenIddictValidationEvents+ProcessAuthenticationContext was successfully processed by OpenIddict.Validation.AspNetCore.OpenIddictValidationAspNetCoreHandlers+ExtractAccessTokenFromQueryString.
+2026-03-24 14:40:45.863 +08:00 [DBG] The event OpenIddict.Validation.OpenIddictValidationEvents+ProcessAuthenticationContext was successfully processed by OpenIddict.Validation.OpenIddictValidationHandlers+ValidateRequiredTokens.
+2026-03-24 14:40:45.863 +08:00 [DBG] The event OpenIddict.Validation.OpenIddictValidationEvents+ProcessAuthenticationContext was successfully processed by OpenIddict.Validation.OpenIddictValidationHandlers+ResolveServerConfiguration.
+2026-03-24 14:40:45.863 +08:00 [DBG] The event OpenIddict.Validation.OpenIddictValidationEvents+ProcessAuthenticationContext was successfully processed by OpenIddict.Validation.OpenIddictValidationHandlers+ResolveIntrospectionEndpoint.
+2026-03-24 14:40:45.863 +08:00 [DBG] The event OpenIddict.Validation.OpenIddictValidationEvents+ProcessAuthenticationContext was successfully processed by OpenIddict.Validation.OpenIddictValidationHandlers+EvaluateIntrospectionRequest.
+2026-03-24 14:40:45.863 +08:00 [DBG] The event OpenIddict.Validation.OpenIddictValidationEvents+ValidateTokenContext was successfully processed by OpenIddict.Validation.OpenIddictValidationHandlers+Protection+ResolveTokenValidationParameters.
+2026-03-24 14:40:45.863 +08:00 [DBG] The event OpenIddict.Validation.OpenIddictValidationEvents+ValidateTokenContext was successfully processed by OpenIddict.Validation.OpenIddictValidationHandlers+Protection+RemoveDisallowedCharacters.
+2026-03-24 14:40:45.863 +08:00 [DBG] The event OpenIddict.Validation.OpenIddictValidationEvents+ValidateTokenContext was successfully processed by OpenIddict.Validation.OpenIddictValidationHandlers+Protection+ValidateIdentityModelToken.
+2026-03-24 14:40:45.863 +08:00 [DBG] The event OpenIddict.Validation.OpenIddictValidationEvents+ValidateTokenContext was successfully processed by OpenIddict.Validation.OpenIddictValidationHandlers+Protection+NormalizeScopeClaims.
+2026-03-24 14:40:45.864 +08:00 [DBG] The event OpenIddict.Validation.OpenIddictValidationEvents+ValidateTokenContext was successfully processed by OpenIddict.Validation.OpenIddictValidationHandlers+Protection+MapInternalClaims.
+2026-03-24 14:40:45.864 +08:00 [DBG] The event OpenIddict.Validation.OpenIddictValidationEvents+ValidateTokenContext was successfully processed by OpenIddict.Validation.OpenIddictValidationHandlers+Protection+ValidatePrincipal.
+2026-03-24 14:40:45.864 +08:00 [DBG] The event OpenIddict.Validation.OpenIddictValidationEvents+ValidateTokenContext was successfully processed by OpenIddict.Validation.OpenIddictValidationHandlers+Protection+ValidateExpirationDate.
+2026-03-24 14:40:45.864 +08:00 [DBG] The event OpenIddict.Validation.OpenIddictValidationEvents+ValidateTokenContext was successfully processed by OpenIddict.Validation.OpenIddictValidationHandlers+Protection+ValidateAudience.
+2026-03-24 14:40:45.864 +08:00 [DBG] The event OpenIddict.Validation.OpenIddictValidationEvents+ProcessAuthenticationContext was successfully processed by OpenIddict.Validation.OpenIddictValidationHandlers+ValidateAccessToken.
+2026-03-24 14:40:45.864 +08:00 [DBG] AuthenticationScheme: OpenIddict.Validation.AspNetCore was successfully authenticated.
+2026-03-24 14:40:45.867 +08:00 [DBG] Get dynamic claims cache for user: 3a2030a0-069c-bb80-4f8f-70ea613a3734
+2026-03-24 14:40:45.868 +08:00 [INF] Request finished HTTP/2 GET https://localhost:5001/api/identity/organization-units - 404 0 null 7.48ms
+2026-03-24 14:40:45.869 +08:00 [INF] Request reached the end of the middleware pipeline without being handled by application code. Request path: GET https://localhost:5001/api/identity/organization-units, Response status code: 404
+2026-03-24 14:45:40.361 +08:00 [INF] Starting Censeq.Admin.HttpApi.Host.
+2026-03-24 14:45:44.165 +08:00 [INF] Loaded ABP modules:
+2026-03-24 14:45:44.166 +08:00 [INF] - Censeq.Admin.CenseqHttpApiHostModule
+2026-03-24 14:45:44.167 +08:00 [INF]   - Censeq.Admin.CenseqAdminHttpApiModule
+2026-03-24 14:45:44.167 +08:00 [INF]     - Censeq.Account.CenseqAccountHttpApiModule
+2026-03-24 14:45:44.167 +08:00 [INF]       - Censeq.Account.CenseqAccountApplicationContractsModule
+2026-03-24 14:45:44.167 +08:00 [INF]         - Censeq.Identity.CenseqIdentityApplicationContractsModule
+2026-03-24 14:45:44.167 +08:00 [INF]           - Censeq.Identity.CenseqIdentityDomainSharedModule
+2026-03-24 14:45:44.167 +08:00 [INF]             - Volo.Abp.Users.AbpUsersDomainSharedModule
+2026-03-24 14:45:44.167 +08:00 [INF]             - Volo.Abp.Validation.AbpValidationModule
+2026-03-24 14:45:44.167 +08:00 [INF]               - Volo.Abp.Validation.AbpValidationAbstractionsModule
+2026-03-24 14:45:44.167 +08:00 [INF]               - Volo.Abp.Localization.AbpLocalizationModule
+2026-03-24 14:45:44.167 +08:00 [INF]                 - Volo.Abp.VirtualFileSystem.AbpVirtualFileSystemModule
+2026-03-24 14:45:44.167 +08:00 [INF]                 - Volo.Abp.Settings.AbpSettingsModule
+2026-03-24 14:45:44.167 +08:00 [INF]                   - Volo.Abp.Localization.AbpLocalizationAbstractionsModule
+2026-03-24 14:45:44.167 +08:00 [INF]                   - Volo.Abp.Security.AbpSecurityModule
+2026-03-24 14:45:44.167 +08:00 [INF]                   - Volo.Abp.Data.AbpDataModule
+2026-03-24 14:45:44.167 +08:00 [INF]                     - Volo.Abp.ObjectExtending.AbpObjectExtendingModule
+2026-03-24 14:45:44.167 +08:00 [INF]                     - Volo.Abp.Uow.AbpUnitOfWorkModule
+2026-03-24 14:45:44.167 +08:00 [INF]                     - Volo.Abp.EventBus.Abstractions.AbpEventBusAbstractionsModule
+2026-03-24 14:45:44.167 +08:00 [INF]                 - Volo.Abp.Threading.AbpThreadingModule
+2026-03-24 14:45:44.167 +08:00 [INF]             - Volo.Abp.Features.AbpFeaturesModule
+2026-03-24 14:45:44.167 +08:00 [INF]               - Volo.Abp.MultiTenancy.AbpMultiTenancyModule
+2026-03-24 14:45:44.167 +08:00 [INF]                 - Volo.Abp.MultiTenancy.AbpMultiTenancyAbstractionsModule
+2026-03-24 14:45:44.167 +08:00 [INF]               - Volo.Abp.Authorization.AbpAuthorizationAbstractionsModule
+2026-03-24 14:45:44.167 +08:00 [INF]           - Volo.Abp.Users.AbpUsersAbstractionModule
+2026-03-24 14:45:44.167 +08:00 [INF]             - Volo.Abp.EventBus.AbpEventBusModule
+2026-03-24 14:45:44.167 +08:00 [INF]               - Volo.Abp.Json.AbpJsonModule
+2026-03-24 14:45:44.167 +08:00 [INF]                 - Volo.Abp.Json.SystemTextJson.AbpJsonSystemTextJsonModule
+2026-03-24 14:45:44.167 +08:00 [INF]                   - Volo.Abp.Json.AbpJsonAbstractionsModule
+2026-03-24 14:45:44.167 +08:00 [INF]                   - Volo.Abp.Timing.AbpTimingModule
+2026-03-24 14:45:44.167 +08:00 [INF]               - Volo.Abp.Guids.AbpGuidsModule
+2026-03-24 14:45:44.167 +08:00 [INF]               - Volo.Abp.BackgroundWorkers.AbpBackgroundWorkersModule
+2026-03-24 14:45:44.167 +08:00 [INF]               - Volo.Abp.DistributedLocking.AbpDistributedLockingAbstractionsModule
+2026-03-24 14:45:44.167 +08:00 [INF]           - Volo.Abp.Authorization.AbpAuthorizationModule
+2026-03-24 14:45:44.167 +08:00 [INF]           - Censeq.PermissionManagement.CenseqPermissionManagementApplicationContractsModule
+2026-03-24 14:45:44.167 +08:00 [INF]             - Volo.Abp.Application.AbpDddApplicationContractsModule
+2026-03-24 14:45:44.167 +08:00 [INF]               - Volo.Abp.Auditing.AbpAuditingContractsModule
+2026-03-24 14:45:44.167 +08:00 [INF]             - Censeq.PermissionManagement.CenseqPermissionManagementDomainSharedModule
+2026-03-24 14:45:44.167 +08:00 [INF]       - Censeq.Identity.CenseqIdentityHttpApiModule
+2026-03-24 14:45:44.167 +08:00 [INF]         - Volo.Abp.AspNetCore.Mvc.AbpAspNetCoreMvcModule
+2026-03-24 14:45:44.167 +08:00 [INF]           - Volo.Abp.AspNetCore.AbpAspNetCoreModule
+2026-03-24 14:45:44.167 +08:00 [INF]             - Volo.Abp.Auditing.AbpAuditingModule
+2026-03-24 14:45:44.167 +08:00 [INF]             - Volo.Abp.Http.AbpHttpModule
+2026-03-24 14:45:44.167 +08:00 [INF]               - Volo.Abp.Http.AbpHttpAbstractionsModule
+2026-03-24 14:45:44.167 +08:00 [INF]               - Volo.Abp.Minify.AbpMinifyModule
+2026-03-24 14:45:44.167 +08:00 [INF]             - Volo.Abp.ExceptionHandling.AbpExceptionHandlingModule
+2026-03-24 14:45:44.167 +08:00 [INF]             - Volo.Abp.AspNetCore.AbpAspNetCoreAbstractionsModule
+2026-03-24 14:45:44.167 +08:00 [INF]           - Volo.Abp.ApiVersioning.AbpApiVersioningAbstractionsModule
+2026-03-24 14:45:44.167 +08:00 [INF]           - Volo.Abp.AspNetCore.Mvc.AbpAspNetCoreMvcContractsModule
+2026-03-24 14:45:44.167 +08:00 [INF]           - Volo.Abp.UI.Navigation.AbpUiNavigationModule
+2026-03-24 14:45:44.167 +08:00 [INF]             - Volo.Abp.UI.AbpUiModule
+2026-03-24 14:45:44.167 +08:00 [INF]           - Volo.Abp.GlobalFeatures.AbpGlobalFeaturesModule
+2026-03-24 14:45:44.167 +08:00 [INF]           - Volo.Abp.Application.AbpDddApplicationModule
+2026-03-24 14:45:44.167 +08:00 [INF]             - Volo.Abp.Domain.AbpDddDomainModule
+2026-03-24 14:45:44.167 +08:00 [INF]               - Volo.Abp.ObjectMapping.AbpObjectMappingModule
+2026-03-24 14:45:44.167 +08:00 [INF]               - Volo.Abp.Specifications.AbpSpecificationsModule
+2026-03-24 14:45:44.167 +08:00 [INF]               - Volo.Abp.Caching.AbpCachingModule
+2026-03-24 14:45:44.167 +08:00 [INF]                 - Volo.Abp.Serialization.AbpSerializationModule
+2026-03-24 14:45:44.167 +08:00 [INF]               - Volo.Abp.Domain.AbpDddDomainSharedModule
+2026-03-24 14:45:44.167 +08:00 [INF]     - Censeq.Admin.CenseqAdminApplicationContractsModule
+2026-03-24 14:45:44.167 +08:00 [INF]       - Censeq.Admin.CenseqAdminDomainSharedModule
+2026-03-24 14:45:44.167 +08:00 [INF]         - Censeq.OpenIddict.CenseqOpenIddictDomainSharedModule
+2026-03-24 14:45:44.167 +08:00 [INF]         - Censeq.AuditLogging.CenseqAuditLoggingDomainSharedModule
+2026-03-24 14:45:44.167 +08:00 [INF]         - Censeq.SettingManagement.CenseqSettingManagementDomainSharedModule
+2026-03-24 14:45:44.167 +08:00 [INF]         - Censeq.TenantManagement.CenseqTenantManagementDomainSharedModule
+2026-03-24 14:45:44.167 +08:00 [INF]         - Censeq.FeatureManagement.CenseqFeatureManagementDomainSharedModule
+2026-03-24 14:45:44.167 +08:00 [INF]       - Censeq.SettingManagement.CenseqSettingManagementApplicationContractsModule
+2026-03-24 14:45:44.167 +08:00 [INF]       - Censeq.TenantManagement.CenseqTenantManagementApplicationContractsModule
+2026-03-24 14:45:44.167 +08:00 [INF]       - Censeq.FeatureManagement.CenseqFeatureManagementApplicationContractsModule
+2026-03-24 14:45:44.167 +08:00 [INF]     - Censeq.PermissionManagement.CenseqPermissionManagementHttpApiModule
+2026-03-24 14:45:44.167 +08:00 [INF]     - Censeq.SettingManagement.CenseqSettingManagementHttpApiModule
+2026-03-24 14:45:44.167 +08:00 [INF]     - Censeq.TenantManagement.CenseqTenantManagementHttpApiModule
+2026-03-24 14:45:44.167 +08:00 [INF]       - Censeq.FeatureManagement.CenseqFeatureManagementHttpApiModule
+2026-03-24 14:45:44.167 +08:00 [INF]   - Volo.Abp.Autofac.AbpAutofacModule
+2026-03-24 14:45:44.167 +08:00 [INF]     - Volo.Abp.Castle.AbpCastleCoreModule
+2026-03-24 14:45:44.167 +08:00 [INF]   - Volo.Abp.AspNetCore.MultiTenancy.AbpAspNetCoreMultiTenancyModule
+2026-03-24 14:45:44.167 +08:00 [INF]   - Censeq.Admin.CenseqAdminApplicationModule
+2026-03-24 14:45:44.167 +08:00 [INF]     - Censeq.Admin.CenseqAdminDomainModule
+2026-03-24 14:45:44.167 +08:00 [INF]       - Censeq.Identity.CenseqIdentityDomainModule
+2026-03-24 14:45:44.167 +08:00 [INF]         - Volo.Abp.Users.AbpUsersDomainModule
+2026-03-24 14:45:44.167 +08:00 [INF]         - Volo.Abp.AutoMapper.AbpAutoMapperModule
+2026-03-24 14:45:44.167 +08:00 [INF]       - Censeq.OpenIddict.CenseqOpenIddictDomainModule
+2026-03-24 14:45:44.167 +08:00 [INF]       - Censeq.PermissionManagement.OpenIddict.CenseqPermissionManagementDomainOpenIddictModule
+2026-03-24 14:45:44.167 +08:00 [INF]         - Censeq.PermissionManagement.CenseqPermissionManagementDomainModule
+2026-03-24 14:45:44.167 +08:00 [INF]       - Censeq.PermissionManagement.Identity.CenseqPermissionManagementDomainIdentityModule
+2026-03-24 14:45:44.167 +08:00 [INF]       - Censeq.AuditLogging.CenseqAuditLoggingDomainModule
+2026-03-24 14:45:44.167 +08:00 [INF]       - Censeq.TenantManagement.CenseqTenantManagementDomainModule
+2026-03-24 14:45:44.167 +08:00 [INF]       - Censeq.FeatureManagement.CenseqFeatureManagementDomainModule
+2026-03-24 14:45:44.167 +08:00 [INF]     - Censeq.Account.CenseqAccountApplicationModule
+2026-03-24 14:45:44.167 +08:00 [INF]       - Censeq.Identity.CenseqIdentityApplicationModule
+2026-03-24 14:45:44.167 +08:00 [INF]         - Censeq.PermissionManagement.CenseqPermissionManagementApplicationModule
+2026-03-24 14:45:44.167 +08:00 [INF]       - Volo.Abp.Emailing.AbpEmailingModule
+2026-03-24 14:45:44.167 +08:00 [INF]         - Volo.Abp.BackgroundJobs.AbpBackgroundJobsAbstractionsModule
+2026-03-24 14:45:44.167 +08:00 [INF]         - Volo.Abp.TextTemplating.AbpTextTemplatingModule
+2026-03-24 14:45:44.167 +08:00 [INF]           - Volo.Abp.TextTemplating.Scriban.AbpTextTemplatingScribanModule
+2026-03-24 14:45:44.167 +08:00 [INF]             - Volo.Abp.TextTemplating.AbpTextTemplatingCoreModule
+2026-03-24 14:45:44.167 +08:00 [INF]     - Censeq.SettingManagement.CenseqSettingManagementApplicationModule
+2026-03-24 14:45:44.167 +08:00 [INF]       - Censeq.SettingManagement.CenseqSettingManagementDomainModule
+2026-03-24 14:45:44.167 +08:00 [INF]     - Censeq.TenantManagement.CenseqTenantManagementApplicationModule
+2026-03-24 14:45:44.167 +08:00 [INF]     - Censeq.FeatureManagement.CenseqFeatureManagementApplicationModule
+2026-03-24 14:45:44.167 +08:00 [INF]   - Censeq.Admin.EntityFrameworkCore.CenseqAdminEntityFrameworkCoreModule
+2026-03-24 14:45:44.167 +08:00 [INF]     - Censeq.AuditLogging.EntityFrameworkCore.CenseqAuditLoggingEntityFrameworkCoreModule
+2026-03-24 14:45:44.167 +08:00 [INF]       - Censeq.Framework.EntityFrameworkCore.CenseqEntityFrameworkCoreModule
+2026-03-24 14:45:44.167 +08:00 [INF]         - Volo.Abp.EntityFrameworkCore.AbpEntityFrameworkCoreModule
+2026-03-24 14:45:44.167 +08:00 [INF]     - Censeq.Identity.EntityFrameworkCore.CenseqIdentityEntityFrameworkCoreModule
+2026-03-24 14:45:44.167 +08:00 [INF]       - Volo.Abp.Users.EntityFrameworkCore.AbpUsersEntityFrameworkCoreModule
+2026-03-24 14:45:44.167 +08:00 [INF]     - Censeq.OpenIddict.EntityFrameworkCore.CenseqOpenIddictEntityFrameworkCoreModule
+2026-03-24 14:45:44.167 +08:00 [INF]     - Censeq.PermissionManagement.EntityFrameworkCore.CenseqPermissionManagementEntityFrameworkCoreModule
+2026-03-24 14:45:44.167 +08:00 [INF]     - Volo.Abp.EntityFrameworkCore.PostgreSql.AbpEntityFrameworkCorePostgreSqlModule
+2026-03-24 14:45:44.167 +08:00 [INF]     - Volo.Abp.EntityFrameworkCore.Sqlite.AbpEntityFrameworkCoreSqliteModule
+2026-03-24 14:45:44.167 +08:00 [INF]     - Censeq.SettingManagement.EntityFrameworkCore.CenseqSettingManagementEntityFrameworkCoreModule
+2026-03-24 14:45:44.167 +08:00 [INF]     - Censeq.TenantManagement.EntityFrameworkCore.CenseqTenantManagementEntityFrameworkCoreModule
+2026-03-24 14:45:44.167 +08:00 [INF]     - Censeq.FeatureManagement.EntityFrameworkCore.CenseqFeatureManagementEntityFrameworkCoreModule
+2026-03-24 14:45:44.167 +08:00 [INF]   - Censeq.Account.Web.CenseqAccountWebOpenIddictModule
+2026-03-24 14:45:44.167 +08:00 [INF]     - Censeq.Account.Web.CenseqAccountWebModule
+2026-03-24 14:45:44.167 +08:00 [INF]       - Censeq.Identity.AspNetCore.CenseqIdentityAspNetCoreModule
+2026-03-24 14:45:44.167 +08:00 [INF]       - Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.AbpAspNetCoreMvcUiThemeSharedModule
+2026-03-24 14:45:44.167 +08:00 [INF]         - Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.AbpAspNetCoreMvcUiBootstrapModule
+2026-03-24 14:45:44.167 +08:00 [INF]           - Volo.Abp.AspNetCore.Mvc.UI.AbpAspNetCoreMvcUiModule
+2026-03-24 14:45:44.167 +08:00 [INF]         - Volo.Abp.AspNetCore.Mvc.UI.Packages.AbpAspNetCoreMvcUiPackagesModule
+2026-03-24 14:45:44.167 +08:00 [INF]           - Volo.Abp.AspNetCore.Mvc.UI.Bundling.AbpAspNetCoreMvcUiBundlingAbstractionsModule
+2026-03-24 14:45:44.167 +08:00 [INF]         - Volo.Abp.AspNetCore.Mvc.UI.Widgets.AbpAspNetCoreMvcUiWidgetsModule
+2026-03-24 14:45:44.167 +08:00 [INF]           - Volo.Abp.AspNetCore.Mvc.UI.Bundling.AbpAspNetCoreMvcUiBundlingModule
+2026-03-24 14:45:44.167 +08:00 [INF]     - Censeq.OpenIddict.CenseqOpenIddictAspNetCoreModule
+2026-03-24 14:45:44.167 +08:00 [INF]   - Censeq.Framework.AspNetCore.Mvc.UI.Theme.Basic.CenseqAspNetCoreMvcUIBasicThemeModule
+2026-03-24 14:45:44.167 +08:00 [INF]     - Volo.Abp.AspNetCore.Mvc.UI.MultiTenancy.AbpAspNetCoreMvcUiMultiTenancyModule
+2026-03-24 14:45:44.167 +08:00 [INF]   - Volo.Abp.AspNetCore.Serilog.AbpAspNetCoreSerilogModule
+2026-03-24 14:45:44.167 +08:00 [INF]   - Censeq.Framework.Swashbuckle.CenseqSwashbuckleModule
+2026-03-24 14:45:44.167 +08:00 [INF]   - Censeq.Framework.AspNetCore.CenseqAspNetCoreModule
+2026-03-24 14:45:44.292 +08:00 [DBG] Started background worker: Censeq.OpenIddict.Tokens.TokenCleanupBackgroundWorker
+2026-03-24 14:45:44.666 +08:00 [INF] User profile is available. Using 'C:\Users\otw_stj\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2026-03-24 14:45:44.761 +08:00 [INF] Removing the controller Censeq.PermissionManagement.PermissionsController, Censeq.PermissionManagement.HttpApi, Version=8.0.0.0, Culture=neutral, PublicKeyToken=null from the application model
+2026-03-24 14:45:44.790 +08:00 [INF] Initialized all ABP modules.
+2026-03-24 14:45:44.928 +08:00 [INF] Now listening on: https://localhost:5001
+2026-03-24 14:45:44.928 +08:00 [INF] Now listening on: http://localhost:5000
+2026-03-24 14:45:44.990 +08:00 [INF] Application started. Press Ctrl+C to shut down.
+2026-03-24 14:45:44.990 +08:00 [INF] Hosting environment: Development
+2026-03-24 14:45:44.990 +08:00 [INF] Content root path: D:\Code\myproject\dotnet\censeq-admin\censeq-admin-api\src\Censeq.Admin.HttpApi.Host
+2026-03-24 14:45:46.068 +08:00 [INF] Request starting HTTP/2 GET https://localhost:5001/ - null null
+2026-03-24 14:45:47.599 +08:00 [DBG] The event OpenIddict.Validation.OpenIddictValidationEvents+ProcessRequestContext was successfully processed by OpenIddict.Validation.AspNetCore.OpenIddictValidationAspNetCoreHandlers+ResolveRequestUri.
+2026-03-24 14:45:47.873 +08:00 [DBG] The event OpenIddict.Server.OpenIddictServerEvents+ProcessRequestContext was successfully processed by OpenIddict.Server.AspNetCore.OpenIddictServerAspNetCoreHandlers+ResolveRequestUri.
+2026-03-24 14:45:47.876 +08:00 [DBG] The event OpenIddict.Server.OpenIddictServerEvents+ProcessRequestContext was successfully processed by OpenIddict.Server.OpenIddictServerHandlers+InferEndpointType.
+2026-03-24 14:45:47.877 +08:00 [DBG] The event OpenIddict.Server.OpenIddictServerEvents+ProcessRequestContext was successfully processed by OpenIddict.Server.AspNetCore.OpenIddictServerAspNetCoreHandlers+ValidateTransportSecurityRequirement.
+2026-03-24 14:45:47.878 +08:00 [DBG] The event OpenIddict.Server.OpenIddictServerEvents+ProcessRequestContext was successfully processed by OpenIddict.Server.AspNetCore.OpenIddictServerAspNetCoreHandlers+ValidateHostHeader.
+2026-03-24 14:45:49.264 +08:00 [DBG] Get dynamic claims cache for user: 3a2030a0-069c-bb80-4f8f-70ea613a3734
+2026-03-24 14:45:49.271 +08:00 [DBG] Filling dynamic claims cache for user: 3a2030a0-069c-bb80-4f8f-70ea613a3734
+2026-03-24 14:45:49.410 +08:00 [INF] Executing endpoint 'Censeq.Admin.Controllers.HomeController.Index (Censeq.Admin.HttpApi.Host)'
+2026-03-24 14:45:49.434 +08:00 [INF] Route matched with {action = "Index", controller = "Home", area = "", page = ""}. Executing controller action with signature Microsoft.AspNetCore.Mvc.ActionResult Index() on controller Censeq.Admin.Controllers.HomeController (Censeq.Admin.HttpApi.Host).
+2026-03-24 14:45:49.473 +08:00 [INF] Executing RedirectResult, redirecting to /swagger.
+2026-03-24 14:45:49.479 +08:00 [INF] Executed action Censeq.Admin.Controllers.HomeController.Index (Censeq.Admin.HttpApi.Host) in 39.3705ms
+2026-03-24 14:45:49.479 +08:00 [INF] Executed endpoint 'Censeq.Admin.Controllers.HomeController.Index (Censeq.Admin.HttpApi.Host)'
+2026-03-24 14:45:49.503 +08:00 [INF] Request finished HTTP/2 GET https://localhost:5001/ - 302 0 null 3433.8668ms
+2026-03-24 14:45:49.514 +08:00 [INF] Request starting HTTP/2 GET https://localhost:5001/swagger/index.html - null null
+2026-03-24 14:45:49.589 +08:00 [INF] Request finished HTTP/2 GET https://localhost:5001/swagger/index.html - 200 null text/html;charset=utf-8 73.9873ms
+2026-03-24 14:45:49.629 +08:00 [INF] Request starting HTTP/2 GET https://localhost:5001/_framework/aspnetcore-browser-refresh.js - null null
+2026-03-24 14:45:49.633 +08:00 [INF] Request starting HTTP/2 GET https://localhost:5001/swagger/index.js - null null
+2026-03-24 14:45:49.635 +08:00 [INF] Request finished HTTP/2 GET https://localhost:5001/swagger/index.js - 200 null application/javascript;charset=utf-8 2.2319ms
+2026-03-24 14:45:49.641 +08:00 [INF] Request finished HTTP/2 GET https://localhost:5001/_framework/aspnetcore-browser-refresh.js - 200 16535 application/javascript; charset=utf-8 12.4541ms
+2026-03-24 14:45:49.701 +08:00 [INF] Request starting HTTP/2 GET https://localhost:5001/_vs/browserLink - null null
+2026-03-24 14:45:51.522 +08:00 [INF] Request finished HTTP/2 GET https://localhost:5001/_vs/browserLink - 200 null text/javascript; charset=UTF-8 1820.3369ms
+2026-03-24 14:45:51.621 +08:00 [INF] Request starting HTTP/2 GET https://localhost:5001/swagger/Default/swagger.json - null null
+2026-03-24 14:45:52.084 +08:00 [INF] Request finished HTTP/2 GET https://localhost:5001/swagger/Default/swagger.json - 200 null application/json;charset=utf-8 463.0405ms
+2026-03-24 14:46:06.217 +08:00 [INF] Request starting HTTP/2 GET https://localhost:5001/api/identity/organization-units - null null
+2026-03-24 14:46:06.221 +08:00 [INF] CORS policy execution successful.
+2026-03-24 14:46:06.225 +08:00 [DBG] The event OpenIddict.Validation.OpenIddictValidationEvents+ProcessRequestContext was successfully processed by OpenIddict.Validation.AspNetCore.OpenIddictValidationAspNetCoreHandlers+ResolveRequestUri.
+2026-03-24 14:46:06.226 +08:00 [DBG] The event OpenIddict.Server.OpenIddictServerEvents+ProcessRequestContext was successfully processed by OpenIddict.Server.AspNetCore.OpenIddictServerAspNetCoreHandlers+ResolveRequestUri.
+2026-03-24 14:46:06.226 +08:00 [DBG] The event OpenIddict.Server.OpenIddictServerEvents+ProcessRequestContext was successfully processed by OpenIddict.Server.OpenIddictServerHandlers+InferEndpointType.
+2026-03-24 14:46:06.226 +08:00 [DBG] The event OpenIddict.Server.OpenIddictServerEvents+ProcessRequestContext was successfully processed by OpenIddict.Server.AspNetCore.OpenIddictServerAspNetCoreHandlers+ValidateTransportSecurityRequirement.
+2026-03-24 14:46:06.226 +08:00 [DBG] The event OpenIddict.Server.OpenIddictServerEvents+ProcessRequestContext was successfully processed by OpenIddict.Server.AspNetCore.OpenIddictServerAspNetCoreHandlers+ValidateHostHeader.
+2026-03-24 14:46:06.230 +08:00 [DBG] The event OpenIddict.Validation.OpenIddictValidationEvents+ProcessAuthenticationContext was successfully processed by OpenIddict.Validation.AspNetCore.OpenIddictValidationAspNetCoreHandlers+ValidateHostHeader.
+2026-03-24 14:46:06.231 +08:00 [DBG] The event OpenIddict.Validation.OpenIddictValidationEvents+ProcessAuthenticationContext was successfully processed by OpenIddict.Validation.OpenIddictValidationHandlers+EvaluateValidatedTokens.
+2026-03-24 14:46:06.232 +08:00 [DBG] The event OpenIddict.Validation.OpenIddictValidationEvents+ProcessAuthenticationContext was successfully processed by OpenIddict.Validation.AspNetCore.OpenIddictValidationAspNetCoreHandlers+ExtractAccessTokenFromAuthorizationHeader.
+2026-03-24 14:46:06.233 +08:00 [DBG] The event OpenIddict.Validation.OpenIddictValidationEvents+ProcessAuthenticationContext was successfully processed by OpenIddict.Validation.AspNetCore.OpenIddictValidationAspNetCoreHandlers+ExtractAccessTokenFromBodyForm.
+2026-03-24 14:46:06.234 +08:00 [DBG] The event OpenIddict.Validation.OpenIddictValidationEvents+ProcessAuthenticationContext was successfully processed by OpenIddict.Validation.AspNetCore.OpenIddictValidationAspNetCoreHandlers+ExtractAccessTokenFromQueryString.
+2026-03-24 14:46:06.235 +08:00 [DBG] The event OpenIddict.Validation.OpenIddictValidationEvents+ProcessAuthenticationContext was successfully processed by OpenIddict.Validation.OpenIddictValidationHandlers+ValidateRequiredTokens.
+2026-03-24 14:46:06.236 +08:00 [DBG] The event OpenIddict.Validation.OpenIddictValidationEvents+ProcessAuthenticationContext was successfully processed by OpenIddict.Validation.OpenIddictValidationHandlers+ResolveServerConfiguration.
+2026-03-24 14:46:06.237 +08:00 [DBG] The event OpenIddict.Validation.OpenIddictValidationEvents+ProcessAuthenticationContext was successfully processed by OpenIddict.Validation.OpenIddictValidationHandlers+ResolveIntrospectionEndpoint.
+2026-03-24 14:46:06.237 +08:00 [DBG] The event OpenIddict.Validation.OpenIddictValidationEvents+ProcessAuthenticationContext was successfully processed by OpenIddict.Validation.OpenIddictValidationHandlers+EvaluateIntrospectionRequest.
+2026-03-24 14:46:06.243 +08:00 [DBG] The event OpenIddict.Validation.OpenIddictValidationEvents+ValidateTokenContext was successfully processed by OpenIddict.Validation.OpenIddictValidationHandlers+Protection+ResolveTokenValidationParameters.
+2026-03-24 14:46:06.244 +08:00 [DBG] The event OpenIddict.Validation.OpenIddictValidationEvents+ValidateTokenContext was successfully processed by OpenIddict.Validation.OpenIddictValidationHandlers+Protection+RemoveDisallowedCharacters.
+2026-03-24 14:46:06.312 +08:00 [DBG] The event OpenIddict.Validation.OpenIddictValidationEvents+ValidateTokenContext was successfully processed by OpenIddict.Validation.OpenIddictValidationHandlers+Protection+ValidateIdentityModelToken.
+2026-03-24 14:46:06.314 +08:00 [DBG] The event OpenIddict.Validation.OpenIddictValidationEvents+ValidateTokenContext was successfully processed by OpenIddict.Validation.OpenIddictValidationHandlers+Protection+NormalizeScopeClaims.
+2026-03-24 14:46:06.317 +08:00 [DBG] The event OpenIddict.Validation.OpenIddictValidationEvents+ValidateTokenContext was successfully processed by OpenIddict.Validation.OpenIddictValidationHandlers+Protection+MapInternalClaims.
+2026-03-24 14:46:06.318 +08:00 [DBG] The event OpenIddict.Validation.OpenIddictValidationEvents+ValidateTokenContext was successfully processed by OpenIddict.Validation.OpenIddictValidationHandlers+Protection+ValidatePrincipal.
+2026-03-24 14:46:06.318 +08:00 [DBG] The event OpenIddict.Validation.OpenIddictValidationEvents+ValidateTokenContext was successfully processed by OpenIddict.Validation.OpenIddictValidationHandlers+Protection+ValidateExpirationDate.
+2026-03-24 14:46:06.319 +08:00 [DBG] The event OpenIddict.Validation.OpenIddictValidationEvents+ValidateTokenContext was successfully processed by OpenIddict.Validation.OpenIddictValidationHandlers+Protection+ValidateAudience.
+2026-03-24 14:46:06.319 +08:00 [DBG] The event OpenIddict.Validation.OpenIddictValidationEvents+ProcessAuthenticationContext was successfully processed by OpenIddict.Validation.OpenIddictValidationHandlers+ValidateAccessToken.
+2026-03-24 14:46:06.320 +08:00 [DBG] AuthenticationScheme: OpenIddict.Validation.AspNetCore was successfully authenticated.
+2026-03-24 14:46:06.335 +08:00 [DBG] Get dynamic claims cache for user: 3a2030a0-069c-bb80-4f8f-70ea613a3734
+2026-03-24 14:46:06.341 +08:00 [INF] Executing endpoint 'Censeq.Identity.OrganizationUnitController.GetAllListAsync (Censeq.Identity.HttpApi)'
+2026-03-24 14:46:06.346 +08:00 [INF] Route matched with {area = "identity", controller = "OrganizationUnit", action = "GetAllList", page = ""}. Executing controller action with signature System.Threading.Tasks.Task`1[Volo.Abp.Application.Dtos.ListResultDto`1[Censeq.Identity.OrganizationUnitDto]] GetAllListAsync() on controller Censeq.Identity.OrganizationUnitController (Censeq.Identity.HttpApi).
+2026-03-24 14:46:07.671 +08:00 [DBG] Added 0 entity changes to the current audit log
+2026-03-24 14:46:07.678 +08:00 [INF] Executing ObjectResult, writing value of type 'Volo.Abp.Application.Dtos.ListResultDto`1[[Censeq.Identity.OrganizationUnitDto, Censeq.Identity.Application.Contracts, Version=8.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2026-03-24 14:46:07.687 +08:00 [INF] Executed action Censeq.Identity.OrganizationUnitController.GetAllListAsync (Censeq.Identity.HttpApi) in 1340.4817ms
+2026-03-24 14:46:07.687 +08:00 [INF] Executed endpoint 'Censeq.Identity.OrganizationUnitController.GetAllListAsync (Censeq.Identity.HttpApi)'
+2026-03-24 14:46:07.690 +08:00 [INF] Request finished HTTP/2 GET https://localhost:5001/api/identity/organization-units - 200 null application/json; charset=utf-8 1472.8785ms
+2026-03-24 14:46:21.363 +08:00 [INF] Request starting HTTP/2 GET https://localhost:5001/api/identity/organization-units - null null
+2026-03-24 14:46:21.363 +08:00 [INF] CORS policy execution successful.
+2026-03-24 14:46:21.367 +08:00 [DBG] The event OpenIddict.Validation.OpenIddictValidationEvents+ProcessRequestContext was successfully processed by OpenIddict.Validation.AspNetCore.OpenIddictValidationAspNetCoreHandlers+ResolveRequestUri.
+2026-03-24 14:46:21.368 +08:00 [DBG] The event OpenIddict.Server.OpenIddictServerEvents+ProcessRequestContext was successfully processed by OpenIddict.Server.AspNetCore.OpenIddictServerAspNetCoreHandlers+ResolveRequestUri.
+2026-03-24 14:46:21.369 +08:00 [DBG] The event OpenIddict.Server.OpenIddictServerEvents+ProcessRequestContext was successfully processed by OpenIddict.Server.OpenIddictServerHandlers+InferEndpointType.
+2026-03-24 14:46:21.369 +08:00 [DBG] The event OpenIddict.Server.OpenIddictServerEvents+ProcessRequestContext was successfully processed by OpenIddict.Server.AspNetCore.OpenIddictServerAspNetCoreHandlers+ValidateTransportSecurityRequirement.
+2026-03-24 14:46:21.369 +08:00 [DBG] The event OpenIddict.Server.OpenIddictServerEvents+ProcessRequestContext was successfully processed by OpenIddict.Server.AspNetCore.OpenIddictServerAspNetCoreHandlers+ValidateHostHeader.
+2026-03-24 14:46:21.380 +08:00 [DBG] The event OpenIddict.Validation.OpenIddictValidationEvents+ProcessAuthenticationContext was successfully processed by OpenIddict.Validation.AspNetCore.OpenIddictValidationAspNetCoreHandlers+ValidateHostHeader.
+2026-03-24 14:46:21.382 +08:00 [DBG] The event OpenIddict.Validation.OpenIddictValidationEvents+ProcessAuthenticationContext was successfully processed by OpenIddict.Validation.OpenIddictValidationHandlers+EvaluateValidatedTokens.
+2026-03-24 14:46:21.383 +08:00 [DBG] The event OpenIddict.Validation.OpenIddictValidationEvents+ProcessAuthenticationContext was successfully processed by OpenIddict.Validation.AspNetCore.OpenIddictValidationAspNetCoreHandlers+ExtractAccessTokenFromAuthorizationHeader.
+2026-03-24 14:46:21.383 +08:00 [DBG] The event OpenIddict.Validation.OpenIddictValidationEvents+ProcessAuthenticationContext was successfully processed by OpenIddict.Validation.AspNetCore.OpenIddictValidationAspNetCoreHandlers+ExtractAccessTokenFromBodyForm.
+2026-03-24 14:46:21.383 +08:00 [DBG] The event OpenIddict.Validation.OpenIddictValidationEvents+ProcessAuthenticationContext was successfully processed by OpenIddict.Validation.AspNetCore.OpenIddictValidationAspNetCoreHandlers+ExtractAccessTokenFromQueryString.
+2026-03-24 14:46:21.383 +08:00 [DBG] The event OpenIddict.Validation.OpenIddictValidationEvents+ProcessAuthenticationContext was successfully processed by OpenIddict.Validation.OpenIddictValidationHandlers+ValidateRequiredTokens.
+2026-03-24 14:46:21.383 +08:00 [DBG] The event OpenIddict.Validation.OpenIddictValidationEvents+ProcessAuthenticationContext was successfully processed by OpenIddict.Validation.OpenIddictValidationHandlers+ResolveServerConfiguration.
+2026-03-24 14:46:21.383 +08:00 [DBG] The event OpenIddict.Validation.OpenIddictValidationEvents+ProcessAuthenticationContext was successfully processed by OpenIddict.Validation.OpenIddictValidationHandlers+ResolveIntrospectionEndpoint.
+2026-03-24 14:46:21.384 +08:00 [DBG] The event OpenIddict.Validation.OpenIddictValidationEvents+ProcessAuthenticationContext was successfully processed by OpenIddict.Validation.OpenIddictValidationHandlers+EvaluateIntrospectionRequest.
+2026-03-24 14:46:21.384 +08:00 [DBG] The event OpenIddict.Validation.OpenIddictValidationEvents+ValidateTokenContext was successfully processed by OpenIddict.Validation.OpenIddictValidationHandlers+Protection+ResolveTokenValidationParameters.
+2026-03-24 14:46:21.384 +08:00 [DBG] The event OpenIddict.Validation.OpenIddictValidationEvents+ValidateTokenContext was successfully processed by OpenIddict.Validation.OpenIddictValidationHandlers+Protection+RemoveDisallowedCharacters.
+2026-03-24 14:46:21.385 +08:00 [DBG] The event OpenIddict.Validation.OpenIddictValidationEvents+ValidateTokenContext was successfully processed by OpenIddict.Validation.OpenIddictValidationHandlers+Protection+ValidateIdentityModelToken.
+2026-03-24 14:46:21.385 +08:00 [DBG] The event OpenIddict.Validation.OpenIddictValidationEvents+ValidateTokenContext was successfully processed by OpenIddict.Validation.OpenIddictValidationHandlers+Protection+NormalizeScopeClaims.
+2026-03-24 14:46:21.386 +08:00 [DBG] The event OpenIddict.Validation.OpenIddictValidationEvents+ValidateTokenContext was successfully processed by OpenIddict.Validation.OpenIddictValidationHandlers+Protection+MapInternalClaims.
+2026-03-24 14:46:21.388 +08:00 [DBG] The event OpenIddict.Validation.OpenIddictValidationEvents+ValidateTokenContext was successfully processed by OpenIddict.Validation.OpenIddictValidationHandlers+Protection+ValidatePrincipal.
+2026-03-24 14:46:21.388 +08:00 [DBG] The event OpenIddict.Validation.OpenIddictValidationEvents+ValidateTokenContext was successfully processed by OpenIddict.Validation.OpenIddictValidationHandlers+Protection+ValidateExpirationDate.
+2026-03-24 14:46:21.388 +08:00 [DBG] The event OpenIddict.Validation.OpenIddictValidationEvents+ValidateTokenContext was successfully processed by OpenIddict.Validation.OpenIddictValidationHandlers+Protection+ValidateAudience.
+2026-03-24 14:46:21.388 +08:00 [DBG] The event OpenIddict.Validation.OpenIddictValidationEvents+ProcessAuthenticationContext was successfully processed by OpenIddict.Validation.OpenIddictValidationHandlers+ValidateAccessToken.
+2026-03-24 14:46:21.388 +08:00 [DBG] AuthenticationScheme: OpenIddict.Validation.AspNetCore was successfully authenticated.
+2026-03-24 14:46:21.393 +08:00 [DBG] Get dynamic claims cache for user: 3a2030a0-069c-bb80-4f8f-70ea613a3734
+2026-03-24 14:46:21.394 +08:00 [INF] Executing endpoint 'Censeq.Identity.OrganizationUnitController.GetAllListAsync (Censeq.Identity.HttpApi)'
+2026-03-24 14:46:21.395 +08:00 [INF] Route matched with {area = "identity", controller = "OrganizationUnit", action = "GetAllList", page = ""}. Executing controller action with signature System.Threading.Tasks.Task`1[Volo.Abp.Application.Dtos.ListResultDto`1[Censeq.Identity.OrganizationUnitDto]] GetAllListAsync() on controller Censeq.Identity.OrganizationUnitController (Censeq.Identity.HttpApi).
+2026-03-24 14:46:21.405 +08:00 [DBG] Added 0 entity changes to the current audit log
+2026-03-24 14:46:21.406 +08:00 [INF] Executing ObjectResult, writing value of type 'Volo.Abp.Application.Dtos.ListResultDto`1[[Censeq.Identity.OrganizationUnitDto, Censeq.Identity.Application.Contracts, Version=8.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2026-03-24 14:46:21.407 +08:00 [INF] Executed action Censeq.Identity.OrganizationUnitController.GetAllListAsync (Censeq.Identity.HttpApi) in 11.9857ms
+2026-03-24 14:46:21.407 +08:00 [INF] Executed endpoint 'Censeq.Identity.OrganizationUnitController.GetAllListAsync (Censeq.Identity.HttpApi)'
+2026-03-24 14:46:21.407 +08:00 [INF] Request finished HTTP/2 GET https://localhost:5001/api/identity/organization-units - 200 null application/json; charset=utf-8 44.3064ms
+2026-03-24 14:54:16.746 +08:00 [INF] Request starting HTTP/2 OPTIONS https://localhost:5001/api/identity/users?skipCount=0&maxResultCount=10 - null null
+2026-03-24 14:54:16.747 +08:00 [INF] CORS policy execution successful.
+2026-03-24 14:54:16.747 +08:00 [INF] Request finished HTTP/2 OPTIONS https://localhost:5001/api/identity/users?skipCount=0&maxResultCount=10 - 204 null null 0.6103ms
+2026-03-24 14:54:16.751 +08:00 [INF] Request starting HTTP/2 GET https://localhost:5001/api/identity/users?skipCount=0&maxResultCount=10 - null null
+2026-03-24 14:54:16.751 +08:00 [INF] CORS policy execution successful.
+2026-03-24 14:54:16.756 +08:00 [DBG] The event OpenIddict.Validation.OpenIddictValidationEvents+ProcessRequestContext was successfully processed by OpenIddict.Validation.AspNetCore.OpenIddictValidationAspNetCoreHandlers+ResolveRequestUri.
+2026-03-24 14:54:16.756 +08:00 [DBG] The event OpenIddict.Server.OpenIddictServerEvents+ProcessRequestContext was successfully processed by OpenIddict.Server.AspNetCore.OpenIddictServerAspNetCoreHandlers+ResolveRequestUri.
+2026-03-24 14:54:16.756 +08:00 [DBG] The event OpenIddict.Server.OpenIddictServerEvents+ProcessRequestContext was successfully processed by OpenIddict.Server.OpenIddictServerHandlers+InferEndpointType.
+2026-03-24 14:54:16.756 +08:00 [DBG] The event OpenIddict.Server.OpenIddictServerEvents+ProcessRequestContext was successfully processed by OpenIddict.Server.AspNetCore.OpenIddictServerAspNetCoreHandlers+ValidateTransportSecurityRequirement.
+2026-03-24 14:54:16.756 +08:00 [DBG] The event OpenIddict.Server.OpenIddictServerEvents+ProcessRequestContext was successfully processed by OpenIddict.Server.AspNetCore.OpenIddictServerAspNetCoreHandlers+ValidateHostHeader.
+2026-03-24 14:54:16.756 +08:00 [DBG] The event OpenIddict.Validation.OpenIddictValidationEvents+ProcessAuthenticationContext was successfully processed by OpenIddict.Validation.AspNetCore.OpenIddictValidationAspNetCoreHandlers+ValidateHostHeader.
+2026-03-24 14:54:16.757 +08:00 [DBG] The event OpenIddict.Validation.OpenIddictValidationEvents+ProcessAuthenticationContext was successfully processed by OpenIddict.Validation.OpenIddictValidationHandlers+EvaluateValidatedTokens.
+2026-03-24 14:54:16.757 +08:00 [DBG] The event OpenIddict.Validation.OpenIddictValidationEvents+ProcessAuthenticationContext was successfully processed by OpenIddict.Validation.AspNetCore.OpenIddictValidationAspNetCoreHandlers+ExtractAccessTokenFromAuthorizationHeader.
+2026-03-24 14:54:16.757 +08:00 [DBG] The event OpenIddict.Validation.OpenIddictValidationEvents+ProcessAuthenticationContext was successfully processed by OpenIddict.Validation.AspNetCore.OpenIddictValidationAspNetCoreHandlers+ExtractAccessTokenFromBodyForm.
+2026-03-24 14:54:16.757 +08:00 [DBG] The event OpenIddict.Validation.OpenIddictValidationEvents+ProcessAuthenticationContext was successfully processed by OpenIddict.Validation.AspNetCore.OpenIddictValidationAspNetCoreHandlers+ExtractAccessTokenFromQueryString.
+2026-03-24 14:54:16.757 +08:00 [DBG] The event OpenIddict.Validation.OpenIddictValidationEvents+ProcessAuthenticationContext was successfully processed by OpenIddict.Validation.OpenIddictValidationHandlers+ValidateRequiredTokens.
+2026-03-24 14:54:16.757 +08:00 [DBG] The event OpenIddict.Validation.OpenIddictValidationEvents+ProcessAuthenticationContext was successfully processed by OpenIddict.Validation.OpenIddictValidationHandlers+ResolveServerConfiguration.
+2026-03-24 14:54:16.757 +08:00 [DBG] The event OpenIddict.Validation.OpenIddictValidationEvents+ProcessAuthenticationContext was successfully processed by OpenIddict.Validation.OpenIddictValidationHandlers+ResolveIntrospectionEndpoint.
+2026-03-24 14:54:16.757 +08:00 [DBG] The event OpenIddict.Validation.OpenIddictValidationEvents+ProcessAuthenticationContext was successfully processed by OpenIddict.Validation.OpenIddictValidationHandlers+EvaluateIntrospectionRequest.
+2026-03-24 14:54:16.757 +08:00 [DBG] The event OpenIddict.Validation.OpenIddictValidationEvents+ValidateTokenContext was successfully processed by OpenIddict.Validation.OpenIddictValidationHandlers+Protection+ResolveTokenValidationParameters.
+2026-03-24 14:54:16.757 +08:00 [DBG] The event OpenIddict.Validation.OpenIddictValidationEvents+ValidateTokenContext was successfully processed by OpenIddict.Validation.OpenIddictValidationHandlers+Protection+RemoveDisallowedCharacters.
+2026-03-24 14:54:16.757 +08:00 [DBG] The event OpenIddict.Validation.OpenIddictValidationEvents+ValidateTokenContext was successfully processed by OpenIddict.Validation.OpenIddictValidationHandlers+Protection+ValidateIdentityModelToken.
+2026-03-24 14:54:16.757 +08:00 [DBG] The event OpenIddict.Validation.OpenIddictValidationEvents+ValidateTokenContext was successfully processed by OpenIddict.Validation.OpenIddictValidationHandlers+Protection+NormalizeScopeClaims.
+2026-03-24 14:54:16.757 +08:00 [DBG] The event OpenIddict.Validation.OpenIddictValidationEvents+ValidateTokenContext was successfully processed by OpenIddict.Validation.OpenIddictValidationHandlers+Protection+MapInternalClaims.
+2026-03-24 14:54:16.757 +08:00 [DBG] The event OpenIddict.Validation.OpenIddictValidationEvents+ValidateTokenContext was successfully processed by OpenIddict.Validation.OpenIddictValidationHandlers+Protection+ValidatePrincipal.
+2026-03-24 14:54:16.757 +08:00 [DBG] The event OpenIddict.Validation.OpenIddictValidationEvents+ValidateTokenContext was successfully processed by OpenIddict.Validation.OpenIddictValidationHandlers+Protection+ValidateExpirationDate.
+2026-03-24 14:54:16.758 +08:00 [DBG] The event OpenIddict.Validation.OpenIddictValidationEvents+ValidateTokenContext was successfully processed by OpenIddict.Validation.OpenIddictValidationHandlers+Protection+ValidateAudience.
+2026-03-24 14:54:16.758 +08:00 [DBG] The event OpenIddict.Validation.OpenIddictValidationEvents+ProcessAuthenticationContext was successfully processed by OpenIddict.Validation.OpenIddictValidationHandlers+ValidateAccessToken.
+2026-03-24 14:54:16.758 +08:00 [DBG] AuthenticationScheme: OpenIddict.Validation.AspNetCore was successfully authenticated.
+2026-03-24 14:54:16.761 +08:00 [DBG] Get dynamic claims cache for user: 3a2030a0-069c-bb80-4f8f-70ea613a3734
+2026-03-24 14:54:16.762 +08:00 [INF] Executing endpoint 'Censeq.Identity.IdentityUserController.GetListAsync (Censeq.Identity.HttpApi)'
+2026-03-24 14:54:16.775 +08:00 [INF] Route matched with {area = "identity", controller = "User", action = "GetList", page = ""}. Executing controller action with signature System.Threading.Tasks.Task`1[Volo.Abp.Application.Dtos.PagedResultDto`1[Censeq.Identity.IdentityUserDto]] GetListAsync(Censeq.Identity.GetIdentityUsersInput) on controller Censeq.Identity.IdentityUserController (Censeq.Identity.HttpApi).
+2026-03-24 14:54:16.966 +08:00 [DBG] Added 0 entity changes to the current audit log
+2026-03-24 14:54:16.967 +08:00 [INF] Executing ObjectResult, writing value of type 'Volo.Abp.Application.Dtos.PagedResultDto`1[[Censeq.Identity.IdentityUserDto, Censeq.Identity.Application.Contracts, Version=8.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2026-03-24 14:54:16.991 +08:00 [INF] Executed action Censeq.Identity.IdentityUserController.GetListAsync (Censeq.Identity.HttpApi) in 215.2311ms
+2026-03-24 14:54:16.991 +08:00 [INF] Executed endpoint 'Censeq.Identity.IdentityUserController.GetListAsync (Censeq.Identity.HttpApi)'
+2026-03-24 14:54:16.992 +08:00 [INF] Request finished HTTP/2 GET https://localhost:5001/api/identity/users?skipCount=0&maxResultCount=10 - 200 null application/json; charset=utf-8 240.9887ms
+2026-03-24 14:54:22.017 +08:00 [INF] Request starting HTTP/2 OPTIONS https://localhost:5001/api/identity/roles/all - null null
+2026-03-24 14:54:22.017 +08:00 [INF] CORS policy execution successful.
+2026-03-24 14:54:22.017 +08:00 [INF] Request finished HTTP/2 OPTIONS https://localhost:5001/api/identity/roles/all - 204 null null 0.7197ms
+2026-03-24 14:54:22.018 +08:00 [INF] Request starting HTTP/2 GET https://localhost:5001/api/identity/organization-units - null null
+2026-03-24 14:54:22.018 +08:00 [INF] CORS policy execution successful.
+2026-03-24 14:54:22.018 +08:00 [DBG] The event OpenIddict.Validation.OpenIddictValidationEvents+ProcessRequestContext was successfully processed by OpenIddict.Validation.AspNetCore.OpenIddictValidationAspNetCoreHandlers+ResolveRequestUri.
+2026-03-24 14:54:22.019 +08:00 [DBG] The event OpenIddict.Server.OpenIddictServerEvents+ProcessRequestContext was successfully processed by OpenIddict.Server.AspNetCore.OpenIddictServerAspNetCoreHandlers+ResolveRequestUri.
+2026-03-24 14:54:22.019 +08:00 [DBG] The event OpenIddict.Server.OpenIddictServerEvents+ProcessRequestContext was successfully processed by OpenIddict.Server.OpenIddictServerHandlers+InferEndpointType.
+2026-03-24 14:54:22.019 +08:00 [DBG] The event OpenIddict.Server.OpenIddictServerEvents+ProcessRequestContext was successfully processed by OpenIddict.Server.AspNetCore.OpenIddictServerAspNetCoreHandlers+ValidateTransportSecurityRequirement.
+2026-03-24 14:54:22.019 +08:00 [DBG] The event OpenIddict.Server.OpenIddictServerEvents+ProcessRequestContext was successfully processed by OpenIddict.Server.AspNetCore.OpenIddictServerAspNetCoreHandlers+ValidateHostHeader.
+2026-03-24 14:54:22.019 +08:00 [DBG] The event OpenIddict.Validation.OpenIddictValidationEvents+ProcessAuthenticationContext was successfully processed by OpenIddict.Validation.AspNetCore.OpenIddictValidationAspNetCoreHandlers+ValidateHostHeader.
+2026-03-24 14:54:22.019 +08:00 [DBG] The event OpenIddict.Validation.OpenIddictValidationEvents+ProcessAuthenticationContext was successfully processed by OpenIddict.Validation.OpenIddictValidationHandlers+EvaluateValidatedTokens.
+2026-03-24 14:54:22.019 +08:00 [DBG] The event OpenIddict.Validation.OpenIddictValidationEvents+ProcessAuthenticationContext was successfully processed by OpenIddict.Validation.AspNetCore.OpenIddictValidationAspNetCoreHandlers+ExtractAccessTokenFromAuthorizationHeader.
+2026-03-24 14:54:22.019 +08:00 [DBG] The event OpenIddict.Validation.OpenIddictValidationEvents+ProcessAuthenticationContext was successfully processed by OpenIddict.Validation.AspNetCore.OpenIddictValidationAspNetCoreHandlers+ExtractAccessTokenFromBodyForm.
+2026-03-24 14:54:22.019 +08:00 [DBG] The event OpenIddict.Validation.OpenIddictValidationEvents+ProcessAuthenticationContext was successfully processed by OpenIddict.Validation.AspNetCore.OpenIddictValidationAspNetCoreHandlers+ExtractAccessTokenFromQueryString.
+2026-03-24 14:54:22.019 +08:00 [DBG] The event OpenIddict.Validation.OpenIddictValidationEvents+ProcessAuthenticationContext was successfully processed by OpenIddict.Validation.OpenIddictValidationHandlers+ValidateRequiredTokens.
+2026-03-24 14:54:22.019 +08:00 [DBG] The event OpenIddict.Validation.OpenIddictValidationEvents+ProcessAuthenticationContext was successfully processed by OpenIddict.Validation.OpenIddictValidationHandlers+ResolveServerConfiguration.
+2026-03-24 14:54:22.019 +08:00 [DBG] The event OpenIddict.Validation.OpenIddictValidationEvents+ProcessAuthenticationContext was successfully processed by OpenIddict.Validation.OpenIddictValidationHandlers+ResolveIntrospectionEndpoint.
+2026-03-24 14:54:22.019 +08:00 [DBG] The event OpenIddict.Validation.OpenIddictValidationEvents+ProcessAuthenticationContext was successfully processed by OpenIddict.Validation.OpenIddictValidationHandlers+EvaluateIntrospectionRequest.
+2026-03-24 14:54:22.019 +08:00 [DBG] The event OpenIddict.Validation.OpenIddictValidationEvents+ValidateTokenContext was successfully processed by OpenIddict.Validation.OpenIddictValidationHandlers+Protection+ResolveTokenValidationParameters.
+2026-03-24 14:54:22.019 +08:00 [DBG] The event OpenIddict.Validation.OpenIddictValidationEvents+ValidateTokenContext was successfully processed by OpenIddict.Validation.OpenIddictValidationHandlers+Protection+RemoveDisallowedCharacters.
+2026-03-24 14:54:22.020 +08:00 [DBG] The event OpenIddict.Validation.OpenIddictValidationEvents+ValidateTokenContext was successfully processed by OpenIddict.Validation.OpenIddictValidationHandlers+Protection+ValidateIdentityModelToken.
+2026-03-24 14:54:22.020 +08:00 [DBG] The event OpenIddict.Validation.OpenIddictValidationEvents+ValidateTokenContext was successfully processed by OpenIddict.Validation.OpenIddictValidationHandlers+Protection+NormalizeScopeClaims.
+2026-03-24 14:54:22.020 +08:00 [DBG] The event OpenIddict.Validation.OpenIddictValidationEvents+ValidateTokenContext was successfully processed by OpenIddict.Validation.OpenIddictValidationHandlers+Protection+MapInternalClaims.
+2026-03-24 14:54:22.020 +08:00 [DBG] The event OpenIddict.Validation.OpenIddictValidationEvents+ValidateTokenContext was successfully processed by OpenIddict.Validation.OpenIddictValidationHandlers+Protection+ValidatePrincipal.
+2026-03-24 14:54:22.020 +08:00 [DBG] The event OpenIddict.Validation.OpenIddictValidationEvents+ValidateTokenContext was successfully processed by OpenIddict.Validation.OpenIddictValidationHandlers+Protection+ValidateExpirationDate.
+2026-03-24 14:54:22.020 +08:00 [DBG] The event OpenIddict.Validation.OpenIddictValidationEvents+ValidateTokenContext was successfully processed by OpenIddict.Validation.OpenIddictValidationHandlers+Protection+ValidateAudience.
+2026-03-24 14:54:22.020 +08:00 [DBG] The event OpenIddict.Validation.OpenIddictValidationEvents+ProcessAuthenticationContext was successfully processed by OpenIddict.Validation.OpenIddictValidationHandlers+ValidateAccessToken.
+2026-03-24 14:54:22.020 +08:00 [DBG] AuthenticationScheme: OpenIddict.Validation.AspNetCore was successfully authenticated.
+2026-03-24 14:54:22.020 +08:00 [INF] Request starting HTTP/2 GET https://localhost:5001/api/identity/roles/all - null null
+2026-03-24 14:54:22.021 +08:00 [INF] CORS policy execution successful.
+2026-03-24 14:54:22.021 +08:00 [DBG] The event OpenIddict.Validation.OpenIddictValidationEvents+ProcessRequestContext was successfully processed by OpenIddict.Validation.AspNetCore.OpenIddictValidationAspNetCoreHandlers+ResolveRequestUri.
+2026-03-24 14:54:22.021 +08:00 [DBG] The event OpenIddict.Server.OpenIddictServerEvents+ProcessRequestContext was successfully processed by OpenIddict.Server.AspNetCore.OpenIddictServerAspNetCoreHandlers+ResolveRequestUri.
+2026-03-24 14:54:22.021 +08:00 [DBG] The event OpenIddict.Server.OpenIddictServerEvents+ProcessRequestContext was successfully processed by OpenIddict.Server.OpenIddictServerHandlers+InferEndpointType.
+2026-03-24 14:54:22.021 +08:00 [DBG] The event OpenIddict.Server.OpenIddictServerEvents+ProcessRequestContext was successfully processed by OpenIddict.Server.AspNetCore.OpenIddictServerAspNetCoreHandlers+ValidateTransportSecurityRequirement.
+2026-03-24 14:54:22.022 +08:00 [DBG] The event OpenIddict.Server.OpenIddictServerEvents+ProcessRequestContext was successfully processed by OpenIddict.Server.AspNetCore.OpenIddictServerAspNetCoreHandlers+ValidateHostHeader.
+2026-03-24 14:54:22.022 +08:00 [DBG] The event OpenIddict.Validation.OpenIddictValidationEvents+ProcessAuthenticationContext was successfully processed by OpenIddict.Validation.AspNetCore.OpenIddictValidationAspNetCoreHandlers+ValidateHostHeader.
+2026-03-24 14:54:22.022 +08:00 [DBG] The event OpenIddict.Validation.OpenIddictValidationEvents+ProcessAuthenticationContext was successfully processed by OpenIddict.Validation.OpenIddictValidationHandlers+EvaluateValidatedTokens.
+2026-03-24 14:54:22.022 +08:00 [DBG] The event OpenIddict.Validation.OpenIddictValidationEvents+ProcessAuthenticationContext was successfully processed by OpenIddict.Validation.AspNetCore.OpenIddictValidationAspNetCoreHandlers+ExtractAccessTokenFromAuthorizationHeader.
+2026-03-24 14:54:22.022 +08:00 [DBG] The event OpenIddict.Validation.OpenIddictValidationEvents+ProcessAuthenticationContext was successfully processed by OpenIddict.Validation.AspNetCore.OpenIddictValidationAspNetCoreHandlers+ExtractAccessTokenFromBodyForm.
+2026-03-24 14:54:22.022 +08:00 [DBG] The event OpenIddict.Validation.OpenIddictValidationEvents+ProcessAuthenticationContext was successfully processed by OpenIddict.Validation.AspNetCore.OpenIddictValidationAspNetCoreHandlers+ExtractAccessTokenFromQueryString.
+2026-03-24 14:54:22.022 +08:00 [DBG] The event OpenIddict.Validation.OpenIddictValidationEvents+ProcessAuthenticationContext was successfully processed by OpenIddict.Validation.OpenIddictValidationHandlers+ValidateRequiredTokens.
+2026-03-24 14:54:22.022 +08:00 [DBG] The event OpenIddict.Validation.OpenIddictValidationEvents+ProcessAuthenticationContext was successfully processed by OpenIddict.Validation.OpenIddictValidationHandlers+ResolveServerConfiguration.
+2026-03-24 14:54:22.022 +08:00 [DBG] The event OpenIddict.Validation.OpenIddictValidationEvents+ProcessAuthenticationContext was successfully processed by OpenIddict.Validation.OpenIddictValidationHandlers+ResolveIntrospectionEndpoint.
+2026-03-24 14:54:22.022 +08:00 [DBG] The event OpenIddict.Validation.OpenIddictValidationEvents+ProcessAuthenticationContext was successfully processed by OpenIddict.Validation.OpenIddictValidationHandlers+EvaluateIntrospectionRequest.
+2026-03-24 14:54:22.022 +08:00 [DBG] The event OpenIddict.Validation.OpenIddictValidationEvents+ValidateTokenContext was successfully processed by OpenIddict.Validation.OpenIddictValidationHandlers+Protection+ResolveTokenValidationParameters.
+2026-03-24 14:54:22.022 +08:00 [DBG] The event OpenIddict.Validation.OpenIddictValidationEvents+ValidateTokenContext was successfully processed by OpenIddict.Validation.OpenIddictValidationHandlers+Protection+RemoveDisallowedCharacters.
+2026-03-24 14:54:22.022 +08:00 [DBG] The event OpenIddict.Validation.OpenIddictValidationEvents+ValidateTokenContext was successfully processed by OpenIddict.Validation.OpenIddictValidationHandlers+Protection+ValidateIdentityModelToken.
+2026-03-24 14:54:22.022 +08:00 [DBG] The event OpenIddict.Validation.OpenIddictValidationEvents+ValidateTokenContext was successfully processed by OpenIddict.Validation.OpenIddictValidationHandlers+Protection+NormalizeScopeClaims.
+2026-03-24 14:54:22.022 +08:00 [DBG] The event OpenIddict.Validation.OpenIddictValidationEvents+ValidateTokenContext was successfully processed by OpenIddict.Validation.OpenIddictValidationHandlers+Protection+MapInternalClaims.
+2026-03-24 14:54:22.023 +08:00 [DBG] The event OpenIddict.Validation.OpenIddictValidationEvents+ValidateTokenContext was successfully processed by OpenIddict.Validation.OpenIddictValidationHandlers+Protection+ValidatePrincipal.
+2026-03-24 14:54:22.023 +08:00 [DBG] The event OpenIddict.Validation.OpenIddictValidationEvents+ValidateTokenContext was successfully processed by OpenIddict.Validation.OpenIddictValidationHandlers+Protection+ValidateExpirationDate.
+2026-03-24 14:54:22.023 +08:00 [DBG] The event OpenIddict.Validation.OpenIddictValidationEvents+ValidateTokenContext was successfully processed by OpenIddict.Validation.OpenIddictValidationHandlers+Protection+ValidateAudience.
+2026-03-24 14:54:22.023 +08:00 [DBG] The event OpenIddict.Validation.OpenIddictValidationEvents+ProcessAuthenticationContext was successfully processed by OpenIddict.Validation.OpenIddictValidationHandlers+ValidateAccessToken.
+2026-03-24 14:54:22.023 +08:00 [DBG] AuthenticationScheme: OpenIddict.Validation.AspNetCore was successfully authenticated.
+2026-03-24 14:54:22.024 +08:00 [DBG] Get dynamic claims cache for user: 3a2030a0-069c-bb80-4f8f-70ea613a3734
+2026-03-24 14:54:22.024 +08:00 [INF] Executing endpoint 'Censeq.Identity.OrganizationUnitController.GetAllListAsync (Censeq.Identity.HttpApi)'
+2026-03-24 14:54:22.025 +08:00 [INF] Route matched with {area = "identity", controller = "OrganizationUnit", action = "GetAllList", page = ""}. Executing controller action with signature System.Threading.Tasks.Task`1[Volo.Abp.Application.Dtos.ListResultDto`1[Censeq.Identity.OrganizationUnitDto]] GetAllListAsync() on controller Censeq.Identity.OrganizationUnitController (Censeq.Identity.HttpApi).
+2026-03-24 14:54:22.036 +08:00 [DBG] Get dynamic claims cache for user: 3a2030a0-069c-bb80-4f8f-70ea613a3734
+2026-03-24 14:54:22.048 +08:00 [DBG] Added 0 entity changes to the current audit log
+2026-03-24 14:54:22.048 +08:00 [INF] Executing ObjectResult, writing value of type 'Volo.Abp.Application.Dtos.ListResultDto`1[[Censeq.Identity.OrganizationUnitDto, Censeq.Identity.Application.Contracts, Version=8.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2026-03-24 14:54:22.048 +08:00 [INF] Executed action Censeq.Identity.OrganizationUnitController.GetAllListAsync (Censeq.Identity.HttpApi) in 23.7763ms
+2026-03-24 14:54:22.048 +08:00 [INF] Executed endpoint 'Censeq.Identity.OrganizationUnitController.GetAllListAsync (Censeq.Identity.HttpApi)'
+2026-03-24 14:54:22.049 +08:00 [INF] Request finished HTTP/2 GET https://localhost:5001/api/identity/organization-units - 200 null application/json; charset=utf-8 31.0691ms
+2026-03-24 14:54:22.053 +08:00 [INF] Executing endpoint 'Censeq.Identity.IdentityRoleController.GetAllListAsync (Censeq.Identity.HttpApi)'
+2026-03-24 14:54:22.057 +08:00 [INF] Route matched with {area = "identity", controller = "Role", action = "GetAllList", page = ""}. Executing controller action with signature System.Threading.Tasks.Task`1[Volo.Abp.Application.Dtos.ListResultDto`1[Censeq.Identity.IdentityRoleDto]] GetAllListAsync() on controller Censeq.Identity.IdentityRoleController (Censeq.Identity.HttpApi).
+2026-03-24 14:54:22.097 +08:00 [DBG] Added 0 entity changes to the current audit log
+2026-03-24 14:54:22.098 +08:00 [INF] Executing ObjectResult, writing value of type 'Volo.Abp.Application.Dtos.ListResultDto`1[[Censeq.Identity.IdentityRoleDto, Censeq.Identity.Application.Contracts, Version=8.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2026-03-24 14:54:22.101 +08:00 [INF] Executed action Censeq.Identity.IdentityRoleController.GetAllListAsync (Censeq.Identity.HttpApi) in 43.4513ms
+2026-03-24 14:54:22.101 +08:00 [INF] Executed endpoint 'Censeq.Identity.IdentityRoleController.GetAllListAsync (Censeq.Identity.HttpApi)'
+2026-03-24 14:54:22.102 +08:00 [INF] Request finished HTTP/2 GET https://localhost:5001/api/identity/roles/all - 200 null application/json; charset=utf-8 81.1656ms
+2026-03-24 14:54:22.111 +08:00 [INF] Request starting HTTP/2 OPTIONS https://localhost:5001/api/identity/users/3a2030a0-069c-bb80-4f8f-70ea613a3734/roles - null null
+2026-03-24 14:54:22.111 +08:00 [INF] Request starting HTTP/2 OPTIONS https://localhost:5001/api/identity/users/3a2030a0-069c-bb80-4f8f-70ea613a3734/organization-units - null null
+2026-03-24 14:54:22.111 +08:00 [INF] CORS policy execution successful.
+2026-03-24 14:54:22.111 +08:00 [INF] CORS policy execution successful.
+2026-03-24 14:54:22.111 +08:00 [INF] Request finished HTTP/2 OPTIONS https://localhost:5001/api/identity/users/3a2030a0-069c-bb80-4f8f-70ea613a3734/roles - 204 null null 0.3791ms
+2026-03-24 14:54:22.111 +08:00 [INF] Request finished HTTP/2 OPTIONS https://localhost:5001/api/identity/users/3a2030a0-069c-bb80-4f8f-70ea613a3734/organization-units - 204 null null 0.3557ms
+2026-03-24 14:54:22.113 +08:00 [INF] Request starting HTTP/2 GET https://localhost:5001/api/identity/users/3a2030a0-069c-bb80-4f8f-70ea613a3734/organization-units - null null
+2026-03-24 14:54:22.113 +08:00 [INF] Request starting HTTP/2 GET https://localhost:5001/api/identity/users/3a2030a0-069c-bb80-4f8f-70ea613a3734/roles - null null
+2026-03-24 14:54:22.113 +08:00 [INF] CORS policy execution successful.
+2026-03-24 14:54:22.113 +08:00 [INF] CORS policy execution successful.
+2026-03-24 14:54:22.113 +08:00 [DBG] The event OpenIddict.Validation.OpenIddictValidationEvents+ProcessRequestContext was successfully processed by OpenIddict.Validation.AspNetCore.OpenIddictValidationAspNetCoreHandlers+ResolveRequestUri.
+2026-03-24 14:54:22.113 +08:00 [DBG] The event OpenIddict.Validation.OpenIddictValidationEvents+ProcessRequestContext was successfully processed by OpenIddict.Validation.AspNetCore.OpenIddictValidationAspNetCoreHandlers+ResolveRequestUri.
+2026-03-24 14:54:22.113 +08:00 [DBG] The event OpenIddict.Server.OpenIddictServerEvents+ProcessRequestContext was successfully processed by OpenIddict.Server.AspNetCore.OpenIddictServerAspNetCoreHandlers+ResolveRequestUri.
+2026-03-24 14:54:22.113 +08:00 [DBG] The event OpenIddict.Server.OpenIddictServerEvents+ProcessRequestContext was successfully processed by OpenIddict.Server.AspNetCore.OpenIddictServerAspNetCoreHandlers+ResolveRequestUri.
+2026-03-24 14:54:22.113 +08:00 [DBG] The event OpenIddict.Server.OpenIddictServerEvents+ProcessRequestContext was successfully processed by OpenIddict.Server.OpenIddictServerHandlers+InferEndpointType.
+2026-03-24 14:54:22.113 +08:00 [DBG] The event OpenIddict.Server.OpenIddictServerEvents+ProcessRequestContext was successfully processed by OpenIddict.Server.AspNetCore.OpenIddictServerAspNetCoreHandlers+ValidateTransportSecurityRequirement.
+2026-03-24 14:54:22.113 +08:00 [DBG] The event OpenIddict.Server.OpenIddictServerEvents+ProcessRequestContext was successfully processed by OpenIddict.Server.AspNetCore.OpenIddictServerAspNetCoreHandlers+ValidateHostHeader.
+2026-03-24 14:54:22.113 +08:00 [DBG] The event OpenIddict.Server.OpenIddictServerEvents+ProcessRequestContext was successfully processed by OpenIddict.Server.OpenIddictServerHandlers+InferEndpointType.
+2026-03-24 14:54:22.114 +08:00 [DBG] The event OpenIddict.Server.OpenIddictServerEvents+ProcessRequestContext was successfully processed by OpenIddict.Server.AspNetCore.OpenIddictServerAspNetCoreHandlers+ValidateTransportSecurityRequirement.
+2026-03-24 14:54:22.114 +08:00 [DBG] The event OpenIddict.Server.OpenIddictServerEvents+ProcessRequestContext was successfully processed by OpenIddict.Server.AspNetCore.OpenIddictServerAspNetCoreHandlers+ValidateHostHeader.
+2026-03-24 14:54:22.114 +08:00 [DBG] The event OpenIddict.Validation.OpenIddictValidationEvents+ProcessAuthenticationContext was successfully processed by OpenIddict.Validation.AspNetCore.OpenIddictValidationAspNetCoreHandlers+ValidateHostHeader.
+2026-03-24 14:54:22.114 +08:00 [DBG] The event OpenIddict.Validation.OpenIddictValidationEvents+ProcessAuthenticationContext was successfully processed by OpenIddict.Validation.AspNetCore.OpenIddictValidationAspNetCoreHandlers+ValidateHostHeader.
+2026-03-24 14:54:22.114 +08:00 [DBG] The event OpenIddict.Validation.OpenIddictValidationEvents+ProcessAuthenticationContext was successfully processed by OpenIddict.Validation.OpenIddictValidationHandlers+EvaluateValidatedTokens.
+2026-03-24 14:54:22.114 +08:00 [DBG] The event OpenIddict.Validation.OpenIddictValidationEvents+ProcessAuthenticationContext was successfully processed by OpenIddict.Validation.OpenIddictValidationHandlers+EvaluateValidatedTokens.
+2026-03-24 14:54:22.114 +08:00 [DBG] The event OpenIddict.Validation.OpenIddictValidationEvents+ProcessAuthenticationContext was successfully processed by OpenIddict.Validation.AspNetCore.OpenIddictValidationAspNetCoreHandlers+ExtractAccessTokenFromAuthorizationHeader.
+2026-03-24 14:54:22.114 +08:00 [DBG] The event OpenIddict.Validation.OpenIddictValidationEvents+ProcessAuthenticationContext was successfully processed by OpenIddict.Validation.AspNetCore.OpenIddictValidationAspNetCoreHandlers+ExtractAccessTokenFromAuthorizationHeader.
+2026-03-24 14:54:22.114 +08:00 [DBG] The event OpenIddict.Validation.OpenIddictValidationEvents+ProcessAuthenticationContext was successfully processed by OpenIddict.Validation.AspNetCore.OpenIddictValidationAspNetCoreHandlers+ExtractAccessTokenFromBodyForm.
+2026-03-24 14:54:22.114 +08:00 [DBG] The event OpenIddict.Validation.OpenIddictValidationEvents+ProcessAuthenticationContext was successfully processed by OpenIddict.Validation.AspNetCore.OpenIddictValidationAspNetCoreHandlers+ExtractAccessTokenFromBodyForm.
+2026-03-24 14:54:22.114 +08:00 [DBG] The event OpenIddict.Validation.OpenIddictValidationEvents+ProcessAuthenticationContext was successfully processed by OpenIddict.Validation.AspNetCore.OpenIddictValidationAspNetCoreHandlers+ExtractAccessTokenFromQueryString.
+2026-03-24 14:54:22.114 +08:00 [DBG] The event OpenIddict.Validation.OpenIddictValidationEvents+ProcessAuthenticationContext was successfully processed by OpenIddict.Validation.AspNetCore.OpenIddictValidationAspNetCoreHandlers+ExtractAccessTokenFromQueryString.
+2026-03-24 14:54:22.114 +08:00 [DBG] The event OpenIddict.Validation.OpenIddictValidationEvents+ProcessAuthenticationContext was successfully processed by OpenIddict.Validation.OpenIddictValidationHandlers+ValidateRequiredTokens.
+2026-03-24 14:54:22.114 +08:00 [DBG] The event OpenIddict.Validation.OpenIddictValidationEvents+ProcessAuthenticationContext was successfully processed by OpenIddict.Validation.OpenIddictValidationHandlers+ValidateRequiredTokens.
+2026-03-24 14:54:22.114 +08:00 [DBG] The event OpenIddict.Validation.OpenIddictValidationEvents+ProcessAuthenticationContext was successfully processed by OpenIddict.Validation.OpenIddictValidationHandlers+ResolveServerConfiguration.
+2026-03-24 14:54:22.114 +08:00 [DBG] The event OpenIddict.Validation.OpenIddictValidationEvents+ProcessAuthenticationContext was successfully processed by OpenIddict.Validation.OpenIddictValidationHandlers+ResolveServerConfiguration.
+2026-03-24 14:54:22.114 +08:00 [DBG] The event OpenIddict.Validation.OpenIddictValidationEvents+ProcessAuthenticationContext was successfully processed by OpenIddict.Validation.OpenIddictValidationHandlers+ResolveIntrospectionEndpoint.
+2026-03-24 14:54:22.114 +08:00 [DBG] The event OpenIddict.Validation.OpenIddictValidationEvents+ProcessAuthenticationContext was successfully processed by OpenIddict.Validation.OpenIddictValidationHandlers+ResolveIntrospectionEndpoint.
+2026-03-24 14:54:22.114 +08:00 [DBG] The event OpenIddict.Validation.OpenIddictValidationEvents+ProcessAuthenticationContext was successfully processed by OpenIddict.Validation.OpenIddictValidationHandlers+EvaluateIntrospectionRequest.
+2026-03-24 14:54:22.114 +08:00 [DBG] The event OpenIddict.Validation.OpenIddictValidationEvents+ProcessAuthenticationContext was successfully processed by OpenIddict.Validation.OpenIddictValidationHandlers+EvaluateIntrospectionRequest.
+2026-03-24 14:54:22.114 +08:00 [DBG] The event OpenIddict.Validation.OpenIddictValidationEvents+ValidateTokenContext was successfully processed by OpenIddict.Validation.OpenIddictValidationHandlers+Protection+ResolveTokenValidationParameters.
+2026-03-24 14:54:22.114 +08:00 [DBG] The event OpenIddict.Validation.OpenIddictValidationEvents+ValidateTokenContext was successfully processed by OpenIddict.Validation.OpenIddictValidationHandlers+Protection+RemoveDisallowedCharacters.
+2026-03-24 14:54:22.114 +08:00 [DBG] The event OpenIddict.Validation.OpenIddictValidationEvents+ValidateTokenContext was successfully processed by OpenIddict.Validation.OpenIddictValidationHandlers+Protection+ResolveTokenValidationParameters.
+2026-03-24 14:54:22.114 +08:00 [DBG] The event OpenIddict.Validation.OpenIddictValidationEvents+ValidateTokenContext was successfully processed by OpenIddict.Validation.OpenIddictValidationHandlers+Protection+RemoveDisallowedCharacters.
+2026-03-24 14:54:22.114 +08:00 [DBG] The event OpenIddict.Validation.OpenIddictValidationEvents+ValidateTokenContext was successfully processed by OpenIddict.Validation.OpenIddictValidationHandlers+Protection+ValidateIdentityModelToken.
+2026-03-24 14:54:22.114 +08:00 [DBG] The event OpenIddict.Validation.OpenIddictValidationEvents+ValidateTokenContext was successfully processed by OpenIddict.Validation.OpenIddictValidationHandlers+Protection+ValidateIdentityModelToken.
+2026-03-24 14:54:22.114 +08:00 [DBG] The event OpenIddict.Validation.OpenIddictValidationEvents+ValidateTokenContext was successfully processed by OpenIddict.Validation.OpenIddictValidationHandlers+Protection+NormalizeScopeClaims.
+2026-03-24 14:54:22.114 +08:00 [DBG] The event OpenIddict.Validation.OpenIddictValidationEvents+ValidateTokenContext was successfully processed by OpenIddict.Validation.OpenIddictValidationHandlers+Protection+NormalizeScopeClaims.
+2026-03-24 14:54:22.114 +08:00 [DBG] The event OpenIddict.Validation.OpenIddictValidationEvents+ValidateTokenContext was successfully processed by OpenIddict.Validation.OpenIddictValidationHandlers+Protection+MapInternalClaims.
+2026-03-24 14:54:22.114 +08:00 [DBG] The event OpenIddict.Validation.OpenIddictValidationEvents+ValidateTokenContext was successfully processed by OpenIddict.Validation.OpenIddictValidationHandlers+Protection+MapInternalClaims.
+2026-03-24 14:54:22.114 +08:00 [DBG] The event OpenIddict.Validation.OpenIddictValidationEvents+ValidateTokenContext was successfully processed by OpenIddict.Validation.OpenIddictValidationHandlers+Protection+ValidatePrincipal.
+2026-03-24 14:54:22.114 +08:00 [DBG] The event OpenIddict.Validation.OpenIddictValidationEvents+ValidateTokenContext was successfully processed by OpenIddict.Validation.OpenIddictValidationHandlers+Protection+ValidatePrincipal.
+2026-03-24 14:54:22.114 +08:00 [DBG] The event OpenIddict.Validation.OpenIddictValidationEvents+ValidateTokenContext was successfully processed by OpenIddict.Validation.OpenIddictValidationHandlers+Protection+ValidateExpirationDate.
+2026-03-24 14:54:22.114 +08:00 [DBG] The event OpenIddict.Validation.OpenIddictValidationEvents+ValidateTokenContext was successfully processed by OpenIddict.Validation.OpenIddictValidationHandlers+Protection+ValidateExpirationDate.
+2026-03-24 14:54:22.114 +08:00 [DBG] The event OpenIddict.Validation.OpenIddictValidationEvents+ValidateTokenContext was successfully processed by OpenIddict.Validation.OpenIddictValidationHandlers+Protection+ValidateAudience.
+2026-03-24 14:54:22.114 +08:00 [DBG] The event OpenIddict.Validation.OpenIddictValidationEvents+ValidateTokenContext was successfully processed by OpenIddict.Validation.OpenIddictValidationHandlers+Protection+ValidateAudience.
+2026-03-24 14:54:22.115 +08:00 [DBG] The event OpenIddict.Validation.OpenIddictValidationEvents+ProcessAuthenticationContext was successfully processed by OpenIddict.Validation.OpenIddictValidationHandlers+ValidateAccessToken.
+2026-03-24 14:54:22.115 +08:00 [DBG] The event OpenIddict.Validation.OpenIddictValidationEvents+ProcessAuthenticationContext was successfully processed by OpenIddict.Validation.OpenIddictValidationHandlers+ValidateAccessToken.
+2026-03-24 14:54:22.115 +08:00 [DBG] AuthenticationScheme: OpenIddict.Validation.AspNetCore was successfully authenticated.
+2026-03-24 14:54:22.115 +08:00 [DBG] AuthenticationScheme: OpenIddict.Validation.AspNetCore was successfully authenticated.
+2026-03-24 14:54:22.117 +08:00 [DBG] Get dynamic claims cache for user: 3a2030a0-069c-bb80-4f8f-70ea613a3734
+2026-03-24 14:54:22.117 +08:00 [DBG] Get dynamic claims cache for user: 3a2030a0-069c-bb80-4f8f-70ea613a3734
+2026-03-24 14:54:22.118 +08:00 [INF] Executing endpoint 'Censeq.Identity.IdentityUserController.GetRolesAsync (Censeq.Identity.HttpApi)'
+2026-03-24 14:54:22.118 +08:00 [INF] Executing endpoint 'Censeq.Identity.IdentityUserController.GetOrganizationUnitsAsync (Censeq.Identity.HttpApi)'
+2026-03-24 14:54:22.122 +08:00 [INF] Route matched with {area = "identity", controller = "User", action = "GetOrganizationUnits", page = ""}. Executing controller action with signature System.Threading.Tasks.Task`1[Volo.Abp.Application.Dtos.ListResultDto`1[Censeq.Identity.OrganizationUnitDto]] GetOrganizationUnitsAsync(System.Guid) on controller Censeq.Identity.IdentityUserController (Censeq.Identity.HttpApi).
+2026-03-24 14:54:22.122 +08:00 [INF] Route matched with {area = "identity", controller = "User", action = "GetRoles", page = ""}. Executing controller action with signature System.Threading.Tasks.Task`1[Volo.Abp.Application.Dtos.ListResultDto`1[Censeq.Identity.IdentityRoleDto]] GetRolesAsync(System.Guid) on controller Censeq.Identity.IdentityUserController (Censeq.Identity.HttpApi).
+2026-03-24 14:54:22.156 +08:00 [DBG] Added 0 entity changes to the current audit log
+2026-03-24 14:54:22.156 +08:00 [INF] Executing ObjectResult, writing value of type 'Volo.Abp.Application.Dtos.ListResultDto`1[[Censeq.Identity.OrganizationUnitDto, Censeq.Identity.Application.Contracts, Version=8.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2026-03-24 14:54:22.157 +08:00 [INF] Executed action Censeq.Identity.IdentityUserController.GetOrganizationUnitsAsync (Censeq.Identity.HttpApi) in 34.9409ms
+2026-03-24 14:54:22.157 +08:00 [INF] Executed endpoint 'Censeq.Identity.IdentityUserController.GetOrganizationUnitsAsync (Censeq.Identity.HttpApi)'
+2026-03-24 14:54:22.157 +08:00 [INF] Request finished HTTP/2 GET https://localhost:5001/api/identity/users/3a2030a0-069c-bb80-4f8f-70ea613a3734/organization-units - 200 null application/json; charset=utf-8 44.3346ms
+2026-03-24 14:54:22.168 +08:00 [DBG] Added 0 entity changes to the current audit log
+2026-03-24 14:54:22.168 +08:00 [INF] Executing ObjectResult, writing value of type 'Volo.Abp.Application.Dtos.ListResultDto`1[[Censeq.Identity.IdentityRoleDto, Censeq.Identity.Application.Contracts, Version=8.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2026-03-24 14:54:22.168 +08:00 [INF] Executed action Censeq.Identity.IdentityUserController.GetRolesAsync (Censeq.Identity.HttpApi) in 46.476ms
+2026-03-24 14:54:22.168 +08:00 [INF] Executed endpoint 'Censeq.Identity.IdentityUserController.GetRolesAsync (Censeq.Identity.HttpApi)'
+2026-03-24 14:54:22.169 +08:00 [INF] Request finished HTTP/2 GET https://localhost:5001/api/identity/users/3a2030a0-069c-bb80-4f8f-70ea613a3734/roles - 200 null application/json; charset=utf-8 55.7931ms
+2026-03-24 14:54:55.881 +08:00 [INF] Request starting HTTP/2 OPTIONS https://localhost:5001/api/identity/roles?skipCount=0&maxResultCount=10 - null null
+2026-03-24 14:54:55.881 +08:00 [INF] CORS policy execution successful.
+2026-03-24 14:54:55.882 +08:00 [INF] Request finished HTTP/2 OPTIONS https://localhost:5001/api/identity/roles?skipCount=0&maxResultCount=10 - 204 null null 0.6322ms
+2026-03-24 14:54:55.883 +08:00 [INF] Request starting HTTP/2 GET https://localhost:5001/api/identity/roles?skipCount=0&maxResultCount=10 - null null
+2026-03-24 14:54:55.884 +08:00 [INF] CORS policy execution successful.
+2026-03-24 14:54:55.884 +08:00 [DBG] The event OpenIddict.Validation.OpenIddictValidationEvents+ProcessRequestContext was successfully processed by OpenIddict.Validation.AspNetCore.OpenIddictValidationAspNetCoreHandlers+ResolveRequestUri.
+2026-03-24 14:54:55.885 +08:00 [DBG] The event OpenIddict.Server.OpenIddictServerEvents+ProcessRequestContext was successfully processed by OpenIddict.Server.AspNetCore.OpenIddictServerAspNetCoreHandlers+ResolveRequestUri.
+2026-03-24 14:54:55.885 +08:00 [DBG] The event OpenIddict.Server.OpenIddictServerEvents+ProcessRequestContext was successfully processed by OpenIddict.Server.OpenIddictServerHandlers+InferEndpointType.
+2026-03-24 14:54:55.885 +08:00 [DBG] The event OpenIddict.Server.OpenIddictServerEvents+ProcessRequestContext was successfully processed by OpenIddict.Server.AspNetCore.OpenIddictServerAspNetCoreHandlers+ValidateTransportSecurityRequirement.
+2026-03-24 14:54:55.885 +08:00 [DBG] The event OpenIddict.Server.OpenIddictServerEvents+ProcessRequestContext was successfully processed by OpenIddict.Server.AspNetCore.OpenIddictServerAspNetCoreHandlers+ValidateHostHeader.
+2026-03-24 14:54:55.885 +08:00 [DBG] The event OpenIddict.Validation.OpenIddictValidationEvents+ProcessAuthenticationContext was successfully processed by OpenIddict.Validation.AspNetCore.OpenIddictValidationAspNetCoreHandlers+ValidateHostHeader.
+2026-03-24 14:54:55.885 +08:00 [DBG] The event OpenIddict.Validation.OpenIddictValidationEvents+ProcessAuthenticationContext was successfully processed by OpenIddict.Validation.OpenIddictValidationHandlers+EvaluateValidatedTokens.
+2026-03-24 14:54:55.885 +08:00 [DBG] The event OpenIddict.Validation.OpenIddictValidationEvents+ProcessAuthenticationContext was successfully processed by OpenIddict.Validation.AspNetCore.OpenIddictValidationAspNetCoreHandlers+ExtractAccessTokenFromAuthorizationHeader.
+2026-03-24 14:54:55.885 +08:00 [DBG] The event OpenIddict.Validation.OpenIddictValidationEvents+ProcessAuthenticationContext was successfully processed by OpenIddict.Validation.AspNetCore.OpenIddictValidationAspNetCoreHandlers+ExtractAccessTokenFromBodyForm.
+2026-03-24 14:54:55.885 +08:00 [DBG] The event OpenIddict.Validation.OpenIddictValidationEvents+ProcessAuthenticationContext was successfully processed by OpenIddict.Validation.AspNetCore.OpenIddictValidationAspNetCoreHandlers+ExtractAccessTokenFromQueryString.
+2026-03-24 14:54:55.885 +08:00 [DBG] The event OpenIddict.Validation.OpenIddictValidationEvents+ProcessAuthenticationContext was successfully processed by OpenIddict.Validation.OpenIddictValidationHandlers+ValidateRequiredTokens.
+2026-03-24 14:54:55.885 +08:00 [DBG] The event OpenIddict.Validation.OpenIddictValidationEvents+ProcessAuthenticationContext was successfully processed by OpenIddict.Validation.OpenIddictValidationHandlers+ResolveServerConfiguration.
+2026-03-24 14:54:55.885 +08:00 [DBG] The event OpenIddict.Validation.OpenIddictValidationEvents+ProcessAuthenticationContext was successfully processed by OpenIddict.Validation.OpenIddictValidationHandlers+ResolveIntrospectionEndpoint.
+2026-03-24 14:54:55.885 +08:00 [DBG] The event OpenIddict.Validation.OpenIddictValidationEvents+ProcessAuthenticationContext was successfully processed by OpenIddict.Validation.OpenIddictValidationHandlers+EvaluateIntrospectionRequest.
+2026-03-24 14:54:55.886 +08:00 [DBG] The event OpenIddict.Validation.OpenIddictValidationEvents+ValidateTokenContext was successfully processed by OpenIddict.Validation.OpenIddictValidationHandlers+Protection+ResolveTokenValidationParameters.
+2026-03-24 14:54:55.886 +08:00 [DBG] The event OpenIddict.Validation.OpenIddictValidationEvents+ValidateTokenContext was successfully processed by OpenIddict.Validation.OpenIddictValidationHandlers+Protection+RemoveDisallowedCharacters.
+2026-03-24 14:54:55.886 +08:00 [DBG] The event OpenIddict.Validation.OpenIddictValidationEvents+ValidateTokenContext was successfully processed by OpenIddict.Validation.OpenIddictValidationHandlers+Protection+ValidateIdentityModelToken.
+2026-03-24 14:54:55.886 +08:00 [DBG] The event OpenIddict.Validation.OpenIddictValidationEvents+ValidateTokenContext was successfully processed by OpenIddict.Validation.OpenIddictValidationHandlers+Protection+NormalizeScopeClaims.
+2026-03-24 14:54:55.886 +08:00 [DBG] The event OpenIddict.Validation.OpenIddictValidationEvents+ValidateTokenContext was successfully processed by OpenIddict.Validation.OpenIddictValidationHandlers+Protection+MapInternalClaims.
+2026-03-24 14:54:55.886 +08:00 [DBG] The event OpenIddict.Validation.OpenIddictValidationEvents+ValidateTokenContext was successfully processed by OpenIddict.Validation.OpenIddictValidationHandlers+Protection+ValidatePrincipal.
+2026-03-24 14:54:55.886 +08:00 [DBG] The event OpenIddict.Validation.OpenIddictValidationEvents+ValidateTokenContext was successfully processed by OpenIddict.Validation.OpenIddictValidationHandlers+Protection+ValidateExpirationDate.
+2026-03-24 14:54:55.886 +08:00 [DBG] The event OpenIddict.Validation.OpenIddictValidationEvents+ValidateTokenContext was successfully processed by OpenIddict.Validation.OpenIddictValidationHandlers+Protection+ValidateAudience.
+2026-03-24 14:54:55.886 +08:00 [DBG] The event OpenIddict.Validation.OpenIddictValidationEvents+ProcessAuthenticationContext was successfully processed by OpenIddict.Validation.OpenIddictValidationHandlers+ValidateAccessToken.
+2026-03-24 14:54:55.886 +08:00 [DBG] AuthenticationScheme: OpenIddict.Validation.AspNetCore was successfully authenticated.
+2026-03-24 14:54:55.890 +08:00 [DBG] Get dynamic claims cache for user: 3a2030a0-069c-bb80-4f8f-70ea613a3734
+2026-03-24 14:54:55.891 +08:00 [INF] Executing endpoint 'Censeq.Identity.IdentityRoleController.GetListAsync (Censeq.Identity.HttpApi)'
+2026-03-24 14:54:55.897 +08:00 [INF] Route matched with {area = "identity", controller = "Role", action = "GetList", page = ""}. Executing controller action with signature System.Threading.Tasks.Task`1[Volo.Abp.Application.Dtos.PagedResultDto`1[Censeq.Identity.IdentityRoleDto]] GetListAsync(Censeq.Identity.GetIdentityRolesInput) on controller Censeq.Identity.IdentityRoleController (Censeq.Identity.HttpApi).
+2026-03-24 14:54:55.922 +08:00 [DBG] Added 0 entity changes to the current audit log
+2026-03-24 14:54:55.922 +08:00 [INF] Executing ObjectResult, writing value of type 'Volo.Abp.Application.Dtos.PagedResultDto`1[[Censeq.Identity.IdentityRoleDto, Censeq.Identity.Application.Contracts, Version=8.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2026-03-24 14:54:55.923 +08:00 [INF] Executed action Censeq.Identity.IdentityRoleController.GetListAsync (Censeq.Identity.HttpApi) in 26.7061ms
+2026-03-24 14:54:55.923 +08:00 [INF] Executed endpoint 'Censeq.Identity.IdentityRoleController.GetListAsync (Censeq.Identity.HttpApi)'
+2026-03-24 14:54:55.924 +08:00 [INF] Request finished HTTP/2 GET https://localhost:5001/api/identity/roles?skipCount=0&maxResultCount=10 - 200 null application/json; charset=utf-8 40.4139ms
