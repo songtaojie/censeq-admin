@@ -10,6 +10,7 @@ export default {
 		systemDic: 'systemDic',
 		systemTenant: 'Tenant management',
 		systemFeature: 'Features',
+		systemSettings: 'Application settings',
 		limits: 'limits',
 		limitsFrontEnd: 'FrontEnd',
 		limitsFrontEndPage: 'FrontEndPage',

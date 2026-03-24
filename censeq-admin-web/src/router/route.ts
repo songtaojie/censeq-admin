@@ -183,6 +183,21 @@ export const dynamicRoutes: Array<RouteRecordRaw> = [
 							icon: 'iconfont icon-crew_feature',
 						},
 					},
+					{
+						path: '/system/settings',
+						name: 'systemSettings',
+						component: () => import('/@/views/system/settings/index.vue'),
+						meta: {
+							title: 'message.router.systemSettings',
+							isLink: '',
+							isHide: false,
+							isKeepAlive: true,
+							isAffix: false,
+							isIframe: false,
+							roles: ['admin'],
+							icon: 'ele-Setting',
+						},
+					},
 				],
 			},
 			{

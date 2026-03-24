@@ -1,4 +1,4 @@
-﻿using Censeq.Framework.Core;
+using Censeq.Framework.Core;
 using Volo.Abp;
 using Volo.Abp.AspNetCore;
 using Volo.Abp.Modularity;
@@ -22,8 +22,7 @@ namespace Censeq.Framework.AspNetCore
 
         public override void OnApplicationInitialization(ApplicationInitializationContext context)
         {
-            var app = context.GetApplicationBuilder();
-            app?.UseCenseqCors();
+            // CORS 须在 UseRouting 之后注册，见各 Host 模块（如 CenseqHttpApiHostModule）。
         }
     }
 }

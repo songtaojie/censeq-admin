@@ -83,12 +83,20 @@ export const service: AxiosInstance = axios.create({
 	},
 });
 
-// 从 Cookie 获取 XSRF-TOKEN 的函数
-function getXsrfToken() {
-	return document.cookie
+// 从 Cookie 获取 XSRF-TOKEN（与 RequestVerificationToken 头一致，须 URL 解码）
+function getXsrfToken(): string | undefined {
+	const raw = document.cookie
 		.split('; ')
 		.find((row) => row.startsWith('XSRF-TOKEN='))
-		?.split('=')[1];
+		?.split('=')
+		.slice(1)
+		.join('=');
+	if (!raw) return undefined;
+	try {
+		return decodeURIComponent(raw);
+	} catch {
+		return raw;
+	}
 }
 
 // 添加请求拦截器
@@ -121,10 +129,11 @@ service.interceptors.request.use(
 // 添加响应拦截器
 service.interceptors.response.use(
 	(response : AxiosResponse<any>) => {
-		// 对响应数据做点什么
-		if(response.status != 200) {
+		// 对响应数据做点什么（2xx 均为成功：如 DELETE 常返回 204、POST 可能 201）
+		const status = response.status;
+		if (status < 200 || status >= 300) {
 			// `token` 过期或者账号已在别处登录
-			if (response.status === 401) {
+			if (status === 401) {
 				Session.clear(); // 清除浏览器全部临时缓存
 				window.location.href = '/'; // 去登录页
 				ElMessageBox.alert('你已被登出，请重新登录', '提示', {})

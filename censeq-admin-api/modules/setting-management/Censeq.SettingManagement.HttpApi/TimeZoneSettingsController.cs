@@ -32,7 +32,7 @@ public class TimeZoneSettingsController : AbpControllerBase, ITimeZoneSettingsAp
     }
 
     [HttpPost]
-    public Task UpdateAsync(string timezone)
+    public Task UpdateAsync([FromQuery] string timezone)
     {
         return _timeZoneSettingsAppService.UpdateAsync(timezone);
     }

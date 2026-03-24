@@ -20,6 +20,8 @@ import other from '/@/utils/other';
 import { Local, Session } from '/@/utils/storage';
 import mittBus from '/@/utils/mitt';
 import setIntroduction from '/@/utils/setIconfont';
+import { useOidc } from '/@/composables/useOidc';
+import { ensureAntiforgeryCookies } from '/@/utils/antiforgery';
 
 // 引入组件
 const LockScreen = defineAsyncComponent(() => import('/@/layout/lockScreen/index.vue'));
@@ -82,6 +84,17 @@ onMounted(() => {
 		if (Session.get('isTagsViewCurrenFull')) {
 			stores.setCurrenFullscreen(Session.get('isTagsViewCurrenFull'));
 		}
+		void (async () => {
+			if (route.path === '/login' || route.path.startsWith('/callback')) return;
+			const oidc = useOidc();
+			if (await oidc.isAuthenticated()) {
+				try {
+					await ensureAntiforgeryCookies();
+				} catch {
+					/* 忽略 */
+				}
+			}
+		})();
 	});
 });
 // 页面销毁时，关闭监听布局配置/i18n监听

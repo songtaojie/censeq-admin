@@ -7,8 +7,12 @@ using Censeq.Framework.AspNetCore.Mvc.UI.Theme.Basic;
 using Censeq.Framework.Swashbuckle;
 using Censeq.OpenIddict;
 using OpenIddict.Validation.AspNetCore;
+using Microsoft.AspNetCore.Antiforgery;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Volo.Abp;
 using Volo.Abp.AspNetCore.MultiTenancy;
+using Volo.Abp.AspNetCore.Mvc.AntiForgery;
 using Volo.Abp.AspNetCore.Mvc.Libs;
 using Volo.Abp.AspNetCore.Serilog;
 using Volo.Abp.Autofac;
@@ -76,6 +80,7 @@ public class CenseqHttpApiHostModule : AbpModule
         ConfigureAuthentication(context);
         ConfigureUrls(configuration);
         ConfigureVirtualFileSystem(context);
+        ConfigureAntiforgeryForCrossOriginSpa(context, hostingEnvironment);
         Configure<AbpMvcLibsOptions>(options =>
         {
             options.CheckLibs = false;
@@ -85,6 +90,29 @@ public class CenseqHttpApiHostModule : AbpModule
         //{
         //    options.IsEnabled = false;
         //});
+    }
+
+    /// <summary>
+    /// 跨站（如 http://localhost:4200 → https://localhost:5001）携带防伪 Cookie 须 SameSite=None；HTTPS API 下 Cookie 须 Secure。
+    /// </summary>
+    private static void ConfigureAntiforgeryForCrossOriginSpa(ServiceConfigurationContext context, IWebHostEnvironment hostingEnvironment)
+    {
+        var securePolicy = hostingEnvironment.IsDevelopment()
+            ? CookieSecurePolicy.SameAsRequest
+            : CookieSecurePolicy.Always;
+
+        context.Services.PostConfigure<AntiforgeryOptions>(options =>
+        {
+            options.HeaderName = "RequestVerificationToken";
+            options.Cookie.SameSite = SameSiteMode.None;
+            options.Cookie.SecurePolicy = securePolicy;
+        });
+
+        context.Services.Configure<AbpAntiForgeryOptions>(options =>
+        {
+            options.TokenCookie.SameSite = SameSiteMode.None;
+            options.TokenCookie.SecurePolicy = securePolicy;
+        });
     }
 
     private static void ConfigureAuthentication(ServiceConfigurationContext context)
@@ -151,7 +179,7 @@ public class CenseqHttpApiHostModule : AbpModule
         app.UseCorrelationId();
         app.UseStaticFiles();
         app.UseRouting();
-        //app.UseCors();
+        app.UseCenseqCors();
         app.UseAuthentication();
         app.UseAbpOpenIddictValidation();
 

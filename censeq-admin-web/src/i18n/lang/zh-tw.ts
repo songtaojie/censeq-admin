@@ -10,6 +10,7 @@ export default {
 		systemDic: '字典管理',
 		systemTenant: '租戶管理',
 		systemFeature: '特性管理',
+		systemSettings: '應用設定',
 		limits: '許可權管理',
 		limitsFrontEnd: '前端控制',
 		limitsFrontEndPage: '頁面許可權',

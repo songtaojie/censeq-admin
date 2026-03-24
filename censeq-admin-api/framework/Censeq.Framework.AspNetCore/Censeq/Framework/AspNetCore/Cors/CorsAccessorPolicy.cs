@@ -1,4 +1,4 @@
-﻿// MIT License
+// MIT License
 //
 // Copyright (c) 2021-present songtaojie, Daming Co.,Ltd and Contributors
 //
@@ -31,20 +31,20 @@ internal static class CorsAccessorPolicy
     /// <param name="enableSignalR"></param>
     internal static void SetCorsPolicy(CorsPolicyBuilder builder, CorsSettingsOptions corsAccessorSettings, bool enableSignalR = false)
     {
-        // 判断是否设置了来源，因为 AllowAnyOrigin 不能和 AllowCredentials一起公用
+        // 判断是否设置了来源，因为 AllowAnyOrigin 不能和 AllowCredentials 一起用
         var isNotSetOrigins = corsAccessorSettings.WithOrigins == null || corsAccessorSettings.WithOrigins.Length == 0;
 
-        // 设置总是允许跨域源配置
-        builder.SetIsOriginAllowed(_ => true);
-
-        // 如果没有配置来源，则允许所有来源
+        // 未配置来源：任意源（不能与 AllowCredentials 同时使用）
         if (isNotSetOrigins)
         {
-            // 解决 SignarlR  不能配置允许所有源问题
             if (!enableSignalR) builder.AllowAnyOrigin();
+            else builder.SetIsOriginAllowed(_ => true);
         }
-        else builder.WithOrigins(corsAccessorSettings.WithOrigins!)
-                    .SetIsOriginAllowedToAllowWildcardSubdomains();
+        else
+        {
+            builder.WithOrigins(corsAccessorSettings.WithOrigins!)
+                .SetIsOriginAllowedToAllowWildcardSubdomains();
+        }
 
         // 如果没有配置请求标头，则允许所有表头，包含处理 SignarlR 情况
         if (corsAccessorSettings.WithHeaders == null || corsAccessorSettings.WithHeaders.Length == 0 || enableSignalR) builder.AllowAnyHeader();
@@ -62,8 +62,11 @@ internal static class CorsAccessorPolicy
             else builder.WithMethods(corsAccessorSettings.WithMethods);
         }
 
-        // 配置跨域凭据，包含处理 SignarlR 情况
-        if (corsAccessorSettings.AllowCredentials == true && !isNotSetOrigins || enableSignalR) builder.AllowCredentials();
+        // 配置跨域凭据（须配合显式 WithOrigins，或由 SignalR 分支处理）
+        if ((corsAccessorSettings.AllowCredentials == true && !isNotSetOrigins) || enableSignalR)
+        {
+            builder.AllowCredentials();
+        }
 
         // 配置响应头，如果前端不能获取自定义的 header 信息，必须配置该项，默认配置了 access-token 和 x-access-token，可取消默认行为
         IEnumerable<string> exposedHeaders = corsAccessorSettings.FixedClientToken == true
