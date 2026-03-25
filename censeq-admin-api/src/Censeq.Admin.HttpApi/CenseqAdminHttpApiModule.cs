@@ -38,11 +38,6 @@ public class CenseqAdminHttpApiModule : AbpModule
     public override void ConfigureServices(ServiceConfigurationContext context)
     {
         ConfigureLocalization();
-        Configure<AbpAspNetCoreMvcOptions>(options =>
-        {
-            options.ControllersToRemove.Add(typeof(PermissionsController));
-        });
-
         var valueValidatorFactoryOptions = context.Services.ExecutePreConfiguredActions<ValueValidatorFactoryOptions>();
         Configure<JsonOptions>(options =>
         {

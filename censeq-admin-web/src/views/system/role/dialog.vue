@@ -138,7 +138,6 @@ const onSubmit = () => {
 };
 // 获取菜单结构数据
 const getMenuData = async () => {
-	const { userInfos } = useUserInfo();
 	const { getPermissionList } = usePermissionApi();
 	const providerKey = state.dialog.type === 'edit' && state.ruleForm.id ? state.ruleForm.id : '';
 	const permissionList = await getPermissionList('R', providerKey);
