@@ -2,7 +2,8 @@
 export default {
 	router: {
 		home: '首頁',
-		system: '系統設置',
+		platform: '平台管理',
+		enterprise: '企業運營',
 		systemMenu: '選單管理',
 		systemRole: '角色管理',
 		systemUser: '用戶管理',

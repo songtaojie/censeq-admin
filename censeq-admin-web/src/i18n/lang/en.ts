@@ -2,7 +2,8 @@
 export default {
 	router: {
 		home: 'home',
-		system: 'system',
+		platform: 'Platform',
+		enterprise: 'Tenant operations',
 		systemMenu: 'systemMenu',
 		systemRole: 'systemRole',
 		systemUser: 'systemUser',
