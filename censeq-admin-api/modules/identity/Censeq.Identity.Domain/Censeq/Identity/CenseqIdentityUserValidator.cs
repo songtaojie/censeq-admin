@@ -2,9 +2,9 @@
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Localization;
-using Censeq.Identity.Localization;
 using Volo.Abp;
 using Censeq.Identity.Entities;
+using Censeq.Identity.Localization;
 
 namespace Censeq.Identity
 {

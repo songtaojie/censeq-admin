@@ -2,7 +2,7 @@ using Volo.Abp.Localization;
 
 namespace Censeq.TenantManagement.Localization;
 
-[LocalizationResourceName("Censeq.TenantManagement")]
+[LocalizationResourceName("CenseqTenantManagement")]
 public class CenseqTenantManagementResource
 {
 

@@ -1,4 +1,4 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.Features;
 using Volo.Abp.Localization;
 using Volo.Abp.Localization.ExceptionHandling;
@@ -31,7 +31,9 @@ public class CenseqIdentityDomainSharedModule : AbpModule
                 .Add<IdentityResource>("zh-Hans")
                 .AddBaseTypes(
                     typeof(AbpValidationResource)
-                ).AddVirtualJson("/Localization");
+                )
+                // 须与 csproj 中 EmbeddedResource 路径一致：Censeq/Identity/Localization/*.json
+                .AddVirtualJson("/Censeq/Identity/Localization/Resources");
         });
 
         Configure<AbpExceptionLocalizationOptions>(options =>

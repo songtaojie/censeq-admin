@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<Import Project="..\..\..\common.props" />
 
@@ -6,17 +6,15 @@
 		<AssemblyName>Censeq.FeatureManagement.Domain.Shared</AssemblyName>
 		<PackageId>Censeq.FeatureManagement.Domain.Shared</PackageId>
 		<Nullable>enable</Nullable>
-		<RootNamespace>Censeq.FeatureManagement</RootNamespace>
 		<GenerateEmbeddedFilesManifest>true</GenerateEmbeddedFilesManifest>
+		<RootNamespace />
 	</PropertyGroup>
 
 	<ItemGroup>
-		<EmbeddedResource Include="Localization\Resources\*.json" />
-		<Content Remove="Localization\Resources\*.json" />
+		<EmbeddedResource Include="Censeq\FeatureManagement\Localization\Resources\*.json" />
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Volo.Abp" />
 		<PackageReference Include="Volo.Abp.Localization" />
 		<PackageReference Include="Volo.Abp.Validation" />
 		<PackageReference Include="Volo.Abp.Json.SystemTextJson" />

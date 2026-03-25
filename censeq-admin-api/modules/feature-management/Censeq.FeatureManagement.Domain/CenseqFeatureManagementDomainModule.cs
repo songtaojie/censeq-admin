@@ -34,7 +34,7 @@ public class CenseqFeatureManagementDomainModule : AbpModule
 
             //TODO: Should be moved to the Tenant Management module
             options.Providers.Add<TenantFeatureManagementProvider>();
-            options.ProviderPolicies[TenantFeatureValueProvider.ProviderName] = "AbpTenantManagement.Tenants.ManageFeatures";
+            options.ProviderPolicies[TenantFeatureValueProvider.ProviderName] = "TenantManagement.Tenants.ManageFeatures";
         });
 
         Configure<AbpExceptionLocalizationOptions>(options =>

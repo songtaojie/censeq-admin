@@ -14,8 +14,8 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<EmbeddedResource Include="Censeq\Identity\Localization\*.json" />
-		<Content Remove="Censeq\Identity\Localization\*.json" />
+		<EmbeddedResource Include="Censeq\Identity\Localization\Resources\*.json" />
+		<Content Remove="Censeq\Identity\Localization\Resources\*.json" />
 	</ItemGroup>
 
 	<ItemGroup>

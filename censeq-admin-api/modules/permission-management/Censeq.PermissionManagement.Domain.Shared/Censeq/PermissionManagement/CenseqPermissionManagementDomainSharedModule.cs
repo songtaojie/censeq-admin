@@ -4,6 +4,7 @@ using Censeq.PermissionManagement.Localization;
 using Volo.Abp.Validation;
 using Volo.Abp.Validation.Localization;
 using Volo.Abp.VirtualFileSystem;
+using Volo.Abp.Localization.ExceptionHandling;
 
 namespace Censeq.PermissionManagement;
 
@@ -22,7 +23,12 @@ public class CenseqPermissionManagementDomainSharedModule : AbpModule
             options.Resources
                 .Add<CenseqPermissionManagementResource>("zh-Hans")
                 .AddBaseTypes(typeof(AbpValidationResource))
-                .AddVirtualJson("/Localization/Resources");
+                .AddVirtualJson("/Censeq/PermissionManagement/Localization/Resources");
+        });
+
+        Configure<AbpExceptionLocalizationOptions>(options =>
+        {
+            options.MapCodeNamespace("CenseqPermissionManagement", typeof(CenseqPermissionManagementResource));
         });
     }
 }

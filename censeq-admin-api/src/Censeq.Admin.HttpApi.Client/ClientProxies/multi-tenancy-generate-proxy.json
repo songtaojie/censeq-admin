@@ -2,7 +2,7 @@
   "modules": {
     "multi-tenancy": {
       "rootPath": "multi-tenancy",
-      "remoteServiceName": "AbpTenantManagement",
+      "remoteServiceName": "TenantManagement",
       "controllers": {
         "Censeq.Admin.Controllers.TenantController": {
           "controllerName": "Tenant",

@@ -6,11 +6,11 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Volo.Abp.Caching;
 using Volo.Abp.Domain.Services;
-using Censeq.Identity.Localization;
 using Volo.Abp.Security.Claims;
 using Volo.Abp.Threading;
 using Volo.Abp.Uow;
 using Censeq.Identity.Entities;
+using Censeq.Identity.Localization;
 
 namespace Censeq.Identity;
 

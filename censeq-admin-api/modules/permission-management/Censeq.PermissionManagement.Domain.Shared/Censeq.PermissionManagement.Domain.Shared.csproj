@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<Import Project="..\..\..\common.props" />
 
@@ -6,13 +6,13 @@
 		<AssemblyName>Censeq.PermissionManagement.Domain.Shared</AssemblyName>
 		<PackageId>Censeq.PermissionManagement.Domain.Shared</PackageId>
 		<Nullable>enable</Nullable>
-		<RootNamespace>Censeq.PermissionManagement</RootNamespace>
 		<GenerateEmbeddedFilesManifest>true</GenerateEmbeddedFilesManifest>
+		<RootNamespace />
 	</PropertyGroup>
 
 	<ItemGroup>
-		<EmbeddedResource Include="Localization\Resources\*.json" />
-		<Content Remove="Localization\Resources\*.json" />
+		<EmbeddedResource Include="Censeq\PermissionManagement\Localization\Resources\*.json" />
+		<Content Remove="Censeq\PermissionManagement\Localization\Resources\*.json" />
 	</ItemGroup>
 
 	<ItemGroup>

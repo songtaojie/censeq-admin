@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<Import Project="..\..\..\common.props" />
 
@@ -6,8 +6,14 @@
 		<AssemblyName>Censeq.SettingManagement.Domain.Shared</AssemblyName>
 		<PackageId>Censeq.SettingManagement.Domain.Shared</PackageId>
 		<Nullable>enable</Nullable>
-		<RootNamespace>Censeq.SettingManagement</RootNamespace>
+		<GenerateEmbeddedFilesManifest>true</GenerateEmbeddedFilesManifest>
+		<RootNamespace />
 	</PropertyGroup>
+
+	<ItemGroup>
+		<EmbeddedResource Include="Censeq\SettingManagement\Localization\Resources\*.json" />
+		<Content Remove="Censeq\SettingManagement\Localization\Resources\*.json" />
+	</ItemGroup>
 
 	<ItemGroup>
 		<PackageReference Include="Volo.Abp.Localization" />

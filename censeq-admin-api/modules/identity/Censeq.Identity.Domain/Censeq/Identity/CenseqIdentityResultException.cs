@@ -4,9 +4,9 @@ using JetBrains.Annotations;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Localization;
 using Volo.Abp.ExceptionHandling;
-using Censeq.Identity.Localization;
 using Volo.Abp.Localization;
 using Volo.Abp;
+using Censeq.Identity.Localization;
 
 namespace Censeq.Identity;
 

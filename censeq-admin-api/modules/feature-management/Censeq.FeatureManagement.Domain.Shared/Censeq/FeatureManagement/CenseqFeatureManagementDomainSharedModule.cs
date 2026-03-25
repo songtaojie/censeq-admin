@@ -27,15 +27,16 @@ public class CenseqFeatureManagementDomainSharedModule : AbpModule
         Configure<AbpLocalizationOptions>(options =>
         {
             options.Resources
-                .Add<CenseqFeatureManagementResource>("en")
+                .Add<CenseqFeatureManagementResource>("zh-Hans")
                 .AddBaseTypes(
                     typeof(AbpValidationResource)
-                ).AddVirtualJson("/Localization/Resources");
+                )
+                .AddVirtualJson("/Censeq/FeatureManagement/Localization/Resources");
         });
 
         Configure<AbpExceptionLocalizationOptions>(options =>
         {
-            options.MapCodeNamespace("Censeq.FeatureManagement", typeof(CenseqFeatureManagementResource));
+            options.MapCodeNamespace("CenseqFeatureManagement", typeof(CenseqFeatureManagementResource));
         });
 
         var valueValidatorFactoryOptions = context.Services.GetPreConfigureActions<ValueValidatorFactoryOptions>();

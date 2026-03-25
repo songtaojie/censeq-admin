@@ -1,4 +1,4 @@
-﻿using Volo.Abp.Features;
+using Volo.Abp.Features;
 using Volo.Abp.Modularity;
 using Volo.Abp.Localization;
 using Volo.Abp.Validation;
@@ -24,10 +24,11 @@ public class CenseqSettingManagementDomainSharedModule : AbpModule
         Configure<AbpLocalizationOptions>(options =>
         {
             options.Resources
-                .Add<CenseqSettingManagementResource>("en")
+                .Add<CenseqSettingManagementResource>("zh-Hans")
                 .AddBaseTypes(
                     typeof(AbpValidationResource)
-                ).AddVirtualJson("/Localization/Resources");
+                )
+                .AddVirtualJson("/Censeq/SettingManagement/Localization/Resources");
         });
     }
 }

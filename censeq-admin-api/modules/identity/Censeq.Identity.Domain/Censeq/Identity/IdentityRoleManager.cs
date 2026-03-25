@@ -9,9 +9,9 @@ using Microsoft.Extensions.Logging;
 using Volo.Abp.Caching;
 using Volo.Abp.Domain.Entities;
 using Volo.Abp.Domain.Services;
-using Censeq.Identity.Localization;
 using Volo.Abp.Security.Claims;
 using Volo.Abp.Threading;
+using Censeq.Identity.Localization;
 
 namespace Censeq.Identity;
 

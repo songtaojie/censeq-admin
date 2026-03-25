@@ -21,15 +21,17 @@ public class CenseqTenantManagementDomainSharedModule : AbpModule
         Configure<AbpLocalizationOptions>(options =>
         {
             options.Resources
-                .Add<CenseqTenantManagementResource>("en")
+                .Add<CenseqTenantManagementResource>("zh-Hans")
                 .AddBaseTypes(
                     typeof(AbpValidationResource)
-                ).AddVirtualJson("/Localization/Resources");
+                )
+                // 与 csproj 嵌入路径一致（同 Identity 模块的 Censeq/.../Localization 结构）
+                .AddVirtualJson("/Censeq/TenantManagement/Localization/Resources");
         });
 
         Configure<AbpExceptionLocalizationOptions>(options =>
         {
-            options.MapCodeNamespace("Censeq.TenantManagement", typeof(CenseqTenantManagementResource));
+            options.MapCodeNamespace("CenseqTenantManagement", typeof(CenseqTenantManagementResource));
         });
     }
 }

@@ -1,6 +1,19 @@
 import axios, { AxiosError, AxiosInstance, AxiosResponse } from 'axios';
 import { ElMessage, ElMessageBox } from 'element-plus';
-import { Session } from '/@/utils/storage';
+import { Local, Session } from '/@/utils/storage';
+
+/** 与 ABP `UseAbpRequestLocalization` 对齐，便于权限名等 LocalizableString 按界面语言返回 */
+function getAbpAcceptLanguage(): string {
+	try {
+		const tc = Local.get('themeConfig') as { globalI18n?: string } | undefined;
+		const ui = tc?.globalI18n ?? 'zh-cn';
+		if (ui === 'zh-cn') return 'zh-Hans';
+		if (ui === 'zh-tw') return 'zh-Hant';
+		return 'en';
+	} catch {
+		return 'zh-Hans';
+	}
+}
 import qs from 'qs';
 import { useOidc } from '/@/composables/useOidc';
 
@@ -112,6 +125,9 @@ service.interceptors.request.use(
 		if(!config.headers.has('Authorization') && acessToken)
 		{
 			config.headers['Authorization'] = `Bearer ${acessToken}`;
+		}
+		if (!config.headers.has('Accept-Language')) {
+			config.headers['Accept-Language'] = getAbpAcceptLanguage();
 		}
 		// 记录中止控制信息
 		const controller = new AbortController();

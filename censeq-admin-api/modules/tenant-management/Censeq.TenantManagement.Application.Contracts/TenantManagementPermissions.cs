@@ -4,7 +4,7 @@ namespace Censeq.TenantManagement;
 
 public static class TenantManagementPermissions
 {
-    public const string GroupName = "AbpTenantManagement";
+    public const string GroupName = "TenantManagement";
 
     public static class Tenants
     {
