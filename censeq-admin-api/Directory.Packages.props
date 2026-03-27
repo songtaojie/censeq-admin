@@ -70,7 +70,7 @@
     <PackageVersion Include="Volo.Abp.Json.SystemTextJson" Version="$(AbpVersion)" />
     <PackageVersion Include="Volo.Abp.Localization" Version="$(AbpVersion)" />
     <PackageVersion Include="Volo.Abp.MailKit" Version="$(AbpVersion)" />
-    <PackageVersion Include="Volo.Abp.MultiTenancy" Version="$(AbpVersion)" />
+    <PackageVersion Include="Volo.Abp.MultiTenancy" Version="8.3.4" />
     <PackageVersion Include="Volo.Abp.ObjectExtending" Version="$(AbpVersion)" />
     <PackageVersion Include="Volo.Abp.OpenIddict.AspNetCore" Version="$(AbpVersion)" />
     <PackageVersion Include="Volo.Abp.OpenIddict.Domain" Version="$(AbpVersion)" />

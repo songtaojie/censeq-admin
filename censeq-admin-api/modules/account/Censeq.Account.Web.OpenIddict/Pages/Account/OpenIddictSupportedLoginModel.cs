@@ -1,8 +1,10 @@
 using System.Security.Claims;
 using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Options;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc;
 using OpenIddict.Server;
 using OpenIddict.Server.AspNetCore;
 using Volo.Abp.DependencyInjection;
@@ -28,28 +30,37 @@ public class OpenIddictSupportedLoginModel : LoginModel
         OpenIddictRequestHelper = openIddictRequestHelper;
     }
 
-    public async override Task<IActionResult> OnGetAsync()
+    protected override async Task<string?> GetOidcAuthorizationTenantParameterAsync()
     {
-        LoginInput = new LoginInputModel();
-
         var request = await OpenIddictRequestHelper.GetFromReturnUrlAsync(ReturnUrl ?? string.Empty);
-        if (request?.ClientId != null)
+        var tenant = request?.GetParameter(TenantResolverConsts.DefaultTenantKey)?.ToString();
+        return string.IsNullOrWhiteSpace(tenant) ? null : tenant;
+    }
+
+    public override async Task<IActionResult> OnGetAsync()
+    {
+        var page = await base.OnGetAsync();
+        if (page is not PageResult)
         {
-            // TODO: Find a proper cancel way.
-            // ShowCancelButton = true;
-
-            LoginInput.UserNameOrEmailAddress = request.LoginHint;
-
-            //TODO: Reference AspNetCore MultiTenancy module and use options to get the tenant key!
-            var tenant = request.GetParameter(TenantResolverConsts.DefaultTenantKey)?.ToString();
-            if (!string.IsNullOrEmpty(tenant))
-            {
-                CurrentTenant.Change(Guid.Parse(tenant));
-                Response.Cookies.Append(TenantResolverConsts.DefaultTenantKey, tenant);
-            }
+            return page;
         }
 
-        return await base.OnGetAsync();
+        var request = await OpenIddictRequestHelper.GetFromReturnUrlAsync(ReturnUrl ?? string.Empty);
+        if (request?.ClientId != null && !string.IsNullOrEmpty(request.LoginHint))
+        {
+            LoginInput.UserNameOrEmailAddress = request.LoginHint;
+        }
+
+        var tenant = request?.GetParameter(TenantResolverConsts.DefaultTenantKey)?.ToString();
+        if (!string.IsNullOrWhiteSpace(tenant))
+        {
+            EnterpriseTenantCode = tenant.Trim();
+            IsEnterpriseTenantPresetFromLink = true;
+            AutoSelectEnterpriseTab = true;
+            LoginScope = "enterprise";
+        }
+
+        return page;
     }
 
     public async override Task<IActionResult> OnPostAsync(string action)

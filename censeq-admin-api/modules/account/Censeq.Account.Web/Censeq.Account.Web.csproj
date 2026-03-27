@@ -16,6 +16,7 @@
 	<ItemGroup>
 		<PackageReference Include="Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared" />
 		<PackageReference Include="Volo.Abp.AutoMapper" />
+		<PackageReference Include="Volo.Abp.MultiTenancy" />
 		<ProjectReference Include="..\..\identity\Censeq.Identity.AspNetCore\Censeq.Identity.AspNetCore.csproj" />
 		<ProjectReference Include="..\Censeq.Account.Application.Contracts\Censeq.Account.Application.Contracts.csproj" />
 		<PackageReference Include="Microsoft.Extensions.FileProviders.Embedded" />

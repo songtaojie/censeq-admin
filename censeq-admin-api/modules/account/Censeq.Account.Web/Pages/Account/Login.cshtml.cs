@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using System.ComponentModel.DataAnnotations;
@@ -7,6 +8,7 @@ using System.Security.Claims;
 using Censeq.Account.Settings;
 using Volo.Abp.Auditing;
 using Censeq.Identity;
+using Volo.Abp.MultiTenancy;
 using Volo.Abp.Security.Claims;
 using Volo.Abp.Settings;
 using Volo.Abp.Validation;
@@ -28,6 +30,19 @@ public class LoginModel : AccountPageModel
 
     [BindProperty]
     public LoginInputModel LoginInput { get; set; } = default!;
+
+    /// <summary>platform：宿主；enterprise：按租户编码登录。</summary>
+    [BindProperty]
+    public string LoginScope { get; set; } = "platform";
+
+    [BindProperty]
+    public string? EnterpriseTenantCode { get; set; }
+
+    /// <summary>授权链接带 __tenant 时为 true，租户编码只读并固定使用链接值。</summary>
+    public bool IsEnterpriseTenantPresetFromLink { get; set; }
+
+    /// <summary>打开页面时是否默认展示「企业」Tab。</summary>
+    public bool AutoSelectEnterpriseTab { get; set; }
 
     public bool EnableLocalLogin { get; set; }
 
@@ -86,6 +101,15 @@ public class LoginModel : AccountPageModel
 
     public virtual async Task<IActionResult> OnPostAsync(string action)
     {
+        if (string.Equals(action, "Login", StringComparison.OrdinalIgnoreCase))
+        {
+            if (!await TryPrepareTenantContextForPasswordLoginAsync())
+            {
+                await ReloadLoginPageStateAsync();
+                return Page();
+            }
+        }
+
         await CheckLocalLoginAsync();
 
         //ValidateModel();
@@ -157,6 +181,121 @@ public class LoginModel : AccountPageModel
         await IdentityDynamicClaimsPrincipalContributorCache.ClearAsync(user.Id, user.TenantId);
 
         return await RedirectSafelyAsync(ReturnUrl ?? string.Empty, ReturnUrlHash);
+    }
+
+    /// <summary>
+    /// OpenIddict 等场景下从 ReturnUrl 读取 __tenant；默认无。
+    /// </summary>
+    protected virtual Task<string?> GetOidcAuthorizationTenantParameterAsync()
+    {
+        return Task.FromResult<string?>(null);
+    }
+
+    /// <summary>
+    /// 在密码校验前切换/清空当前租户，使 SignIn 与用户库 tenant_id 一致。
+    /// </summary>
+    protected virtual async Task<bool> TryPrepareTenantContextForPasswordLoginAsync()
+    {
+        var fromAuthorization = await GetOidcAuthorizationTenantParameterAsync();
+        if (!string.IsNullOrWhiteSpace(fromAuthorization))
+        {
+            var trimmed = fromAuthorization.Trim();
+            EnterpriseTenantCode = trimmed;
+            IsEnterpriseTenantPresetFromLink = true;
+            AutoSelectEnterpriseTab = true;
+            LoginScope = "enterprise";
+            if (!await TryResolveAndApplyTenantAsync(trimmed))
+            {
+                Alerts.Warning("无法根据链接中的租户信息匹配有效租户，请核对 __tenant 参数或联系管理员。");
+                return false;
+            }
+
+            return true;
+        }
+
+        if (string.Equals(LoginScope, "enterprise", StringComparison.OrdinalIgnoreCase))
+        {
+            if (string.IsNullOrWhiteSpace(EnterpriseTenantCode))
+            {
+                Alerts.Warning("请输入租户编码。");
+                return false;
+            }
+
+            if (!await TryResolveAndApplyTenantAsync(EnterpriseTenantCode.Trim()))
+            {
+                Alerts.Warning("租户编码无效，请核对后重试。");
+                return false;
+            }
+
+            return true;
+        }
+
+        ClearTenantContextForHostLogin();
+        return true;
+    }
+
+    protected virtual void ClearTenantContextForHostLogin()
+    {
+        CurrentTenant.Change(null);
+        Response.Cookies.Delete(TenantResolverConsts.DefaultTenantKey);
+    }
+
+    protected virtual async Task<bool> TryResolveAndApplyTenantAsync(string raw)
+    {
+        if (string.IsNullOrWhiteSpace(raw))
+        {
+            return false;
+        }
+
+        raw = raw.Trim();
+        var tenantStore = LazyServiceProvider.LazyGetRequiredService<ITenantStore>();
+        Guid? tenantId = null;
+
+        if (Guid.TryParse(raw, out var asGuid))
+        {
+            var byId = await tenantStore.FindAsync(asGuid);
+            if (byId != null)
+            {
+                tenantId = byId.Id;
+            }
+        }
+
+        if (tenantId == null)
+        {
+            var byName = await tenantStore.FindAsync(raw.ToUpperInvariant());
+            if (byName != null)
+            {
+                tenantId = byName.Id;
+            }
+        }
+
+        if (tenantId == null)
+        {
+            return false;
+        }
+
+        CurrentTenant.Change(tenantId.Value);
+        Response.Cookies.Append(
+            TenantResolverConsts.DefaultTenantKey,
+            tenantId.Value.ToString("D"),
+            new CookieOptions
+            {
+                IsEssential = true,
+                HttpOnly = false,
+                Secure = Request.IsHttps,
+                SameSite = SameSiteMode.Lax,
+                Path = "/"
+            });
+
+        return true;
+    }
+
+    protected virtual async Task ReloadLoginPageStateAsync()
+    {
+        ExternalProviders = await GetExternalProviders();
+        EnableLocalLogin = await SettingProvider.IsTrueAsync(AccountSettingNames.EnableLocalLogin);
+        EnableRememberMe = await SettingProvider.IsTrueAsync(CenseqAccountSettingNames.EnableRememberMe);
+        IsSelfRegistrationEnabled = await SettingProvider.IsTrueAsync(AccountSettingNames.IsSelfRegistrationEnabled);
     }
 
     /// <summary>
