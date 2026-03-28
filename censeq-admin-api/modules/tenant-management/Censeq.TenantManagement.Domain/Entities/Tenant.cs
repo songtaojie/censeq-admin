@@ -6,7 +6,7 @@ using Volo.Abp;
 using Volo.Abp.Auditing;
 using Volo.Abp.Domain.Entities.Auditing;
 
-namespace Censeq.TenantManagement;
+namespace Censeq.TenantManagement.Entities;
 
 public class Tenant : FullAuditedAggregateRoot<Guid>, IHasEntityVersion
 {

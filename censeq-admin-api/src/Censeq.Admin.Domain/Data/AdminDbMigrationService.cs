@@ -4,6 +4,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using Censeq.TenantManagement;
 using Censeq.Identity;
+using Censeq.TenantManagement.Entities;
 
 namespace Censeq.Admin.Data;
 

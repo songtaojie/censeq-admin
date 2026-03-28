@@ -1,4 +1,5 @@
 using AutoMapper;
+using Censeq.TenantManagement.Entities;
 
 namespace Censeq.TenantManagement;
 

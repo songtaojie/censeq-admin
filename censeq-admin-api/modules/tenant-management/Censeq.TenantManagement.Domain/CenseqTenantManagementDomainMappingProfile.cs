@@ -1,4 +1,5 @@
 using AutoMapper;
+using Censeq.TenantManagement.Entities;
 using Volo.Abp.Data;
 using Volo.Abp.MultiTenancy;
 

@@ -17,7 +17,7 @@ using Censeq.PermissionManagement.EntityFrameworkCore;
 using Censeq.SettingManagement.Entities;
 using Censeq.SettingManagement.EntityFrameworkCore;
 using Censeq.SettingManagement.EntityFrameworkCore.Modeling;
-using Censeq.TenantManagement;
+using Censeq.TenantManagement.Entities;
 using Censeq.TenantManagement.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Volo.Abp.Data;

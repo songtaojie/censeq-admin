@@ -10,6 +10,7 @@ using Volo.Abp.ObjectExtending;
 using Volo.Abp.ObjectExtending.Modularity;
 using Volo.Abp.Threading;
 using Censeq.TenantManagement.ObjectExtending;
+using Censeq.TenantManagement.Entities;
 
 namespace Censeq.TenantManagement;
 

@@ -2,6 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using Volo.Abp;
 using Censeq.Framework.EntityFrameworkCore;
 using static Censeq.TenantManagement.TenantConsts;
+using Censeq.TenantManagement.Entities;
 
 namespace Censeq.TenantManagement.EntityFrameworkCore
 {

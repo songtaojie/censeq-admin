@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Censeq.TenantManagement.Entities;
 using JetBrains.Annotations;
 using Volo.Abp;
 using Volo.Abp.Caching;

@@ -1,3 +1,4 @@
+using Censeq.TenantManagement.Entities;
 using System;
 using System.Threading.Tasks;
 using Volo.Abp;

@@ -3,7 +3,7 @@ using JetBrains.Annotations;
 using Volo.Abp;
 using Volo.Abp.Domain.Entities;
 
-namespace Censeq.TenantManagement;
+namespace Censeq.TenantManagement.Entities;
 
 public class TenantConnectionString : Entity
 {
