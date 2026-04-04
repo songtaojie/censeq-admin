@@ -15,6 +15,7 @@ using Volo.Abp.Validation;
 using IdentityUser = Censeq.Identity.Entities.IdentityUser;
 using Censeq.Account.Web.Settings;
 using Censeq.Identity.AspNetCore;
+using Censeq.TenantManagement;
 
 namespace Censeq.Account.Web.Pages.Account;
 
@@ -206,7 +207,7 @@ public class LoginModel : AccountPageModel
             LoginScope = "enterprise";
             if (!await TryResolveAndApplyTenantAsync(trimmed))
             {
-                Alerts.Warning("无法根据链接中的租户信息匹配有效租户，请核对 __tenant 参数或联系管理员。");
+                Alerts.Warning("无法根据链接中的租户编码匹配有效租户，请核对 __tenant 参数或联系管理员。");
                 return false;
             }
 
@@ -247,37 +248,18 @@ public class LoginModel : AccountPageModel
             return false;
         }
 
-        raw = raw.Trim();
-        var tenantStore = LazyServiceProvider.LazyGetRequiredService<ITenantStore>();
-        Guid? tenantId = null;
-
-        if (Guid.TryParse(raw, out var asGuid))
-        {
-            var byId = await tenantStore.FindAsync(asGuid);
-            if (byId != null)
-            {
-                tenantId = byId.Id;
-            }
-        }
-
-        if (tenantId == null)
-        {
-            var byName = await tenantStore.FindAsync(raw.ToUpperInvariant());
-            if (byName != null)
-            {
-                tenantId = byName.Id;
-            }
-        }
-
-        if (tenantId == null)
+        var tenantRepository = LazyServiceProvider.LazyGetRequiredService<ITenantRepository>();
+        var tenant = await tenantRepository.FindByCodeAsync(raw.Trim());
+        if (tenant == null)
         {
             return false;
         }
 
-        CurrentTenant.Change(tenantId.Value);
+        var tenantId = tenant.Id;
+        CurrentTenant.Change(tenantId);
         Response.Cookies.Append(
             TenantResolverConsts.DefaultTenantKey,
-            tenantId.Value.ToString("D"),
+            tenantId.ToString("D"),
             new CookieOptions
             {
                 IsEssential = true,

@@ -8,5 +8,7 @@ public class TenantDto : ExtensibleEntityDto<Guid>, IHasConcurrencyStamp
 {
     public string Name { get; set; }
 
+    public string? Code { get; set; }
+
     public string ConcurrencyStamp { get; set; }
 }

@@ -4,7 +4,7 @@
 		<p>
 			将在 <strong>{{ countdown }}</strong> 秒后跳转到登录页面
 		</p>
-		<button @click="redirectToLogin">立即跳转</button>
+		<button type="button" @click="redirectToOpenIdLogin">立即跳转</button>
 	</div>
 </template>
 

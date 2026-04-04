@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Censeq.TenantManagement;
 using JetBrains.Annotations;
 using Volo.Abp;
 using Volo.Abp.Auditing;
@@ -14,6 +15,8 @@ public class Tenant : FullAuditedAggregateRoot<Guid>, IHasEntityVersion
 
     public virtual string NormalizedName { get; protected set; }
 
+    public virtual string? Code { get; protected set; }
+
     public virtual int EntityVersion { get; protected set; }
 
     public virtual List<TenantConnectionString> ConnectionStrings { get; protected set; }
@@ -23,11 +26,12 @@ public class Tenant : FullAuditedAggregateRoot<Guid>, IHasEntityVersion
 
     }
 
-    protected internal Tenant(Guid id, [NotNull] string name, [CanBeNull] string normalizedName)
+    protected internal Tenant(Guid id, [NotNull] string name, [CanBeNull] string normalizedName, [CanBeNull] string code = null)
         : base(id)
     {
         SetName(name);
         SetNormalizedName(normalizedName);
+        SetCode(code);
 
         ConnectionStrings = new List<TenantConnectionString>();
     }
@@ -86,5 +90,35 @@ public class Tenant : FullAuditedAggregateRoot<Guid>, IHasEntityVersion
     protected internal virtual void SetNormalizedName([CanBeNull] string normalizedName)
     {
         NormalizedName = normalizedName;
+    }
+
+    /// <summary>
+    /// 将登录/表单输入规范为持久化形式（去空白、统一大写），便于不区分大小写匹配。
+    /// </summary>
+    [CanBeNull]
+    public static string? NormalizeCode([CanBeNull] string? raw)
+    {
+        if (string.IsNullOrWhiteSpace(raw))
+        {
+            return null;
+        }
+
+        return raw.Trim().ToUpperInvariant();
+    }
+
+    protected internal virtual void SetCode([CanBeNull] string? code)
+    {
+        if (string.IsNullOrEmpty(code))
+        {
+            Code = null;
+            return;
+        }
+
+        Code = Check.Length(code, nameof(code), TenantConsts.MaxCodeLength);
+    }
+
+    public virtual void SetCodePublic([CanBeNull] string code)
+    {
+        SetCode(code);
     }
 }

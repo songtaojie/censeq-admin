@@ -66,7 +66,7 @@ public class TenantAppService : TenantManagementAppServiceBase, ITenantAppServic
     [Authorize(TenantManagementPermissions.Tenants.Create)]
     public virtual async Task<TenantDto> CreateAsync(TenantCreateDto input)
     {
-        var tenant = await TenantManager.CreateAsync(input.Name);
+        var tenant = await TenantManager.CreateAsync(input.Name, input.Code);
         input.MapExtraPropertiesTo(tenant);
 
         await TenantRepository.InsertAsync(tenant);
@@ -105,6 +105,7 @@ public class TenantAppService : TenantManagementAppServiceBase, ITenantAppServic
         var tenant = await TenantRepository.GetAsync(id);
 
         await TenantManager.ChangeNameAsync(tenant, input.Name);
+        await TenantManager.ChangeCodeAsync(tenant, input.Code);
 
         tenant.SetConcurrencyStampIfNotNull(input.ConcurrencyStamp);
         input.MapExtraPropertiesTo(tenant);

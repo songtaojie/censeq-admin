@@ -11,6 +11,10 @@ public abstract class TenantCreateOrUpdateDtoBase : ExtensibleObject
     [Display(Name = "TenantName")]
     public string Name { get; set; }
 
+    [DynamicStringLength(typeof(TenantConsts), nameof(TenantConsts.MaxCodeLength))]
+    [Display(Name = "TenantCode")]
+    public string? Code { get; set; }
+
     public TenantCreateOrUpdateDtoBase() : base(false)
     {
 

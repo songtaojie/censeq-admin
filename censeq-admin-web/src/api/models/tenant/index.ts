@@ -4,18 +4,21 @@
 export interface TenantDto {
 	id: string;
 	name?: string;
+	code?: string | null;
 	concurrencyStamp?: string;
 	extraProperties?: Record<string, unknown>;
 }
 
 export interface TenantCreateDto {
 	name: string;
+	code: string;
 	adminEmailAddress: string;
 	adminPassword: string;
 }
 
 export interface TenantUpdateDto {
 	name: string;
+	code?: string | null;
 	concurrencyStamp?: string;
 }
 

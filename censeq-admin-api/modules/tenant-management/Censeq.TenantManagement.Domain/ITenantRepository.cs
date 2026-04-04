@@ -14,6 +14,11 @@ public interface ITenantRepository : IBasicRepository<Tenant, Guid>
         bool includeDetails = true,
         CancellationToken cancellationToken = default);
 
+    Task<Tenant?> FindByCodeAsync(
+        string code,
+        bool includeDetails = true,
+        CancellationToken cancellationToken = default);
+
     [Obsolete("Use FindByNameAsync method.")]
     Tenant? FindByName(
         string normalizedName,

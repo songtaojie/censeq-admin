@@ -5,6 +5,15 @@
 				<el-form-item label="租户名称" prop="name">
 					<el-input v-model="state.ruleForm.name" placeholder="请输入租户名称" clearable maxlength="64" show-word-limit />
 				</el-form-item>
+				<el-form-item label="租户编码" prop="code">
+					<el-input
+						v-model="state.ruleForm.code"
+						placeholder="企业登录使用，须唯一（保存时统一为大写）"
+						clearable
+						maxlength="64"
+						show-word-limit
+					/>
+				</el-form-item>
 				<template v-if="state.dialog.type === 'add'">
 					<el-form-item label="管理员邮箱" prop="adminEmailAddress">
 						<el-input v-model="state.ruleForm.adminEmailAddress" type="email" placeholder="用于租户内初始管理员账号" clearable maxlength="256" />
@@ -28,7 +37,7 @@
 					show-icon
 					:closable="false"
 					class="mt10"
-					title="当前账号无「管理连接串」权限，仅可修改租户名称。"
+					title="当前账号无「管理连接串」权限，仅可修改租户名称与编码。"
 				/>
 			</el-form>
 			<template #footer>
@@ -54,6 +63,7 @@ const formRef = ref<FormInstance>();
 
 const emptyForm = () => ({
 	name: '',
+	code: '',
 	adminEmailAddress: '',
 	adminPassword: '',
 	defaultConnectionString: '',
@@ -88,6 +98,10 @@ const formRules = computed<FormRules>(() => {
 		],
 	};
 	if (state.dialog.type === 'add') {
+		rules.code = [
+			{ required: true, message: '请输入租户编码', trigger: 'blur' },
+			{ min: 1, max: 64, message: '长度 1~64 个字符', trigger: 'blur' },
+		];
 		rules.adminEmailAddress = [
 			{ required: true, message: '请输入管理员邮箱', trigger: 'blur' },
 			{ type: 'email', message: '邮箱格式不正确', trigger: 'blur' },
@@ -96,6 +110,8 @@ const formRules = computed<FormRules>(() => {
 			{ required: true, message: '请输入管理员密码', trigger: 'blur' },
 			{ min: 6, max: 128, message: '建议长度 6~128 个字符', trigger: 'blur' },
 		];
+	} else {
+		rules.code = [{ max: 64, message: '最长 64 个字符', trigger: 'blur' }];
 	}
 	return rules;
 });
@@ -113,6 +129,7 @@ const openDialog = async (type: string, row?: TenantDto) => {
 	state.dialog.type = type as 'add' | 'edit';
 	if (type === 'edit' && row) {
 		state.ruleForm.name = row.name ?? '';
+		state.ruleForm.code = row.code ?? '';
 		state.ruleForm.id = row.id!;
 		state.ruleForm.concurrencyStamp = row.concurrencyStamp ?? '';
 		state.dialog.title = '修改租户';
@@ -180,6 +197,7 @@ const onSubmit = async () => {
 			if (state.dialog.type === 'add') {
 				await createTenant({
 					name: state.ruleForm.name.trim(),
+					code: state.ruleForm.code.trim(),
 					adminEmailAddress: state.ruleForm.adminEmailAddress.trim(),
 					adminPassword: state.ruleForm.adminPassword,
 				});
@@ -187,6 +205,7 @@ const onSubmit = async () => {
 			} else if (state.dialog.type === 'edit') {
 				await updateTenant(state.ruleForm.id, {
 					name: state.ruleForm.name.trim(),
+					code: state.ruleForm.code.trim() || null,
 					concurrencyStamp: state.ruleForm.concurrencyStamp,
 				});
 				if (state.connectionStringUi.visible) {

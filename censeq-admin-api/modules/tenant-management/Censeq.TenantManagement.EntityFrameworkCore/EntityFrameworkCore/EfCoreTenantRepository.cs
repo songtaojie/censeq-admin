@@ -30,6 +30,23 @@ public class EfCoreTenantRepository : EfCoreRepository<ITenantManagementDbContex
             .FirstOrDefaultAsync(t => t.NormalizedName == normalizedName, GetCancellationToken(cancellationToken));
     }
 
+    public virtual async Task<Tenant?> FindByCodeAsync(
+        string code,
+        bool includeDetails = true,
+        CancellationToken cancellationToken = default)
+    {
+        var normalized = Tenant.NormalizeCode(code);
+        if (normalized == null)
+        {
+            return null;
+        }
+
+        return await (await GetDbSetAsync())
+            .IncludeDetails(includeDetails)
+            .OrderBy(t => t.Id)
+            .FirstOrDefaultAsync(t => t.Code == normalized, GetCancellationToken(cancellationToken));
+    }
+
     [Obsolete("Use FindByNameAsync method.")]
     public virtual Tenant? FindByName(string normalizedName, bool includeDetails = true)
     {
@@ -61,7 +78,8 @@ public class EfCoreTenantRepository : EfCoreRepository<ITenantManagementDbContex
             .WhereIf(
                 !filter.IsNullOrWhiteSpace(),
                 u =>
-                    u.Name.Contains(filter!)
+                    u.Name.Contains(filter!) ||
+                    (u.Code != null && u.Code.Contains(filter!))
             )
             .OrderBy(sorting.IsNullOrEmpty() ? nameof(Tenant.Name) : sorting)
             .PageBy(skipCount, maxResultCount)
@@ -74,7 +92,8 @@ public class EfCoreTenantRepository : EfCoreRepository<ITenantManagementDbContex
             .WhereIf(
                 !filter.IsNullOrWhiteSpace(),
                 u =>
-                    u.Name.Contains(filter!)
+                    u.Name.Contains(filter!) ||
+                    (u.Code != null && u.Code.Contains(filter!))
             ).CountAsync(cancellationToken: GetCancellationToken(cancellationToken));
     }
 

@@ -1,0 +1,18 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "build",
+            "command": "dotnet",
+            "args": [
+                "build",
+                "${workspaceFolder}/src/Censeq.Admin.HttpApi.Host/Censeq.Admin.HttpApi.Host.csproj",
+                "-c",
+                "Debug"
+            ],
+            "type": "shell",
+            "problemMatcher": "$msCompile",
+            "group": "build"
+        }
+    ]
+}

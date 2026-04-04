@@ -2,7 +2,7 @@
 	<div class="system-tenant-container layout-padding">
 		<div class="system-tenant-padding layout-padding-auto layout-padding-view">
 			<div class="system-tenant-search mb15">
-				<el-input v-model="state.tableData.param.search" size="default" placeholder="租户名称过滤" style="max-width: 200px" clearable @keyup.enter="onQuery" />
+				<el-input v-model="state.tableData.param.search" size="default" placeholder="租户名称或编码过滤" style="max-width: 200px" clearable @keyup.enter="onQuery" />
 				<el-button size="default" type="primary" class="ml10" @click="onQuery">
 					<el-icon>
 						<ele-Search />
@@ -19,6 +19,7 @@
 			<el-table :data="state.tableData.data" v-loading="state.tableData.loading" style="width: 100%">
 				<el-table-column type="index" label="序号" width="60" />
 				<el-table-column prop="name" label="租户名称" min-width="160" show-overflow-tooltip />
+				<el-table-column prop="code" label="租户编码" min-width="120" show-overflow-tooltip />
 				<el-table-column prop="id" label="租户 Id" min-width="280" show-overflow-tooltip />
 				<el-table-column label="操作" width="140" fixed="right">
 					<template #default="scope">

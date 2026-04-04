@@ -8,7 +8,9 @@ namespace Censeq.TenantManagement;
 public interface ITenantManager : IDomainService
 {
     [NotNull]
-    Task<Tenant> CreateAsync([NotNull] string name);
+    Task<Tenant> CreateAsync([NotNull] string name, [CanBeNull] string? code);
 
     Task ChangeNameAsync([NotNull] Tenant tenant, [NotNull] string name);
+
+    Task ChangeCodeAsync([NotNull] Tenant tenant, [CanBeNull] string? code);
 }

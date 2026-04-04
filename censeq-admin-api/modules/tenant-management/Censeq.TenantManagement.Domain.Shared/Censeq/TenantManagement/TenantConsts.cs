@@ -8,6 +8,11 @@ public static class TenantConsts
     public static int MaxNameLength { get; set; } = 64;
 
     /// <summary>
+    /// Default value: 64
+    /// </summary>
+    public static int MaxCodeLength { get; set; } = 64;
+
+    /// <summary>
     /// Default value: 128
     /// </summary>
     public static int MaxPasswordLength { get; set; } = 128;
