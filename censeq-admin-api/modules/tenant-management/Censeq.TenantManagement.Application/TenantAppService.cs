@@ -12,7 +12,6 @@ using Volo.Abp.ObjectExtending;
 
 namespace Censeq.TenantManagement;
 
-[Authorize(TenantManagementPermissions.Tenants.Default)]
 public class TenantAppService : TenantManagementAppServiceBase, ITenantAppService
 {
     protected IDataSeeder DataSeeder { get; }
@@ -35,6 +34,7 @@ public class TenantAppService : TenantManagementAppServiceBase, ITenantAppServic
         LocalEventBus = localEventBus;
     }
 
+    [Authorize]
     public virtual async Task<TenantDto> GetAsync(Guid id)
     {
         return ObjectMapper.Map<Tenant, TenantDto>(
@@ -42,6 +42,7 @@ public class TenantAppService : TenantManagementAppServiceBase, ITenantAppServic
         );
     }
 
+    [Authorize]
     public virtual async Task<PagedResultDto<TenantDto>> GetListAsync(GetTenantsInput input)
     {
         if (input.Sorting.IsNullOrWhiteSpace())

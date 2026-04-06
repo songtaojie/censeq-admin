@@ -9,7 +9,7 @@
 					</el-icon>
 					查询
 				</el-button>
-				<el-button size="default" type="success" class="ml10" @click="onOpenAddRole('add')">
+				<el-button size="default" type="success" class="ml10" @click="onOpenAddRole">
 					<el-icon>
 						<ele-FolderAdd />
 					</el-icon>
@@ -19,30 +19,49 @@
 			<el-table :data="state.tableData.data" v-loading="state.tableData.loading" style="width: 100%">
 				<el-table-column type="index" label="序号" width="60" />
 				<el-table-column prop="name" label="角色名称" show-overflow-tooltip></el-table-column>
-				<!-- <el-table-column prop="sort" label="排序" show-overflow-tooltip></el-table-column> -->
-				 <el-table-column prop="isDefault" label="是否默认" show-overflow-tooltip>
+				<el-table-column prop="isDefault" label="是否默认" width="100" align="center">
 					<template #default="scope">
-						<el-switch v-model="scope.row.isDefault" disabled size="default" />
+						<el-tag size="small" :type="scope.row.isDefault ? 'success' : 'info'">
+							{{ scope.row.isDefault ? '是' : '否' }}
+						</el-tag>
 					</template>
 				</el-table-column>
-				<el-table-column prop="isPublic" label="是否公共" show-overflow-tooltip>
+				<el-table-column prop="isPublic" label="是否公共" width="100" align="center">
 					<template #default="scope">
-						<el-switch v-model="scope.row.isPublic" disabled size="default" />
+						<el-tag size="small" :type="scope.row.isPublic ? 'success' : 'info'">
+							{{ scope.row.isPublic ? '是' : '否' }}
+						</el-tag>
 					</template>
 				</el-table-column>
-				<el-table-column prop="isStatic" label="是否静态" show-overflow-tooltip>
+				<el-table-column prop="isStatic" label="是否静态" width="100" align="center">
 					<template #default="scope">
-						<el-switch v-model="scope.row.isStatic" disabled  size="default" />
+						<el-tag size="small" :type="scope.row.isStatic ? 'warning' : 'info'">
+							{{ scope.row.isStatic ? '是' : '否' }}
+						</el-tag>
 					</template>
 				</el-table-column>
-				<!-- <el-table-column prop="describe" label="角色描述" show-overflow-tooltip></el-table-column> -->
-				<!-- <el-table-column prop="createTime" label="创建时间" show-overflow-tooltip></el-table-column> -->
-				<el-table-column label="操作" width="100">
+				<el-table-column label="操作" width="380" align="center" fixed="right">
 					<template #default="scope">
-						<el-button :disabled="scope.row.isDefault" size="small" text type="primary" @click="onOpenEditRole('edit', scope.row)"
-							>修改</el-button
-						>
-						<el-button :disabled="scope.row.isDefault" size="small" text type="primary" @click="onRowDel(scope.row)">删除</el-button>
+						<el-button size="small" text type="primary" @click="onOpenEditRole(scope.row)">
+							<el-icon><ele-Edit /></el-icon>
+							编辑
+						</el-button>
+						<el-button size="small" text type="primary" @click="onOpenPermission(scope.row)">
+							<el-icon><ele-Menu /></el-icon>
+							授权菜单
+						</el-button>
+						<el-button size="small" text type="primary" @click="onOpenClaims(scope.row)">
+							<el-icon><ele-DocumentChecked /></el-icon>
+							角色声明
+						</el-button>
+						<el-popconfirm title="确定删除该角色吗？" @confirm="onRowDel(scope.row)">
+							<template #reference>
+								<el-button size="small" text type="danger" :disabled="scope.row.isDefault || scope.row.isStatic">
+									<el-icon><ele-Delete /></el-icon>
+									删除
+								</el-button>
+							</template>
+						</el-popconfirm>
 					</template>
 				</el-table-column>
 			</el-table>
@@ -60,20 +79,32 @@
 			>
 			</el-pagination>
 		</div>
-		<RoleDialog ref="roleDialogRef" @refresh="getTableData()" />
+
+		<!-- 新增/编辑角色对话框 -->
+		<RoleEditDialog ref="roleEditRef" @refresh="getTableData()" />
+		<!-- 授权菜单对话框 -->
+		<RolePermissionDialog ref="rolePermissionRef" />
+		<!-- 角色声明对话框 -->
+		<RoleClaimDialog ref="roleClaimRef" />
 	</div>
 </template>
 
 <script setup lang="ts" name="systemRole">
 import { defineAsyncComponent, reactive, onMounted, ref } from 'vue';
-import { ElMessageBox, ElMessage } from 'element-plus';
+import { ElMessage } from 'element-plus';
 import { useIdentityApi } from '/@/api/apis';
 import { IdentityRoleDto } from '/@/api/models/identity';
+
 // 引入组件
-const RoleDialog = defineAsyncComponent(() => import('/@/views/system/role/dialog.vue'));
+const RoleEditDialog = defineAsyncComponent(() => import('./edit.vue'));
+const RolePermissionDialog = defineAsyncComponent(() => import('./permission.vue'));
+const RoleClaimDialog = defineAsyncComponent(() => import('./claim.vue'));
 
 // 定义变量内容
-const roleDialogRef = ref();
+const roleEditRef = ref();
+const rolePermissionRef = ref();
+const roleClaimRef = ref();
+
 const state = reactive({
 	tableData: {
 		data: [] as Array<IdentityRoleDto>,
@@ -86,6 +117,7 @@ const state = reactive({
 		},
 	},
 });
+
 // 初始化表格数据
 const getTableData = async () => {
 	state.tableData.loading = true;
@@ -102,42 +134,56 @@ const getTableData = async () => {
 		state.tableData.loading = false;
 	}
 };
+
 // 打开新增角色弹窗
-const onOpenAddRole = (type: string) => {
-	roleDialogRef.value.openDialog(type);
+const onOpenAddRole = () => {
+	roleEditRef.value.openDialog();
 };
-// 打开修改角色弹窗
-const onOpenEditRole = (type: string, row: Object) => {
-	roleDialogRef.value.openDialog(type, row);
+
+// 打开编辑角色弹窗
+const onOpenEditRole = (row: IdentityRoleDto) => {
+	roleEditRef.value.openDialog(row);
 };
+
+// 打开授权菜单弹窗
+const onOpenPermission = (row: IdentityRoleDto) => {
+	rolePermissionRef.value.openDialog(row);
+};
+
+// 打开角色声明弹窗
+const onOpenClaims = (row: IdentityRoleDto) => {
+	roleClaimRef.value.openDialog(row);
+};
+
 // 删除角色
-const onRowDel = (row: IdentityRoleDto) => {
-	ElMessageBox.confirm(`此操作将永久删除角色「${row.name}」，是否继续?`, '提示', {
-		confirmButtonText: '确认',
-		cancelButtonText: '取消',
-		type: 'warning',
-	})
-		.then(async () => {
-			const { deleteRole } = useIdentityApi();
-			await deleteRole(row.id!);
-			ElMessage.success('删除成功');
-			await getTableData();
-		})
-		.catch(() => {});
+const onRowDel = async (row: IdentityRoleDto) => {
+	try {
+		const { deleteRole } = useIdentityApi();
+		await deleteRole(row.id!);
+		ElMessage.success('删除成功');
+		await getTableData();
+	} catch (error) {
+		// 删除失败
+	}
 };
+
 const onQuery = () => {
+	state.tableData.param.pageIndex = 1;
 	getTableData();
 };
+
 // 分页改变
 const onHandleSizeChange = (val: number) => {
 	state.tableData.param.pageSize = val;
 	getTableData();
 };
+
 // 分页改变
 const onHandleCurrentChange = (val: number) => {
 	state.tableData.param.pageIndex = val;
 	getTableData();
 };
+
 // 页面加载时
 onMounted(() => {
 	getTableData();

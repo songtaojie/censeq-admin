@@ -90,6 +90,19 @@ export interface IdentityUserUpdateRolesDto {
 	roleNames: string[];
 }
 
+/** 角色声明DTO */
+export interface IdentityRoleClaimDto {
+	id: string;
+	claimType: string;
+	claimValue: string;
+}
+
+/** 创建角色声明DTO */
+export interface IdentityRoleClaimCreateDto {
+	claimType: string;
+	claimValue: string;
+}
+
 export interface UserLookupCountRequest {
 	filter?: string;
 }

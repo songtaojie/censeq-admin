@@ -9,6 +9,7 @@
 					<el-input
 						v-model="state.ruleForm.code"
 						placeholder="企业登录使用，须唯一（保存时统一为大写）"
+						:disabled="state.dialog.type === 'edit'"
 						clearable
 						maxlength="64"
 						show-word-limit
@@ -96,12 +97,12 @@ const formRules = computed<FormRules>(() => {
 			{ required: true, message: '请输入租户名称', trigger: 'blur' },
 			{ min: 1, max: 64, message: '长度 1~64 个字符', trigger: 'blur' },
 		],
-	};
-	if (state.dialog.type === 'add') {
-		rules.code = [
+		code: [
 			{ required: true, message: '请输入租户编码', trigger: 'blur' },
 			{ min: 1, max: 64, message: '长度 1~64 个字符', trigger: 'blur' },
-		];
+		],
+	};
+	if (state.dialog.type === 'add') {
 		rules.adminEmailAddress = [
 			{ required: true, message: '请输入管理员邮箱', trigger: 'blur' },
 			{ type: 'email', message: '邮箱格式不正确', trigger: 'blur' },
@@ -110,8 +111,6 @@ const formRules = computed<FormRules>(() => {
 			{ required: true, message: '请输入管理员密码', trigger: 'blur' },
 			{ min: 6, max: 128, message: '建议长度 6~128 个字符', trigger: 'blur' },
 		];
-	} else {
-		rules.code = [{ max: 64, message: '最长 64 个字符', trigger: 'blur' }];
 	}
 	return rules;
 });
@@ -205,7 +204,7 @@ const onSubmit = async () => {
 			} else if (state.dialog.type === 'edit') {
 				await updateTenant(state.ruleForm.id, {
 					name: state.ruleForm.name.trim(),
-					code: state.ruleForm.code.trim() || null,
+					code: state.ruleForm.code.trim(),
 					concurrencyStamp: state.ruleForm.concurrencyStamp,
 				});
 				if (state.connectionStringUi.visible) {

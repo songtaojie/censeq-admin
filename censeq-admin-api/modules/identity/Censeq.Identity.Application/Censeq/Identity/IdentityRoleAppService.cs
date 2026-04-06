@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -85,6 +86,8 @@ public class IdentityRoleAppService : IdentityAppServiceBase, IIdentityRoleAppSe
         if (role.Name != input.Name)
         {
             (await RoleManager.SetRoleNameAsync(role, input.Name)).CheckErrors();
+            // SetRoleNameAsync 已经更新了角色，需要重新获取以更新 ConcurrencyStamp
+            role = await RoleManager.GetByIdAsync(id);
         }
 
         role.IsDefault = input.IsDefault;
@@ -93,7 +96,6 @@ public class IdentityRoleAppService : IdentityAppServiceBase, IIdentityRoleAppSe
         input.MapExtraPropertiesTo(role);
 
         (await RoleManager.UpdateAsync(role)).CheckErrors();
-        await CurrentUnitOfWork!.SaveChangesAsync();
 
         return ObjectMapper!.Map<IdentityRole, IdentityRoleDto>(role!);
     }
@@ -108,5 +110,62 @@ public class IdentityRoleAppService : IdentityAppServiceBase, IIdentityRoleAppSe
         }
 
         (await RoleManager.DeleteAsync(role)).CheckErrors();
+    }
+
+    [Authorize(IdentityPermissions.Roles.Default)]
+    public virtual async Task<IdentityRoleClaimListDto> GetClaimsAsync(Guid roleId)
+    {
+        var role = await RoleRepository.FindByNormalizedNameAsync(
+            (await RoleManager.GetByIdAsync(roleId)).NormalizedName,
+            includeDetails: true);
+        if (role == null)
+        {
+            throw new Volo.Abp.Domain.Entities.EntityNotFoundException(typeof(IdentityRole), roleId);
+        }
+
+        var claims = role.Claims.Select(c => new IdentityRoleClaimDto
+        {
+            Id = c.Id,
+            ClaimType = c.ClaimType,
+            ClaimValue = c.ClaimValue
+        }).ToList();
+
+        return new IdentityRoleClaimListDto(claims);
+    }
+
+    [Authorize(IdentityPermissions.Roles.Update)]
+    public virtual async Task AddClaimAsync(Guid roleId, IdentityRoleClaimCreateDto input)
+    {
+        var role = await RoleRepository.FindByNormalizedNameAsync(
+            (await RoleManager.GetByIdAsync(roleId)).NormalizedName,
+            includeDetails: true);
+        if (role == null)
+        {
+            throw new Volo.Abp.Domain.Entities.EntityNotFoundException(typeof(IdentityRole), roleId);
+        }
+
+        var claim = new System.Security.Claims.Claim(input.ClaimType, input.ClaimValue);
+        role.AddClaim(GuidGenerator, claim);
+
+        await RoleRepository.UpdateAsync(role);
+    }
+
+    [Authorize(IdentityPermissions.Roles.Update)]
+    public virtual async Task RemoveClaimAsync(Guid roleId, Guid claimId)
+    {
+        var role = await RoleRepository.FindByNormalizedNameAsync(
+            (await RoleManager.GetByIdAsync(roleId)).NormalizedName,
+            includeDetails: true);
+        if (role == null)
+        {
+            throw new Volo.Abp.Domain.Entities.EntityNotFoundException(typeof(IdentityRole), roleId);
+        }
+
+        var claim = role.Claims.FirstOrDefault(c => c.Id == claimId);
+        if (claim != null)
+        {
+            role.Claims.Remove(claim);
+            await RoleRepository.UpdateAsync(role);
+        }
     }
 }

@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Censeq.Admin.Data;
 using Serilog;
 using Serilog.Events;
 
@@ -35,6 +36,10 @@ public class Program
             await builder.AddApplicationAsync<CenseqHttpApiHostModule>();
             var app = builder.Build();
             await app.InitializeApplicationAsync();
+            if (app.Services.GetRequiredService<IHostEnvironment>().IsDevelopment())
+            {
+                await app.Services.GetRequiredService<AdminDbMigrationService>().MigrateAsync();
+            }
             await app.RunAsync();
             return 0;
         }

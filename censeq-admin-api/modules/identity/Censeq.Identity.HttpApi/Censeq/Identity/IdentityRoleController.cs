@@ -60,4 +60,25 @@ public class IdentityRoleController : AbpControllerBase, IIdentityRoleAppService
     {
         return RoleAppService.DeleteAsync(id);
     }
+
+    [HttpGet]
+    [Route("{roleId}/claims")]
+    public virtual Task<IdentityRoleClaimListDto> GetClaimsAsync(Guid roleId)
+    {
+        return RoleAppService.GetClaimsAsync(roleId);
+    }
+
+    [HttpPost]
+    [Route("{roleId}/claims")]
+    public virtual Task AddClaimAsync(Guid roleId, [FromBody] IdentityRoleClaimCreateDto input)
+    {
+        return RoleAppService.AddClaimAsync(roleId, input);
+    }
+
+    [HttpDelete]
+    [Route("{roleId}/claims/{claimId}")]
+    public virtual Task RemoveClaimAsync(Guid roleId, Guid claimId)
+    {
+        return RoleAppService.RemoveClaimAsync(roleId, claimId);
+    }
 }

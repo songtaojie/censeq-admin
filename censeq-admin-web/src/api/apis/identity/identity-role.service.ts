@@ -1,6 +1,8 @@
 import type {
 	GetIdentityRolesRequest,
 	GetIdentityUsersRequest,
+	IdentityRoleClaimCreateDto,
+	IdentityRoleClaimDto,
 	IdentityRoleCreateDto,
 	IdentityRoleDto,
 	IdentityRoleUpdateDto,
@@ -37,6 +39,16 @@ export function useIdentityApi() {
 		},
 		deleteRole: async (id: string): Promise<void> => {
 			return await identityApi.delete<void>(`api/identity/roles/${id}`, undefined);
+		},
+
+		getRoleClaims: async (roleId: string): Promise<ListResponseDto<IdentityRoleClaimDto>> => {
+			return await identityApi.request<ListResponseDto<IdentityRoleClaimDto>>(`api/identity/roles/${roleId}/claims`, 'GET');
+		},
+		addRoleClaim: async (roleId: string, input: IdentityRoleClaimCreateDto): Promise<void> => {
+			return await identityApi.request<void>(`api/identity/roles/${roleId}/claims`, 'POST', input);
+		},
+		removeRoleClaim: async (roleId: string, claimId: string): Promise<void> => {
+			return await identityApi.delete<void>(`api/identity/roles/${roleId}/claims/${claimId}`, undefined);
 		},
 
 		getUserPage: async (input: GetIdentityUsersRequest): Promise<PagedResponseDto<IdentityUserDto>> => {

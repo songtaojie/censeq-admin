@@ -64,16 +64,27 @@
                                 使用平台（宿主）管理员账号登录。
                             </div>
                             <div class="row mb-4 col-12 enterprise-tenant-field" style="display: @(Model.AutoSelectEnterpriseTab ? "block" : "none")">
-                                <label class="form-label" for="EnterpriseTenantCode">租户编码</label>
-                                @if (Model.IsEnterpriseTenantPresetFromLink)
-                                {
-                                    <input asp-for="EnterpriseTenantCode" class="form-control" autocomplete="off" readonly />
-                                    <div class="form-text">已由登录链接指定，不可修改。</div>
-                                }
-                                else
-                                {
-                                    <input asp-for="EnterpriseTenantCode" class="form-control" autocomplete="off" placeholder="请输入租户编码（不区分大小写）" />
-                                }
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="fa-solid fa-building"></i></span>
+                                    @if (Model.IsEnterpriseTenantPresetFromLink)
+                                    {
+                                        <input asp-for="EnterpriseTenantCode" class="form-control" autocomplete="off" readonly />
+                                    }
+                                    else
+                                    {
+                                        <input asp-for="EnterpriseTenantCode" class="form-control" autocomplete="off" placeholder="请输入租户编码（不区分大小写）" />
+                                    }
+                                </div>
+                                <span class="form-text">
+                                    @if (Model.IsEnterpriseTenantPresetFromLink)
+                                    {
+                                        <span>已由登录链接指定，不可修改。</span>
+                                    }
+                                    else
+                                    {
+                                        <span>用于企业租户登录，系统会自动忽略大小写。</span>
+                                    }
+                                </span>
                             </div>
 
                             <div class="row mb-4 col-12">

@@ -9,7 +9,7 @@ var permissionApi = useBaseApi('permission-management');
 export function usePermissionApi() {
 	return {
 		updatePermission: async (providerName: string, providerKey: string, input: UpdatePermissionsDto): Promise<void> => {
-			return await permissionApi.update<void>('api/permission-management/permissions', input);
+			return await permissionApi.update<void>(`api/permission-management/permissions?providerName=${providerName}&providerKey=${providerKey}`, input);
 		},
 		getPermissionList: async (providerName: string, providerKey: string): Promise<GetPermissionListResponseDto> => {
 			return await permissionApi.list<GetPermissionListResponseDto>('api/permission-management/permissions', { providerName, providerKey });
