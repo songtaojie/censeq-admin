@@ -26,6 +26,7 @@
         <ProjectReference Include="..\..\framework\Censeq.Framework.AspNetCore\Censeq.Framework.AspNetCore.csproj" />
         <ProjectReference Include="..\..\framework\Censeq.Framework.Swashbuckle\Censeq.Framework.Swashbuckle.csproj" />
         <ProjectReference Include="..\..\modules\account\Censeq.Account.Web.OpenIddict\Censeq.Account.Web.OpenIddict.csproj" />
+        <ProjectReference Include="..\..\modules\audit-logging\Censeq.AuditLogging.HttpApi\Censeq.AuditLogging.HttpApi.csproj" />
         <ProjectReference Include="..\..\modules\basic-theme\Censeq.Framework.AspNetCore.Mvc.UI.Theme.Basic\Censeq.Framework.AspNetCore.Mvc.UI.Theme.Basic.csproj" />
         <ProjectReference Include="..\Censeq.Admin.Application\Censeq.Admin.Application.csproj" />
         <ProjectReference Include="..\Censeq.Admin.EntityFrameworkCore\Censeq.Admin.EntityFrameworkCore.csproj" />

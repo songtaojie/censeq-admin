@@ -1,0 +1,23 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+	<Import Project="..\..\..\common.props" />
+
+	<PropertyGroup>
+		<AssemblyName>Censeq.AuditLogging.Application</AssemblyName>
+		<PackageId>Censeq.AuditLogging.Application</PackageId>
+		<Nullable>enable</Nullable>
+		<RootNamespace>Censeq.AuditLogging</RootNamespace>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Volo.Abp.Ddd.Application" />
+		<PackageReference Include="Volo.Abp.EventBus" />
+		<PackageReference Include="Volo.Abp.Data" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\Censeq.AuditLogging.Application.Contracts\Censeq.AuditLogging.Application.Contracts.csproj" />
+		<ProjectReference Include="..\Censeq.AuditLogging.Domain\Censeq.AuditLogging.Domain.csproj" />
+	</ItemGroup>
+
+</Project>

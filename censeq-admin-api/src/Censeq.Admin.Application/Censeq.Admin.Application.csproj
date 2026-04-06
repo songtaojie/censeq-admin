@@ -9,6 +9,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\modules\audit-logging\Censeq.AuditLogging.Application\Censeq.AuditLogging.Application.csproj" />
     <ProjectReference Include="..\..\modules\feature-management\Censeq.FeatureManagement.Application\Censeq.FeatureManagement.Application.csproj" />
     <ProjectReference Include="..\..\modules\identity\Censeq.Identity.Application\Censeq.Identity.Application.csproj" />
     <ProjectReference Include="..\..\modules\permission-management\Censeq.PermissionManagement.Application\Censeq.PermissionManagement.Application.csproj" />

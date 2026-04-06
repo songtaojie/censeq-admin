@@ -1,3 +1,4 @@
+export * from './audit-logging/audit-log.service';
 export * from './feature-management/features.service';
 export * from './identity/identity-role.service';
 export * from './permission-management/permissions.service';

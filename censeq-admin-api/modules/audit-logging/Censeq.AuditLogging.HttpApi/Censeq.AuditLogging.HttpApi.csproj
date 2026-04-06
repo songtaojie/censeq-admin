@@ -1,0 +1,20 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+	<Import Project="..\..\..\common.props" />
+
+	<PropertyGroup>
+		<AssemblyName>Censeq.AuditLogging.HttpApi</AssemblyName>
+		<PackageId>Censeq.AuditLogging.HttpApi</PackageId>
+		<Nullable>enable</Nullable>
+		<RootNamespace>Censeq.AuditLogging</RootNamespace>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Volo.Abp.AspNetCore.Mvc" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\Censeq.AuditLogging.Application.Contracts\Censeq.AuditLogging.Application.Contracts.csproj" />
+	</ItemGroup>
+
+</Project>

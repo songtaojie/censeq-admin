@@ -216,6 +216,21 @@ export const dynamicRoutes: Array<RouteRecordRaw> = [
 							icon: 'ele-Setting',
 						},
 					},
+					{
+						path: '/system/audit-log',
+						name: 'systemAuditLog',
+						component: () => import('/@/views/system/audit-log/index.vue'),
+						meta: {
+							title: 'message.router.systemAuditLog',
+							isLink: '',
+							isHide: false,
+							isKeepAlive: true,
+							isAffix: false,
+							isIframe: false,
+							roles: ['admin'],
+							icon: 'ele-Document',
+						},
+					},
 				],
 			},
 			{

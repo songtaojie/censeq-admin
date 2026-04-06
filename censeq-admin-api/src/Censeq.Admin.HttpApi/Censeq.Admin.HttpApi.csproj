@@ -9,6 +9,7 @@
   </PropertyGroup>
 
 	<ItemGroup>
+		<ProjectReference Include="..\..\modules\audit-logging\Censeq.AuditLogging.HttpApi\Censeq.AuditLogging.HttpApi.csproj" />
 		<ProjectReference Include="..\..\modules\feature-management\Censeq.FeatureManagement.Domain.Shared\Censeq.FeatureManagement.Domain.Shared.csproj" />
 		<ProjectReference Include="..\..\modules\feature-management\Censeq.FeatureManagement.HttpApi\Censeq.FeatureManagement.HttpApi.csproj" />
 		<ProjectReference Include="..\..\modules\identity\Censeq.Identity.HttpApi\Censeq.Identity.HttpApi.csproj" />

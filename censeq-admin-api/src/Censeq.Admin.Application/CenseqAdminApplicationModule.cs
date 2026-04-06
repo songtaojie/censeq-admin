@@ -1,4 +1,5 @@
 ﻿using Censeq.Account;
+using Censeq.AuditLogging;
 using Censeq.FeatureManagement;
 using Censeq.Identity;
 using Censeq.PermissionManagement;
@@ -18,7 +19,8 @@ namespace Censeq.Admin;
     typeof(CenseqPermissionManagementApplicationModule),
     typeof(CenseqSettingManagementApplicationModule),
     typeof(CenseqTenantManagementApplicationModule),
-    typeof(CenseqFeatureManagementApplicationModule)
+    typeof(CenseqFeatureManagementApplicationModule),
+    typeof(CenseqAuditLoggingApplicationModule)
     )]
 public class CenseqAdminApplicationModule : AbpModule
 {

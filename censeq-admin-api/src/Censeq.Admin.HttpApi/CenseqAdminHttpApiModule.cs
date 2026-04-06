@@ -1,5 +1,6 @@
 using Censeq.Account;
 using Censeq.Admin.Localization;
+using Censeq.AuditLogging;
 using Censeq.FeatureManagement;
 using Censeq.FeatureManagement.JsonConverters;
 using Censeq.FeatureManagement.Localization;
@@ -23,7 +24,8 @@ namespace Censeq.Admin;
     typeof(CenseqPermissionManagementHttpApiModule),
     typeof(CenseqSettingManagementHttpApiModule),
     typeof(CenseqTenantManagementHttpApiModule),
-    typeof(CenseqFeatureManagementHttpApiModule)
+    typeof(CenseqFeatureManagementHttpApiModule),
+    typeof(CenseqAuditLoggingHttpApiModule)
     )]
 public class CenseqAdminHttpApiModule : AbpModule
 {

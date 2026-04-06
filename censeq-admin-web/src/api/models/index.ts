@@ -1,3 +1,4 @@
+export * from './audit-logging';
 export * from './core';
 export * from './feature-management';
 export * from './identity';
