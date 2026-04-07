@@ -15,5 +15,8 @@ public class CenseqIdentityApplicationModuleAutoMapperProfile : Profile
 
         CreateMap<OrganizationUnit, OrganizationUnitDto>()
             .MapExtraProperties();
+
+        CreateMap<IdentitySession, IdentitySessionDto>()
+            .ForMember(dest => dest.IsCurrentSession, opt => opt.Ignore());
     }
 }

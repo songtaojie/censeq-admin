@@ -1,5 +1,8 @@
+using System.Collections.Generic;
+using System.Linq;
 using System.Security.Claims;
 using Censeq.Identity;
+using Censeq.Identity.Entities;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -23,6 +26,7 @@ public partial class TokenController
     protected IOptions<CenseqIdentityOptions> CenseqIdentityOptions => LazyServiceProvider.LazyGetRequiredService<IOptions<CenseqIdentityOptions>>();
     protected IOptions<IdentityOptions> IdentityOptions => LazyServiceProvider.LazyGetRequiredService<IOptions<IdentityOptions>>();
     protected IdentitySecurityLogManager IdentitySecurityLogManager => LazyServiceProvider.LazyGetRequiredService<IdentitySecurityLogManager>();
+    protected IdentitySessionManager IdentitySessionManager => LazyServiceProvider.LazyGetRequiredService<IdentitySessionManager>();
 
     protected ISettingProvider SettingProvider => LazyServiceProvider.LazyGetRequiredService<ISettingProvider>();
     protected IdentityDynamicClaimsPrincipalContributorCache IdentityDynamicClaimsPrincipalContributorCache => LazyServiceProvider.LazyGetRequiredService<IdentityDynamicClaimsPrincipalContributorCache>();
@@ -363,6 +367,15 @@ public partial class TokenController
         // will be used to create an id_token, a token or a code.
         var principal = await SignInManager.CreateUserPrincipalAsync(user);
 
+        // Create session and add SessionId claim
+        var session = await CreateSessionAsync(user, request);
+        if (session != null)
+        {
+            var sessionIdClaim = new Claim(AbpClaimTypes.SessionId, session.SessionId)
+                .SetDestinations(OpenIddictConstants.Destinations.AccessToken, OpenIddictConstants.Destinations.IdentityToken);
+            principal.Identities.FirstOrDefault()!.AddClaim(sessionIdClaim);
+        }
+
         var rememberMe = request.GetParameter("RememberMe")?.ToString() ?? string.Empty;
         if (!rememberMe.IsNullOrWhiteSpace() && bool.TryParse(rememberMe, out var rememberMeValue) && rememberMeValue)
         {
@@ -386,6 +399,128 @@ public partial class TokenController
         );
 
         return SignIn(principal, OpenIddictServerAspNetCoreDefaults.AuthenticationScheme);
+    }
+
+    protected virtual async Task<IdentitySession> CreateSessionAsync(IdentityUser user, OpenIddictRequest request)
+    {
+        try
+        {
+            var device = GetDeviceType();
+            var deviceInfo = GetDeviceInfo();
+            var clientId = request.ClientId ?? string.Empty;
+
+            // 检查并限制最大并发会话数
+            var options = LazyServiceProvider.LazyGetRequiredService<IOptions<IdentitySessionOptions>>().Value;
+            if (options.MaxConcurrentSessions.HasValue && options.MaxConcurrentSessions.Value > 0)
+            {
+                var currentCount = await IdentitySessionManager.GetCountAsync(user.Id);
+                if (currentCount >= options.MaxConcurrentSessions.Value && options.AutoRemoveOldestSession)
+                {
+                    // 删除最旧的会话
+                    await IdentitySessionManager.DeleteAllAsync(user.Id);
+                }
+            }
+
+            var ipAddresses = GetClientIpAddresses();
+
+            return await IdentitySessionManager.CreateAsync(
+                user.Id,
+                device,
+                deviceInfo,
+                clientId,
+                ipAddresses
+            );
+        }
+        catch (Exception ex)
+        {
+            Logger.LogError(ex, "Failed to create session for user {UserId}", user.Id);
+            return null;
+        }
+    }
+
+    protected virtual string GetDeviceType()
+    {
+        var httpContext = HttpContext;
+        if (httpContext == null)
+        {
+            return IdentitySessionDevices.Web;
+        }
+
+        var userAgent = httpContext.Request.Headers.UserAgent.ToString();
+        if (string.IsNullOrEmpty(userAgent))
+        {
+            return IdentitySessionDevices.Web;
+        }
+
+        // 简单的设备类型检测
+        userAgent = userAgent.ToLowerInvariant();
+        if (userAgent.Contains("mobile") || userAgent.Contains("android") || userAgent.Contains("iphone"))
+        {
+            return IdentitySessionDevices.Mobile;
+        }
+
+        return IdentitySessionDevices.Web;
+    }
+
+    protected virtual string GetDeviceInfo()
+    {
+        try
+        {
+            var httpContext = HttpContext;
+            if (httpContext == null)
+            {
+                return string.Empty;
+            }
+
+            var options = LazyServiceProvider.LazyGetRequiredService<IOptions<IdentitySessionOptions>>().Value;
+            if (!options.SaveDeviceInfo)
+            {
+                return string.Empty;
+            }
+
+            var userAgent = httpContext.Request.Headers.UserAgent.ToString();
+            return userAgent?.Length > IdentitySessionConsts.MaxDeviceInfoLength
+                ? userAgent[..IdentitySessionConsts.MaxDeviceInfoLength]
+                : userAgent ?? string.Empty;
+        }
+        catch
+        {
+            return string.Empty;
+        }
+    }
+
+    protected virtual string GetClientIpAddresses()
+    {
+        try
+        {
+            var httpContext = HttpContext;
+            if (httpContext == null)
+            {
+                return string.Empty;
+            }
+
+            var ips = new List<string>();
+
+            // 尝试获取 X-Forwarded-For 头（经过代理时）
+            var forwardedFor = httpContext.Request.Headers["X-Forwarded-For"].FirstOrDefault();
+            if (!string.IsNullOrWhiteSpace(forwardedFor))
+            {
+                ips.AddRange(forwardedFor.Split(',').Select(ip => ip.Trim()).Where(ip => !string.IsNullOrWhiteSpace(ip)));
+            }
+
+            // 添加远程 IP
+            var remoteIp = httpContext.Connection.RemoteIpAddress?.ToString();
+            if (!string.IsNullOrWhiteSpace(remoteIp) && !ips.Contains(remoteIp))
+            {
+                ips.Add(remoteIp);
+            }
+
+            return string.Join(",", ips);
+        }
+        catch
+        {
+            return string.Empty;
+        }
     }
 
     protected virtual async Task<bool> IsTfaEnabledAsync(IdentityUser user)

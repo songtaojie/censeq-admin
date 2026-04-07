@@ -1,10 +1,13 @@
 using System.Collections.Generic;
+using System.Linq;
+using System.Security.Claims;
 using System.Security.Principal;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
 using OpenIddict.Abstractions;
 using OpenIddict.Server.AspNetCore;
+using Volo.Abp.Security.Claims;
 
 namespace Censeq.OpenIddict.Controllers;
 
@@ -47,8 +50,27 @@ public partial class TokenController
 
             await OpenIddictClaimsPrincipalManager.HandleAsync(request, principal);
 
+            // 更新现有session的最后访问时间
+            await UpdateSessionLastAccessedTimeAsync(principal);
+
             // Returning a SignInResult will ask OpenIddict to issue the appropriate access/identity tokens.
             return SignIn(principal, OpenIddictServerAspNetCoreDefaults.AuthenticationScheme);
+        }
+    }
+
+    protected virtual async Task UpdateSessionLastAccessedTimeAsync(ClaimsPrincipal principal)
+    {
+        try
+        {
+            var sessionId = principal.FindFirstValue(AbpClaimTypes.SessionId);
+            if (!string.IsNullOrEmpty(sessionId))
+            {
+                await IdentitySessionManager.UpdateLastAccessedTimeAsync(sessionId);
+            }
+        }
+        catch (Exception ex)
+        {
+            Logger.LogError(ex, "Failed to update session last accessed time during token refresh");
         }
     }
 }

@@ -6,6 +6,7 @@ import type {
 	IdentityRoleCreateDto,
 	IdentityRoleDto,
 	IdentityRoleUpdateDto,
+	IdentitySessionDto,
 	IdentityUserCreateDto,
 	IdentityUserDto,
 	IdentityUserOrganizationUnitsDto,
@@ -93,6 +94,26 @@ export function useIdentityApi() {
 		},
 		deleteOrganizationUnit: async (id: string): Promise<void> => {
 			return await identityApi.delete<void>(`api/identity/organization-units/${id}`, undefined);
+		},
+
+		// 会话管理 API
+		getMySessions: async (): Promise<IdentitySessionDto[]> => {
+			return await identityApi.request<IdentitySessionDto[]>('api/identity/sessions/my-sessions', 'GET');
+		},
+		getUserSessions: async (userId: string): Promise<IdentitySessionDto[]> => {
+			return await identityApi.request<IdentitySessionDto[]>(`api/identity/sessions/user/${userId}`, 'GET');
+		},
+		revokeMySession: async (sessionId: string): Promise<void> => {
+			return await identityApi.delete<void>(`api/identity/sessions/my-sessions/${sessionId}`, undefined);
+		},
+		revokeUserSession: async (userId: string, sessionId: string): Promise<void> => {
+			return await identityApi.delete<void>(`api/identity/sessions/user/${userId}/${sessionId}`, undefined);
+		},
+		revokeAllOtherSessions: async (): Promise<void> => {
+			return await identityApi.delete<void>('api/identity/sessions/my-sessions/others', undefined);
+		},
+		revokeAllUserSessions: async (userId: string): Promise<void> => {
+			return await identityApi.delete<void>(`api/identity/sessions/user/${userId}/all`, undefined);
 		},
 	};
 }

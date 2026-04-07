@@ -3,7 +3,9 @@
     "allow": [
       "Bash(dotnet ef:*)",
       "Bash(dotnet build:*)",
-      "Bash(dotnet sln:*)"
+      "Bash(dotnet sln:*)",
+      "Bash(taskkill -F -IM \"Censeq.Admin.HttpApi.Host.exe\")",
+      "Bash(npm run:*)"
     ]
   }
 }

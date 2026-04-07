@@ -28,6 +28,10 @@ public class IdentityPermissionDefinitionProvider : PermissionDefinitionProvider
         organizationUnitsPermission.AddChild(IdentityPermissions.OrganizationUnits.Update, L("Permission:Edit"));
         organizationUnitsPermission.AddChild(IdentityPermissions.OrganizationUnits.Delete, L("Permission:Delete"));
 
+        var sessionsPermission = identityGroup.AddPermission(IdentityPermissions.Sessions.Default, L("Permission:SessionManagement"));
+        sessionsPermission.AddChild(IdentityPermissions.Sessions.Manage, L("Permission:Manage"));
+        sessionsPermission.AddChild(IdentityPermissions.Sessions.Revoke, L("Permission:Revoke"));
+
         identityGroup
             .AddPermission(IdentityPermissions.UserLookup.Default, L("Permission:UserLookup"))
             .WithProviders(ClientPermissionValueProvider.ProviderName);

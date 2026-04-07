@@ -127,6 +127,22 @@
     "ModificationTime": "修改时间",
     "PasswordUpdateTime": "密码更新时间",
     "LockoutEndTime": "锁定结束时间",
-    "FailedAccessCount": "访问失败次数"
+    "FailedAccessCount": "访问失败次数",
+    "Permission:SessionManagement": "会话管理",
+    "Permission:Manage": "管理",
+    "Permission:Revoke": "终止",
+    "Session:SessionNotFound": "会话不存在",
+    "Session:SessionNotBelongToUser": "会话不属于该用户",
+    "Session:MySessions": "我的会话",
+    "Session:Device": "设备",
+    "Session:DeviceInfo": "设备信息",
+    "Session:SignedIn": "登录时间",
+    "Session:LastAccessed": "最后访问",
+    "Session:IpAddress": "IP地址",
+    "Session:CurrentSession": "当前会话",
+    "Session:RevokeSession": "终止会话",
+    "Session:RevokeAllOtherSessions": "终止其他所有会话",
+    "Session:ConfirmRevoke": "确定要终止此会话吗？",
+    "Session:ConfirmRevokeAllOthers": "确定要终止其他所有会话吗？"
   }
 }

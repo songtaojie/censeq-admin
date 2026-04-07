@@ -38,6 +38,13 @@ public static class IdentityPermissions
         public const string Delete = Default + ".Delete";
     }
 
+    public static class Sessions
+    {
+        public const string Default = GroupName + ".Sessions";
+        public const string Manage = Default + ".Manage";
+        public const string Revoke = Default + ".Revoke";
+    }
+
     public static string[] GetAll()
     {
         return ReflectionHelper.GetPublicConstantsRecursively(typeof(IdentityPermissions));

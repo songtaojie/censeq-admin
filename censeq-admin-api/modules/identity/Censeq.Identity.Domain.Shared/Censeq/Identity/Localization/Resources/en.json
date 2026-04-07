@@ -127,6 +127,22 @@
     "ModificationTime": "Modification time",
     "PasswordUpdateTime": "Password update time",
     "LockoutEndTime": "Lockout end time",
-    "FailedAccessCount": "Failed access count"
+    "FailedAccessCount": "Failed access count",
+    "Permission:SessionManagement": "Session management",
+    "Permission:Manage": "Manage",
+    "Permission:Revoke": "Revoke",
+    "Session:SessionNotFound": "Session not found",
+    "Session:SessionNotBelongToUser": "Session does not belong to the user",
+    "Session:MySessions": "My sessions",
+    "Session:Device": "Device",
+    "Session:DeviceInfo": "Device info",
+    "Session:SignedIn": "Signed in",
+    "Session:LastAccessed": "Last accessed",
+    "Session:IpAddress": "IP address",
+    "Session:CurrentSession": "Current session",
+    "Session:RevokeSession": "Revoke session",
+    "Session:RevokeAllOtherSessions": "Revoke all other sessions",
+    "Session:ConfirmRevoke": "Are you sure you want to revoke this session?",
+    "Session:ConfirmRevokeAllOthers": "Are you sure you want to revoke all other sessions?"
   }
 }

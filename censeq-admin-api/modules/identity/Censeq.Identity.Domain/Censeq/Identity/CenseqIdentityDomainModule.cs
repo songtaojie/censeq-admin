@@ -37,6 +37,13 @@ public class CenseqIdentityDomainModule : AbpModule
 
     public override void ConfigureServices(ServiceConfigurationContext context)
     {
+        // 注册 Session 选项
+        context.Services.AddOptions<IdentitySessionOptions>();
+        context.Services.AddOptions<IdentitySessionCleanupOptions>();
+
+        // 注册 Session 管理器
+        context.Services.AddTransient<IdentitySessionManager>();
+
         context.Services.AddAutoMapperObjectMapper<CenseqIdentityDomainModule>();
 
         Configure<AbpAutoMapperOptions>(options =>

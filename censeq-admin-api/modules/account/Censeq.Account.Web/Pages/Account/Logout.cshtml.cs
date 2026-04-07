@@ -2,12 +2,15 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Censeq.Account.Settings;
 using Censeq.Identity;
+using Volo.Abp.Security.Claims;
 using Volo.Abp.Settings;
 
 namespace Censeq.Account.Web.Pages.Account;
 
 public class LogoutModel : AccountPageModel
 {
+    public IdentitySessionManager IdentitySessionManager { get; set; }
+
     [HiddenInput]
     [BindProperty(SupportsGet = true)]
     public string? ReturnUrl { get; set; }
@@ -18,6 +21,9 @@ public class LogoutModel : AccountPageModel
 
     public virtual async Task<IActionResult> OnGetAsync()
     {
+        // 删除当前会话
+        await DeleteCurrentSessionAsync();
+
         await IdentitySecurityLogManager.SaveAsync(new IdentitySecurityLogContext()
         {
             Identity = IdentitySecurityLogIdentityConsts.Identity,
@@ -42,5 +48,20 @@ public class LogoutModel : AccountPageModel
     {
         return Task.FromResult<IActionResult>(Page());
     }
+
+    protected virtual async Task DeleteCurrentSessionAsync()
+    {
+        try
+        {
+            var sessionId = CurrentUser.FindClaim(AbpClaimTypes.SessionId)?.Value;
+            if (!string.IsNullOrEmpty(sessionId))
+            {
                 await IdentitySessionManager.DeleteAsync(sessionId);
+            }
+        }
+        catch
+        {
+            // 忽略删除会话时的错误，确保用户能够正常登出
+        }
+    }
 }

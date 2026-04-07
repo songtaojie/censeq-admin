@@ -110,3 +110,18 @@ export interface UserLookupCountRequest {
 export interface UserLookupSearchRequest extends PagedAndSortedRequestDto {
 	filter?: string;
 }
+
+/** 会话 DTO */
+export interface IdentitySessionDto {
+	id: string;
+	sessionId: string;
+	tenantId?: string | null;
+	userId: string;
+	device: string;
+	deviceInfo?: string;
+	clientId?: string;
+	ipAddresses?: string;
+	signedIn: string;
+	lastAccessed?: string;
+	isCurrentSession: boolean;
+}

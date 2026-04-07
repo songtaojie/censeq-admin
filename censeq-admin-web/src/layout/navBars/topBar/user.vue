@@ -62,6 +62,10 @@
 				:class="!state.isScreenfull ? 'icon-fullscreen' : 'icon-tuichuquanping'"
 			></i>
 		</div>
+		<!-- 会话管理图标 -->
+		<div class="layout-navbars-breadcrumb-user-icon" @click="onSessionManageClick" title="在线用户管理">
+			<el-icon><ele-User /></el-icon>
+		</div>
 		<el-dropdown :show-timeout="70" :hide-timeout="50" @command="onHandleCommandClick">
 			<span class="layout-navbars-breadcrumb-user-link">
 				<img :src="userInfos.photo" class="layout-navbars-breadcrumb-user-link-photo mr5" />
@@ -81,7 +85,9 @@
 				</el-dropdown-menu>
 			</template>
 		</el-dropdown>
-		<Search ref="searchRef" />
+			<Search ref="searchRef" />
+		<!-- 会话管理弹窗 -->
+		<SessionManager ref="sessionManagerRef" />
 	</div>
 </template>
 
@@ -102,10 +108,12 @@ import { useOidc } from '/@/composables/useOidc';
 // 引入组件
 const UserNews = defineAsyncComponent(() => import('/@/layout/navBars/topBar/userNews.vue'));
 const Search = defineAsyncComponent(() => import('/@/layout/navBars/topBar/search.vue'));
+const SessionManager = defineAsyncComponent(() => import('/@/layout/navBars/topBar/sessionManager.vue'));
 
 // 定义变量内容
 const userNewsRef = ref();
 const userNewsBadgeRef = ref();
+const sessionManagerRef = ref();
 const { locale, t } = useI18n();
 const router = useRouter();
 const storesThemeConfig = useThemeConfig();
@@ -192,6 +200,10 @@ const onHandleCommandClick = (path: string) => {
 // 菜单搜索点击
 const onSearchClick = () => {
 	searchRef.value.openSearch();
+};
+// 会话管理点击
+const onSessionManageClick = () => {
+	sessionManagerRef.value?.open();
 };
 // 组件大小改变
 const onComponentSizeChange = (size: string) => {

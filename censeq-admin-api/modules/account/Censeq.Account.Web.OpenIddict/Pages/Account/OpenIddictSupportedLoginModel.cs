@@ -24,8 +24,9 @@ public class OpenIddictSupportedLoginModel : LoginModel
         IOptions<CenseqAccountOptions> accountOptions,
         IdentityDynamicClaimsPrincipalContributorCache identityDynamicClaimsPrincipalContributorCache,
         CenseqOpenIddictRequestHelper openIddictRequestHelper,
-        IWebHostEnvironment webHostEnvironment)
-        : base(schemeProvider, accountOptions, identityDynamicClaimsPrincipalContributorCache, webHostEnvironment)
+        IWebHostEnvironment webHostEnvironment,
+        IdentitySessionManager identitySessionManager)
+        : base(schemeProvider, accountOptions, identityDynamicClaimsPrincipalContributorCache, webHostEnvironment, identitySessionManager)
     {
         OpenIddictRequestHelper = openIddictRequestHelper;
     }

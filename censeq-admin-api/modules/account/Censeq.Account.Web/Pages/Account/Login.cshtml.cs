@@ -2,8 +2,10 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Diagnostics;
+using System.Linq;
 using System.Security.Claims;
 using Censeq.Account.Settings;
 using Volo.Abp.Auditing;
@@ -16,6 +18,7 @@ using IdentityUser = Censeq.Identity.Entities.IdentityUser;
 using Censeq.Account.Web.Settings;
 using Censeq.Identity.AspNetCore;
 using Censeq.TenantManagement;
+using Censeq.Identity.Entities;
 
 namespace Censeq.Account.Web.Pages.Account;
 
@@ -68,6 +71,7 @@ public class LoginModel : AccountPageModel
     //protected IOptions<IdentityOptions> IdentityOptions { get; }
     protected IdentityDynamicClaimsPrincipalContributorCache IdentityDynamicClaimsPrincipalContributorCache { get; }
     protected IWebHostEnvironment WebHostEnvironment { get; }
+    protected IdentitySessionManager IdentitySessionManager { get; }
     public bool ShowCancelButton { get; set; }
     public bool ShowRequireMigrateSeedMessage { get; set; }
 
@@ -75,12 +79,14 @@ public class LoginModel : AccountPageModel
         IAuthenticationSchemeProvider schemeProvider,
         IOptions<CenseqAccountOptions> accountOptions,
         IdentityDynamicClaimsPrincipalContributorCache identityDynamicClaimsPrincipalContributorCache,
-        IWebHostEnvironment webHostEnvironment)
+        IWebHostEnvironment webHostEnvironment,
+        IdentitySessionManager identitySessionManager)
     {
         SchemeProvider = schemeProvider;
         AccountOptions = accountOptions.Value;
         IdentityDynamicClaimsPrincipalContributorCache = identityDynamicClaimsPrincipalContributorCache;
         WebHostEnvironment = webHostEnvironment;
+        IdentitySessionManager = identitySessionManager;
     }
 
     public virtual async Task<IActionResult> OnGetAsync()
@@ -180,6 +186,9 @@ public class LoginModel : AccountPageModel
 
         // Clear the dynamic claims cache.
         await IdentityDynamicClaimsPrincipalContributorCache.ClearAsync(user.Id, user.TenantId);
+
+        // Create session for the login
+        await CreateSessionAsync(user);
 
         return await RedirectSafelyAsync(ReturnUrl ?? string.Empty, ReturnUrlHash);
     }
@@ -443,6 +452,100 @@ public class LoginModel : AccountPageModel
         if (!await SettingProvider.IsTrueAsync(AccountSettingNames.EnableLocalLogin))
         {
             throw new UserFriendlyException(L["LocalLoginDisabledMessage"]);
+        }
+    }
+
+    protected virtual async Task CreateSessionAsync(IdentityUser user)
+    {
+        try
+        {
+            var device = GetDeviceType();
+            var deviceInfo = GetDeviceInfo();
+            var clientId = "Admin_Web"; // Web登录的客户端ID
+
+            // 获取IP地址
+            var ipAddresses = GetClientIpAddresses();
+
+            await IdentitySessionManager.CreateAsync(
+                user.Id,
+                device,
+                deviceInfo,
+                clientId,
+                ipAddresses
+            );
+
+            Logger.LogDebug("Created session for user {UserId} during login", user.Id);
+        }
+        catch (Exception ex)
+        {
+            Logger.LogError(ex, "Failed to create session for user {UserId} during login", user.Id);
+            // 不影响登录流程
+        }
+    }
+
+    protected virtual string GetDeviceType()
+    {
+        var userAgent = Request.Headers.UserAgent.ToString();
+        if (string.IsNullOrEmpty(userAgent))
+        {
+            return IdentitySessionDevices.Web;
+        }
+
+        userAgent = userAgent.ToLowerInvariant();
+        if (userAgent.Contains("mobile") || userAgent.Contains("android") || userAgent.Contains("iphone"))
+        {
+            return IdentitySessionDevices.Mobile;
+        }
+
+        return IdentitySessionDevices.Web;
+    }
+
+    protected virtual string GetDeviceInfo()
+    {
+        try
+        {
+            var options = LazyServiceProvider.LazyGetRequiredService<IOptions<IdentitySessionOptions>>().Value;
+            if (!options.SaveDeviceInfo)
+            {
+                return string.Empty;
+            }
+
+            var userAgent = Request.Headers.UserAgent.ToString();
+            return userAgent?.Length > IdentitySessionConsts.MaxDeviceInfoLength
+                ? userAgent[..IdentitySessionConsts.MaxDeviceInfoLength]
+                : userAgent ?? string.Empty;
+        }
+        catch
+        {
+            return string.Empty;
+        }
+    }
+
+    protected virtual string GetClientIpAddresses()
+    {
+        try
+        {
+            var ips = new List<string>();
+
+            // 尝试获取 X-Forwarded-For 头（经过代理时）
+            var forwardedFor = Request.Headers["X-Forwarded-For"].FirstOrDefault();
+            if (!string.IsNullOrWhiteSpace(forwardedFor))
+            {
+                ips.AddRange(forwardedFor.Split(',').Select(ip => ip.Trim()).Where(ip => !string.IsNullOrWhiteSpace(ip)));
+            }
+
+            // 添加远程 IP
+            var remoteIp = HttpContext.Connection.RemoteIpAddress?.ToString();
+            if (!string.IsNullOrWhiteSpace(remoteIp) && !ips.Contains(remoteIp))
+            {
+                ips.Add(remoteIp);
+            }
+
+            return string.Join(",", ips);
+        }
+        catch
+        {
+            return string.Empty;
         }
     }
 

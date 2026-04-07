@@ -5,6 +5,8 @@ using Censeq.Admin.MultiTenancy;
 using Censeq.Framework.AspNetCore;
 using Censeq.Framework.AspNetCore.Mvc.UI.Theme.Basic;
 using Censeq.Framework.Swashbuckle;
+using Censeq.Identity;
+using Censeq.Identity.AspNetCore;
 using Censeq.OpenIddict;
 using OpenIddict.Validation.AspNetCore;
 using Microsoft.AspNetCore.Antiforgery;
@@ -193,7 +195,10 @@ public class CenseqHttpApiHostModule : AbpModule
 
         app.UseAuditing();
         app.UseAbpSerilogEnrichers();
-        
+
+        // 使用 Session 中间件（必须在 UseAuthentication 之后）
+        app.UseIdentitySession();
+
         app.UseConfiguredEndpoints();
     }
 }

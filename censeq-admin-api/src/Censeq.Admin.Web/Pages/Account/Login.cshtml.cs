@@ -5,6 +5,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Censeq.Admin.Application;
 using Censeq.Admin.Settings;
+using Censeq.Identity;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -58,18 +59,21 @@ public class LoginModel : AccountPageModel
     protected AbpAccountOptions AccountOptions { get; }
     protected IOptions<IdentityOptions> IdentityOptions { get; }
     protected IdentityDynamicClaimsPrincipalContributorCache IdentityDynamicClaimsPrincipalContributorCache { get; }
+    protected IdentitySessionManager IdentitySessionManager { get; }
     public bool ShowCancelButton { get; set; } = true;
 
     public LoginModel(
         IAuthenticationSchemeProvider schemeProvider,
         IOptions<AbpAccountOptions> accountOptions,
         IOptions<IdentityOptions> identityOptions,
-        IdentityDynamicClaimsPrincipalContributorCache identityDynamicClaimsPrincipalContributorCache)
+        IdentityDynamicClaimsPrincipalContributorCache identityDynamicClaimsPrincipalContributorCache,
+        IdentitySessionManager identitySessionManager)
     {
         SchemeProvider = schemeProvider;
         IdentityOptions = identityOptions;
         AccountOptions = accountOptions.Value;
         IdentityDynamicClaimsPrincipalContributorCache = identityDynamicClaimsPrincipalContributorCache;
+        IdentitySessionManager = identitySessionManager;
     }
 
     public virtual async Task<IActionResult> OnGetAsync()
@@ -151,6 +155,9 @@ public class LoginModel : AccountPageModel
 
         // Clear the dynamic claims cache.
         await IdentityDynamicClaimsPrincipalContributorCache.ClearAsync(user.Id, user.TenantId);
+
+        // Create session for the login
+        await CreateSessionAsync(user);
 
         return await RedirectSafelyAsync(ReturnUrl, ReturnUrlHash);
     }
@@ -320,6 +327,96 @@ public class LoginModel : AccountPageModel
         if (!await SettingProvider.IsTrueAsync(AdminSettingNames.EnableLocalLogin))
         {
             throw new UserFriendlyException(L["LocalLoginDisabledMessage"]);
+        }
+    }
+
+    protected virtual async Task CreateSessionAsync(IdentityUser user)
+    {
+        try
+        {
+            var device = GetDeviceType();
+            var deviceInfo = GetDeviceInfo();
+            var clientId = "Admin_Web";
+
+            var ipAddresses = GetClientIpAddresses();
+
+            await IdentitySessionManager.CreateAsync(
+                user.Id,
+                device,
+                deviceInfo,
+                clientId,
+                ipAddresses
+            );
+
+            Logger.LogDebug("Created session for user {UserId} during login", user.Id);
+        }
+        catch (Exception ex)
+        {
+            Logger.LogError(ex, "Failed to create session for user {UserId} during login", user.Id);
+        }
+    }
+
+    protected virtual string GetDeviceType()
+    {
+        var userAgent = Request.Headers.UserAgent.ToString();
+        if (string.IsNullOrEmpty(userAgent))
+        {
+            return IdentitySessionDevices.Web;
+        }
+
+        userAgent = userAgent.ToLowerInvariant();
+        if (userAgent.Contains("mobile") || userAgent.Contains("android") || userAgent.Contains("iphone"))
+        {
+            return IdentitySessionDevices.Mobile;
+        }
+
+        return IdentitySessionDevices.Web;
+    }
+
+    protected virtual string GetDeviceInfo()
+    {
+        try
+        {
+            var options = LazyServiceProvider.LazyGetRequiredService<IOptions<IdentitySessionOptions>>().Value;
+            if (!options.SaveDeviceInfo)
+            {
+                return string.Empty;
+            }
+
+            var userAgent = Request.Headers.UserAgent.ToString();
+            return userAgent?.Length > IdentitySessionConsts.MaxDeviceInfoLength
+                ? userAgent[..IdentitySessionConsts.MaxDeviceInfoLength]
+                : userAgent ?? string.Empty;
+        }
+        catch
+        {
+            return string.Empty;
+        }
+    }
+
+    protected virtual string GetClientIpAddresses()
+    {
+        try
+        {
+            var ips = new List<string>();
+
+            var forwardedFor = Request.Headers["X-Forwarded-For"].FirstOrDefault();
+            if (!string.IsNullOrWhiteSpace(forwardedFor))
+            {
+                ips.AddRange(forwardedFor.Split(',').Select(ip => ip.Trim()).Where(ip => !string.IsNullOrWhiteSpace(ip)));
+            }
+
+            var remoteIp = HttpContext.Connection.RemoteIpAddress?.ToString();
+            if (!string.IsNullOrWhiteSpace(remoteIp) && !ips.Contains(remoteIp))
+            {
+                ips.Add(remoteIp);
+            }
+
+            return string.Join(",", ips);
+        }
+        catch
+        {
+            return string.Empty;
         }
     }
 
