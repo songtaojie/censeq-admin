@@ -42,4 +42,5 @@ public class LogoutModel : AccountPageModel
     {
         return Task.FromResult<IActionResult>(Page());
     }
+                await IdentitySessionManager.DeleteAsync(sessionId);
 }
