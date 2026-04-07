@@ -6,7 +6,7 @@ using Volo.Abp.Domain.Repositories;
 
 namespace Censeq.OpenIddict.Scopes;
 
-public interface IOpenIddictScopeRepository : IBasicRepository<OpenIddictScope, Guid>
+public interface IOpenIddictScopeRepository : IRepository<OpenIddictScope, Guid>
 {
     Task<List<OpenIddictScope>> GetListAsync(string sorting, int skipCount, int maxResultCount, string filter = null, CancellationToken cancellationToken = default);
 

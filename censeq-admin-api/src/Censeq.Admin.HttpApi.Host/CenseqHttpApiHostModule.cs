@@ -32,6 +32,7 @@ namespace Censeq.Admin;
     typeof(CenseqAdminApplicationModule),
     typeof(CenseqAdminEntityFrameworkCoreModule),
     typeof(CenseqAccountWebOpenIddictModule),
+    typeof(CenseqOpenIddictHttpApiModule),
     typeof(CenseqAspNetCoreMvcUIBasicThemeModule),
     typeof(AbpAspNetCoreSerilogModule),
     typeof(CenseqSwashbuckleModule),

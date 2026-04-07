@@ -1,0 +1,17 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <RootNamespace>Censeq.OpenIddict</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Volo.Abp.AspNetCore.Mvc"/>
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Censeq.OpenIddict.Application\Censeq.OpenIddict.Application.csproj" />
+  </ItemGroup>
+
+</Project>

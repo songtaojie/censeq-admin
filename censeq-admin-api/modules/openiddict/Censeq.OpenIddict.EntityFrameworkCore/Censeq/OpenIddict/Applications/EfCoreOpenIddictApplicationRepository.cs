@@ -20,19 +20,21 @@ public class EfCoreOpenIddictApplicationRepository : EfCoreRepository<ICenseqOpe
     }
 
     public virtual async Task<List<OpenIddictApplication>> GetListAsync(string sorting, int skipCount, int maxResultCount, string? filter = null,
-        CancellationToken cancellationToken = default)
+        string? clientType = null, CancellationToken cancellationToken = default)
     {
         return await (await GetDbSetAsync())
             .WhereIf(!filter.IsNullOrWhiteSpace(), x => x.ClientId.Contains(filter!))
+            .WhereIf(!clientType.IsNullOrWhiteSpace(), x => x.ClientType == clientType)
             .OrderBy(sorting.IsNullOrWhiteSpace() ? nameof(OpenIddictApplication.ClientId) : sorting)
             .PageBy(skipCount, maxResultCount)
             .ToListAsync(GetCancellationToken(cancellationToken));
     }
 
-    public virtual async Task<long> GetCountAsync(string? filter = null, CancellationToken cancellationToken = default)
+    public virtual async Task<long> GetCountAsync(string? filter = null, string? clientType = null, CancellationToken cancellationToken = default)
     {
         return await (await GetDbSetAsync())
             .WhereIf(!filter.IsNullOrWhiteSpace(), x => x.ClientId.Contains(filter!))
+            .WhereIf(!clientType.IsNullOrWhiteSpace(), x => x.ClientType == clientType)
             .LongCountAsync(GetCancellationToken(cancellationToken));
     }
 
