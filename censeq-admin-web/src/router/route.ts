@@ -157,6 +157,21 @@ export const dynamicRoutes: Array<RouteRecordRaw> = [
 						},
 					},
 					{
+						path: '/system/claim-type',
+						name: 'systemClaimType',
+						component: () => import('/@/views/system/claim-type/index.vue'),
+						meta: {
+							title: '声明类型管理',
+							isLink: '',
+							isHide: false,
+							isKeepAlive: true,
+							isAffix: false,
+							isIframe: false,
+							roles: ['admin'],
+							icon: 'ele-Collection',
+						},
+					},
+					{
 						path: '/system/user',
 						name: 'systemUser',
 						component: () => import('/@/views/system/user/index.vue'),

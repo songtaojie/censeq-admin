@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Options;
@@ -13,29 +14,35 @@ public class IdentityDataSeeder : ITransientDependency, IIdentityDataSeeder
 {
     protected IGuidGenerator GuidGenerator { get; }
     protected IIdentityRoleRepository RoleRepository { get; }
+    protected IIdentityClaimTypeRepository ClaimTypeRepository { get; }
     protected IIdentityUserRepository UserRepository { get; }
     protected ILookupNormalizer LookupNormalizer { get; }
     protected IdentityUserManager UserManager { get; }
     protected IdentityRoleManager RoleManager { get; }
+    protected IdentityClaimTypeManager ClaimTypeManager { get; }
     protected ICurrentTenant CurrentTenant { get; }
     protected IOptions<IdentityOptions> IdentityOptions { get; }
 
     public IdentityDataSeeder(
         IGuidGenerator guidGenerator,
         IIdentityRoleRepository roleRepository,
+        IIdentityClaimTypeRepository claimTypeRepository,
         IIdentityUserRepository userRepository,
         ILookupNormalizer lookupNormalizer,
         IdentityUserManager userManager,
         IdentityRoleManager roleManager,
+        IdentityClaimTypeManager claimTypeManager,
         ICurrentTenant currentTenant,
         IOptions<IdentityOptions> identityOptions)
     {
         GuidGenerator = guidGenerator;
         RoleRepository = roleRepository;
+        ClaimTypeRepository = claimTypeRepository;
         UserRepository = userRepository;
         LookupNormalizer = lookupNormalizer;
         UserManager = userManager;
         RoleManager = roleManager;
+        ClaimTypeManager = claimTypeManager;
         CurrentTenant = currentTenant;
         IdentityOptions = identityOptions;
     }
@@ -66,6 +73,11 @@ public class IdentityDataSeeder : ITransientDependency, IIdentityDataSeeder
 
             if (adminUser != null)
             {
+                if (tenantId == null)
+                {
+                    await SeedClaimTypesAsync();
+                }
+
                 return result;
             }
 
@@ -104,7 +116,32 @@ public class IdentityDataSeeder : ITransientDependency, IIdentityDataSeeder
 
             (await UserManager.AddToRoleAsync(adminUser, adminRoleName)).CheckErrors();
 
+            if (tenantId == null)
+            {
+                await SeedClaimTypesAsync();
+            }
+
             return result;
+        }
+    }
+
+    protected virtual async Task SeedClaimTypesAsync()
+    {
+        var claimTypes = new List<IdentityClaimType>
+        {
+            new IdentityClaimType(GuidGenerator.Create(), "DataScope", false, false, null, null, "数据范围", IdentityClaimValueType.String),
+            new IdentityClaimType(GuidGenerator.Create(), "MaxAmount", false, false, null, null, "最大审批金额", IdentityClaimValueType.Int),
+            new IdentityClaimType(GuidGenerator.Create(), "DepartmentId", false, false, null, null, "部门ID", IdentityClaimValueType.String)
+        };
+
+        foreach (var claimType in claimTypes)
+        {
+            if (await ClaimTypeRepository.AnyAsync(claimType.Name))
+            {
+                continue;
+            }
+
+            await ClaimTypeManager.CreateAsync(claimType);
         }
     }
 }

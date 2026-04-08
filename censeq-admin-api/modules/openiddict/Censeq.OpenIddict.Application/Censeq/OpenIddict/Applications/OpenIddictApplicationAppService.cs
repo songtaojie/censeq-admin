@@ -52,8 +52,8 @@ public class OpenIddictApplicationAppService :
 
         var list = await ApplicationRepository.GetListAsync(
             input.Sorting,
-            input.MaxResultCount,
             input.SkipCount,
+            input.MaxResultCount,
             input.Filter,
             input.ClientType);
 

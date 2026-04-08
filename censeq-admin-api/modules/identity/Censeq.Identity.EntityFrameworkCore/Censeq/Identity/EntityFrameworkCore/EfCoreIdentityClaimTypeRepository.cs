@@ -39,6 +39,9 @@ public class EfCoreIdentityClaimTypeRepository : EfCoreRepository<ICenseqIdentit
                 !filter.IsNullOrWhiteSpace(),
                 u =>
                     u.Name.Contains(filter)
+                    || u.Description.Contains(filter)
+                    || u.Regex.Contains(filter)
+                    || u.RegexDescription.Contains(filter)
             )
             .OrderBy(sorting.IsNullOrWhiteSpace() ? nameof(IdentityClaimType.Name) : sorting)
             .PageBy(skipCount, maxResultCount)
@@ -56,6 +59,9 @@ public class EfCoreIdentityClaimTypeRepository : EfCoreRepository<ICenseqIdentit
                 !filter.IsNullOrWhiteSpace(),
                 u =>
                     u.Name.Contains(filter!)
+                    || u.Description.Contains(filter!)
+                    || u.Regex.Contains(filter!)
+                    || u.RegexDescription.Contains(filter!)
             ).LongCountAsync(GetCancellationToken(cancellationToken));
     }
 

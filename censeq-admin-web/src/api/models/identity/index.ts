@@ -1,5 +1,7 @@
 import type { ExtensibleEntityDto, ExtensibleFullAuditedEntityDto, ExtensibleObject, PagedAndSortedRequestDto } from '../core';
 
+export type IdentityClaimValueType = 'String' | 'Int' | 'Boolean' | 'DateTime';
+
 export interface GetIdentityRolesRequest extends PagedAndSortedRequestDto {
 	filter?: string;
 }
@@ -101,6 +103,43 @@ export interface IdentityRoleClaimDto {
 export interface IdentityRoleClaimCreateDto {
 	claimType: string;
 	claimValue: string;
+}
+
+export interface IdentityClaimTypeDto extends ExtensibleEntityDto<string> {
+	name: string;
+	required: boolean;
+	isStatic: boolean;
+	regex?: string;
+	regexDescription?: string;
+	description?: string;
+	valueType: IdentityClaimValueType;
+	creationTime?: string;
+	creatorId?: string;
+	lastModificationTime?: string;
+	lastModifierId?: string;
+}
+
+export interface IdentityClaimTypeCreateDto extends ExtensibleObject {
+	name: string;
+	required: boolean;
+	isStatic: boolean;
+	regex?: string;
+	regexDescription?: string;
+	description?: string;
+	valueType: IdentityClaimValueType;
+}
+
+export interface IdentityClaimTypeUpdateDto extends ExtensibleObject {
+	name: string;
+	required: boolean;
+	regex?: string;
+	regexDescription?: string;
+	description?: string;
+	valueType: IdentityClaimValueType;
+}
+
+export interface GetIdentityClaimTypesRequest extends PagedAndSortedRequestDto {
+	filter?: string;
 }
 
 export interface UserLookupCountRequest {

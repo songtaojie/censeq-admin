@@ -32,6 +32,11 @@ public class IdentityPermissionDefinitionProvider : PermissionDefinitionProvider
         sessionsPermission.AddChild(IdentityPermissions.Sessions.Manage, L("Permission:Manage"));
         sessionsPermission.AddChild(IdentityPermissions.Sessions.Revoke, L("Permission:Revoke"));
 
+        var claimTypesPermission = identityGroup.AddPermission(IdentityPermissions.ClaimTypes.Default, L("Permission:ClaimTypeManagement"));
+        claimTypesPermission.AddChild(IdentityPermissions.ClaimTypes.Create, L("Permission:Create"));
+        claimTypesPermission.AddChild(IdentityPermissions.ClaimTypes.Update, L("Permission:Edit"));
+        claimTypesPermission.AddChild(IdentityPermissions.ClaimTypes.Delete, L("Permission:Delete"));
+
         identityGroup
             .AddPermission(IdentityPermissions.UserLookup.Default, L("Permission:UserLookup"))
             .WithProviders(ClientPermissionValueProvider.ProviderName);

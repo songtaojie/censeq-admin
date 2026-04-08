@@ -8,6 +8,7 @@ using IdentityRole = Censeq.Identity.Entities.IdentityRole;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Data;
 using Volo.Abp.ObjectExtending;
+using Volo.Abp;
 
 namespace Censeq.Identity;
 
@@ -16,13 +17,16 @@ public class IdentityRoleAppService : IdentityAppServiceBase, IIdentityRoleAppSe
 {
     protected IdentityRoleManager RoleManager { get; }
     protected IIdentityRoleRepository RoleRepository { get; }
+    protected IIdentityClaimTypeRepository ClaimTypeRepository { get; }
 
     public IdentityRoleAppService(
         IdentityRoleManager roleManager,
-        IIdentityRoleRepository roleRepository)
+        IIdentityRoleRepository roleRepository,
+        IIdentityClaimTypeRepository claimTypeRepository)
     {
         RoleManager = roleManager;
         RoleRepository = roleRepository;
+        ClaimTypeRepository = claimTypeRepository;
     }
 
     public virtual async Task<IdentityRoleDto> GetAsync(Guid id)
@@ -136,6 +140,11 @@ public class IdentityRoleAppService : IdentityAppServiceBase, IIdentityRoleAppSe
     [Authorize(IdentityPermissions.Roles.Update)]
     public virtual async Task AddClaimAsync(Guid roleId, IdentityRoleClaimCreateDto input)
     {
+        if (!await ClaimTypeRepository.AnyAsync(input.ClaimType))
+        {
+            throw new UserFriendlyException($"声明类型 '{input.ClaimType}' 不存在，请先在声明类型管理中维护。");
+        }
+
         var role = await RoleRepository.FindByNormalizedNameAsync(
             (await RoleManager.GetByIdAsync(roleId)).NormalizedName,
             includeDetails: true);

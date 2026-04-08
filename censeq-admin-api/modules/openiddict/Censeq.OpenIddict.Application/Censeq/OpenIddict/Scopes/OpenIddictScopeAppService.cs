@@ -51,8 +51,8 @@ public class OpenIddictScopeAppService :
 
         var list = await ScopeRepository.GetListAsync(
             input.Sorting,
-            input.MaxResultCount,
             input.SkipCount,
+            input.MaxResultCount,
             input.Filter);
 
         var dtos = list.Select(MapToDto).ToList();
@@ -94,9 +94,10 @@ public class OpenIddictScopeAppService :
         await CheckUpdatePolicyAsync();
 
         var scope = await ScopeRepository.GetAsync(id);
+        var scopeModel = scope.ToModel();
 
         var descriptor = new OpenIddictScopeDescriptor();
-        await ScopeManager.PopulateAsync(descriptor, scope);
+        await ScopeManager.PopulateAsync(descriptor, scopeModel);
 
         descriptor.DisplayName = input.DisplayName;
         descriptor.Description = input.Description;
@@ -107,7 +108,7 @@ public class OpenIddictScopeAppService :
             descriptor.Resources.Add(resource);
         }
 
-        await ScopeManager.UpdateAsync(scope, descriptor);
+        await ScopeManager.UpdateAsync(scopeModel, descriptor);
         scope = await ScopeRepository.GetAsync(id);
 
         return MapToDto(scope);
@@ -118,7 +119,7 @@ public class OpenIddictScopeAppService :
         await CheckDeletePolicyAsync();
 
         var scope = await ScopeRepository.GetAsync(id);
-        await ScopeManager.DeleteAsync(scope);
+        await ScopeManager.DeleteAsync(scope.ToModel());
     }
 
     public virtual async Task<bool> CheckNameExistsAsync(string name, Guid? excludeId = null)
