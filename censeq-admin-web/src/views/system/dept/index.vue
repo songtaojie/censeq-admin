@@ -126,9 +126,4 @@ onMounted(() => {
 </script>
 
 <style scoped lang="scss">
-.system-dept-container {
-	.system-dept-padding {
-		padding: 15px;
-	}
-}
 </style>

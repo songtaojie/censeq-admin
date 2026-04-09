@@ -1,6 +1,14 @@
 <template>
 	<div class="role-permission-dialog-container">
-		<el-dialog :title="`授权角色菜单【${state.roleName}】`" v-model="state.dialog.isShowDialog" width="600px" destroy-on-close>
+		<el-dialog :title="`角色菜单授权【${state.roleName}】`" v-model="state.dialog.isShowDialog" width="720px" destroy-on-close>
+			<div class="dialog-intro">
+				为当前角色配置可访问的菜单权限。树形勾选会同步影响角色可见菜单，保存后立即生效。
+			</div>
+			<div class="permission-summary">
+				<el-tag type="primary">角色：{{ state.roleName || '-' }}</el-tag>
+				<el-tag type="success">已授权 {{ grantedCount }} 项</el-tag>
+				<el-tag type="info">总权限 {{ permissionCount }} 项</el-tag>
+			</div>
 			<el-tree
 				ref="treeRef"
 				node-key="name"
@@ -48,6 +56,9 @@ const state = reactive({
 	submitLoading: false,
 });
 
+const permissionCount = ref(0);
+const grantedCount = ref(0);
+
 // 打开弹窗
 const openDialog = (row: IdentityRoleDto) => {
 	state.roleId = row.id!;
@@ -60,6 +71,8 @@ const openDialog = (row: IdentityRoleDto) => {
 const closeDialog = () => {
 	state.dialog.isShowDialog = false;
 	state.menuData = [];
+	permissionCount.value = 0;
+	grantedCount.value = 0;
 };
 
 // 取消
@@ -105,11 +118,13 @@ const getMenuData = async () => {
 		const { getPermissionList } = usePermissionApi();
 		const permissionList = await getPermissionList('R', state.roleId);
 		state.menuData = permissionList.groups;
+		permissionCount.value = state.menuData.reduce((total, group) => total + group.permissions.length, 0);
 
 		// 等待DOM更新后设置选中状态
 		nextTick(() => {
 			treeRef.value?.setCheckedKeys([]);
 			const selectNames = extractGrantedPermissionNames(state.menuData);
+			grantedCount.value = selectNames.length;
 			treeRef.value?.setCheckedKeys(selectNames);
 		});
 	} finally {
@@ -139,12 +154,28 @@ defineExpose({
 
 <style scoped lang="scss">
 .role-permission-dialog-container {
+	.dialog-intro {
+		margin-bottom: 12px;
+		padding: 12px 14px;
+		border-radius: 12px;
+		background: var(--el-fill-color-light);
+		color: var(--el-text-color-secondary);
+		line-height: 1.7;
+	}
+
+	.permission-summary {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 10px;
+		margin-bottom: 12px;
+	}
+
 	.menu-data-tree {
 		width: 100%;
 		border: 1px solid var(--el-border-color);
 		border-radius: var(--el-input-border-radius, var(--el-border-radius-base));
 		padding: 10px;
-		max-height: 400px;
+		max-height: 460px;
 		overflow-y: auto;
 	}
 }

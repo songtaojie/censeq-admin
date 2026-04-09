@@ -47,7 +47,7 @@ body,
 	width: 100%;
 	height: 100%;
 	.layout-pd {
-		padding: 15px !important;
+		padding: 8px !important;
 	}
 	.layout-flex {
 		display: flex;
@@ -84,6 +84,7 @@ body,
 			.layout-parent {
 				@extend .layout-flex;
 				position: relative;
+				padding: 0;
 			}
 		}
 	}
@@ -101,6 +102,7 @@ body,
 			@extend .layout-flex;
 		}
 		&-view {
+			padding: 8px;
 			background: var(--el-color-white);
 			width: 100%;
 			height: 100%;
@@ -231,6 +233,47 @@ body,
 			height: 100%;
 		}
 	}
+}
+
+/* 页面公共布局
+------------------------------- */
+.page-shell {
+	@extend .layout-flex;
+	gap: 5px;
+}
+.page-filter-card {
+	:deep(.el-card__body) {
+		padding-bottom: 0;
+	}
+}
+.page-content-card {
+	flex: 1;
+	display: flex;
+	flex-direction: column;
+
+	:deep(.el-card__body) {
+		flex: 1;
+		display: flex;
+		flex-direction: column;
+	}
+}
+.page-toolbar {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: 10px;
+}
+.page-search {
+	min-width: 220px;
+	width: 260px;
+}
+.page-table {
+	flex: 1;
+}
+.page-table-body {
+	flex: 1;
+	display: flex;
+	flex-direction: column;
 }
 
 /* cursor 鼠标形状

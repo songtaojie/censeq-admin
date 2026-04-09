@@ -1,26 +1,32 @@
 <template>
-	<div class="openiddict-scope-container">
-		<el-card shadow="hover">
-			<div class="system-user-search mb15">
-				<el-form :model="state.searchForm" size="default" inline>
+	<div class="openiddict-scope-container layout-padding">
+		<div class="openiddict-scope-padding layout-padding-auto layout-padding-view page-shell">
+			<el-card shadow="hover" :body-style="{ paddingBottom: '0' }" class="page-filter-card">
+				<el-form :model="state.searchForm" size="default" inline class="page-toolbar">
 					<el-form-item label="关键词">
-						<el-input v-model="state.searchForm.filter" placeholder="请输入名称或显示名称" clearable />
+						<el-input v-model="state.searchForm.filter" class="page-search" placeholder="请输入名称或显示名称" clearable />
 					</el-form-item>
 					<el-form-item>
-						<el-button size="default" type="primary" @click="handleSearch">
-							<el-icon><ele-Search /></el-icon>查询
-						</el-button>
-						<el-button size="default" @click="resetSearch">
-							<el-icon><ele-RefreshLeft /></el-icon>重置
-						</el-button>
+						<el-button-group>
+							<el-button size="default" type="primary" @click="handleSearch">
+								<el-icon><ele-Search /></el-icon>查询
+							</el-button>
+							<el-button size="default" @click="resetSearch">
+								<el-icon><ele-RefreshLeft /></el-icon>重置
+							</el-button>
+						</el-button-group>
+					</el-form-item>
+					<el-form-item>
 						<el-button type="success" size="default" @click="handleCreate">
 							<el-icon><ele-Plus /></el-icon>新建作用域
 						</el-button>
 					</el-form-item>
 				</el-form>
-			</div>
+			</el-card>
 
-			<el-table :data="state.dataList" v-loading="state.loading" border>
+			<el-card class="page-content-card" shadow="hover" style="margin-top: 5px">
+				<div class="page-table-body">
+					<el-table :data="state.dataList" v-loading="state.loading" border>
 				<el-table-column type="index" label="序号" width="60" align="center" />
 				<el-table-column prop="name" label="名称" min-width="120" show-overflow-tooltip />
 				<el-table-column prop="displayName" label="显示名称" min-width="150" show-overflow-tooltip>
@@ -43,15 +49,15 @@
 						{{ formatDateTime(row.creationTime) }}
 					</template>
 				</el-table-column>
-				<el-table-column label="操作" width="150" align="center" fixed="right">
+					<el-table-column label="操作" width="150" align="center" fixed="right">
 					<template #default="{ row }">
 						<el-button type="primary" link size="small" @click="handleEdit(row)">编辑</el-button>
 						<el-button type="danger" link size="small" @click="handleDelete(row)">删除</el-button>
 					</template>
 				</el-table-column>
-			</el-table>
+					</el-table>
 
-			<el-pagination
+					<el-pagination
 				v-model:current-page="state.searchForm.skipCount"
 				v-model:page-size="state.searchForm.maxResultCount"
 				:pager-count="5"
@@ -60,9 +66,11 @@
 				layout="total, sizes, prev, pager, next, jumper"
 				background
 				@size-change="handlePageSizeChange"
-				@current-change="getList"
-			></el-pagination>
-		</el-card>
+					@current-change="getList"
+					></el-pagination>
+				</div>
+			</el-card>
+		</div>
 
 		<!-- 编辑弹窗 -->
 		<el-dialog

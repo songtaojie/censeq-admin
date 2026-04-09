@@ -1,58 +1,44 @@
 <template>
 	<div class="system-feature-container layout-padding">
-		<div class="system-feature-hero">
-			<div>
-				<div class="hero-kicker">SYSTEM FEATURES</div>
-				<h2>特性中心</h2>
-				<p>这里集中管理系统特性的取值、默认值和作用范围，支持按租户或全局范围查看、搜索和编辑。</p>
-			</div>
-			<div class="hero-stats">
-				<div v-for="card in summaryCards" :key="card.label" class="stat-card">
-					<div class="stat-label">{{ card.label }}</div>
-					<div class="stat-value">{{ card.value }}</div>
-					<div class="stat-hint">{{ card.hint }}</div>
-				</div>
-			</div>
-		</div>
+		<div class="system-feature-padding layout-padding-auto">
+			<el-card shadow="hover" :body-style="{ paddingBottom: '0' }" class="feature-query-card">
+				<el-form :inline="true">
+					<el-form-item label="范围">
+						<el-radio-group v-model="state.scope" size="default" @change="onScopeChange">
+							<el-radio-button label="host">宿主默认</el-radio-button>
+							<el-radio-button label="tenant">租户覆盖</el-radio-button>
+						</el-radio-group>
+					</el-form-item>
+					<el-form-item v-if="state.scope === 'tenant'" label="租户">
+						<el-select
+							v-model="state.tenantId"
+							class="tenant-select"
+							filterable
+							clearable
+							placeholder="选择租户"
+							@change="loadFeatures"
+						>
+							<el-option v-for="t in state.tenantOptions" :key="t.id" :label="`${t.name ?? t.id}`" :value="t.id!" />
+						</el-select>
+					</el-form-item>
+					<el-form-item label="关键字">
+						<el-input v-model="state.keyword" class="feature-search" clearable placeholder="名称 / 描述 / 默认值" />
+					</el-form-item>
+					<el-form-item>
+						<el-checkbox v-model="state.onlyOverridden">仅显示已覆盖</el-checkbox>
+					</el-form-item>
+					<el-form-item>
+						<el-button-group>
+							<el-button type="primary" :loading="state.loading" :disabled="loadDisabled" @click="loadFeatures"> 刷新 </el-button>
+							<el-button type="success" :loading="state.saving" :disabled="saveDisabled" @click="onSave"> 保存 </el-button>
+							<el-button type="warning" plain :disabled="resetDisabled" @click="onResetOverrides"> 清除覆盖 </el-button>
+						</el-button-group>
+					</el-form-item>
+				</el-form>
+			</el-card>
 
-		<div class="system-feature-padding layout-padding-auto layout-padding-view">
-			<el-alert type="info" show-icon :closable="false" class="mb15">
-				当前页面用于维护特性的可用范围和覆盖值，特性定义本身仍由系统配置同步生成。
-			</el-alert>
-
-			<div class="system-feature-toolbar mb15">
-				<el-radio-group v-model="state.scope" size="default" @change="onScopeChange">
-					<el-radio-button label="host">宿主（全局默认）</el-radio-button>
-					<el-radio-button label="tenant">指定租户</el-radio-button>
-				</el-radio-group>
-				<el-select
-					v-if="state.scope === 'tenant'"
-					v-model="state.tenantId"
-					class="ml10 tenant-select"
-					filterable
-					clearable
-					placeholder="选择租户"
-					@change="loadFeatures"
-				>
-					<el-option v-for="t in state.tenantOptions" :key="t.id" :label="`${t.name ?? t.id}`" :value="t.id!" />
-				</el-select>
-				<el-input v-model="state.keyword" class="ml10 feature-search" clearable placeholder="按名称、描述、默认值搜索" />
-				<el-checkbox v-model="state.onlyOverridden" class="ml10">仅显示已覆盖</el-checkbox>
-				<el-button type="primary" class="ml10" :loading="state.loading" :disabled="loadDisabled" @click="loadFeatures">刷新</el-button>
-				<el-button type="success" :loading="state.saving" :disabled="saveDisabled" @click="onSave">保存</el-button>
-				<el-button type="warning" plain :disabled="resetDisabled" @click="onResetOverrides">清除本范围覆盖</el-button>
-			</div>
-
-			<div class="feature-summary mb15">
-				<el-tag v-if="state.scope === 'host'" type="info">当前范围：全局默认</el-tag>
-				<el-tag v-else-if="state.tenantId" type="info">当前范围：租户 {{ state.tenantId }}</el-tag>
-				<el-tag v-else type="warning">请先选择租户</el-tag>
-				<el-tag type="success">已覆盖 {{ summary.overriddenCount }} 项</el-tag>
-				<el-tag type="warning">默认/继承 {{ summary.defaultCount }} 项</el-tag>
-				<el-tag type="primary">共 {{ summary.featureCount }} 项</el-tag>
-			</div>
-
-			<div v-loading="state.loading">
+			<el-card class="full-table feature-table-card" shadow="hover" style="margin-top: 5px">
+				<div v-loading="state.loading" class="feature-table-body">
 				<template v-if="filteredGroups.length">
 					<el-collapse v-model="state.activeGroups">
 						<el-collapse-item v-for="g in filteredGroups" :key="g.name" :name="g.name">
@@ -115,7 +101,8 @@
 					</el-collapse>
 				</template>
 				<el-empty v-else-if="!state.loading" description="当前范围无特性或暂无匹配结果" />
-			</div>
+				</div>
+			</el-card>
 		</div>
 	</div>
 </template>
@@ -145,24 +132,6 @@ const state = reactive({
 const loadDisabled = computed(() => state.scope === 'tenant' && !state.tenantId);
 const saveDisabled = computed(() => state.loading || loadDisabled.value || !state.groups.length);
 const resetDisabled = computed(() => state.loading || loadDisabled.value || !state.groups.length);
-
-const summary = computed(() => {
-	const features = state.groups.flatMap((group) => group.features ?? []);
-	const overriddenCount = features.filter((feature) => hasStoredValue(feature)).length;
-	return {
-		groupCount: state.groups.length,
-		featureCount: features.length,
-		overriddenCount,
-		defaultCount: features.length - overriddenCount,
-	};
-});
-
-const summaryCards = computed(() => [
-	{ label: '特性分组', value: String(summary.value.groupCount), hint: '系统同步生成的分组' },
-	{ label: '特性总数', value: String(summary.value.featureCount), hint: '当前范围已加载' },
-	{ label: '已覆盖', value: String(summary.value.overriddenCount), hint: '当前范围有显式值' },
-	{ label: '默认/继承', value: String(summary.value.defaultCount), hint: '仍沿用定义默认值' },
-]);
 
 const filteredGroups = computed(() => {
 	const keyword = state.keyword.trim().toLowerCase();
@@ -382,85 +351,44 @@ onMounted(async () => {
 
 <style scoped lang="scss">
 .system-feature-container {
-	.system-feature-hero {
+	.system-feature-padding {
 		display: flex;
-		justify-content: space-between;
-		gap: 24px;
-		padding: 24px 24px 20px;
-		border-radius: 18px;
-		background:
-			linear-gradient(135deg, rgba(13, 110, 253, 0.16), rgba(25, 135, 84, 0.12)),
-			linear-gradient(180deg, rgba(255, 255, 255, 0.88), rgba(255, 255, 255, 0.72));
-		border: 1px solid var(--el-border-color-lighter);
-		backdrop-filter: blur(12px);
-		.hero-kicker {
-			font-size: 12px;
-			font-weight: 700;
-			letter-spacing: 0.18em;
-			text-transform: uppercase;
-			color: var(--el-color-primary);
-		}
-		h2 {
-			margin: 8px 0 10px;
-			font-size: 28px;
-			line-height: 1.1;
-		}
-		p {
-			margin: 0;
-			max-width: 680px;
-			color: var(--el-text-color-secondary);
-		}
-		.hero-stats {
-			display: grid;
-			grid-template-columns: repeat(2, minmax(120px, 1fr));
-			gap: 12px;
-			min-width: 320px;
-		}
-		.stat-card {
-			padding: 14px 16px;
-			border-radius: 14px;
-			background: rgba(255, 255, 255, 0.68);
-			border: 1px solid rgba(255, 255, 255, 0.8);
-			box-shadow: 0 8px 24px rgba(15, 23, 42, 0.05);
-		}
-		.stat-label {
-			font-size: 12px;
-			color: var(--el-text-color-secondary);
-		}
-		.stat-value {
-			margin-top: 4px;
-			font-size: 24px;
-			font-weight: 700;
-		}
-		.stat-hint {
-			margin-top: 4px;
-			font-size: 12px;
-			color: var(--el-text-color-secondary);
-		}
+		flex-direction: column;
+		gap: 5px;
+		min-height: 100%;
+	}
+}
+
+.feature-query-card {
+	:deep(.el-card__body) {
+		padding-bottom: 0;
+	}
+}
+
+.feature-table-card {
+	flex: 1;
+	display: flex;
+	flex-direction: column;
+
+	:deep(.el-card__body) {
+		flex: 1;
+		display: flex;
+		flex-direction: column;
 	}
 
-	.system-feature-padding {
-		padding: 15px;
+	.feature-table-body {
+		flex: 1;
+		display: flex;
+		flex-direction: column;
 	}
 }
-.system-feature-toolbar {
-	display: flex;
-	flex-wrap: wrap;
-	align-items: center;
-	gap: 10px;
-}
+
 .tenant-select {
 	min-width: 220px;
 }
 .feature-search {
 	min-width: 260px;
-	flex: 1;
-}
-.feature-summary {
-	display: flex;
-	flex-wrap: wrap;
-	gap: 10px;
-	align-items: center;
+	width: 260px;
 }
 .group-title {
 	display: flex;
@@ -530,20 +458,8 @@ onMounted(async () => {
 .text-secondary {
 	color: var(--el-text-color-secondary);
 }
-.text-xs {
-	font-size: 12px;
-}
 
 @media (max-width: 960px) {
-	.system-feature-container {
-		.system-feature-hero {
-			flex-direction: column;
-			.hero-stats {
-				min-width: 0;
-				grid-template-columns: repeat(2, minmax(0, 1fr));
-			}
-		}
-	}
 	.feature-search,
 	.feature-control {
 		width: 100%;

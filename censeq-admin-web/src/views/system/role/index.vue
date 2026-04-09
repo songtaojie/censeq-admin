@@ -1,24 +1,34 @@
 <template>
 	<div class="system-role-container layout-padding">
-		<div class="system-role-padding layout-padding-auto layout-padding-view">
-			<div class="system-user-search mb15">
-				<el-input v-model="state.tableData.param.search" size="default" placeholder="请输入角色名称" style="max-width: 180px"> </el-input>
-				<el-button size="default" type="primary" class="ml10" @click="onQuery">
-					<el-icon>
-						<ele-Search />
-					</el-icon>
-					查询
-				</el-button>
-				<el-button size="default" type="success" class="ml10" @click="onOpenAddRole">
-					<el-icon>
-						<ele-FolderAdd />
-					</el-icon>
-					新增角色
-				</el-button>
-			</div>
-			<el-table :data="state.tableData.data" v-loading="state.tableData.loading" style="width: 100%">
+		<div class="system-role-padding layout-padding-auto">
+			<el-card shadow="hover" :body-style="{ paddingBottom: '0' }" class="role-query-card">
+				<el-form :model="state.tableData.param" :inline="true">
+					<el-form-item label="角色名称">
+						<el-input v-model="state.tableData.param.search" placeholder="角色名称" clearable class="role-search" @keyup.enter="onQuery" />
+					</el-form-item>
+					<el-form-item>
+						<el-button-group>
+							<el-button type="primary" icon="ele-Search" @click="onQuery"> 查询 </el-button>
+							<el-button icon="ele-Refresh" @click="onResetQuery"> 重置 </el-button>
+						</el-button-group>
+					</el-form-item>
+					<el-form-item>
+						<el-button type="primary" icon="ele-Plus" @click="onOpenAddRole"> 新增 </el-button>
+					</el-form-item>
+				</el-form>
+			</el-card>
+
+			<el-card class="full-table role-table-card" shadow="hover" style="margin-top: 5px">
+				<el-table :data="state.tableData.data" v-loading="state.tableData.loading" style="width: 100%" stripe border highlight-current-row>
 				<el-table-column type="index" label="序号" width="60" />
-				<el-table-column prop="name" label="角色名称" show-overflow-tooltip></el-table-column>
+				<el-table-column prop="name" label="角色名称" min-width="220" show-overflow-tooltip>
+					<template #default="scope">
+						<div class="role-name-cell">
+							<div class="role-name">{{ scope.row.name }}</div>
+							<div class="role-id">ID: {{ scope.row.id }}</div>
+						</div>
+					</template>
+				</el-table-column>
 				<el-table-column prop="isDefault" label="是否默认" width="100" align="center">
 					<template #default="scope">
 						<el-tag size="small" :type="scope.row.isDefault ? 'success' : 'info'">
@@ -64,20 +74,21 @@
 						</el-popconfirm>
 					</template>
 				</el-table-column>
-			</el-table>
-			<el-pagination
-				@size-change="onHandleSizeChange"
-				@current-change="onHandleCurrentChange"
-				class="mt15"
-				:pager-count="5"
-				:page-sizes="[10, 20, 30]"
-				v-model:current-page="state.tableData.param.pageIndex"
-				background
-				v-model:page-size="state.tableData.param.pageSize"
-				layout="total, sizes, prev, pager, next, jumper"
-				:total="state.tableData.total"
-			>
-			</el-pagination>
+				</el-table>
+				<el-pagination
+					@size-change="onHandleSizeChange"
+					@current-change="onHandleCurrentChange"
+					class="mt15"
+					:pager-count="5"
+					:page-sizes="[10, 20, 30]"
+					v-model:current-page="state.tableData.param.pageIndex"
+					background
+					v-model:page-size="state.tableData.param.pageSize"
+					layout="total, sizes, prev, pager, next, jumper"
+					:total="state.tableData.total"
+				>
+				</el-pagination>
+			</el-card>
 		</div>
 
 		<!-- 新增/编辑角色对话框 -->
@@ -172,6 +183,12 @@ const onQuery = () => {
 	getTableData();
 };
 
+const onResetQuery = () => {
+	state.tableData.param.search = '';
+	state.tableData.param.pageIndex = 1;
+	getTableData();
+};
+
 // 分页改变
 const onHandleSizeChange = (val: number) => {
 	state.tableData.param.pageSize = val;
@@ -193,10 +210,59 @@ onMounted(() => {
 <style scoped lang="scss">
 .system-role-container {
 	.system-role-padding {
-		padding: 15px;
-		.el-table {
-			flex: 1;
-		}
+		display: flex;
+		flex-direction: column;
+		gap: 5px;
+		min-height: 100%;
+	}
+}
+
+.role-query-card {
+	:deep(.el-card__body) {
+		padding-bottom: 0;
+	}
+}
+
+.role-table-card {
+	flex: 1;
+	display: flex;
+	flex-direction: column;
+
+	:deep(.el-card__body) {
+		flex: 1;
+		display: flex;
+		flex-direction: column;
+	}
+
+	:deep(.el-table) {
+		flex: 1;
+	}
+}
+
+.role-search {
+	min-width: 260px;
+	width: 260px;
+}
+.role-name-cell {
+	display: flex;
+	flex-direction: column;
+	gap: 4px;
+
+	.role-name {
+		font-weight: 600;
+	}
+
+	.role-id {
+		font-size: 12px;
+		color: var(--el-text-color-secondary);
+	}
+}
+
+@media (max-width: 960px) {
+	.role-search {
+		width: 100%;
+		min-width: 0;
+		flex: 1;
 	}
 }
 </style>

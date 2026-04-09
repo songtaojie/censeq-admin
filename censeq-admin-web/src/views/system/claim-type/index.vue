@@ -1,31 +1,42 @@
 <template>
 	<div class="claim-type-container layout-padding">
-		<div class="claim-type-padding layout-padding-auto layout-padding-view">
-			<div class="system-user-search mb15">
-				<el-input v-model="state.tableData.param.search" size="default" placeholder="请输入声明类型名称" style="max-width: 220px" />
-				<el-button size="default" type="primary" class="ml10" @click="onQuery">
-					<el-icon>
-						<ele-Search />
-					</el-icon>
-					查询
-				</el-button>
-				<el-button size="default" class="ml10" @click="onReset">
-					<el-icon>
-						<ele-RefreshLeft />
-					</el-icon>
-					重置
-				</el-button>
-				<el-button size="default" type="success" class="ml10" @click="onOpenAdd">
-					<el-icon>
-						<ele-Plus />
-					</el-icon>
-					新增声明类型
-				</el-button>
-			</div>
+		<div class="claim-type-padding layout-padding-auto layout-padding-view page-shell">
+			<el-card shadow="hover" :body-style="{ paddingBottom: '0' }" class="page-filter-card">
+				<el-form :inline="true" class="page-toolbar">
+					<el-form-item label="声明类型">
+						<el-input v-model="state.tableData.param.search" class="page-search" placeholder="请输入声明类型名称" />
+					</el-form-item>
+					<el-form-item>
+						<el-button-group>
+							<el-button size="default" type="primary" @click="onQuery">
+								<el-icon>
+									<ele-Search />
+								</el-icon>
+								查询
+							</el-button>
+							<el-button size="default" @click="onReset">
+								<el-icon>
+									<ele-RefreshLeft />
+								</el-icon>
+								重置
+							</el-button>
+						</el-button-group>
+					</el-form-item>
+					<el-form-item>
+						<el-button size="default" type="success" @click="onOpenAdd">
+							<el-icon>
+								<ele-Plus />
+							</el-icon>
+							新增声明类型
+						</el-button>
+					</el-form-item>
+				</el-form>
+			</el-card>
 
-			<el-alert type="info" :closable="false" class="mb15" title="这里维护系统允许使用的角色声明类型，角色声明页会从这里读取可选项。" />
-
-			<el-table :data="state.tableData.data" v-loading="state.tableData.loading" border>
+			<el-card class="page-content-card" shadow="hover" style="margin-top: 5px">
+				<el-alert type="info" :closable="false" class="mb15" title="这里维护系统允许使用的角色声明类型，角色声明页会从这里读取可选项。" />
+				<div class="page-table-body">
+					<el-table :data="state.tableData.data" v-loading="state.tableData.loading" border>
 				<el-table-column type="index" label="序号" width="70" align="center" />
 				<el-table-column prop="name" label="名称" min-width="160" show-overflow-tooltip />
 				<el-table-column prop="valueType" label="值类型" width="120" align="center">
@@ -53,7 +64,7 @@
 						{{ row.description || '-' }}
 					</template>
 				</el-table-column>
-				<el-table-column label="操作" width="170" align="center" fixed="right">
+					<el-table-column label="操作" width="170" align="center" fixed="right">
 					<template #default="{ row }">
 						<el-button type="primary" link size="small" @click="onOpenEdit(row)" :disabled="row.isStatic">编辑</el-button>
 						<el-popconfirm title="确定删除该声明类型吗？" @confirm="onDelete(row)">
@@ -62,10 +73,11 @@
 							</template>
 						</el-popconfirm>
 					</template>
-				</el-table-column>
-			</el-table>
+					</el-table-column>
+					</el-table>
+				</div>
 
-			<el-pagination
+				<el-pagination
 				v-model:current-page="state.tableData.param.pageIndex"
 				v-model:page-size="state.tableData.param.pageSize"
 				:pager-count="5"
@@ -75,7 +87,8 @@
 				background
 				@size-change="onPageSizeChange"
 				@current-change="getTableData"
-			/>
+				/>
+			</el-card>
 		</div>
 
 		<el-dialog v-model="state.dialogVisible" :title="state.isEdit ? '编辑声明类型' : '新增声明类型'" width="560px" destroy-on-close>

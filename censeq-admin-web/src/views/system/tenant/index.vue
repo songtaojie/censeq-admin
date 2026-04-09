@@ -134,7 +134,6 @@ onMounted(() => {
 <style scoped lang="scss">
 .system-tenant-container {
 	.system-tenant-padding {
-		padding: 15px;
 		.el-table {
 			flex: 1;
 		}

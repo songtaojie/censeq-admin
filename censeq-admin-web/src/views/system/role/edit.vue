@@ -1,24 +1,25 @@
 <template>
 	<div class="role-edit-dialog-container">
-		<el-dialog :title="state.dialog.title" v-model="state.dialog.isShowDialog" width="500px" destroy-on-close>
-			<el-form ref="formRef" :model="state.ruleForm" :rules="rules" size="default" label-width="90px">
+		<el-dialog :title="state.dialog.title" v-model="state.dialog.isShowDialog" width="560px" destroy-on-close>
+			<div class="dialog-intro">维护角色名称及其基础属性。默认角色会自动分配给新用户，公共角色可供其他用户查看和选择。</div>
+			<el-form ref="formRef" :model="state.ruleForm" :rules="rules" size="default" label-width="96px" class="role-form">
 				<el-form-item label="角色名称" prop="name">
-					<el-input v-model="state.ruleForm.name" placeholder="请输入角色名称" clearable></el-input>
+					<el-input v-model="state.ruleForm.name" placeholder="请输入角色名称" clearable maxlength="50" show-word-limit />
 				</el-form-item>
-				<el-form-item label="是否默认">
-					<el-radio-group v-model="state.ruleForm.isDefault">
-						<el-radio :label="true">是</el-radio>
-						<el-radio :label="false">否</el-radio>
-					</el-radio-group>
-					<div class="form-tip">默认角色会自动分配给新用户</div>
-				</el-form-item>
-				<el-form-item label="是否公共">
-					<el-radio-group v-model="state.ruleForm.isPublic">
-						<el-radio :label="true">是</el-radio>
-						<el-radio :label="false">否</el-radio>
-					</el-radio-group>
-					<div class="form-tip">公共角色可以被其他用户查看</div>
-				</el-form-item>
+				<el-row :gutter="12">
+					<el-col :span="12">
+						<el-form-item label="默认角色">
+							<el-switch v-model="state.ruleForm.isDefault" inline-prompt active-text="是" inactive-text="否" />
+							<div class="form-tip">默认角色会自动分配给新用户</div>
+						</el-form-item>
+					</el-col>
+					<el-col :span="12">
+						<el-form-item label="公共角色">
+							<el-switch v-model="state.ruleForm.isPublic" inline-prompt active-text="是" inactive-text="否" />
+							<div class="form-tip">公共角色可以被其他用户查看</div>
+						</el-form-item>
+					</el-col>
+				</el-row>
 			</el-form>
 			<template #footer>
 				<span class="dialog-footer">
@@ -129,10 +130,26 @@ defineExpose({
 
 <style scoped lang="scss">
 .role-edit-dialog-container {
+	.dialog-intro {
+		margin-bottom: 16px;
+		padding: 12px 14px;
+		border-radius: 12px;
+		background: var(--el-fill-color-light);
+		color: var(--el-text-color-secondary);
+		line-height: 1.7;
+	}
+
+	.role-form {
+		:deep(.el-form-item__content) {
+			flex-wrap: wrap;
+		}
+	}
+
 	.form-tip {
 		font-size: 12px;
 		color: #909399;
-		margin-top: 5px;
+		margin-top: 6px;
+		line-height: 1.5;
 	}
 }
 </style>

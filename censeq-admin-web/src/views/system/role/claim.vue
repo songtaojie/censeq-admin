@@ -1,9 +1,17 @@
 <template>
 	<div class="role-claim-dialog-container">
-		<el-dialog :title="`角色声明管理【${state.roleName}】`" v-model="state.dialog.isShowDialog" width="800px" destroy-on-close>
+		<el-dialog :title="`角色声明【${state.roleName}】`" v-model="state.dialog.isShowDialog" width="860px" destroy-on-close>
+			<div class="dialog-intro">
+				声明用于给角色附加结构化的业务信息，例如数据范围、部门标识或审批阈值。支持按声明类型动态维护值。
+			</div>
 			<div class="claim-toolbar">
 				<el-button type="primary" size="small" @click="onAddClaim" :icon="Plus">添加声明</el-button>
 				<el-button type="success" size="small" @click="openClaimTypeManage">维护声明类型</el-button>
+			</div>
+			<div class="claim-summary mb15">
+				<el-tag type="primary">当前角色：{{ state.roleName || '-' }}</el-tag>
+				<el-tag type="success">声明 {{ state.claims.length }} 条</el-tag>
+				<el-tag type="info">类型 {{ state.claimTypes.length }} 种</el-tag>
 			</div>
 			<el-alert v-if="!state.claimTypes.length" type="warning" :closable="false" class="mb15" title="当前没有可用的声明类型，请先维护声明类型后再添加角色声明。" />
 			<el-table :data="state.claims" border size="small" v-loading="state.loading" height="350">
@@ -264,10 +272,26 @@ defineExpose({
 
 <style scoped lang="scss">
 .role-claim-dialog-container {
+	.dialog-intro {
+		margin-bottom: 12px;
+		padding: 12px 14px;
+		border-radius: 12px;
+		background: var(--el-fill-color-light);
+		color: var(--el-text-color-secondary);
+		line-height: 1.7;
+	}
+
 	.claim-toolbar {
-		margin-bottom: 15px;
 		display: flex;
-		justify-content: flex-end;
+		justify-content: flex-start;
+		gap: 10px;
+		margin-bottom: 12px;
+	}
+
+	.claim-summary {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 10px;
 	}
 
 	.claim-tips {

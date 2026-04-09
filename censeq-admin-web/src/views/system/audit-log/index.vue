@@ -217,7 +217,6 @@ onMounted(() => {
 <style scoped lang="scss">
 .audit-log-container {
   .audit-log-padding {
-    padding: 15px;
     .el-table {
       flex: 1;
     }
