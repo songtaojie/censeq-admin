@@ -13,6 +13,10 @@ export interface FeatureDto {
 	displayName?: string;
 	value?: string;
 	description?: string;
+	defaultValue?: string;
+	isVisibleToClients?: boolean;
+	isAvailableToHost?: boolean;
+	allowedProviders?: string[];
 	depth?: number;
 	parentName?: string;
 	valueType?: FeatureValueTypeJson;

@@ -104,6 +104,10 @@ public class FeatureAppService : FeatureManagementAppServiceBase, IFeatureAppSer
             Description = featureDefinition.Description != null
                 ? (string)featureDefinition.Description.Localize(StringLocalizerFactory)! ?? string.Empty
                 : string.Empty,
+            DefaultValue = featureDefinition.DefaultValue ?? string.Empty,
+            IsVisibleToClients = featureDefinition.IsVisibleToClients,
+            IsAvailableToHost = featureDefinition.IsAvailableToHost,
+            AllowedProviders = ParseAllowedProviders(featureDefinition.AllowedProviders),
 
             ValueType = featureDefinition.ValueType!,
 
@@ -115,6 +119,20 @@ public class FeatureAppService : FeatureManagementAppServiceBase, IFeatureAppSer
                 Key = featureNameValueWithGrantedProvider.Provider?.Key ?? string.Empty
             }
         };
+    }
+
+    private static List<string> ParseAllowedProviders(string? allowedProviders)
+    {
+        if (allowedProviders.IsNullOrWhiteSpace())
+        {
+            return new List<string>();
+        }
+
+        return allowedProviders
+            .Split(',', StringSplitOptions.RemoveEmptyEntries)
+            .Select(provider => provider.Trim())
+            .Where(provider => !provider.IsNullOrWhiteSpace())
+            .ToList();
     }
 
     public virtual async Task UpdateAsync([NotNull] string providerName, string? providerKey, UpdateFeaturesDto input)
