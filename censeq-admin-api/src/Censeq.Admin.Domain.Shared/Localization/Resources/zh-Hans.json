@@ -74,6 +74,13 @@
         "AppDescription": "站在巨人肩膀上的 .NET 通用权限开发框架",
         "Menu:Home": "首页",
         "Welcome": "欢迎",
-        "LongWelcomeMessage": "欢迎使用本应用程序。这是一个基于 ABP 框架的启动项目。更多信息，请访问 abp.io。"
+        "LongWelcomeMessage": "欢迎使用本应用程序。这是一个基于 ABP 框架的启动项目。更多信息，请访问 abp.io。",
+        "Permission:Menus": "菜单管理",
+        "Permission:Create": "创建",
+        "Permission:Edit": "编辑",
+        "Permission:Delete": "删除",
+        "Permission:ChangeStatus": "启停用",
+        "Permission:ManageOrder": "排序",
+        "Permission:CopyFromHost": "从宿主复制菜单"
     }
 }

@@ -9,5 +9,6 @@ export function useUserInfo() {
 		$id: store.$id,
 		userInfos: userInfos,
 		setUserInfos: store.setUserInfos,
+		setAccessContext: store.setAccessContext,
 	};
 }

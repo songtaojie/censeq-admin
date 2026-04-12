@@ -27,15 +27,20 @@ export function useOidc() {
 
 	const setUser = async (user: User | null) => {
 		if (user != null && user.profile != null) {
+			const cached = (Session.get('userInfo') as Partial<UserInfos> | undefined) ?? {};
 			var userInfos = {
-				authBtnList: [],
-				userName: user.profile.preferred_username,
+				authBtnList: cached.authBtnList ?? [],
+				userName: user.profile.preferred_username ?? cached.userName ?? '',
 				time: new Date().getTime(),
-				photo: user.profile.picture ?? '/upload/logo.png',
-				roles: ['admin'],
+				photo: user.profile.picture ?? cached.photo ?? '/upload/logo.png',
+				roles: cached.roles ?? [],
 			};
 			Session.set('userInfo', userInfos);
 		}
+	};
+
+	const getCurrentUser = async () => {
+		return await userManager.getUser();
 	};
 
 	// 处理回调（callback 页面中调用）
@@ -111,6 +116,7 @@ export function useOidc() {
 		signinSilentCallback,
 		trySilentRenew,
 		logout,
+		getCurrentUser,
 		getAcessToken,
 		isAuthenticated,
 	};

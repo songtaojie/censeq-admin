@@ -68,6 +68,13 @@
     "AccessDenied": "Access denied!",
     "AccessDeniedMessage": "You do not have access to this resource.",
     "OrRegisterWith": "Or register with",
-    "RegisterUsingYourProviderAccount": "Register using your {0} account"
+    "RegisterUsingYourProviderAccount": "Register using your {0} account",
+    "Permission:Menus": "Menu management",
+    "Permission:Create": "Create",
+    "Permission:Edit": "Edit",
+    "Permission:Delete": "Delete",
+    "Permission:ChangeStatus": "Change status",
+    "Permission:ManageOrder": "Manage order",
+    "Permission:CopyFromHost": "Copy menus from host"
   }
 }

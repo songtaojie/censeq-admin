@@ -1,0 +1,344 @@
+using System.Collections.Generic;
+using System.Linq;
+using Volo.Abp.Data;
+using Volo.Abp.DependencyInjection;
+using Volo.Abp.Domain.Repositories;
+using Volo.Abp.Domain.Services;
+using Volo.Abp.Uow;
+
+namespace Censeq.Admin.Menus;
+
+public class MenuDataSeedContributor : DomainService, IDataSeedContributor, ITransientDependency
+{
+    private readonly IRepository<Menu, Guid> _menuRepository;
+    private readonly IRepository<MenuPermission, Guid> _menuPermissionRepository;
+
+    public MenuDataSeedContributor(
+        IRepository<Menu, Guid> menuRepository,
+        IRepository<MenuPermission, Guid> menuPermissionRepository)
+    {
+        _menuRepository = menuRepository;
+        _menuPermissionRepository = menuPermissionRepository;
+    }
+
+    [UnitOfWork]
+    public virtual async Task SeedAsync(DataSeedContext context)
+    {
+        if (context.TenantId.HasValue)
+        {
+            return;
+        }
+
+        var queryable = await _menuRepository.GetQueryableAsync();
+        var hasHostMenus = await AsyncExecuter.AnyAsync(queryable.Where(x => x.TenantId == null));
+        if (hasHostMenus)
+        {
+            return;
+        }
+
+        var createdMenus = new Dictionary<string, Menu>(StringComparer.Ordinal);
+        var createdPermissions = new List<MenuPermission>();
+
+        foreach (var definition in GetHostMenuDefinitions())
+        {
+            var parentId = definition.ParentKey is null
+                ? (Guid?)null
+                : createdMenus[definition.ParentKey].Id;
+
+            var menu = new Menu(Guid.NewGuid(), null, definition.Name, definition.Title, definition.Type);
+            menu.SetParent(parentId);
+            menu.SetRouteName(definition.RouteName);
+            menu.SetPath(definition.Path);
+            menu.SetComponent(definition.Component);
+            menu.SetRedirect(definition.Redirect);
+            menu.SetIcon(definition.Icon);
+            menu.SetSort(definition.Sort);
+            menu.SetDisplayOptions(definition.Visible, definition.KeepAlive, definition.Affix);
+            menu.SetLinkOptions(false, null, false);
+            menu.SetStatus(true);
+            menu.SetAuthorizationMode(definition.AuthorizationMode);
+
+            await _menuRepository.InsertAsync(menu, autoSave: true);
+
+            foreach (var permissionName in definition.PermissionNames)
+            {
+                var menuPermission = new MenuPermission(Guid.NewGuid(), menu.Id, permissionName);
+                createdPermissions.Add(menuPermission);
+                await _menuPermissionRepository.InsertAsync(menuPermission, autoSave: true);
+            }
+
+            createdMenus[definition.Key] = menu;
+        }
+    }
+
+    private static IReadOnlyList<SeedMenuDefinition> GetHostMenuDefinitions()
+    {
+        return new List<SeedMenuDefinition>
+        {
+            new(
+                key: "home",
+                name: "home",
+                title: "message.router.home",
+                routeName: "home",
+                path: "/home",
+                component: "home/index",
+                redirect: null,
+                icon: "iconfont icon-shouye",
+                type: MenuType.Menu,
+                sort: 10,
+                affix: true,
+                authorizationMode: MenuAuthorizationMode.Anonymous,
+                permissionNames: Array.Empty<string>()),
+            new(
+                key: "platform",
+                name: "platform",
+                title: "message.router.platform",
+                routeName: "platform",
+                path: "/platform",
+                component: "layout/routerView/parent",
+                redirect: "/platform/tenant",
+                icon: "ele-Monitor",
+                type: MenuType.Directory,
+                sort: 20,
+                authorizationMode: MenuAuthorizationMode.Anonymous,
+                permissionNames: Array.Empty<string>()),
+            new(
+                key: "systemTenant",
+                parentKey: "platform",
+                name: "systemTenant",
+                title: "message.router.systemTenant",
+                routeName: "systemTenant",
+                path: "/platform/tenant",
+                component: "system/tenant/index",
+                redirect: null,
+                icon: "ele-HomeFilled",
+                type: MenuType.Menu,
+                sort: 10,
+                authorizationMode: MenuAuthorizationMode.Permission,
+                permissionNames: new[] { "TenantManagement.Tenants" }),
+            new(
+                key: "systemFeature",
+                parentKey: "platform",
+                name: "systemFeature",
+                title: "message.router.systemFeature",
+                routeName: "systemFeature",
+                path: "/platform/feature",
+                component: "system/feature/index",
+                redirect: null,
+                icon: "iconfont icon-crew_feature",
+                type: MenuType.Menu,
+                sort: 20,
+                authorizationMode: MenuAuthorizationMode.Permission,
+                permissionNames: new[] { "CenseqFeatureManagement.ManageHostFeatures" }),
+            new(
+                key: "systemMenu",
+                parentKey: "platform",
+                name: "systemMenu",
+                title: "message.router.systemMenu",
+                routeName: "systemMenu",
+                path: "/platform/menu",
+                component: "system/menu/index",
+                redirect: null,
+                icon: "iconfont icon-caidan",
+                type: MenuType.Menu,
+                sort: 30,
+                authorizationMode: MenuAuthorizationMode.Permission,
+                permissionNames: new[] { "Admin.Menus" }),
+            new(
+                key: "system",
+                name: "system",
+                title: "message.router.enterprise",
+                routeName: "system",
+                path: "/system",
+                component: "layout/routerView/parent",
+                redirect: "/system/user",
+                icon: "iconfont icon-xitongshezhi",
+                type: MenuType.Directory,
+                sort: 30,
+                authorizationMode: MenuAuthorizationMode.Anonymous,
+                permissionNames: Array.Empty<string>()),
+            new(
+                key: "systemRole",
+                parentKey: "system",
+                name: "systemRole",
+                title: "message.router.systemRole",
+                routeName: "systemRole",
+                path: "/system/role",
+                component: "system/role/index",
+                redirect: null,
+                icon: "ele-ColdDrink",
+                type: MenuType.Menu,
+                sort: 10,
+                authorizationMode: MenuAuthorizationMode.Permission,
+                permissionNames: new[] { "CenseqIdentity.Roles" }),
+            new(
+                key: "systemClaimType",
+                parentKey: "system",
+                name: "systemClaimType",
+                title: "声明类型管理",
+                routeName: "systemClaimType",
+                path: "/system/claim-type",
+                component: "system/claim-type/index",
+                redirect: null,
+                icon: "ele-Collection",
+                type: MenuType.Menu,
+                sort: 20,
+                authorizationMode: MenuAuthorizationMode.Permission,
+                permissionNames: new[] { "CenseqIdentity.ClaimTypes" }),
+            new(
+                key: "systemUser",
+                parentKey: "system",
+                name: "systemUser",
+                title: "message.router.systemUser",
+                routeName: "systemUser",
+                path: "/system/user",
+                component: "system/user/index",
+                redirect: null,
+                icon: "iconfont icon-icon-",
+                type: MenuType.Menu,
+                sort: 30,
+                authorizationMode: MenuAuthorizationMode.Permission,
+                permissionNames: new[] { "CenseqIdentity.Users" }),
+            new(
+                key: "systemDept",
+                parentKey: "system",
+                name: "systemDept",
+                title: "message.router.systemDept",
+                routeName: "systemDept",
+                path: "/system/dept",
+                component: "system/dept/index",
+                redirect: null,
+                icon: "ele-OfficeBuilding",
+                type: MenuType.Menu,
+                sort: 40,
+                authorizationMode: MenuAuthorizationMode.Permission,
+                permissionNames: new[] { "CenseqIdentity.OrganizationUnits" }),
+            new(
+                key: "systemSettings",
+                parentKey: "system",
+                name: "systemSettings",
+                title: "message.router.systemSettings",
+                routeName: "systemSettings",
+                path: "/system/settings",
+                component: "system/settings/index",
+                redirect: null,
+                icon: "ele-Setting",
+                type: MenuType.Menu,
+                sort: 50,
+                authorizationMode: MenuAuthorizationMode.Permission,
+                permissionNames: new[] { "SettingManagement.Emailing", "SettingManagement.TimeZone" }),
+            new(
+                key: "openiddict",
+                name: "openiddict",
+                title: "OAuth/OpenID",
+                routeName: "openiddict",
+                path: "/openiddict",
+                component: "layout/routerView/parent",
+                redirect: "/openiddict/application",
+                icon: "ele-Lock",
+                type: MenuType.Directory,
+                sort: 40,
+                authorizationMode: MenuAuthorizationMode.Anonymous,
+                permissionNames: Array.Empty<string>()),
+            new(
+                key: "openiddictApplication",
+                parentKey: "openiddict",
+                name: "openiddictApplication",
+                title: "应用管理",
+                routeName: "openiddictApplication",
+                path: "/openiddict/application",
+                component: "openiddict/application/index",
+                redirect: null,
+                icon: "ele-Connection",
+                type: MenuType.Menu,
+                sort: 10,
+                authorizationMode: MenuAuthorizationMode.Permission,
+                permissionNames: new[] { "OpenIddict.Applications" }),
+            new(
+                key: "openiddictScope",
+                parentKey: "openiddict",
+                name: "openiddictScope",
+                title: "作用域管理",
+                routeName: "openiddictScope",
+                path: "/openiddict/scope",
+                component: "openiddict/scope/index",
+                redirect: null,
+                icon: "ele-Collection",
+                type: MenuType.Menu,
+                sort: 20,
+                authorizationMode: MenuAuthorizationMode.Permission,
+                permissionNames: new[] { "OpenIddict.Scopes" })
+        };
+    }
+
+    private sealed class SeedMenuDefinition
+    {
+        public SeedMenuDefinition(
+            string key,
+            string name,
+            string title,
+            string routeName,
+            string path,
+            string component,
+            string? redirect,
+            string icon,
+            MenuType type,
+            int sort,
+            MenuAuthorizationMode authorizationMode,
+            IReadOnlyList<string> permissionNames,
+            string? parentKey = null,
+            bool visible = true,
+            bool keepAlive = true,
+            bool affix = false)
+        {
+            Key = key;
+            ParentKey = parentKey;
+            Name = name;
+            Title = title;
+            RouteName = routeName;
+            Path = path;
+            Component = component;
+            Redirect = redirect;
+            Icon = icon;
+            Type = type;
+            Sort = sort;
+            Visible = visible;
+            KeepAlive = keepAlive;
+            Affix = affix;
+            AuthorizationMode = authorizationMode;
+            PermissionNames = permissionNames;
+        }
+
+        public string Key { get; }
+
+        public string? ParentKey { get; }
+
+        public string Name { get; }
+
+        public string Title { get; }
+
+        public string RouteName { get; }
+
+        public string Path { get; }
+
+        public string Component { get; }
+
+        public string? Redirect { get; }
+
+        public string Icon { get; }
+
+        public MenuType Type { get; }
+
+        public int Sort { get; }
+
+        public bool Visible { get; }
+
+        public bool KeepAlive { get; }
+
+        public bool Affix { get; }
+
+        public MenuAuthorizationMode AuthorizationMode { get; }
+
+        public IReadOnlyList<string> PermissionNames { get; }
+    }
+}

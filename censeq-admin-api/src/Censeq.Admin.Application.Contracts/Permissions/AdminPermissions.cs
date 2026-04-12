@@ -4,6 +4,14 @@ public static class AdminPermissions
 {
     public const string GroupName = "Admin";
 
-    //Add your own permission names. Example:
-    //public const string MyPermission1 = GroupName + ".MyPermission1";
+    public static class Menus
+    {
+        public const string Default = GroupName + ".Menus";
+        public const string Create = Default + ".Create";
+        public const string Update = Default + ".Update";
+        public const string Delete = Default + ".Delete";
+        public const string ManageStatus = Default + ".ManageStatus";
+        public const string ManageOrder = Default + ".ManageOrder";
+        public const string CopyFromHost = Default + ".CopyFromHost";
+    }
 }

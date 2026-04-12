@@ -9,8 +9,14 @@ public class AdminPermissionDefinitionProvider : PermissionDefinitionProvider
     public override void Define(IPermissionDefinitionContext context)
     {
         var myGroup = context.AddGroup(AdminPermissions.GroupName);
-        //Define your own permissions here. Example:
-        //myGroup.AddPermission(AdminPermissions.MyPermission1, L("Permission:MyPermission1"));
+
+        var menusPermission = myGroup.AddPermission(AdminPermissions.Menus.Default, L("Permission:Menus"));
+        menusPermission.AddChild(AdminPermissions.Menus.Create, L("Permission:Create"));
+        menusPermission.AddChild(AdminPermissions.Menus.Update, L("Permission:Edit"));
+        menusPermission.AddChild(AdminPermissions.Menus.Delete, L("Permission:Delete"));
+        menusPermission.AddChild(AdminPermissions.Menus.ManageStatus, L("Permission:ChangeStatus"));
+        menusPermission.AddChild(AdminPermissions.Menus.ManageOrder, L("Permission:ManageOrder"));
+        menusPermission.AddChild(AdminPermissions.Menus.CopyFromHost, L("Permission:CopyFromHost"));
     }
 
     private static LocalizableString L(string name)

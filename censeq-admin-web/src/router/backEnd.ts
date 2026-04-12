@@ -1,5 +1,4 @@
 import { RouteRecordRaw } from 'vue-router';
-import { storeToRefs } from 'pinia';
 import pinia from '/@/stores/index';
 import { useRequestOldRoutes } from '/@/stores/requestOldRoutes';
 import { Session } from '/@/utils/storage';
@@ -8,7 +7,8 @@ import { dynamicRoutes, notFoundAndNoPower } from '/@/router/route';
 import { formatTwoStageRoutes, formatFlatteningRoutes, router } from '/@/router/index';
 import { useRoutesList } from '/@/stores/routesList';
 import { useTagsViewRoutes } from '/@/stores/tagsViewRoutes';
-import { useMenuApi } from '/@/api/menu/index';
+import { useMenuApi } from '/@/api/apis';
+import type { CurrentUserMenuResultDto, MenuRouteDto } from '/@/api/models/menu';
 import { useUserInfo } from '/@/composables/useUserInfo';
 
 // 后端控制路由
@@ -38,23 +38,13 @@ export async function initBackEndControlRoutes() {
 	if (window.nextLoading === undefined) NextLoading.start();
 	// 无 token 停止执行下一步
 	if (!Session.get('token')) return false;
+	const runtimeMenu = await getBackEndControlRoutes();
 	const { setUserInfos } = useUserInfo();
-	// 触发初始化用户信息 pinia
-	// https://gitee.com/lyt-top/vue-next-admin/issues/I5F1HP
-	await setUserInfos();
-	// 获取路由菜单数据
-	const res = await getBackEndControlRoutes();
+	await setUserInfos({ roles: runtimeMenu.roles ?? [], authBtnList: runtimeMenu.authBtnList ?? [] });
 	// 无登录权限时，添加判断
 	// https://gitee.com/lyt-top/vue-next-admin/issues/I64HVO
-	if (res.data.length <= 0) return Promise.resolve(true);
-	// 存储接口原始路由（未处理component），根据需求选择使用
-	useRequestOldRoutes().setRequestOldRoutes(JSON.parse(JSON.stringify(res.data)));
-	// 处理路由（component），替换 dynamicRoutes（/@/router/route）第一个顶级 children 的路由
-	dynamicRoutes[0].children = await backEndComponent(res.data);
-	// 添加动态路由
-	await setAddRoute();
-	// 设置路由到 pinia routesList 中（已处理成多级嵌套路由）及缓存多级嵌套数组处理后的一维数组
-	setFilterMenuAndCacheTagsViewRoutes();
+	if ((runtimeMenu.routes?.length ?? 0) <= 0) return Promise.resolve(true);
+	await applyRuntimeRoutes(runtimeMenu);
 }
 
 /**
@@ -108,13 +98,7 @@ export async function setAddRoute() {
  * @returns 返回后端路由菜单数据
  */
 export function getBackEndControlRoutes() {
-	// 模拟 admin 与 test
-	const { userInfos } = useUserInfo();
-	const auth = userInfos.value.roles[0];
-	// 管理员 admin
-	if (auth === 'admin') return menuApi.getAdminMenu();
-	// 其它用户 test
-	else return menuApi.getTestMenu();
+	return menuApi.getCurrentUserRuntimeMenu();
 }
 
 /**
@@ -123,7 +107,16 @@ export function getBackEndControlRoutes() {
  * @description 路径：/src/views/system/menu/component/addMenu.vue
  */
 export async function setBackEndControlRefreshRoutes() {
-	await getBackEndControlRoutes();
+	const runtimeMenu = await getBackEndControlRoutes();
+	const { setAccessContext } = useUserInfo();
+	setAccessContext(runtimeMenu.roles ?? [], runtimeMenu.authBtnList ?? []);
+	if ((runtimeMenu.routes?.length ?? 0) <= 0) {
+		dynamicRoutes[0].children = [];
+		useRequestOldRoutes().setRequestOldRoutes([] as never[]);
+		setFilterMenuAndCacheTagsViewRoutes();
+		return;
+	}
+	await applyRuntimeRoutes(runtimeMenu);
 }
 
 /**
@@ -131,13 +124,21 @@ export async function setBackEndControlRefreshRoutes() {
  * @param routes 后端返回的路由表数组
  * @returns 返回处理成函数后的 component
  */
-export function backEndComponent(routes: any) {
+export function backEndComponent(routes: MenuRouteDto[]) {
 	if (!routes) return;
-	return routes.map((item: any) => {
+	return routes.map((item: MenuRouteDto) => {
 		if (item.component) item.component = dynamicImport(dynamicViewsModules, item.component as string);
 		item.children && backEndComponent(item.children);
 		return item;
 	});
+}
+
+async function applyRuntimeRoutes(runtimeMenu: CurrentUserMenuResultDto) {
+	const routes = JSON.parse(JSON.stringify(runtimeMenu.routes ?? [])) as MenuRouteDto[];
+	useRequestOldRoutes().setRequestOldRoutes(JSON.parse(JSON.stringify(routes)));
+	dynamicRoutes[0].children = (await backEndComponent(routes)) as RouteRecordRaw[];
+	await setAddRoute();
+	setFilterMenuAndCacheTagsViewRoutes();
 }
 
 /**

@@ -6,6 +6,7 @@ using Censeq.Identity;
 using Censeq.Identity.Entities;
 using Censeq.Identity.EntityFrameworkCore;
 using Censeq.Identity.EntityFrameworkCore.Modeling;
+using Censeq.Admin.Menus;
 using Censeq.OpenIddict.Applications;
 using Censeq.OpenIddict.Authorizations;
 using Censeq.OpenIddict.EntityFrameworkCore;
@@ -58,6 +59,9 @@ public class CenseqAdminDbContext(DbContextOptions<CenseqAdminDbContext> options
     public DbSet<Tenant> Tenants { get; set; }
     public DbSet<TenantConnectionString> TenantConnectionStrings { get; set; }
 
+    public DbSet<Menu> Menus { get; set; }
+    public DbSet<MenuPermission> MenuPermissions { get; set; }
+
     public DbSet<PermissionGroupDefinitionRecord> PermissionGroups { get; set; }
     public DbSet<PermissionDefinitionRecord> Permissions { get; set; }
     public DbSet<PermissionGrant> PermissionGrants { get; set; }
@@ -76,6 +80,7 @@ public class CenseqAdminDbContext(DbContextOptions<CenseqAdminDbContext> options
         builder.ConfigureAuditLogging();
         builder.ConfigureFeatureManagement();
         builder.ConfigureIdentity();
+        builder.ConfigureAdminMenus();
         builder.ConfigureOpenIddict();
         builder.ConfigurePermissionManagement();
         builder.ConfigureSettingManagement();

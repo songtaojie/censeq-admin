@@ -107,7 +107,7 @@ public class FeatureAppService : FeatureManagementAppServiceBase, IFeatureAppSer
             DefaultValue = featureDefinition.DefaultValue ?? string.Empty,
             IsVisibleToClients = featureDefinition.IsVisibleToClients,
             IsAvailableToHost = featureDefinition.IsAvailableToHost,
-            AllowedProviders = ParseAllowedProviders(featureDefinition.AllowedProviders),
+            AllowedProviders = featureDefinition.AllowedProviders?.ToList() ?? new List<string>(),
 
             ValueType = featureDefinition.ValueType!,
 
@@ -119,20 +119,6 @@ public class FeatureAppService : FeatureManagementAppServiceBase, IFeatureAppSer
                 Key = featureNameValueWithGrantedProvider.Provider?.Key ?? string.Empty
             }
         };
-    }
-
-    private static List<string> ParseAllowedProviders(string? allowedProviders)
-    {
-        if (allowedProviders.IsNullOrWhiteSpace())
-        {
-            return new List<string>();
-        }
-
-        return allowedProviders
-            .Split(',', StringSplitOptions.RemoveEmptyEntries)
-            .Select(provider => provider.Trim())
-            .Where(provider => !provider.IsNullOrWhiteSpace())
-            .ToList();
     }
 
     public virtual async Task UpdateAsync([NotNull] string providerName, string? providerKey, UpdateFeaturesDto input)
