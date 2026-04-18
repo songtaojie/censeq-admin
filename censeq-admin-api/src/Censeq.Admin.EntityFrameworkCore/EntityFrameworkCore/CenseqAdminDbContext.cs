@@ -62,7 +62,7 @@ public class CenseqAdminDbContext(DbContextOptions<CenseqAdminDbContext> options
     public DbSet<Menu> Menus { get; set; }
     public DbSet<MenuPermission> MenuPermissions { get; set; }
 
-    public DbSet<PermissionGroupDefinitionRecord> PermissionGroups { get; set; }
+    public DbSet<PermissionGroup> PermissionGroups { get; set; }
     public DbSet<PermissionDefinitionRecord> Permissions { get; set; }
     public DbSet<PermissionGrant> PermissionGrants { get; set; }
 

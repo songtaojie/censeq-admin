@@ -5,32 +5,32 @@ using Volo.Abp.Domain.Entities;
 
 namespace Censeq.PermissionManagement.Entities;
 
-public class PermissionGroupDefinitionRecord : BasicAggregateRoot<Guid>, IHasExtraProperties
+public class PermissionGroup : BasicAggregateRoot<Guid>, IHasExtraProperties
 {
     public string Name { get; set; } = string.Empty;
     public string DisplayName { get; set; } = string.Empty;
     public ExtraPropertyDictionary ExtraProperties { get; protected set; } = [];
 
-    public PermissionGroupDefinitionRecord()
+    public PermissionGroup()
     {
         this.SetDefaultsForExtraProperties();
     }
 
-    public PermissionGroupDefinitionRecord(Guid id, string name, string? displayName) : base(id)
+    public PermissionGroup(Guid id, string name, string? displayName) : base(id)
     {
-        Name = Check.NotNullOrWhiteSpace(name, nameof(name), PermissionGroupDefinitionRecordConsts.MaxNameLength);
-        DisplayName = Check.NotNullOrWhiteSpace(displayName, nameof(displayName), PermissionGroupDefinitionRecordConsts.MaxDisplayNameLength);
+        Name = Check.NotNullOrWhiteSpace(name, nameof(name), PermissionGroupConsts.MaxNameLength);
+        DisplayName = Check.NotNullOrWhiteSpace(displayName, nameof(displayName), PermissionGroupConsts.MaxDisplayNameLength);
         this.SetDefaultsForExtraProperties();
     }
 
-    public bool HasSameData(PermissionGroupDefinitionRecord otherRecord)
+    public bool HasSameData(PermissionGroup otherRecord)
     {
         if (Name != otherRecord.Name || DisplayName != otherRecord.DisplayName)
             return false;
         return this.HasSameExtraProperties(otherRecord);
     }
 
-    public void Patch(PermissionGroupDefinitionRecord otherRecord)
+    public void Patch(PermissionGroup otherRecord)
     {
         if (Name != otherRecord.Name) Name = otherRecord.Name;
         if (DisplayName != otherRecord.DisplayName) DisplayName = otherRecord.DisplayName;

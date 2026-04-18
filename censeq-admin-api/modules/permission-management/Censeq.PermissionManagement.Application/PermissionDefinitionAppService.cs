@@ -9,11 +9,11 @@ namespace Censeq.PermissionManagement;
 [Authorize(PermissionManagementPermissions.DefinitionManagement)]
 public class PermissionDefinitionAppService : ApplicationService, IPermissionDefinitionAppService
 {
-    private readonly IPermissionGroupDefinitionRecordRepository _groupRepo;
+    private readonly IPermissionGroupRepository _groupRepo;
     private readonly IPermissionDefinitionRecordRepository _permissionRepo;
 
     public PermissionDefinitionAppService(
-        IPermissionGroupDefinitionRecordRepository groupRepo,
+        IPermissionGroupRepository groupRepo,
         IPermissionDefinitionRecordRepository permissionRepo)
     {
         _groupRepo = groupRepo;
@@ -42,7 +42,7 @@ public class PermissionDefinitionAppService : ApplicationService, IPermissionDef
         var allGroups = await _groupRepo.GetListAsync();
         var group = allGroups.FirstOrDefault(g => g.Name == groupName);
         if (group == null)
-            throw new EntityNotFoundException(typeof(PermissionGroupDefinitionRecord), groupName);
+            throw new EntityNotFoundException(typeof(PermissionGroup), groupName);
 
         group.DisplayName = input.DisplayName.Trim();
         await _groupRepo.UpdateAsync(group);
@@ -61,7 +61,7 @@ public class PermissionDefinitionAppService : ApplicationService, IPermissionDef
         var allGroups = await _groupRepo.GetListAsync();
         var groupExists = allGroups.FirstOrDefault(g => g.Name == groupName);
         if (groupExists == null)
-            throw new EntityNotFoundException(typeof(PermissionGroupDefinitionRecord), groupName);
+            throw new EntityNotFoundException(typeof(PermissionGroup), groupName);
 
         var allPermissions = await _permissionRepo.GetListAsync();
         var permissions = allPermissions.Where(p => p.GroupName == groupName).ToList();

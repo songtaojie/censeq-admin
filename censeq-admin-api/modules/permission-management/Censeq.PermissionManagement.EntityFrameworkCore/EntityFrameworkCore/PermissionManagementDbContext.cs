@@ -8,7 +8,7 @@ namespace Censeq.PermissionManagement.EntityFrameworkCore;
 [ConnectionStringName(CenseqPermissionManagementDbProperties.ConnectionStringName)]
 public class PermissionManagementDbContext : AbpDbContext<PermissionManagementDbContext>, IPermissionManagementDbContext
 {
-    public DbSet<PermissionGroupDefinitionRecord> PermissionGroups { get; set; }
+    public DbSet<PermissionGroup> PermissionGroups { get; set; }
     public DbSet<PermissionDefinitionRecord> Permissions { get; set; }
     public DbSet<PermissionGrant> PermissionGrants { get; set; }
 

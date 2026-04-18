@@ -14,7 +14,7 @@ public class CenseqPermissionManagementEntityFrameworkCoreModule : AbpModule
         context.Services.AddAbpDbContext<PermissionManagementDbContext>(options =>
         {
             options.AddDefaultRepositories<IPermissionManagementDbContext>();
-            options.AddRepository<PermissionGroupDefinitionRecord, EfCorePermissionGroupDefinitionRecordRepository>();
+            options.AddRepository<PermissionGroup, EfCorePermissionGroupRepository>();
             options.AddRepository<PermissionDefinitionRecord, EfCorePermissionDefinitionRecordRepository>();
             options.AddRepository<PermissionGrant, EfCorePermissionGrantRepository>();
         });

@@ -16,14 +16,14 @@ public interface IPermissionDefinitionSerializer
     /// </summary>
     /// <param name="permissionGroups">Ȩ���鶨��</param>
     /// <returns>Ȩ���鶨���¼��Ȩ�޶����¼</returns>
-    Task<(PermissionGroupDefinitionRecord[], PermissionDefinitionRecord[])>SerializeAsync(IEnumerable<PermissionGroupDefinition> permissionGroups);
+    Task<(PermissionGroup[], PermissionDefinitionRecord[])>SerializeAsync(IEnumerable<PermissionGroupDefinition> permissionGroups);
 
     /// <summary>
     /// ���л�
     /// </summary>
     /// <param name="permissionGroup">Ȩ���鶨��</param>
     /// <returns>Ȩ���鶨���¼</returns>
-    Task<PermissionGroupDefinitionRecord> SerializeAsync(PermissionGroupDefinition permissionGroup);
+    Task<PermissionGroup> SerializeAsync(PermissionGroupDefinition permissionGroup);
 
     /// <summary>
     /// ���л�

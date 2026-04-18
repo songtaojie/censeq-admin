@@ -23,7 +23,7 @@ public class DynamicPermissionDefinitionStore : IDynamicPermissionDefinitionStor
     /// <summary>
     /// Ȩ����洢��
     /// </summary>
-    protected IPermissionGroupDefinitionRecordRepository PermissionGroupRepository { get; }
+    protected IPermissionGroupRepository PermissionGroupRepository { get; }
 
     /// <summary>
     /// Ȩ�޴洢��
@@ -73,7 +73,7 @@ public class DynamicPermissionDefinitionStore : IDynamicPermissionDefinitionStor
     /// <param name="permissionManagementOptions"></param>
     /// <param name="distributedLock"></param>
     public DynamicPermissionDefinitionStore(
-        IPermissionGroupDefinitionRecordRepository permissionGroupRepository,
+        IPermissionGroupRepository permissionGroupRepository,
         IPermissionDefinitionRecordRepository permissionRepository,
         IPermissionDefinitionSerializer permissionDefinitionSerializer,
         IDynamicPermissionDefinitionStoreInMemoryCache storeCache,

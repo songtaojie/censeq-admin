@@ -72,7 +72,7 @@ public class DynamicPermissionDefinitionStoreInMemoryCache : IDynamicPermissionD
     /// <param name="permissionGroupRecords"></param>
     /// <param name="permissionRecords"></param>
     /// <returns></returns>
-    public Task FillAsync(List<PermissionGroupDefinitionRecord> permissionGroupRecords, List<PermissionDefinitionRecord> permissionRecords)
+    public Task FillAsync(List<PermissionGroup> permissionGroupRecords, List<PermissionDefinitionRecord> permissionRecords)
     {
         PermissionGroupDefinitions.Clear();
         PermissionDefinitions.Clear();

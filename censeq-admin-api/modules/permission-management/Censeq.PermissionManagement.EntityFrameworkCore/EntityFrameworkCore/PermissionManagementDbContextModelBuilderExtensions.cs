@@ -21,18 +21,18 @@ namespace Censeq.PermissionManagement.EntityFrameworkCore
             });
             if (builder.IsHostDatabase())
             {
-                builder.Entity<PermissionGroupDefinitionRecord>(b =>
+                builder.Entity<PermissionGroup>(b =>
                 {
-                    b.ToCenseqTable(nameof(PermissionGroupDefinitionRecord)).ConfigureCenseqByConvention();
-                    b.Property(x => x.Name).HasMaxLength(PermissionGroupDefinitionRecordConsts.MaxNameLength).IsRequired();
-                    b.Property(x => x.DisplayName).HasMaxLength(PermissionGroupDefinitionRecordConsts.MaxDisplayNameLength).IsRequired();
+                    b.ToCenseqTable(nameof(PermissionGroup)).ConfigureCenseqByConvention();
+                    b.Property(x => x.Name).HasMaxLength(PermissionGroupConsts.MaxNameLength).IsRequired();
+                    b.Property(x => x.DisplayName).HasMaxLength(PermissionGroupConsts.MaxDisplayNameLength).IsRequired();
                     b.HasIndex(x => new { x.Name }).IsUnique();
                     b.ApplyObjectExtensionMappings();
                 });
                 builder.Entity<PermissionDefinitionRecord>(b =>
                 {
                     b.ToCenseqTable(nameof(PermissionDefinitionRecord)).ConfigureCenseqByConvention();
-                    b.Property(x => x.GroupName).HasMaxLength(PermissionGroupDefinitionRecordConsts.MaxNameLength).IsRequired();
+                    b.Property(x => x.GroupName).HasMaxLength(PermissionGroupConsts.MaxNameLength).IsRequired();
                     b.Property(x => x.Name).HasMaxLength(PermissionDefinitionRecordConsts.MaxNameLength).IsRequired();
                     b.Property(x => x.ParentName).HasMaxLength(PermissionDefinitionRecordConsts.MaxNameLength);
                     b.Property(x => x.DisplayName).HasMaxLength(PermissionDefinitionRecordConsts.MaxDisplayNameLength).IsRequired();

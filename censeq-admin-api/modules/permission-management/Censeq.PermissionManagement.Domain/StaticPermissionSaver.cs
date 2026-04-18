@@ -31,7 +31,7 @@ public class StaticPermissionSaver : IStaticPermissionSaver, ITransientDependenc
     /// <summary>
     /// 
     /// </summary>
-    protected IPermissionGroupDefinitionRecordRepository PermissionGroupRepository { get; }
+    protected IPermissionGroupRepository PermissionGroupRepository { get; }
     /// <summary>
     /// 
     /// </summary>
@@ -86,7 +86,7 @@ public class StaticPermissionSaver : IStaticPermissionSaver, ITransientDependenc
     /// <param name="unitOfWorkManager"></param>
     public StaticPermissionSaver(
         IStaticPermissionDefinitionStore staticStore,
-        IPermissionGroupDefinitionRecordRepository permissionGroupRepository,
+        IPermissionGroupRepository permissionGroupRepository,
         IPermissionDefinitionRecordRepository permissionRepository,
         IPermissionDefinitionSerializer permissionSerializer,
         IDistributedCache cache,
@@ -211,10 +211,10 @@ public class StaticPermissionSaver : IStaticPermissionSaver, ITransientDependenc
     }
 
     private async Task<bool> UpdateChangedPermissionGroupsAsync(
-        IEnumerable<PermissionGroupDefinitionRecord> permissionGroupRecords)
+        IEnumerable<PermissionGroup> permissionGroupRecords)
     {
-        var newRecords = new List<PermissionGroupDefinitionRecord>();
-        var changedRecords = new List<PermissionGroupDefinitionRecord>();
+        var newRecords = new List<PermissionGroup>();
+        var changedRecords = new List<PermissionGroup>();
         var list = await PermissionGroupRepository.GetListAsync();
         var permissionGroupRecordsInDatabase = list.ToDictionary(x => x.Name);
 
@@ -245,7 +245,7 @@ public class StaticPermissionSaver : IStaticPermissionSaver, ITransientDependenc
             ? permissionGroupRecordsInDatabase.Values
                 .Where(x => PermissionOptions.DeletedPermissionGroups.Contains(x.Name))
                 .ToArray()
-            : Array.Empty<PermissionGroupDefinitionRecord>();
+            : Array.Empty<PermissionGroup>();
 
         if (newRecords.Any())
         {
@@ -353,7 +353,7 @@ public class StaticPermissionSaver : IStaticPermissionSaver, ITransientDependenc
     }
 
     private static string CalculateHash(
-        PermissionGroupDefinitionRecord[] permissionGroupRecords,
+        PermissionGroup[] permissionGroupRecords,
         PermissionDefinitionRecord[] permissionRecords,
         IEnumerable<string> deletedPermissionGroups,
         IEnumerable<string> deletedPermissions)
@@ -364,7 +364,7 @@ public class StaticPermissionSaver : IStaticPermissionSaver, ITransientDependenc
             {
                 Modifiers =
                 {
-                    new AbpIgnorePropertiesModifiers<PermissionGroupDefinitionRecord, Guid>().CreateModifyAction(x => x.Id),
+                    new AbpIgnorePropertiesModifiers<PermissionGroup, Guid>().CreateModifyAction(x => x.Id),
                     new AbpIgnorePropertiesModifiers<PermissionDefinitionRecord, Guid>().CreateModifyAction(x => x.Id)
                 }
             }

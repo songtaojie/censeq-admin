@@ -47,9 +47,9 @@ public class PermissionDefinitionSerializer : IPermissionDefinitionSerializer, I
     /// </summary>
     /// <param name="permissionGroups">权限组定义</param>
     /// <returns></returns>
-    public async Task<(PermissionGroupDefinitionRecord[], PermissionDefinitionRecord[])> SerializeAsync(IEnumerable<PermissionGroupDefinition> permissionGroups)
+    public async Task<(PermissionGroup[], PermissionDefinitionRecord[])> SerializeAsync(IEnumerable<PermissionGroupDefinition> permissionGroups)
     {
-        var permissionGroupRecords = new List<PermissionGroupDefinitionRecord>(permissionGroups.Count());
+        var permissionGroupRecords = new List<PermissionGroup>(permissionGroups.Count());
         var permissionRecords = new List<PermissionDefinitionRecord>();
 
         foreach (var permissionGroup in permissionGroups)
@@ -70,11 +70,11 @@ public class PermissionDefinitionSerializer : IPermissionDefinitionSerializer, I
     /// </summary>
     /// <param name="permissionGroup">权限组定义</param>
     /// <returns></returns>
-    public Task<PermissionGroupDefinitionRecord> SerializeAsync(PermissionGroupDefinition permissionGroup)
+    public Task<PermissionGroup> SerializeAsync(PermissionGroupDefinition permissionGroup)
     {
         using (CultureHelper.Use(CultureInfo.InvariantCulture))
         {
-            var permissionGroupRecord = new PermissionGroupDefinitionRecord(
+            var permissionGroupRecord = new PermissionGroup(
                 GuidGenerator.Create(),
                 permissionGroup.Name,
                 LocalizableStringSerializer.Serialize(permissionGroup.DisplayName));

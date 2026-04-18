@@ -33,7 +33,7 @@ public interface IDynamicPermissionDefinitionStoreInMemoryCache
     /// <param name="permissionGroupRecords"></param>
     /// <param name="permissionRecords"></param>
     /// <returns></returns>
-    Task FillAsync(List<PermissionGroupDefinitionRecord> permissionGroupRecords,List<PermissionDefinitionRecord> permissionRecords);
+    Task FillAsync(List<PermissionGroup> permissionGroupRecords,List<PermissionDefinitionRecord> permissionRecords);
 
     /// <summary>
     /// ��ȡȨ��
