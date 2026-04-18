@@ -1,7 +1,6 @@
 import { RouteRecordRaw } from 'vue-router';
 import pinia from '/@/stores/index';
 import { useRequestOldRoutes } from '/@/stores/requestOldRoutes';
-import { Session } from '/@/utils/storage';
 import { NextLoading } from '/@/utils/loading';
 import { dynamicRoutes, notFoundAndNoPower } from '/@/router/route';
 import { formatTwoStageRoutes, formatFlatteningRoutes, router } from '/@/router/index';
@@ -10,6 +9,7 @@ import { useTagsViewRoutes } from '/@/stores/tagsViewRoutes';
 import { useMenuApi } from '/@/api/apis';
 import type { CurrentUserMenuResultDto, MenuRouteDto } from '/@/api/models/menu';
 import { useUserInfo } from '/@/composables/useUserInfo';
+import { useOidc } from '/@/composables/useOidc';
 
 // 后端控制路由
 
@@ -36,8 +36,8 @@ const dynamicViewsModules: Record<string, Function> = Object.assign({}, { ...lay
 export async function initBackEndControlRoutes() {
 	// 界面 loading 动画开始执行
 	if (window.nextLoading === undefined) NextLoading.start();
-	// 无 token 停止执行下一步
-	if (!Session.get('token')) return false;
+	const { isAuthenticated } = useOidc();
+	if (!(await isAuthenticated())) return false;
 	const runtimeMenu = await getBackEndControlRoutes();
 	const { setUserInfos } = useUserInfo();
 	await setUserInfos({ roles: runtimeMenu.roles ?? [], authBtnList: runtimeMenu.authBtnList ?? [] });

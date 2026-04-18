@@ -401,7 +401,7 @@ public partial class TokenController
         return SignIn(principal, OpenIddictServerAspNetCoreDefaults.AuthenticationScheme);
     }
 
-    protected virtual async Task<IdentitySession> CreateSessionAsync(IdentityUser user, OpenIddictRequest request)
+    protected virtual async Task<IdentitySession?> CreateSessionAsync(IdentityUser user, OpenIddictRequest request)
     {
         try
         {

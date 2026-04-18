@@ -47,9 +47,11 @@ export function useOidc() {
 	const handleRedirectCallback = async () => {
 		try {
 			const user = await userManager.signinCallback();
-			console.log('回调中的user', user);
+			await setUser(user);
+			return user;
 		} catch (err) {
 			Logger.error('OIDC 回调失败:', err);
+			throw err;
 		}
 	};
 

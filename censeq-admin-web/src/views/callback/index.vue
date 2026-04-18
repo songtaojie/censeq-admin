@@ -2,20 +2,37 @@
 	<div>
 		<div desktop="12" tablet="8">
 			<dl>
-				<dt>authorize successful</dt>
-				<dt>Your browser should be redirected soon</dt>
+				<dt>{{ callbackTitle }}</dt>
+				<dt>{{ callbackDescription }}</dt>
 			</dl>
 		</div>
 	</div>
 </template>
 <script setup lang="ts" name="callback">
-import { onBeforeMount } from 'vue';
+import { computed, onBeforeMount, ref } from 'vue';
 import { useRouter } from 'vue-router';
 import { useOidc } from '/@/composables/useOidc';
 import { Session } from '/@/utils/storage';
 import { ensureAntiforgeryCookies } from '/@/utils/antiforgery';
 const router = useRouter();
 const { handleRedirectCallback } = useOidc();
+const callbackError = ref('');
+
+const callbackTitle = computed(() => (callbackError.value ? 'authorize failed' : 'authorize successful'));
+const callbackDescription = computed(() => {
+	if (callbackError.value) return callbackError.value;
+	return 'Your browser should be redirected soon';
+});
+
+const getErrorMessage = (error: unknown) => {
+	if (error instanceof Error) return error.message;
+	if (typeof error === 'string') return error;
+	try {
+		return JSON.stringify(error);
+	} catch {
+		return 'Unknown callback error';
+	}
+};
 
 onBeforeMount(async () => {
 	try {
@@ -34,6 +51,7 @@ onBeforeMount(async () => {
 		}
 	} catch (err) {
 		console.error(' 登录回调失败:', err);
+		callbackError.value = `OIDC callback failed: ${getErrorMessage(err)}`;
 	} finally {
 		Session.remove('pre_auth_route');
 	}

@@ -26,7 +26,7 @@ public class Tenant : FullAuditedAggregateRoot<Guid>, IHasEntityVersion
 
     }
 
-    protected internal Tenant(Guid id, [NotNull] string name, [CanBeNull] string normalizedName, [CanBeNull] string code = null)
+    protected internal Tenant(Guid id, [NotNull] string name, [CanBeNull] string? normalizedName, [CanBeNull] string? code = null)
         : base(id)
     {
         SetName(name);
@@ -117,7 +117,7 @@ public class Tenant : FullAuditedAggregateRoot<Guid>, IHasEntityVersion
         Code = Check.Length(code, nameof(code), TenantConsts.MaxCodeLength);
     }
 
-    public virtual void SetCodePublic([CanBeNull] string code)
+    public virtual void SetCodePublic([CanBeNull] string? code)
     {
         SetCode(code);
     }

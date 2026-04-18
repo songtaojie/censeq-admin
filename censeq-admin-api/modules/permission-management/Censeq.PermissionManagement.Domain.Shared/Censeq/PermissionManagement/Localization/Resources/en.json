@@ -1,6 +1,8 @@
 {
   "culture": "en",
   "texts": {
+    "Permission:PermissionManagement": "Permission management",
+    "Permission:DefinitionManagement": "Permission definition management",
     "Permissions": "Permissions",
     "OnlyProviderPermissons": "Only this provider",
     "All": "All",

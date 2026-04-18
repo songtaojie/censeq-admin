@@ -24,7 +24,7 @@ public interface IIdentityClaimTypeRepository : IBasicRepository<IdentityClaimTy
     );
 
     Task<List<IdentityClaimType>> GetListAsync(
-        string sorting,
+        string? sorting,
         int maxResultCount,
         int skipCount,
         string filter,

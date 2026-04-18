@@ -6,3 +6,4 @@ export * from './menu/menu.service';
 export * from './permission-management/permissions.service';
 export * from './setting-management/settings.service';
 export * from './tenant-management/tenant.service';
+export * from './permission-management/permission-definition.service';

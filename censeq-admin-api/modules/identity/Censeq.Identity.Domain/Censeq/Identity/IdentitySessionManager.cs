@@ -79,7 +79,7 @@ public class IdentitySessionManager : DomainService
     /// </summary>
     public virtual Task<IdentitySession?> FindAsync(string sessionId, CancellationToken cancellationToken = default)
     {
-        return SessionRepository.FindAsync(sessionId, cancellationToken);
+        return SessionRepository.FindAsync(sessionId, cancellationToken)!;
     }
 
     /// <summary>

@@ -14,12 +14,14 @@ using Volo.Abp.ObjectExtending.Modularity;
 using Volo.Abp.Security.Claims;
 using Volo.Abp.Threading;
 using Volo.Abp.Users;
+using Censeq.PermissionManagement;
 
 namespace Censeq.Identity;
 
 [DependsOn(
     typeof(AbpDddDomainModule),
     typeof(CenseqIdentityDomainSharedModule),
+    typeof(CenseqPermissionManagementDomainModule),
     typeof(AbpUsersDomainModule),
     typeof(AbpAutoMapperModule)
     )]

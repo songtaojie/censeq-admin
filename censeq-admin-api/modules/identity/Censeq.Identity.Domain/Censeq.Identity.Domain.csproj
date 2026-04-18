@@ -23,6 +23,7 @@
 	<ItemGroup>
 	  <ProjectReference Include="..\..\..\framework\Censeq.Framework.Core\Censeq.Framework.Core.csproj" />
 	  <ProjectReference Include="..\Censeq.Identity.Domain.Shared\Censeq.Identity.Domain.Shared.csproj" />
+	  <ProjectReference Include="..\..\permission-management\Censeq.PermissionManagement.Domain\Censeq.PermissionManagement.Domain.csproj" />
 	</ItemGroup>
 
 </Project>

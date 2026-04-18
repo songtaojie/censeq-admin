@@ -17,7 +17,11 @@ namespace Censeq.Admin
 
         public ValueTask HandleAsync(ProcessSignInContext context)
         {
-            var identity = (ClaimsIdentity)context.Principal.Identity;
+            var identity = context.Principal?.Identity as ClaimsIdentity;
+            if (identity == null)
+            {
+                return default;
+            }
 
             // 添加 aud 声明
             identity.AddClaim(new Claim(OpenIddictConstants.Claims.Audience, "your-audience-here"));

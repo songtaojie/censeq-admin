@@ -28,7 +28,7 @@ public class EfCoreIdentityClaimTypeRepository : EfCoreRepository<ICenseqIdentit
     }
 
     public virtual async Task<List<IdentityClaimType>> GetListAsync(
-        string sorting,
+        string? sorting,
         int maxResultCount,
         int skipCount,
         string filter,
@@ -39,9 +39,9 @@ public class EfCoreIdentityClaimTypeRepository : EfCoreRepository<ICenseqIdentit
                 !filter.IsNullOrWhiteSpace(),
                 u =>
                     u.Name.Contains(filter)
-                    || u.Description.Contains(filter)
-                    || u.Regex.Contains(filter)
-                    || u.RegexDescription.Contains(filter)
+                    || (u.Description != null && u.Description.Contains(filter))
+                    || (u.Regex != null && u.Regex.Contains(filter))
+                    || (u.RegexDescription != null && u.RegexDescription.Contains(filter))
             )
             .OrderBy(sorting.IsNullOrWhiteSpace() ? nameof(IdentityClaimType.Name) : sorting)
             .PageBy(skipCount, maxResultCount)
@@ -59,9 +59,9 @@ public class EfCoreIdentityClaimTypeRepository : EfCoreRepository<ICenseqIdentit
                 !filter.IsNullOrWhiteSpace(),
                 u =>
                     u.Name.Contains(filter!)
-                    || u.Description.Contains(filter!)
-                    || u.Regex.Contains(filter!)
-                    || u.RegexDescription.Contains(filter!)
+                    || (u.Description != null && u.Description.Contains(filter!))
+                    || (u.Regex != null && u.Regex.Contains(filter!))
+                    || (u.RegexDescription != null && u.RegexDescription.Contains(filter!))
             ).LongCountAsync(GetCancellationToken(cancellationToken));
     }
 

@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Censeq.PermissionManagement;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Options;
+using Volo.Abp.Authorization.Permissions;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Guids;
 using Volo.Abp.MultiTenancy;
@@ -12,6 +14,12 @@ namespace Censeq.Identity;
 
 public class IdentityDataSeeder : ITransientDependency, IIdentityDataSeeder
 {
+    private static readonly string[] DefaultAdminPermissions =
+    [
+        "PermissionManagement.DefinitionManagement",
+        "AuditLogging.AuditLogs"
+    ];
+
     protected IGuidGenerator GuidGenerator { get; }
     protected IIdentityRoleRepository RoleRepository { get; }
     protected IIdentityClaimTypeRepository ClaimTypeRepository { get; }
@@ -20,6 +28,7 @@ public class IdentityDataSeeder : ITransientDependency, IIdentityDataSeeder
     protected IdentityUserManager UserManager { get; }
     protected IdentityRoleManager RoleManager { get; }
     protected IdentityClaimTypeManager ClaimTypeManager { get; }
+    protected IPermissionDataSeeder PermissionDataSeeder { get; }
     protected ICurrentTenant CurrentTenant { get; }
     protected IOptions<IdentityOptions> IdentityOptions { get; }
 
@@ -32,6 +41,7 @@ public class IdentityDataSeeder : ITransientDependency, IIdentityDataSeeder
         IdentityUserManager userManager,
         IdentityRoleManager roleManager,
         IdentityClaimTypeManager claimTypeManager,
+        IPermissionDataSeeder permissionDataSeeder,
         ICurrentTenant currentTenant,
         IOptions<IdentityOptions> identityOptions)
     {
@@ -43,6 +53,7 @@ public class IdentityDataSeeder : ITransientDependency, IIdentityDataSeeder
         UserManager = userManager;
         RoleManager = roleManager;
         ClaimTypeManager = claimTypeManager;
+        PermissionDataSeeder = permissionDataSeeder;
         CurrentTenant = currentTenant;
         IdentityOptions = identityOptions;
     }
@@ -112,6 +123,13 @@ public class IdentityDataSeeder : ITransientDependency, IIdentityDataSeeder
 
                 (await RoleManager.CreateAsync(adminRole)).CheckErrors();
                 result.CreatedAdminRole = true;
+
+                await PermissionDataSeeder.SeedAsync(
+                    RolePermissionValueProvider.ProviderName,
+                    adminRoleName,
+                    DefaultAdminPermissions,
+                    tenantId
+                );
             }
 
             (await UserManager.AddToRoleAsync(adminUser, adminRoleName)).CheckErrors();

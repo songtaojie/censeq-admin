@@ -92,7 +92,9 @@
     <PackageVersion Include="Volo.Abp.Validation" Version="$(AbpVersion)" />
     <PackageVersion Include="Volo.Abp.AutoMapper" Version="$(AbpVersion)" />
     <!-- Microsoft -->
+    <PackageVersion Include="Microsoft.EntityFrameworkCore" Version="$(MicrosoftEntityFrameworkCoreDesignVersion)" />
     <PackageVersion Include="Microsoft.EntityFrameworkCore.Design" Version="$(MicrosoftEntityFrameworkCoreDesignVersion)" />
+    <PackageVersion Include="Microsoft.EntityFrameworkCore.Relational" Version="$(MicrosoftEntityFrameworkCoreDesignVersion)" />
     <PackageVersion Include="Microsoft.Extensions.FileProviders.Embedded" Version="$(MicrosoftExtensionsVersion)" />
     <PackageVersion Include="Microsoft.Extensions.Hosting" Version="$(MicrosoftExtensionsHostingVersion)" />
     <PackageVersion Include="Microsoft.Extensions.Identity.Core" Version="$(MicrosoftExtensionsIdentityCoreVersion)" />

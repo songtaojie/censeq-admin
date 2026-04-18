@@ -29,21 +29,38 @@ public class MenuDataSeedContributor : DomainService, IDataSeedContributor, ITra
             return;
         }
 
+        // 预加载所有已存在的 host 菜单，按 (Path, Component) 组合键判断是否已存在
         var queryable = await _menuRepository.GetQueryableAsync();
-        var hasHostMenus = await AsyncExecuter.AnyAsync(queryable.Where(x => x.TenantId == null));
-        if (hasHostMenus)
-        {
-            return;
-        }
+        var existingMenus = await AsyncExecuter.ToListAsync(
+            queryable.Where(x => x.TenantId == null));
 
-        var createdMenus = new Dictionary<string, Menu>(StringComparer.Ordinal);
-        var createdPermissions = new List<MenuPermission>();
+        var existingKeys = new HashSet<(string?, string?)>(
+            existingMenus.Select(x => (x.Path, x.Component)));
+
+        // menuByKey 用于解析子菜单的 parentId，含已存在和新插入的菜单
+        var menuByKey = new Dictionary<string, Menu>(StringComparer.Ordinal);
+        foreach (var existing in existingMenus)
+        {
+            // key 与 name 相同（种子数据中 key == name）
+            if (!menuByKey.ContainsKey(existing.Name))
+            {
+                menuByKey[existing.Name] = existing;
+            }
+        }
 
         foreach (var definition in GetHostMenuDefinitions())
         {
+            // 按 (Path, Component) 判断是否已存在，存在则跳过
+            if (existingKeys.Contains((definition.Path, definition.Component)))
+            {
+                continue;
+            }
+
             var parentId = definition.ParentKey is null
                 ? (Guid?)null
-                : createdMenus[definition.ParentKey].Id;
+                : menuByKey.TryGetValue(definition.ParentKey, out var parentMenu)
+                    ? parentMenu.Id
+                    : (Guid?)null;
 
             var menu = new Menu(Guid.NewGuid(), null, definition.Name, definition.Title, definition.Type);
             menu.SetParent(parentId);
@@ -63,11 +80,10 @@ public class MenuDataSeedContributor : DomainService, IDataSeedContributor, ITra
             foreach (var permissionName in definition.PermissionNames)
             {
                 var menuPermission = new MenuPermission(Guid.NewGuid(), menu.Id, permissionName);
-                createdPermissions.Add(menuPermission);
                 await _menuPermissionRepository.InsertAsync(menuPermission, autoSave: true);
             }
 
-            createdMenus[definition.Key] = menu;
+            menuByKey[definition.Key] = menu;
         }
     }
 
@@ -144,6 +160,20 @@ public class MenuDataSeedContributor : DomainService, IDataSeedContributor, ITra
                 sort: 30,
                 authorizationMode: MenuAuthorizationMode.Permission,
                 permissionNames: new[] { "Admin.Menus" }),
+            new(
+                key: "systemAuditLog",
+                parentKey: "platform",
+                name: "systemAuditLog",
+                title: "message.router.systemAuditLog",
+                routeName: "systemAuditLog",
+                path: "/platform/audit-log",
+                component: "system/audit-log/index",
+                redirect: null,
+                icon: "ele-Document",
+                type: MenuType.Menu,
+                sort: 40,
+                authorizationMode: MenuAuthorizationMode.Permission,
+                permissionNames: new[] { "AuditLogging.AuditLogs" }),
             new(
                 key: "system",
                 name: "system",
@@ -227,6 +257,20 @@ public class MenuDataSeedContributor : DomainService, IDataSeedContributor, ITra
                 sort: 50,
                 authorizationMode: MenuAuthorizationMode.Permission,
                 permissionNames: new[] { "SettingManagement.Emailing", "SettingManagement.TimeZone" }),
+            new(
+                key: "systemPermissionDefinition",
+                parentKey: "system",
+                name: "systemPermissionDefinition",
+                title: "权限定义管理",
+                routeName: "systemPermissionDefinition",
+                path: "/system/permission-definition",
+                component: "system/permission-definition/index",
+                redirect: null,
+                icon: "ele-Key",
+                type: MenuType.Menu,
+                sort: 70,
+                authorizationMode: MenuAuthorizationMode.Permission,
+                permissionNames: new[] { "PermissionManagement.DefinitionManagement" }),
             new(
                 key: "openiddict",
                 name: "openiddict",
