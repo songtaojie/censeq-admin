@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Identity;
 using IdentityRole = Censeq.Identity.Entities.IdentityRole;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Data;
+using Volo.Abp.Domain.Entities;
 using Volo.Abp.ObjectExtending;
 using Volo.Abp;
 
@@ -58,6 +59,9 @@ public class IdentityRoleAppService : IdentityAppServiceBase, IIdentityRoleAppSe
     [Authorize(IdentityPermissions.Roles.Create)]
     public virtual async Task<IdentityRoleDto> CreateAsync(IdentityRoleCreateDto input)
     {
+        var normalizedCode = NormalizeRoleCode(input.Code);
+        await EnsureRoleCodeUniqueAsync(normalizedCode);
+
         var role = new IdentityRole(
             GuidGenerator.Create(),
             input.Name,
@@ -67,6 +71,8 @@ public class IdentityRoleAppService : IdentityAppServiceBase, IIdentityRoleAppSe
             IsDefault = input.IsDefault,
             IsPublic = input.IsPublic
         };
+
+        role.SetCode(normalizedCode);
 
         input.MapExtraPropertiesTo(role);
 
@@ -82,7 +88,7 @@ public class IdentityRoleAppService : IdentityAppServiceBase, IIdentityRoleAppSe
         var role = await RoleManager.GetByIdAsync(id);
         if (role == null)
         {
-            throw new Volo.Abp.Domain.Entities.EntityNotFoundException(typeof(IdentityRole), id);
+            throw new EntityNotFoundException(typeof(IdentityRole), id);
         }
 
         role.SetConcurrencyStampIfNotNull(input.ConcurrencyStamp);
@@ -96,6 +102,18 @@ public class IdentityRoleAppService : IdentityAppServiceBase, IIdentityRoleAppSe
 
         role.IsDefault = input.IsDefault;
         role.IsPublic = input.IsPublic;
+
+        var normalizedCode = NormalizeRoleCode(input.Code);
+        if (!string.Equals(role.Code, normalizedCode, StringComparison.Ordinal))
+        {
+            if (!string.IsNullOrWhiteSpace(role.Code))
+            {
+                throw new UserFriendlyException("角色编码已设置，不允许再次修改。");
+            }
+
+            await EnsureRoleCodeUniqueAsync(normalizedCode, id);
+            role.SetCode(normalizedCode);
+        }
 
         input.MapExtraPropertiesTo(role);
 
@@ -176,5 +194,29 @@ public class IdentityRoleAppService : IdentityAppServiceBase, IIdentityRoleAppSe
             role.Claims.Remove(claim);
             await RoleRepository.UpdateAsync(role);
         }
+    }
+
+    protected virtual async Task EnsureRoleCodeUniqueAsync(string? code, Guid? excludedRoleId = null)
+    {
+        if (code.IsNullOrWhiteSpace())
+        {
+            return;
+        }
+
+        var existingRole = await RoleRepository.FindByCodeAsync(code!);
+        if (existingRole != null && existingRole.Id != excludedRoleId)
+        {
+            throw new UserFriendlyException($"角色编码“{code}”已存在，请使用其他编码。");
+        }
+    }
+
+    protected virtual string? NormalizeRoleCode(string? code)
+    {
+        if (code.IsNullOrWhiteSpace())
+        {
+            return null;
+        }
+
+        return code.Trim().ToUpperInvariant();
     }
 }

@@ -133,6 +133,27 @@
 						</el-form-item>
 					</el-col>
 					<el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24" class="mb20">
+						<el-form-item label="权限组">
+							<el-select
+								v-model="state.ruleForm.selectedPermissionGroups"
+								multiple
+								clearable
+								collapse-tags
+								collapse-tags-tooltip
+								placeholder="不选则展示全量权限组"
+								class="w100"
+								@change="onPermissionGroupsChange"
+							>
+								<el-option
+									v-for="group in state.allPermissionGroups"
+									:key="group.name"
+									:label="group.displayName"
+									:value="group.name"
+								/>
+							</el-select>
+						</el-form-item>
+					</el-col>
+					<el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24" class="mb20">
 						<el-form-item label="权限选择" prop="selectedPermissionNames">
 							<div class="permission-selector">
 								<div class="permission-selector__toolbar">
@@ -222,6 +243,7 @@ type MenuFormState = {
 	status: boolean;
 	authorizationMode: 1 | 2 | 3;
 	selectedPermissionNames: string[];
+	selectedPermissionGroups: string[];
 	remark: string;
 	buttonCode: string;
 	concurrencyStamp: string;
@@ -255,6 +277,7 @@ const createDefaultForm = (): MenuFormState => ({
 	status: true,
 	authorizationMode: 1,
 	selectedPermissionNames: [],
+	selectedPermissionGroups: [],
 	remark: '',
 	buttonCode: '',
 	concurrencyStamp: '',
@@ -266,6 +289,7 @@ const state = reactive({
 	ruleForm: createDefaultForm(),
 	menuData: [] as MenuTreeItemDto[],
 	permissionGroups: [] as MenuPermissionGroupDto[],
+	allPermissionGroups: [] as { name: string; displayName: string }[],
 	loading: false,
 	submitting: false,
 	dialog: {
@@ -429,9 +453,15 @@ const loadMenuTree = async () => {
 	state.menuData = data.items ?? [];
 };
 
-const loadPermissionGroups = async () => {
-	const data = await menuApi.getMenuPermissionGroups();
+const loadPermissionGroups = async (params?: { menuId?: string; parentId?: string }) => {
+	const data = await menuApi.getMenuPermissionGroups(params);
 	state.permissionGroups = data.items ?? [];
+};
+
+const loadAllPermissionGroups = async () => {
+	// 加载全量权限组（不传 menuId/parentId），用于权限组多选下拉
+	const data = await menuApi.getMenuPermissionGroups();
+	state.allPermissionGroups = (data.items ?? []).map((g) => ({ name: g.name, displayName: g.displayName }));
 };
 
 const fillForm = (detail: MenuDetailDto) => {
@@ -456,6 +486,9 @@ const fillForm = (detail: MenuDetailDto) => {
 		status: detail.status,
 		authorizationMode: detail.authorizationMode,
 		selectedPermissionNames: [...(detail.permissionNames ?? [])],
+		selectedPermissionGroups: detail.permissionGroups
+			? detail.permissionGroups.split(',').map((s) => s.trim()).filter(Boolean)
+			: [],
 		remark: detail.remark ?? '',
 		buttonCode: detail.buttonCode ?? '',
 		concurrencyStamp: detail.concurrencyStamp,
@@ -476,14 +509,24 @@ const openDialog = async (type: DialogMode, row?: MenuTreeItemDto) => {
 		state.dialog.title = type === 'edit' ? '修改菜单' : '新增菜单';
 		state.dialog.submitTxt = type === 'edit' ? '修 改' : '新 增';
 		await loadMenuTree();
-		await loadPermissionGroups();
+		await loadAllPermissionGroups();
 		resetForm();
+
+		// Determine context for permission group filtering
+		const permissionParams: { menuId?: string; parentId?: string } = {};
 		if (type === 'edit' && row?.id) {
 			const detail = await menuApi.getMenu(row.id);
 			fillForm(detail);
+			permissionParams.menuId = row.id;
+			if (detail.parentId) {
+				permissionParams.parentId = detail.parentId;
+			}
 		} else if (row?.id && row.type !== 3) {
 			state.ruleForm.parentId = row.id;
+			permissionParams.parentId = row.id;
 		}
+
+		await loadPermissionGroups(permissionParams);
 		state.dialog.isShowDialog = true;
 		syncPermissionTreeState();
 	} finally {
@@ -504,6 +547,24 @@ const syncSelectedPermissions = () => {
 };
 
 const clearPermissionSelection = () => {
+	permissionTreeRef.value?.setCheckedKeys([]);
+	state.ruleForm.selectedPermissionNames = [];
+};
+
+const onPermissionGroupsChange = async () => {
+	// 权限组变更时，根据新选择的权限组重新加载权限树，并清空已选权限
+	const groups = state.ruleForm.selectedPermissionGroups;
+	if (groups.length > 0) {
+		// 直接从 allPermissionGroups 过滤，不需要再请求接口
+		const allowedNames = new Set(groups);
+		const data = await menuApi.getMenuPermissionGroups();
+		state.permissionGroups = (data.items ?? []).filter((g) => allowedNames.has(g.name));
+	} else {
+		// 未选权限组时展示全量
+		const data = await menuApi.getMenuPermissionGroups();
+		state.permissionGroups = data.items ?? [];
+	}
+	// 清空已选权限（权限组变了，之前选的可能不再适用）
 	permissionTreeRef.value?.setCheckedKeys([]);
 	state.ruleForm.selectedPermissionNames = [];
 };
@@ -536,6 +597,9 @@ const buildPayload = (): CreateMenuDto => {
 		authorizationMode: state.ruleForm.authorizationMode,
 		remark: normalizeOptional(state.ruleForm.remark),
 		buttonCode: state.ruleForm.type === 3 ? normalizeOptional(state.ruleForm.buttonCode) : undefined,
+		permissionGroups: state.ruleForm.selectedPermissionGroups.length > 0
+			? state.ruleForm.selectedPermissionGroups.join(',')
+			: undefined,
 		permissionNames,
 	};
 };
@@ -616,3 +680,24 @@ defineExpose({
 	openDialog,
 });
 </script>
+
+<style scoped lang="scss">
+.permission-selector {
+	width: 100%;
+
+	&__toolbar {
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		margin-bottom: 8px;
+	}
+
+	&__tree {
+		border: 1px solid var(--el-border-color);
+		border-radius: var(--el-input-border-radius, var(--el-border-radius-base));
+		padding: 10px;
+		max-height: 300px;
+		overflow-y: auto;
+	}
+}
+</style>

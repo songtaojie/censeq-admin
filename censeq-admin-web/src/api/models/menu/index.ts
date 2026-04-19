@@ -23,6 +23,7 @@ export interface CreateMenuDto {
 	authorizationMode: MenuAuthorizationMode;
 	remark?: string;
 	buttonCode?: string;
+	permissionGroups?: string | null;
 	permissionNames: string[];
 }
 
@@ -70,6 +71,7 @@ export interface MenuTreeItemDto {
 	status: boolean;
 	authorizationMode: MenuAuthorizationMode;
 	buttonCode?: string | null;
+	permissionGroups?: string | null;
 	permissionNames: string[];
 	children: MenuTreeItemDto[];
 }

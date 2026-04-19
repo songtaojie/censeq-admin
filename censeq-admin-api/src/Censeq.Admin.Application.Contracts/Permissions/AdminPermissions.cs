@@ -2,7 +2,7 @@
 
 public static class AdminPermissions
 {
-    public const string GroupName = "Admin";
+    public const string GroupName = "CenseqAdmin";
 
     public static class Menus
     {

@@ -34,13 +34,40 @@ public class MenuAppService : AdminAppService, IMenuAppService
         _simpleStateCheckerManager = simpleStateCheckerManager;
     }
 
-    public virtual async Task<ListResultDto<MenuPermissionGroupDto>> GetPermissionGroupsAsync()
+    public virtual async Task<ListResultDto<MenuPermissionGroupDto>> GetPermissionGroupsAsync(Guid? menuId = null, Guid? parentId = null)
     {
+        // 优先使用菜单自身的 PermissionGroups 字段精确过滤
+        HashSet<string>? allowedGroupNames = null;
+
+        if (menuId.HasValue)
+        {
+            var menu = await _menuRepository.FindAsync(menuId.Value);
+            if (menu?.PermissionGroups != null)
+            {
+                allowedGroupNames = ParsePermissionGroups(menu.PermissionGroups);
+            }
+        }
+
+        // 新增模式：从父菜单获取 PermissionGroups
+        if (allowedGroupNames == null && parentId.HasValue)
+        {
+            var parentMenu = await _menuRepository.FindAsync(parentId.Value);
+            if (parentMenu?.PermissionGroups != null)
+            {
+                allowedGroupNames = ParsePermissionGroups(parentMenu.PermissionGroups);
+            }
+        }
+
         var result = new List<MenuPermissionGroupDto>();
         var multiTenancySide = CurrentTenant.GetMultiTenancySide();
 
         foreach (var group in await _permissionDefinitionManager.GetGroupsAsync())
         {
+            if (allowedGroupNames != null && !allowedGroupNames.Contains(group.Name))
+            {
+                continue;
+            }
+
             var permissions = new List<MenuPermissionDefinitionDto>();
             var availableDefinitions = group.GetPermissionsWithChildren()
                 .Where(x => x.IsEnabled)
@@ -78,6 +105,21 @@ public class MenuAppService : AdminAppService, IMenuAppService
         return new ListResultDto<MenuPermissionGroupDto>(result);
     }
 
+    private static HashSet<string> ParsePermissionGroups(string permissionGroups)
+    {
+        return new HashSet<string>(
+            permissionGroups.Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries),
+            StringComparer.Ordinal);
+    }
+
+    public virtual async Task<ListResultDto<string>> GetReferencedPermissionNamesAsync()
+    {
+        var queryable = await _menuPermissionRepository.GetQueryableAsync();
+        var permissionNames = await AsyncExecuter.ToListAsync(
+            queryable.Select(x => x.PermissionName).Distinct());
+        return new ListResultDto<string>(permissionNames);
+    }
+
     public virtual async Task<ListResultDto<MenuTreeItemDto>> GetTreeAsync()
     {
         var menus = await GetManagementMenusAsync();
@@ -98,7 +140,7 @@ public class MenuAppService : AdminAppService, IMenuAppService
     [Authorize(AdminPermissions.Menus.Create)]
     public virtual async Task<MenuDetailDto> CreateAsync(CreateMenuDto input)
     {
-        ValidatePermissionConfiguration(input.AuthorizationMode, input.PermissionNames);
+        await ValidatePermissionConfigurationAsync(input.AuthorizationMode, input.PermissionNames);
 
         var menu = new Menu(GuidGenerator.Create(), CurrentTenant.Id, input.Name, input.Title, input.Type);
         ApplyInput(menu, input);
@@ -113,7 +155,7 @@ public class MenuAppService : AdminAppService, IMenuAppService
     [Authorize(AdminPermissions.Menus.Update)]
     public virtual async Task<MenuDetailDto> UpdateAsync(Guid id, UpdateMenuDto input)
     {
-        ValidatePermissionConfiguration(input.AuthorizationMode, input.PermissionNames);
+        await ValidatePermissionConfigurationAsync(input.AuthorizationMode, input.PermissionNames);
 
         var menu = await _menuRepository.GetAsync(id);
         EnsureTenantScope(menu);
@@ -248,6 +290,7 @@ public class MenuAppService : AdminAppService, IMenuAppService
             target.SetAuthorizationMode(source.AuthorizationMode);
             target.SetRemark(source.Remark);
             target.SetButtonCode(source.ButtonCode);
+            target.SetPermissionGroups(source.PermissionGroups);
 
             await _menuManager.ValidateAsync(target);
             await _menuRepository.InsertAsync(target, autoSave: true);
@@ -275,6 +318,7 @@ public class MenuAppService : AdminAppService, IMenuAppService
         menu.SetAuthorizationMode(input.AuthorizationMode);
         menu.SetRemark(input.Remark);
         menu.SetButtonCode(input.ButtonCode);
+        menu.SetPermissionGroups(input.PermissionGroups);
     }
 
     private void EnsureTenantScope(Menu menu)
@@ -285,12 +329,23 @@ public class MenuAppService : AdminAppService, IMenuAppService
         }
     }
 
-    private void ValidatePermissionConfiguration(MenuAuthorizationMode authorizationMode, IEnumerable<string> permissionNames)
+    private async Task ValidatePermissionConfigurationAsync(MenuAuthorizationMode authorizationMode, IEnumerable<string> permissionNames)
     {
         var normalized = NormalizePermissions(permissionNames);
         if (authorizationMode != MenuAuthorizationMode.Anonymous && normalized.Count == 0)
         {
             throw new AbpException("Permission based menu nodes must bind at least one ABP permission.");
+        }
+
+        if (normalized.Count > 0)
+        {
+            var allDefinitions = await _permissionDefinitionManager.GetPermissionsAsync();
+            var definedNames = new HashSet<string>(allDefinitions.Select(x => x.Name), StringComparer.Ordinal);
+            var invalidNames = normalized.Where(x => !definedNames.Contains(x)).ToList();
+            if (invalidNames.Count > 0)
+            {
+                throw new AbpException($"The following permission names do not exist: {string.Join(", ", invalidNames)}");
+            }
         }
     }
 
@@ -376,6 +431,7 @@ public class MenuAppService : AdminAppService, IMenuAppService
                     Status = x.Status,
                     AuthorizationMode = x.AuthorizationMode,
                     ButtonCode = x.ButtonCode,
+                    PermissionGroups = x.PermissionGroups,
                     PermissionNames = permissionLookup.GetValueOrDefault(x.Id) ?? []
                 };
                 item.Children = BuildTree(x.Id, menus, permissionLookup);
@@ -410,6 +466,7 @@ public class MenuAppService : AdminAppService, IMenuAppService
             AuthorizationMode = menu.AuthorizationMode,
             Remark = menu.Remark,
             ButtonCode = menu.ButtonCode,
+            PermissionGroups = menu.PermissionGroups,
             PermissionNames = permissions.Select(x => x.PermissionName).OrderBy(x => x).ToList(),
             ConcurrencyStamp = menu.ConcurrencyStamp
         };

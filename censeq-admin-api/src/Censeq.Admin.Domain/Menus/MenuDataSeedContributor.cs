@@ -74,6 +74,7 @@ public class MenuDataSeedContributor : DomainService, IDataSeedContributor, ITra
             menu.SetLinkOptions(false, null, false);
             menu.SetStatus(true);
             menu.SetAuthorizationMode(definition.AuthorizationMode);
+            menu.SetPermissionGroups(definition.PermissionGroups);
 
             await _menuRepository.InsertAsync(menu, autoSave: true);
 
@@ -131,7 +132,8 @@ public class MenuDataSeedContributor : DomainService, IDataSeedContributor, ITra
                 type: MenuType.Menu,
                 sort: 10,
                 authorizationMode: MenuAuthorizationMode.Permission,
-                permissionNames: new[] { "TenantManagement.Tenants" }),
+                permissionNames: new[] { "TenantManagement.Tenants" },
+                permissionGroups: "TenantManagement"),
             new(
                 key: "systemFeature",
                 parentKey: "platform",
@@ -145,7 +147,8 @@ public class MenuDataSeedContributor : DomainService, IDataSeedContributor, ITra
                 type: MenuType.Menu,
                 sort: 20,
                 authorizationMode: MenuAuthorizationMode.Permission,
-                permissionNames: new[] { "CenseqFeatureManagement.ManageHostFeatures" }),
+                permissionNames: new[] { "CenseqFeatureManagement.ManageHostFeatures" },
+                permissionGroups: "CenseqFeatureManagement"),
             new(
                 key: "systemMenu",
                 parentKey: "platform",
@@ -159,7 +162,8 @@ public class MenuDataSeedContributor : DomainService, IDataSeedContributor, ITra
                 type: MenuType.Menu,
                 sort: 30,
                 authorizationMode: MenuAuthorizationMode.Permission,
-                permissionNames: new[] { "Admin.Menus" }),
+                permissionNames: new[] { "Admin.Menus" },
+                permissionGroups: "Admin"),
             new(
                 key: "systemAuditLog",
                 parentKey: "platform",
@@ -173,7 +177,8 @@ public class MenuDataSeedContributor : DomainService, IDataSeedContributor, ITra
                 type: MenuType.Menu,
                 sort: 40,
                 authorizationMode: MenuAuthorizationMode.Permission,
-                permissionNames: new[] { "AuditLogging.AuditLogs" }),
+                permissionNames: new[] { "AuditLogging.AuditLogs" },
+                permissionGroups: "AuditLogging"),
             new(
                 key: "system",
                 name: "system",
@@ -200,7 +205,8 @@ public class MenuDataSeedContributor : DomainService, IDataSeedContributor, ITra
                 type: MenuType.Menu,
                 sort: 10,
                 authorizationMode: MenuAuthorizationMode.Permission,
-                permissionNames: new[] { "CenseqIdentity.Roles" }),
+                permissionNames: new[] { "CenseqIdentity.Roles" },
+                permissionGroups: "CenseqIdentity"),
             new(
                 key: "systemClaimType",
                 parentKey: "system",
@@ -214,7 +220,8 @@ public class MenuDataSeedContributor : DomainService, IDataSeedContributor, ITra
                 type: MenuType.Menu,
                 sort: 20,
                 authorizationMode: MenuAuthorizationMode.Permission,
-                permissionNames: new[] { "CenseqIdentity.ClaimTypes" }),
+                permissionNames: new[] { "CenseqIdentity.ClaimTypes" },
+                permissionGroups: "CenseqIdentity"),
             new(
                 key: "systemUser",
                 parentKey: "system",
@@ -228,7 +235,8 @@ public class MenuDataSeedContributor : DomainService, IDataSeedContributor, ITra
                 type: MenuType.Menu,
                 sort: 30,
                 authorizationMode: MenuAuthorizationMode.Permission,
-                permissionNames: new[] { "CenseqIdentity.Users" }),
+                permissionNames: new[] { "CenseqIdentity.Users" },
+                permissionGroups: "CenseqIdentity"),
             new(
                 key: "systemDept",
                 parentKey: "system",
@@ -242,7 +250,8 @@ public class MenuDataSeedContributor : DomainService, IDataSeedContributor, ITra
                 type: MenuType.Menu,
                 sort: 40,
                 authorizationMode: MenuAuthorizationMode.Permission,
-                permissionNames: new[] { "CenseqIdentity.OrganizationUnits" }),
+                permissionNames: new[] { "CenseqIdentity.OrganizationUnits" },
+                permissionGroups: "CenseqIdentity"),
             new(
                 key: "systemSettings",
                 parentKey: "system",
@@ -256,7 +265,8 @@ public class MenuDataSeedContributor : DomainService, IDataSeedContributor, ITra
                 type: MenuType.Menu,
                 sort: 50,
                 authorizationMode: MenuAuthorizationMode.Permission,
-                permissionNames: new[] { "SettingManagement.Emailing", "SettingManagement.TimeZone" }),
+                permissionNames: new[] { "SettingManagement.Emailing", "SettingManagement.TimeZone" },
+                permissionGroups: "SettingManagement"),
             new(
                 key: "systemPermissionDefinition",
                 parentKey: "system",
@@ -270,11 +280,12 @@ public class MenuDataSeedContributor : DomainService, IDataSeedContributor, ITra
                 type: MenuType.Menu,
                 sort: 70,
                 authorizationMode: MenuAuthorizationMode.Permission,
-                permissionNames: new[] { "PermissionManagement.DefinitionManagement" }),
+                permissionNames: new[] { "PermissionManagement.DefinitionManagement" },
+                permissionGroups: "PermissionManagement"),
             new(
                 key: "openiddict",
                 name: "openiddict",
-                title: "OAuth/OpenID",
+                title: "认证中心",
                 routeName: "openiddict",
                 path: "/openiddict",
                 component: "layout/routerView/parent",
@@ -297,7 +308,8 @@ public class MenuDataSeedContributor : DomainService, IDataSeedContributor, ITra
                 type: MenuType.Menu,
                 sort: 10,
                 authorizationMode: MenuAuthorizationMode.Permission,
-                permissionNames: new[] { "OpenIddict.Applications" }),
+                permissionNames: new[] { "OpenIddict.Applications" },
+                permissionGroups: "OpenIddict"),
             new(
                 key: "openiddictScope",
                 parentKey: "openiddict",
@@ -311,7 +323,8 @@ public class MenuDataSeedContributor : DomainService, IDataSeedContributor, ITra
                 type: MenuType.Menu,
                 sort: 20,
                 authorizationMode: MenuAuthorizationMode.Permission,
-                permissionNames: new[] { "OpenIddict.Scopes" })
+                permissionNames: new[] { "OpenIddict.Scopes" },
+                permissionGroups: "OpenIddict")
         };
     }
 
@@ -333,7 +346,8 @@ public class MenuDataSeedContributor : DomainService, IDataSeedContributor, ITra
             string? parentKey = null,
             bool visible = true,
             bool keepAlive = true,
-            bool affix = false)
+            bool affix = false,
+            string? permissionGroups = null)
         {
             Key = key;
             ParentKey = parentKey;
@@ -351,6 +365,7 @@ public class MenuDataSeedContributor : DomainService, IDataSeedContributor, ITra
             Affix = affix;
             AuthorizationMode = authorizationMode;
             PermissionNames = permissionNames;
+            PermissionGroups = permissionGroups;
         }
 
         public string Key { get; }
@@ -384,5 +399,7 @@ public class MenuDataSeedContributor : DomainService, IDataSeedContributor, ITra
         public MenuAuthorizationMode AuthorizationMode { get; }
 
         public IReadOnlyList<string> PermissionNames { get; }
+
+        public string? PermissionGroups { get; }
     }
 }

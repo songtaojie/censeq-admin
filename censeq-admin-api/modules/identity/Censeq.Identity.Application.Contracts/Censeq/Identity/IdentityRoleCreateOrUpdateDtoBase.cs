@@ -11,6 +11,10 @@ public class IdentityRoleCreateOrUpdateDtoBase : ExtensibleObject
     [Display(Name = "RoleName")]
     public string Name { get; set; }
 
+    [DynamicStringLength(typeof(IdentityRoleConsts), nameof(IdentityRoleConsts.MaxCodeLength))]
+    [Display(Name = "RoleCode")]
+    public string? Code { get; set; }
+
     public bool IsDefault { get; set; }
 
     public bool IsPublic { get; set; }

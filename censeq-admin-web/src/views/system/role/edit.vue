@@ -3,6 +3,17 @@
 		<el-dialog :title="state.dialog.title" v-model="state.dialog.isShowDialog" width="560px" destroy-on-close>
 			<div class="dialog-intro">维护角色名称及其基础属性。默认角色会自动分配给新用户，公共角色可供其他用户查看和选择。</div>
 			<el-form ref="formRef" :model="state.ruleForm" :rules="rules" size="default" label-width="96px" class="role-form">
+				<el-form-item label="角色编码" prop="code">
+					<el-input
+						v-model="state.ruleForm.code"
+						placeholder="请输入角色编码"
+						clearable
+						maxlength="64"
+						show-word-limit
+						:disabled="state.dialog.type === 'edit' && !!state.originalCode"
+					/>
+					<div class="form-tip">角色编码唯一；编码一旦设置，后续不允许修改。</div>
+				</el-form-item>
 				<el-form-item label="角色名称" prop="name">
 					<el-input v-model="state.ruleForm.name" placeholder="请输入角色名称" clearable maxlength="50" show-word-limit />
 				</el-form-item>
@@ -46,9 +57,11 @@ const formRef = ref();
 
 const state = reactive({
 	ruleForm: {
+		code: '',
 		isDefault: false,
 		isPublic: false,
 	} as IdentityRoleDto,
+	originalCode: '',
 	dialog: {
 		isShowDialog: false,
 		type: '' as 'add' | 'edit' | '',
@@ -59,6 +72,7 @@ const state = reactive({
 });
 
 const rules: FormRules = {
+	code: [{ max: 64, message: '长度不能超过 64 个字符', trigger: 'blur' }],
 	name: [
 		{ required: true, message: '请输入角色名称', trigger: 'blur' },
 		{ min: 2, max: 50, message: '长度在 2 到 50 个字符', trigger: 'blur' },
@@ -70,10 +84,12 @@ const openDialog = (row?: IdentityRoleDto) => {
 	state.dialog.type = row ? 'edit' : 'add';
 	if (row) {
 		state.ruleForm = { ...row };
+		state.originalCode = row.code || '';
 		state.dialog.title = '修改角色';
 		state.dialog.submitTxt = '修 改';
 	} else {
-		state.ruleForm = { isDefault: false, isPublic: false, name: '' } as IdentityRoleDto;
+		state.ruleForm = { isDefault: false, isPublic: false, name: '', code: '' } as IdentityRoleDto;
+		state.originalCode = '';
 		state.dialog.title = '新增角色';
 		state.dialog.submitTxt = '新 增';
 	}
@@ -83,6 +99,7 @@ const openDialog = (row?: IdentityRoleDto) => {
 // 关闭弹窗
 const closeDialog = () => {
 	state.dialog.isShowDialog = false;
+	state.originalCode = '';
 	formRef.value?.resetFields();
 };
 
@@ -100,6 +117,7 @@ const onSubmit = () => {
 			const { createRole, updateRole } = useIdentityApi();
 			if (state.dialog.type === 'edit' && state.ruleForm.id) {
 				await updateRole(state.ruleForm.id, {
+					code: state.ruleForm.code || undefined,
 					name: state.ruleForm.name,
 					isDefault: state.ruleForm.isDefault,
 					isPublic: state.ruleForm.isPublic,
@@ -108,6 +126,7 @@ const onSubmit = () => {
 				ElMessage.success('修改成功');
 			} else {
 				await createRole({
+					code: state.ruleForm.code || undefined,
 					name: state.ruleForm.name,
 					isDefault: state.ruleForm.isDefault,
 					isPublic: state.ruleForm.isPublic,

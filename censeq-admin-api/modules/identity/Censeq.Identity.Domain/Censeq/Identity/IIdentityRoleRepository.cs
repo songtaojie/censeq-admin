@@ -14,6 +14,11 @@ public interface IIdentityRoleRepository : IBasicRepository<IdentityRole, Guid>
         CancellationToken cancellationToken = default
     );
 
+    Task<IdentityRole?> FindByCodeAsync(
+        string code,
+        CancellationToken cancellationToken = default
+    );
+
     Task<List<IdentityRoleWithUserCount>> GetListWithUserCountAsync(
         string? sorting = null,
         int maxResultCount = int.MaxValue,

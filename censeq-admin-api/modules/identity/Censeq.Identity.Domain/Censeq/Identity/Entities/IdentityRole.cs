@@ -31,6 +31,11 @@ public class IdentityRole : AggregateRoot<Guid>, IMultiTenant, IHasEntityVersion
     public virtual string NormalizedName { get; protected internal set; }
 
     /// <summary>
+    /// Gets or sets the business code for this role.
+    /// </summary>
+    public virtual string? Code { get; protected internal set; }
+
+    /// <summary>
     /// Navigation property for claims in this role.
     /// </summary>
     public virtual ICollection<IdentityRoleClaim> Claims { get; protected set; }
@@ -132,6 +137,17 @@ public class IdentityRole : AggregateRoot<Guid>, IMultiTenant, IHasEntityVersion
                 TenantId = TenantId
             }
         );
+    }
+
+    public virtual void SetCode(string? code)
+    {
+        if (string.IsNullOrWhiteSpace(code))
+        {
+            Code = null;
+            return;
+        }
+
+        Code = Check.Length(code.Trim().ToUpperInvariant(), nameof(code), IdentityRoleConsts.MaxCodeLength);
     }
 
     public override string ToString()

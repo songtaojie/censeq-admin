@@ -5,7 +5,9 @@ namespace Censeq.Admin.Menus;
 
 public interface IMenuAppService : IApplicationService
 {
-    Task<ListResultDto<MenuPermissionGroupDto>> GetPermissionGroupsAsync();
+    Task<ListResultDto<MenuPermissionGroupDto>> GetPermissionGroupsAsync(Guid? menuId = null, Guid? parentId = null);
+
+    Task<ListResultDto<string>> GetReferencedPermissionNamesAsync();
 
     Task<ListResultDto<MenuTreeItemDto>> GetTreeAsync();
 

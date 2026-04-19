@@ -28,6 +28,15 @@ public class EfCoreIdentityRoleRepository : EfCoreRepository<ICenseqIdentityDbCo
             .FirstOrDefaultAsync(r => r.NormalizedName == normalizedRoleName, GetCancellationToken(cancellationToken)))!;
     }
 
+    public virtual async Task<IdentityRole?> FindByCodeAsync(
+        string code,
+        CancellationToken cancellationToken = default)
+    {
+        return await (await GetDbSetAsync())
+            .OrderBy(x => x.Id)
+            .FirstOrDefaultAsync(r => r.Code == code, GetCancellationToken(cancellationToken));
+    }
+
     public virtual async Task<List<IdentityRoleWithUserCount>> GetListWithUserCountAsync(
         string? sorting = null,
         int maxResultCount = int.MaxValue,
@@ -88,6 +97,7 @@ public class EfCoreIdentityRoleRepository : EfCoreRepository<ICenseqIdentityDbCo
         return await (await GetDbSetAsync())
             .WhereIf(!filter.IsNullOrWhiteSpace(),
                 x => x.Name.Contains(filter!) ||
+                     (x.Code != null && x.Code.Contains(filter!)) ||
                      x.NormalizedName.Contains(filter!))
             .LongCountAsync(GetCancellationToken(cancellationToken));
     }
@@ -118,6 +128,7 @@ public class EfCoreIdentityRoleRepository : EfCoreRepository<ICenseqIdentityDbCo
             .IncludeDetails(includeDetails)
             .WhereIf(!filter.IsNullOrWhiteSpace(),
                 x => x.Name.Contains(filter!) ||
+                     (x.Code != null && x.Code.Contains(filter!)) ||
                      x.NormalizedName.Contains(filter!))
             .OrderBy(sorting.IsNullOrWhiteSpace() ? nameof(IdentityRole.Name) : sorting)
             .PageBy(skipCount, maxResultCount)

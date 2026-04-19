@@ -3,8 +3,8 @@
 		<div class="system-role-padding layout-padding-auto">
 			<el-card shadow="hover" :body-style="{ paddingBottom: '0' }" class="role-query-card">
 				<el-form :model="state.tableData.param" :inline="true">
-					<el-form-item label="角色名称">
-						<el-input v-model="state.tableData.param.search" placeholder="角色名称" clearable class="role-search" @keyup.enter="onQuery" />
+					<el-form-item label="角色名称/编码">
+						<el-input v-model="state.tableData.param.search" placeholder="角色名称或编码" clearable class="role-search" @keyup.enter="onQuery" />
 					</el-form-item>
 					<el-form-item>
 						<el-button-group>
@@ -21,6 +21,11 @@
 			<el-card class="full-table role-table-card" shadow="hover" style="margin-top: 5px">
 				<el-table :data="state.tableData.data" v-loading="state.tableData.loading" style="width: 100%" stripe border highlight-current-row>
 				<el-table-column type="index" label="序号" width="60" />
+				<el-table-column prop="code" label="角色编码" width="160" show-overflow-tooltip>
+					<template #default="scope">
+						{{ scope.row.code || '-' }}
+					</template>
+				</el-table-column>
 				<el-table-column prop="name" label="角色名称" min-width="220" show-overflow-tooltip>
 					<template #default="scope">
 						<div class="role-name-cell">

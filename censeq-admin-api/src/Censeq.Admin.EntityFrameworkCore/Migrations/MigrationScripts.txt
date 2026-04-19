@@ -1,15 +1,24 @@
-//��src�ļ���Ŀ¼��ִ��
-//1. �����µ�Ǩ�ƣ�dotnet ef migrations add <name>
+// 在 censeq-admin-api 目录下执行
+
+// 1. 新增迁移
+// dotnet ef migrations add <name>
 dotnet ef migrations add InitialDb --project ./src/Censeq.Admin.EntityFrameworkCore/Censeq.Admin.EntityFrameworkCore.csproj --startup-project ./src/Censeq.Admin.HttpApi.Host/Censeq.Admin.HttpApi.Host.csproj --context CenseqAdminDbContext
 
-//2. ����Ǩ������SQL�ű���dotnet ef migrations script <from> <to>
+// 2. 生成迁移 SQL 脚本
+// dotnet ef migrations script <from> <to>
 dotnet ef migrations script 0 InitialDb --output ./src/Censeq.Admin.EntityFrameworkCore/Migrations/Scripts/InitialDb.sql --project ./src/Censeq.Admin.EntityFrameworkCore/Censeq.Admin.EntityFrameworkCore.csproj --startup-project ./src/Censeq.Admin.HttpApi.Host/Censeq.Admin.HttpApi.Host.csproj --context CenseqAdminDbContext
-//3. �г����õ�Ǩ�ƣ�dotnet ef migrations list
-//4. ɾ����һ��Ǩ�ƣ�
+
+// 3. 查看当前迁移列表
+// dotnet ef migrations list
+
+// 4. 删除最近一次迁移
 dotnet ef migrations remove --project ./src/Censeq.Admin.EntityFrameworkCore/Censeq.Admin.EntityFrameworkCore.csproj --startup-project ./src/Censeq.Admin.HttpApi.Host/Censeq.Admin.HttpApi.Host.csproj --context CenseqAdminDbContext
-//5. ������ϴ�Ǩ�������Ƿ��ģ�ͽ������κθ��ģ�dotnet ef migrations has-pending-model-changes
 
-dotnet ef database update --project ./Censeq.Admin.EntityFrameworkCore/Censeq.Admin.EntityFrameworkCore.csproj --startup-project ./Censeq.Admin.HttpApi.Host/Censeq.Admin.HttpApi.Host.csproj --context CenseqAdminDbContext
+// 5. 检查当前模型是否还有未生成的迁移变更
+// dotnet ef migrations has-pending-model-changes
 
+// 6. 更新数据库
+dotnet ef database update --project ./src/Censeq.Admin.EntityFrameworkCore/Censeq.Admin.EntityFrameworkCore.csproj --startup-project ./src/Censeq.Admin.HttpApi.Host/Censeq.Admin.HttpApi.Host.csproj --context CenseqAdminDbContext
 
-dotnet ef migrations add InitialDb  --project ./src/Censeq.Admin.EntityFrameworkCore/Censeq.Admin.EntityFrameworkCore.csproj  --startup-project ./src/Censeq.Admin.DbMigrator/Censeq.Admin.DbMigrator.csproj  --context CenseqAdminDbContext -v
+// 7. 使用 DbMigrator 作为启动项目生成迁移（适合部分场景排查）
+dotnet ef migrations add InitialDb --project ./src/Censeq.Admin.EntityFrameworkCore/Censeq.Admin.EntityFrameworkCore.csproj --startup-project ./src/Censeq.Admin.DbMigrator/Censeq.Admin.DbMigrator.csproj --context CenseqAdminDbContext -v

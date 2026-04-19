@@ -11,4 +11,5 @@ public static class MenuConsts
     public const int MaxExternalUrlLength = 512;
     public const int MaxRemarkLength = 512;
     public const int MaxButtonCodeLength = 128;
+    public const int MaxPermissionGroupsLength = 512;
 }

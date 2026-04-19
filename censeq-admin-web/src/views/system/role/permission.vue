@@ -18,7 +18,20 @@
 				show-checkbox
 				class="menu-data-tree"
 				v-loading="state.loading"
-			/>
+			>
+				<template #default="{ data }">
+					<span class="permission-node">
+						<span>{{ data.displayName }}</span>
+						<el-tag
+							v-if="data.name && referencedPermissionNames.has(data.name)"
+							type="warning"
+							size="small"
+							effect="plain"
+							style="margin-left: 6px"
+						>菜单引用</el-tag>
+					</span>
+				</template>
+			</el-tree>
 			<template #footer>
 				<span class="dialog-footer">
 					<el-button @click="onCancel" size="default">取 消</el-button>
@@ -37,6 +50,7 @@ import type { ElTree } from 'element-plus';
 import { ElMessage } from 'element-plus';
 import { IdentityRoleDto } from '/@/api/models/identity';
 import { usePermissionApi } from '/@/api/apis';
+import { useMenuApi } from '/@/api/apis';
 import { PermissionGroupDto, UpdatePermissionDto } from '/@/api/models/permission';
 
 const treeRef = ref<InstanceType<typeof ElTree>>();
@@ -58,6 +72,7 @@ const state = reactive({
 
 const permissionCount = ref(0);
 const grantedCount = ref(0);
+const referencedPermissionNames = ref<Set<string>>(new Set());
 
 // 打开弹窗
 const openDialog = (row: IdentityRoleDto) => {
@@ -73,6 +88,7 @@ const closeDialog = () => {
 	state.menuData = [];
 	permissionCount.value = 0;
 	grantedCount.value = 0;
+	referencedPermissionNames.value = new Set();
 };
 
 // 取消
@@ -116,7 +132,14 @@ const getMenuData = async () => {
 	state.loading = true;
 	try {
 		const { getPermissionList } = usePermissionApi();
-		const permissionList = await getPermissionList('R', state.roleId);
+		const menuApi = useMenuApi();
+
+		const [permissionList, referencedResult] = await Promise.all([
+			getPermissionList('R', state.roleId),
+			menuApi.getReferencedPermissionNames(),
+		]);
+
+		referencedPermissionNames.value = new Set(referencedResult.items ?? []);
 		state.menuData = permissionList.groups;
 		permissionCount.value = state.menuData.reduce((total, group) => total + group.permissions.length, 0);
 
@@ -177,6 +200,11 @@ defineExpose({
 		padding: 10px;
 		max-height: 460px;
 		overflow-y: auto;
+
+		.permission-node {
+			display: inline-flex;
+			align-items: center;
+		}
 	}
 }
 </style>

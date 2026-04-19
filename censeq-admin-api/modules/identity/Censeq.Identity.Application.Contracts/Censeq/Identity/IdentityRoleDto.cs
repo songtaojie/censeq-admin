@@ -8,6 +8,8 @@ public class IdentityRoleDto : ExtensibleEntityDto<Guid>, IHasConcurrencyStamp
 {
     public string Name { get; set; }
 
+    public string? Code { get; set; }
+
     public bool IsDefault { get; set; }
 
     public bool IsStatic { get; set; }

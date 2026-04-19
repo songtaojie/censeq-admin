@@ -24,6 +24,7 @@ public static class CenseqAdminMenuDbContextModelCreatingExtensions
             b.Property(x => x.ExternalUrl).HasMaxLength(Menus.MenuConsts.MaxExternalUrlLength);
             b.Property(x => x.Remark).HasMaxLength(Menus.MenuConsts.MaxRemarkLength);
             b.Property(x => x.ButtonCode).HasMaxLength(Menus.MenuConsts.MaxButtonCodeLength);
+            b.Property(x => x.PermissionGroups).HasMaxLength(Menus.MenuConsts.MaxPermissionGroupsLength);
             b.Property(x => x.Type).HasConversion<byte>().IsRequired();
             b.Property(x => x.AuthorizationMode).HasConversion<byte>().IsRequired();
             b.HasIndex(x => new { x.TenantId, x.ParentId, x.Sort });

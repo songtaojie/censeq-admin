@@ -96,12 +96,14 @@ namespace Censeq.Identity.EntityFrameworkCore.Modeling
                     .ConfigureCenseqByConvention();
 
                 b.Property(r => r.Name).IsRequired().HasMaxLength(IdentityRoleConsts.MaxNameLength);
+                b.Property(r => r.Code).IsRequired(false).HasMaxLength(IdentityRoleConsts.MaxCodeLength);
                 b.Property(r => r.NormalizedName).IsRequired().HasMaxLength(IdentityRoleConsts.MaxNormalizedNameLength);
                 b.Property(r => r.IsDefault);
                 b.Property(r => r.IsStatic);
                 b.Property(r => r.IsPublic);
                 b.Property(r => r.TenantId);
 
+                b.HasIndex(r => r.Code).IsUnique();
                 b.HasIndex(r => r.NormalizedName);
                 b.ApplyObjectExtensionMappings();
             });

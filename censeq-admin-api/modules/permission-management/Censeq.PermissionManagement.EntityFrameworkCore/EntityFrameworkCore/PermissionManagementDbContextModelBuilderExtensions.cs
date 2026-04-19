@@ -26,6 +26,7 @@ namespace Censeq.PermissionManagement.EntityFrameworkCore
                     b.ToCenseqTable(nameof(PermissionGroup)).ConfigureCenseqByConvention();
                     b.Property(x => x.Name).HasMaxLength(PermissionGroupConsts.MaxNameLength).IsRequired();
                     b.Property(x => x.DisplayName).HasMaxLength(PermissionGroupConsts.MaxDisplayNameLength).IsRequired();
+                    b.Property(x => x.LocalizationKey).HasMaxLength(PermissionGroupConsts.MaxLocalizationKeyLength);
                     b.HasIndex(x => new { x.Name }).IsUnique();
                     b.ApplyObjectExtensionMappings();
                 });
@@ -36,6 +37,7 @@ namespace Censeq.PermissionManagement.EntityFrameworkCore
                     b.Property(x => x.Name).HasMaxLength(PermissionDefinitionRecordConsts.MaxNameLength).IsRequired();
                     b.Property(x => x.ParentName).HasMaxLength(PermissionDefinitionRecordConsts.MaxNameLength);
                     b.Property(x => x.DisplayName).HasMaxLength(PermissionDefinitionRecordConsts.MaxDisplayNameLength).IsRequired();
+                    b.Property(x => x.LocalizationKey).HasMaxLength(PermissionDefinitionRecordConsts.MaxLocalizationKeyLength);
                     b.Property(x => x.Providers).HasMaxLength(PermissionDefinitionRecordConsts.MaxProvidersLength);
                     b.Property(x => x.StateCheckers).HasMaxLength(PermissionDefinitionRecordConsts.MaxStateCheckersLength);
                     b.HasIndex(x => new { x.Name }).IsUnique();

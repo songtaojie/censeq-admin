@@ -17,9 +17,15 @@ public class MenuController : AdminController, Menus.IMenuAppService
     }
 
     [HttpGet("permissions")]
-    public virtual Task<ListResultDto<Menus.MenuPermissionGroupDto>> GetPermissionGroupsAsync()
+    public virtual Task<ListResultDto<Menus.MenuPermissionGroupDto>> GetPermissionGroupsAsync([FromQuery] Guid? menuId = null, [FromQuery] Guid? parentId = null)
     {
-        return _menuAppService.GetPermissionGroupsAsync();
+        return _menuAppService.GetPermissionGroupsAsync(menuId, parentId);
+    }
+
+    [HttpGet("referenced-permissions")]
+    public virtual Task<ListResultDto<string>> GetReferencedPermissionNamesAsync()
+    {
+        return _menuAppService.GetReferencedPermissionNamesAsync();
     }
 
     [HttpGet("tree")]

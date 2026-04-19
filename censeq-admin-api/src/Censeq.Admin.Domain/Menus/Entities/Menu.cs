@@ -50,6 +50,8 @@ public class Menu : FullAuditedAggregateRoot<Guid>, IMultiTenant
 
     public virtual string? ButtonCode { get; protected set; }
 
+    public virtual string? PermissionGroups { get; protected set; }
+
     public virtual ICollection<MenuPermission> Permissions { get; protected set; }
 
     protected Menu()
@@ -179,6 +181,11 @@ public class Menu : FullAuditedAggregateRoot<Guid>, IMultiTenant
         ButtonCode = Type == MenuType.Button
             ? NormalizeOptional(buttonCode, MenuConsts.MaxButtonCodeLength, nameof(buttonCode))
             : null;
+    }
+
+    public virtual void SetPermissionGroups(string? permissionGroups)
+    {
+        PermissionGroups = NormalizeOptional(permissionGroups, MenuConsts.MaxPermissionGroupsLength, nameof(permissionGroups));
     }
 
     public virtual void SetPermissions(IEnumerable<MenuPermission> permissions)

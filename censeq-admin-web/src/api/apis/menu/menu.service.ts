@@ -27,8 +27,12 @@ export function useMenuApi() {
 			return await menuApi.request<ListResponseDto<MenuTreeItemDto>>(`${menuBasePath}/tree`, 'GET');
 		},
 
-		getMenuPermissionGroups: async (): Promise<ListResponseDto<MenuPermissionGroupDto>> => {
-			return await menuApi.request<ListResponseDto<MenuPermissionGroupDto>>(`${menuBasePath}/permissions`, 'GET');
+		getMenuPermissionGroups: async (params?: { menuId?: string; parentId?: string }): Promise<ListResponseDto<MenuPermissionGroupDto>> => {
+			return await menuApi.request<ListResponseDto<MenuPermissionGroupDto>>(`${menuBasePath}/permissions`, 'GET', params);
+		},
+
+		getReferencedPermissionNames: async (): Promise<ListResponseDto<string>> => {
+			return await menuApi.request<ListResponseDto<string>>(`${menuBasePath}/referenced-permissions`, 'GET');
 		},
 
 		getMenu: async (id: string): Promise<MenuDetailDto> => {

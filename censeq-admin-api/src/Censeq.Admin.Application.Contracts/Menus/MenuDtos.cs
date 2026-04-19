@@ -60,6 +60,9 @@ public class CreateMenuDto
     [StringLength(MenuConsts.MaxButtonCodeLength)]
     public string? ButtonCode { get; set; }
 
+    [StringLength(MenuConsts.MaxPermissionGroupsLength)]
+    public string? PermissionGroups { get; set; }
+
     public List<string> PermissionNames { get; set; } = [];
 }
 
@@ -130,6 +133,8 @@ public class MenuTreeItemDto : EntityDto<Guid>
     public MenuAuthorizationMode AuthorizationMode { get; set; }
 
     public string? ButtonCode { get; set; }
+
+    public string? PermissionGroups { get; set; }
 
     public List<string> PermissionNames { get; set; } = [];
 
