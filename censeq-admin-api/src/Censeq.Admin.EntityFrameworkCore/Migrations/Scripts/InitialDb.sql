@@ -41,6 +41,8 @@ CREATE TABLE censeq_feature_definition_record (
     parent_name character varying(128) NOT NULL,
     display_name character varying(256) NOT NULL,
     description character varying(256) NOT NULL,
+    localization_key character varying(512),
+    description_localization_key character varying(512),
     default_value character varying(256) NOT NULL,
     is_visible_to_clients boolean NOT NULL,
     is_available_to_host boolean NOT NULL,
@@ -54,6 +56,7 @@ CREATE TABLE censeq_feature_group_definition_record (
     id uuid NOT NULL,
     name character varying(128) NOT NULL,
     display_name character varying(256) NOT NULL,
+    localization_key character varying(512),
     extra_properties text NOT NULL,
     CONSTRAINT pk_censeq_feature_group_definition_record PRIMARY KEY (id)
 );
@@ -95,6 +98,7 @@ CREATE TABLE censeq_identity_role (
     tenant_id uuid,
     name character varying(256) NOT NULL,
     normalized_name character varying(256) NOT NULL,
+    code character varying(64),
     is_default boolean NOT NULL,
     is_static boolean NOT NULL,
     is_public boolean NOT NULL,
@@ -341,6 +345,7 @@ CREATE TABLE censeq_permission_definition_record (
     name character varying(128) NOT NULL,
     parent_name character varying(128),
     display_name character varying(256) NOT NULL,
+    localization_key character varying(512),
     is_enabled boolean NOT NULL,
     multi_tenancy_side smallint NOT NULL,
     providers character varying(128),
@@ -362,6 +367,7 @@ CREATE TABLE censeq_permission_group (
     id uuid NOT NULL,
     name character varying(128) NOT NULL,
     display_name character varying(256) NOT NULL,
+    localization_key character varying(512),
     extra_properties text NOT NULL,
     CONSTRAINT pk_censeq_permission_group PRIMARY KEY (id)
 );
@@ -379,7 +385,9 @@ CREATE TABLE censeq_setting_definition_record (
     id uuid NOT NULL,
     name character varying(128) NOT NULL,
     display_name character varying(256) NOT NULL,
+    localization_key character varying(512),
     description character varying(512),
+    description_localization_key character varying(512),
     default_value character varying(2048),
     is_visible_to_clients boolean NOT NULL,
     providers character varying(1024),
@@ -562,6 +570,8 @@ CREATE UNIQUE INDEX ix_censeq_feature_value_name_provider_name_provider_key ON c
 
 CREATE UNIQUE INDEX ix_censeq_identity_link_user_source_user_id_source_tenant_id_t ON censeq_identity_link_user (source_user_id, source_tenant_id, target_user_id, target_tenant_id);
 
+CREATE UNIQUE INDEX ix_censeq_identity_role_code ON censeq_identity_role (code);
+
 CREATE INDEX ix_censeq_identity_role_normalized_name ON censeq_identity_role (normalized_name);
 
 CREATE INDEX ix_censeq_identity_role_claim_identity_role_id ON censeq_identity_role_claim (identity_role_id);
@@ -653,7 +663,7 @@ CREATE INDEX ix_censeq_tenant_name ON censeq_tenant (name);
 CREATE INDEX ix_censeq_tenant_normalized_name ON censeq_tenant (normalized_name);
 
 INSERT INTO ef_migrations_history (migration_id, product_version)
-VALUES ('20260419132243_InitialDb', '8.0.16');
+VALUES ('20260419144549_InitialDb', '8.0.16');
 
 COMMIT;
 

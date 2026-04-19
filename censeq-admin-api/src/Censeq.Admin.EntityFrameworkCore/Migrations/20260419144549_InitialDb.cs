@@ -55,6 +55,8 @@ namespace Censeq.Admin.Migrations
                     parent_name = table.Column<string>(type: "character varying(128)", maxLength: 128, nullable: false),
                     display_name = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: false),
                     description = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: false),
+                    localization_key = table.Column<string>(type: "character varying(512)", maxLength: 512, nullable: true),
+                    description_localization_key = table.Column<string>(type: "character varying(512)", maxLength: 512, nullable: true),
                     default_value = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: false),
                     is_visible_to_clients = table.Column<bool>(type: "boolean", nullable: false),
                     is_available_to_host = table.Column<bool>(type: "boolean", nullable: false),
@@ -74,6 +76,7 @@ namespace Censeq.Admin.Migrations
                     id = table.Column<Guid>(type: "uuid", nullable: false),
                     name = table.Column<string>(type: "character varying(128)", maxLength: 128, nullable: false),
                     display_name = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: false),
+                    localization_key = table.Column<string>(type: "character varying(512)", maxLength: 512, nullable: true),
                     extra_properties = table.Column<string>(type: "text", nullable: false)
                 },
                 constraints: table =>
@@ -139,6 +142,7 @@ namespace Censeq.Admin.Migrations
                     tenant_id = table.Column<Guid>(type: "uuid", nullable: true),
                     name = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: false),
                     normalized_name = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: false),
+                    code = table.Column<string>(type: "character varying(64)", maxLength: 64, nullable: true),
                     is_default = table.Column<bool>(type: "boolean", nullable: false),
                     is_static = table.Column<bool>(type: "boolean", nullable: false),
                     is_public = table.Column<bool>(type: "boolean", nullable: false),
@@ -456,6 +460,7 @@ namespace Censeq.Admin.Migrations
                     name = table.Column<string>(type: "character varying(128)", maxLength: 128, nullable: false),
                     parent_name = table.Column<string>(type: "character varying(128)", maxLength: 128, nullable: true),
                     display_name = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: false),
+                    localization_key = table.Column<string>(type: "character varying(512)", maxLength: 512, nullable: true),
                     is_enabled = table.Column<bool>(type: "boolean", nullable: false),
                     multi_tenancy_side = table.Column<byte>(type: "smallint", nullable: false),
                     providers = table.Column<string>(type: "character varying(128)", maxLength: 128, nullable: true),
@@ -489,6 +494,7 @@ namespace Censeq.Admin.Migrations
                     id = table.Column<Guid>(type: "uuid", nullable: false),
                     name = table.Column<string>(type: "character varying(128)", maxLength: 128, nullable: false),
                     display_name = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: false),
+                    localization_key = table.Column<string>(type: "character varying(512)", maxLength: 512, nullable: true),
                     extra_properties = table.Column<string>(type: "text", nullable: false)
                 },
                 constraints: table =>
@@ -518,7 +524,9 @@ namespace Censeq.Admin.Migrations
                     id = table.Column<Guid>(type: "uuid", nullable: false),
                     name = table.Column<string>(type: "character varying(128)", maxLength: 128, nullable: false),
                     display_name = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: false),
+                    localization_key = table.Column<string>(type: "character varying(512)", maxLength: 512, nullable: true),
                     description = table.Column<string>(type: "character varying(512)", maxLength: 512, nullable: true),
+                    description_localization_key = table.Column<string>(type: "character varying(512)", maxLength: 512, nullable: true),
                     default_value = table.Column<string>(type: "character varying(2048)", maxLength: 2048, nullable: true),
                     is_visible_to_clients = table.Column<bool>(type: "boolean", nullable: false),
                     providers = table.Column<string>(type: "character varying(1024)", maxLength: 1024, nullable: true),
@@ -873,6 +881,12 @@ namespace Censeq.Admin.Migrations
                 name: "ix_censeq_identity_link_user_source_user_id_source_tenant_id_t",
                 table: "censeq_identity_link_user",
                 columns: new[] { "source_user_id", "source_tenant_id", "target_user_id", "target_tenant_id" },
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "ix_censeq_identity_role_code",
+                table: "censeq_identity_role",
+                column: "code",
                 unique: true);
 
             migrationBuilder.CreateIndex(

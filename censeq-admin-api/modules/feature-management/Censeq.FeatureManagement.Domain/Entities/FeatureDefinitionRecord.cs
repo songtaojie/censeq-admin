@@ -18,6 +18,12 @@ public class FeatureDefinitionRecord : BasicAggregateRoot<Guid>, IHasExtraProper
 
     public string Description { get; set; }
 
+    /// <summary>系统原始多语言 key（DisplayName），格式为 L:ResourceName,Key，只读，由系统同步写入</summary>
+    public string? LocalizationKey { get; set; }
+
+    /// <summary>系统原始多语言 key（Description），格式为 L:ResourceName,Key，只读，由系统同步写入</summary>
+    public string? DescriptionLocalizationKey { get; set; }
+
     public string DefaultValue { get; set; }
 
     public bool IsVisibleToClients { get; set; }
@@ -77,119 +83,37 @@ public class FeatureDefinitionRecord : BasicAggregateRoot<Guid>, IHasExtraProper
     }
     public bool HasSameData(FeatureDefinitionRecord otherRecord)
     {
-        if (Name != otherRecord.Name)
-        {
-            return false;
-        }
-
-        if (GroupName != otherRecord.GroupName)
-        {
-            return false;
-        }
-
-        if (ParentName != otherRecord.ParentName)
-        {
-            return false;
-        }
-
-        if (DisplayName != otherRecord.DisplayName)
-        {
-            return false;
-        }
-
-        if (Description != otherRecord.Description)
-        {
-            return false;
-        }
-
-        if (DefaultValue != otherRecord.DefaultValue)
-        {
-            return false;
-        }
-
-        if (IsVisibleToClients != otherRecord.IsVisibleToClients)
-        {
-            return false;
-        }
-
-        if (IsAvailableToHost != otherRecord.IsAvailableToHost)
-        {
-            return false;
-        }
-        if (AllowedProviders != otherRecord.AllowedProviders)
-        {
-            return false;
-        }
-
-        if (ValueType != otherRecord.ValueType)
-        {
-            return false;
-        }
-
-        if (!this.HasSameExtraProperties(otherRecord))
-        {
-            return false;
-        }
-
+        if (Name != otherRecord.Name) return false;
+        if (GroupName != otherRecord.GroupName) return false;
+        if (ParentName != otherRecord.ParentName) return false;
+        // DisplayName/Description 是用户可编辑字段，不参与系统同步的变更检测
+        if (LocalizationKey != otherRecord.LocalizationKey) return false;
+        if (DescriptionLocalizationKey != otherRecord.DescriptionLocalizationKey) return false;
+        if (DefaultValue != otherRecord.DefaultValue) return false;
+        if (IsVisibleToClients != otherRecord.IsVisibleToClients) return false;
+        if (IsAvailableToHost != otherRecord.IsAvailableToHost) return false;
+        if (AllowedProviders != otherRecord.AllowedProviders) return false;
+        if (ValueType != otherRecord.ValueType) return false;
+        if (!this.HasSameExtraProperties(otherRecord)) return false;
         return true;
     }
 
     public void Patch(FeatureDefinitionRecord otherRecord)
     {
-        if (Name != otherRecord.Name)
-        {
-            Name = otherRecord.Name;
-        }
-
-        if (GroupName != otherRecord.GroupName)
-        {
-            GroupName = otherRecord.GroupName;
-        }
-
-        if (ParentName != otherRecord.ParentName)
-        {
-            ParentName = otherRecord.ParentName;
-        }
-
-        if (DisplayName != otherRecord.DisplayName)
-        {
-            DisplayName = otherRecord.DisplayName;
-        }
-
-        if (Description != otherRecord.Description)
-        {
-            Description = otherRecord.Description;
-        }
-
-        if (DefaultValue != otherRecord.DefaultValue)
-        {
-            DefaultValue = otherRecord.DefaultValue;
-        }
-
-        if (IsVisibleToClients != otherRecord.IsVisibleToClients)
-        {
-            IsVisibleToClients = otherRecord.IsVisibleToClients;
-        }
-
-        if (IsAvailableToHost != otherRecord.IsAvailableToHost)
-        {
-            IsAvailableToHost = otherRecord.IsAvailableToHost;
-        }
-
-        if (AllowedProviders != otherRecord.AllowedProviders)
-        {
-            AllowedProviders = otherRecord.AllowedProviders;
-        }
-
-        if (ValueType != otherRecord.ValueType)
-        {
-            ValueType = otherRecord.ValueType;
-        }
-
+        if (Name != otherRecord.Name) Name = otherRecord.Name;
+        if (GroupName != otherRecord.GroupName) GroupName = otherRecord.GroupName;
+        if (ParentName != otherRecord.ParentName) ParentName = otherRecord.ParentName;
+        // DisplayName/Description 是用户可编辑字段，系统同步时不覆盖
+        if (LocalizationKey != otherRecord.LocalizationKey) LocalizationKey = otherRecord.LocalizationKey;
+        if (DescriptionLocalizationKey != otherRecord.DescriptionLocalizationKey) DescriptionLocalizationKey = otherRecord.DescriptionLocalizationKey;
+        if (DefaultValue != otherRecord.DefaultValue) DefaultValue = otherRecord.DefaultValue;
+        if (IsVisibleToClients != otherRecord.IsVisibleToClients) IsVisibleToClients = otherRecord.IsVisibleToClients;
+        if (IsAvailableToHost != otherRecord.IsAvailableToHost) IsAvailableToHost = otherRecord.IsAvailableToHost;
+        if (AllowedProviders != otherRecord.AllowedProviders) AllowedProviders = otherRecord.AllowedProviders;
+        if (ValueType != otherRecord.ValueType) ValueType = otherRecord.ValueType;
         if (!this.HasSameExtraProperties(otherRecord))
         {
             ExtraProperties.Clear();
-
             foreach (var property in otherRecord.ExtraProperties)
             {
                 ExtraProperties.Add(property.Key, property.Value);

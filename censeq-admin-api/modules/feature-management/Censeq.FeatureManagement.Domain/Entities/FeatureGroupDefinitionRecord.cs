@@ -11,6 +11,9 @@ public class FeatureGroupDefinitionRecord : BasicAggregateRoot<Guid>, IHasExtraP
 
     public string DisplayName { get; set; }
 
+    /// <summary>系统原始多语言 key，格式为 L:ResourceName,Key，只读，由系统同步写入</summary>
+    public string? LocalizationKey { get; set; }
+
     public ExtraPropertyDictionary ExtraProperties { get; protected set; }
 
     public FeatureGroupDefinitionRecord()
@@ -22,12 +25,13 @@ public class FeatureGroupDefinitionRecord : BasicAggregateRoot<Guid>, IHasExtraP
     public FeatureGroupDefinitionRecord(
         Guid id,
         string name,
-        string displayName)
+        string displayName,
+        string? localizationKey = null)
         : base(id)
     {
         Name = Check.NotNullOrWhiteSpace(name, nameof(name), FeatureGroupDefinitionRecordConsts.MaxNameLength);
-        DisplayName =  Check.NotNullOrWhiteSpace(displayName, nameof(displayName), FeatureGroupDefinitionRecordConsts.MaxDisplayNameLength);;
-
+        DisplayName = Check.NotNullOrWhiteSpace(displayName, nameof(displayName), FeatureGroupDefinitionRecordConsts.MaxDisplayNameLength);
+        LocalizationKey = localizationKey;
 
         ExtraProperties = new ExtraPropertyDictionary();
         this.SetDefaultsForExtraProperties();
@@ -35,12 +39,8 @@ public class FeatureGroupDefinitionRecord : BasicAggregateRoot<Guid>, IHasExtraP
 
     public bool HasSameData(FeatureGroupDefinitionRecord otherRecord)
     {
-        if (Name != otherRecord.Name)
-        {
-            return false;
-        }
-
-        if (DisplayName != otherRecord.DisplayName)
+        // DisplayName 是用户可编辑字段，不参与系统同步的变更检测
+        if (Name != otherRecord.Name || LocalizationKey != otherRecord.LocalizationKey)
         {
             return false;
         }
@@ -60,9 +60,10 @@ public class FeatureGroupDefinitionRecord : BasicAggregateRoot<Guid>, IHasExtraP
             Name = otherRecord.Name;
         }
 
-        if (DisplayName != otherRecord.DisplayName)
+        // DisplayName 是用户可编辑字段，系统同步时不覆盖
+        if (LocalizationKey != otherRecord.LocalizationKey)
         {
-            DisplayName = otherRecord.DisplayName;
+            LocalizationKey = otherRecord.LocalizationKey;
         }
 
         if (!this.HasSameExtraProperties(otherRecord))

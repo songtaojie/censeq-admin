@@ -36,6 +36,7 @@ public static class FeatureManagementDbContextModelCreatingExtensions
 
             b.Property(x => x.Name).HasMaxLength(FeatureGroupDefinitionRecordConsts.MaxNameLength).IsRequired();
             b.Property(x => x.DisplayName).HasMaxLength(FeatureGroupDefinitionRecordConsts.MaxDisplayNameLength).IsRequired();
+            b.Property(x => x.LocalizationKey).HasMaxLength(FeatureGroupDefinitionRecordConsts.MaxLocalizationKeyLength);
 
             b.HasIndex(x => new { x.Name }).IsUnique();
 
@@ -50,6 +51,8 @@ public static class FeatureManagementDbContextModelCreatingExtensions
             b.Property(x => x.Name).HasMaxLength(FeatureDefinitionRecordConsts.MaxNameLength).IsRequired();
             b.Property(x => x.ParentName).HasMaxLength(FeatureDefinitionRecordConsts.MaxNameLength);
             b.Property(x => x.DisplayName).HasMaxLength(FeatureDefinitionRecordConsts.MaxDisplayNameLength).IsRequired();
+            b.Property(x => x.LocalizationKey).HasMaxLength(FeatureDefinitionRecordConsts.MaxLocalizationKeyLength);
+            b.Property(x => x.DescriptionLocalizationKey).HasMaxLength(FeatureDefinitionRecordConsts.MaxLocalizationKeyLength);
             b.Property(x => x.Description).HasMaxLength(FeatureDefinitionRecordConsts.MaxDescriptionLength);
             b.Property(x => x.DefaultValue).HasMaxLength(FeatureDefinitionRecordConsts.MaxDefaultValueLength);
             b.Property(x => x.AllowedProviders).HasMaxLength(FeatureDefinitionRecordConsts.MaxAllowedProvidersLength);

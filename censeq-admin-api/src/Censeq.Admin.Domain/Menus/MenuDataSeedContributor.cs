@@ -29,19 +29,14 @@ public class MenuDataSeedContributor : DomainService, IDataSeedContributor, ITra
             return;
         }
 
-        // 预加载所有已存在的 host 菜单，按 (Path, Component) 组合键判断是否已存在
+        // 预加载所有已存在的 host 菜单，并在种子执行时同步更新已有记录。
         var queryable = await _menuRepository.GetQueryableAsync();
         var existingMenus = await AsyncExecuter.ToListAsync(
             queryable.Where(x => x.TenantId == null));
 
-        var existingKeys = new HashSet<(string?, string?)>(
-            existingMenus.Select(x => (x.Path, x.Component)));
-
-        // menuByKey 用于解析子菜单的 parentId，含已存在和新插入的菜单
         var menuByKey = new Dictionary<string, Menu>(StringComparer.Ordinal);
         foreach (var existing in existingMenus)
         {
-            // key 与 name 相同（种子数据中 key == name）
             if (!menuByKey.ContainsKey(existing.Name))
             {
                 menuByKey[existing.Name] = existing;
@@ -50,41 +45,77 @@ public class MenuDataSeedContributor : DomainService, IDataSeedContributor, ITra
 
         foreach (var definition in GetHostMenuDefinitions())
         {
-            // 按 (Path, Component) 判断是否已存在，存在则跳过
-            if (existingKeys.Contains((definition.Path, definition.Component)))
-            {
-                continue;
-            }
-
             var parentId = definition.ParentKey is null
                 ? (Guid?)null
                 : menuByKey.TryGetValue(definition.ParentKey, out var parentMenu)
                     ? parentMenu.Id
                     : (Guid?)null;
 
-            var menu = new Menu(Guid.NewGuid(), null, definition.Name, definition.Title, definition.Type);
-            menu.SetParent(parentId);
-            menu.SetRouteName(definition.RouteName);
-            menu.SetPath(definition.Path);
-            menu.SetComponent(definition.Component);
-            menu.SetRedirect(definition.Redirect);
-            menu.SetIcon(definition.Icon);
-            menu.SetSort(definition.Sort);
-            menu.SetDisplayOptions(definition.Visible, definition.KeepAlive, definition.Affix);
-            menu.SetLinkOptions(false, null, false);
-            menu.SetStatus(true);
-            menu.SetAuthorizationMode(definition.AuthorizationMode);
-            menu.SetPermissionGroups(definition.PermissionGroups);
-
-            await _menuRepository.InsertAsync(menu, autoSave: true);
-
-            foreach (var permissionName in definition.PermissionNames)
+            var menu = FindExistingMenu(existingMenus, menuByKey, definition);
+            if (menu == null)
             {
-                var menuPermission = new MenuPermission(Guid.NewGuid(), menu.Id, permissionName);
-                await _menuPermissionRepository.InsertAsync(menuPermission, autoSave: true);
+                menu = new Menu(Guid.NewGuid(), null, definition.Name, definition.Title, definition.Type);
+                ApplyDefinition(menu, definition, parentId);
+                await _menuRepository.InsertAsync(menu, autoSave: true);
+                existingMenus.Add(menu);
+            }
+            else
+            {
+                ApplyDefinition(menu, definition, parentId);
+                await _menuRepository.UpdateAsync(menu, autoSave: true);
             }
 
+            await ReplacePermissionsAsync(menu, definition.PermissionNames);
+
             menuByKey[definition.Key] = menu;
+        }
+    }
+
+    private static Menu? FindExistingMenu(
+        List<Menu> existingMenus,
+        Dictionary<string, Menu> menuByKey,
+        SeedMenuDefinition definition)
+    {
+        if (menuByKey.TryGetValue(definition.Key, out var menu))
+        {
+            return menu;
+        }
+
+        return existingMenus.FirstOrDefault(x => x.Path == definition.Path && x.Component == definition.Component);
+    }
+
+    private static void ApplyDefinition(Menu menu, SeedMenuDefinition definition, Guid? parentId)
+    {
+        menu.SetParent(parentId);
+        menu.SetName(definition.Name);
+        menu.SetTitle(definition.Title);
+        menu.SetType(definition.Type);
+        menu.SetRouteName(definition.RouteName);
+        menu.SetPath(definition.Path);
+        menu.SetComponent(definition.Component);
+        menu.SetRedirect(definition.Redirect);
+        menu.SetIcon(definition.Icon);
+        menu.SetSort(definition.Sort);
+        menu.SetDisplayOptions(definition.Visible, definition.KeepAlive, definition.Affix);
+        menu.SetLinkOptions(false, null, false);
+        menu.SetStatus(true);
+        menu.SetAuthorizationMode(definition.AuthorizationMode);
+        menu.SetPermissionGroups(definition.PermissionGroups);
+    }
+
+    private async Task ReplacePermissionsAsync(Menu menu, IReadOnlyCollection<string> permissionNames)
+    {
+        var queryable = await _menuPermissionRepository.GetQueryableAsync();
+        var existingPermissions = await AsyncExecuter.ToListAsync(queryable.Where(x => x.MenuId == menu.Id));
+        foreach (var permission in existingPermissions)
+        {
+            await _menuPermissionRepository.DeleteAsync(permission, autoSave: true);
+        }
+
+        foreach (var permissionName in permissionNames.Distinct(StringComparer.Ordinal))
+        {
+            var menuPermission = new MenuPermission(Guid.NewGuid(), menu.Id, permissionName);
+            await _menuPermissionRepository.InsertAsync(menuPermission, autoSave: true);
         }
     }
 
@@ -162,7 +193,7 @@ public class MenuDataSeedContributor : DomainService, IDataSeedContributor, ITra
                 type: MenuType.Menu,
                 sort: 30,
                 authorizationMode: MenuAuthorizationMode.Permission,
-                permissionNames: new[] { "Admin.Menus" },
+                permissionNames: new[] { "CenseqAdmin.Menus" },
                 permissionGroups: "Admin"),
             new(
                 key: "systemAuditLog",

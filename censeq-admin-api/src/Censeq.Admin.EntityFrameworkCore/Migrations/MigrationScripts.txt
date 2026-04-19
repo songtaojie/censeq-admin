@@ -21,4 +21,4 @@ dotnet ef migrations remove --project ./src/Censeq.Admin.EntityFrameworkCore/Cen
 dotnet ef database update --project ./src/Censeq.Admin.EntityFrameworkCore/Censeq.Admin.EntityFrameworkCore.csproj --startup-project ./src/Censeq.Admin.HttpApi.Host/Censeq.Admin.HttpApi.Host.csproj --context CenseqAdminDbContext
 
 // 7. 使用 DbMigrator 作为启动项目生成迁移（适合部分场景排查）
-dotnet ef migrations add InitialDb --project ./src/Censeq.Admin.EntityFrameworkCore/Censeq.Admin.EntityFrameworkCore.csproj --startup-project ./src/Censeq.Admin.DbMigrator/Censeq.Admin.DbMigrator.csproj --context CenseqAdminDbContext -v
+dotnet ef migrations add InitialDb --project ./src/Censeq.Admin.EntityFrameworkCore/C enseq.Admin.EntityFrameworkCore.csproj --startup-project ./src/Censeq.Admin.DbMigrator/Censeq.Admin.DbMigrator.csproj --context CenseqAdminDbContext -v

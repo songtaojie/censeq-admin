@@ -36,7 +36,9 @@ namespace Censeq.SettingManagement.EntityFrameworkCore.Modeling
 
                 b.Property(x => x.Name).HasMaxLength(SettingDefinitionRecordConsts.MaxNameLength).IsRequired();
                 b.Property(x => x.DisplayName).HasMaxLength(SettingDefinitionRecordConsts.MaxDisplayNameLength).IsRequired();
+                b.Property(x => x.LocalizationKey).HasMaxLength(SettingDefinitionRecordConsts.MaxLocalizationKeyLength);
                 b.Property(x => x.Description).HasMaxLength(SettingDefinitionRecordConsts.MaxDescriptionLength);
+                b.Property(x => x.DescriptionLocalizationKey).HasMaxLength(SettingDefinitionRecordConsts.MaxLocalizationKeyLength);
                 b.Property(x => x.DefaultValue).HasMaxLength(SettingDefinitionRecordConsts.MaxDefaultValueLength);
                 b.Property(x => x.Providers).HasMaxLength(SettingDefinitionRecordConsts.MaxProvidersLength);
 

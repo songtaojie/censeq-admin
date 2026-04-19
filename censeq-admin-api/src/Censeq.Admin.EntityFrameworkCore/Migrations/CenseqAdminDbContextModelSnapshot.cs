@@ -527,6 +527,11 @@ namespace Censeq.Admin.Migrations
                         .HasColumnType("character varying(256)")
                         .HasColumnName("description");
 
+                    b.Property<string>("DescriptionLocalizationKey")
+                        .HasMaxLength(512)
+                        .HasColumnType("character varying(512)")
+                        .HasColumnName("description_localization_key");
+
                     b.Property<string>("DisplayName")
                         .IsRequired()
                         .HasMaxLength(256)
@@ -551,6 +556,11 @@ namespace Censeq.Admin.Migrations
                     b.Property<bool>("IsVisibleToClients")
                         .HasColumnType("boolean")
                         .HasColumnName("is_visible_to_clients");
+
+                    b.Property<string>("LocalizationKey")
+                        .HasMaxLength(512)
+                        .HasColumnType("character varying(512)")
+                        .HasColumnName("localization_key");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -599,6 +609,11 @@ namespace Censeq.Admin.Migrations
                         .IsRequired()
                         .HasColumnType("text")
                         .HasColumnName("extra_properties");
+
+                    b.Property<string>("LocalizationKey")
+                        .HasMaxLength(512)
+                        .HasColumnType("character varying(512)")
+                        .HasColumnName("localization_key");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -751,6 +766,11 @@ namespace Censeq.Admin.Migrations
                         .HasColumnType("uuid")
                         .HasColumnName("id");
 
+                    b.Property<string>("Code")
+                        .HasMaxLength(64)
+                        .HasColumnType("character varying(64)")
+                        .HasColumnName("code");
+
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
                         .IsRequired()
@@ -784,11 +804,6 @@ namespace Censeq.Admin.Migrations
                         .HasMaxLength(256)
                         .HasColumnType("character varying(256)")
                         .HasColumnName("name");
-
-                    b.Property<string>("Code")
-                        .HasMaxLength(64)
-                        .HasColumnType("character varying(64)")
-                        .HasColumnName("code");
 
                     b.Property<string>("NormalizedName")
                         .IsRequired()
@@ -1965,6 +1980,11 @@ namespace Censeq.Admin.Migrations
                         .HasColumnType("boolean")
                         .HasColumnName("is_enabled");
 
+                    b.Property<string>("LocalizationKey")
+                        .HasMaxLength(512)
+                        .HasColumnType("character varying(512)")
+                        .HasColumnName("localization_key");
+
                     b.Property<byte>("MultiTenancySide")
                         .HasColumnType("smallint")
                         .HasColumnName("multi_tenancy_side");
@@ -2058,6 +2078,11 @@ namespace Censeq.Admin.Migrations
                         .HasColumnType("text")
                         .HasColumnName("extra_properties");
 
+                    b.Property<string>("LocalizationKey")
+                        .HasMaxLength(512)
+                        .HasColumnType("character varying(512)")
+                        .HasColumnName("localization_key");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(128)
@@ -2128,6 +2153,11 @@ namespace Censeq.Admin.Migrations
                         .HasColumnType("character varying(512)")
                         .HasColumnName("description");
 
+                    b.Property<string>("DescriptionLocalizationKey")
+                        .HasMaxLength(512)
+                        .HasColumnType("character varying(512)")
+                        .HasColumnName("description_localization_key");
+
                     b.Property<string>("DisplayName")
                         .IsRequired()
                         .HasMaxLength(256)
@@ -2150,6 +2180,11 @@ namespace Censeq.Admin.Migrations
                     b.Property<bool>("IsVisibleToClients")
                         .HasColumnType("boolean")
                         .HasColumnName("is_visible_to_clients");
+
+                    b.Property<string>("LocalizationKey")
+                        .HasMaxLength(512)
+                        .HasColumnType("character varying(512)")
+                        .HasColumnName("localization_key");
 
                     b.Property<string>("Name")
                         .IsRequired()

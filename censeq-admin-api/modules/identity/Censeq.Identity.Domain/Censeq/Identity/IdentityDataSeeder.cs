@@ -16,6 +16,13 @@ public class IdentityDataSeeder : ITransientDependency, IIdentityDataSeeder
 {
     private static readonly string[] DefaultAdminPermissions =
     [
+        "CenseqAdmin.Menus",
+        "CenseqAdmin.Menus.Create",
+        "CenseqAdmin.Menus.Update",
+        "CenseqAdmin.Menus.Delete",
+        "CenseqAdmin.Menus.ManageStatus",
+        "CenseqAdmin.Menus.ManageOrder",
+        "CenseqAdmin.Menus.CopyFromHost",
         "PermissionManagement.DefinitionManagement",
         "AuditLogging.AuditLogs"
     ];
@@ -74,36 +81,30 @@ public class IdentityDataSeeder : ITransientDependency, IIdentityDataSeeder
 
             var result = new IdentityDataSeedResult();
             //"admin" user
-            if(adminUserName.IsNullOrWhiteSpace())
+            if (adminUserName.IsNullOrWhiteSpace())
             {
                 adminUserName = IdentityDataSeedContributor.AdminUserNameDefaultValue;
             }
+
             var adminUser = await UserRepository.FindByNormalizedUserNameAsync(
                 LookupNormalizer.NormalizeName(adminUserName)
             );
 
-            if (adminUser != null)
+            if (adminUser == null)
             {
-                if (tenantId == null)
+                adminUser = new IdentityUser(
+                    GuidGenerator.Create(),
+                    adminUserName,
+                    adminEmail,
+                    tenantId
+                )
                 {
-                    await SeedClaimTypesAsync();
-                }
+                    Name = adminUserName
+                };
 
-                return result;
+                (await UserManager.CreateAsync(adminUser, adminPassword, validatePassword: false)).CheckErrors();
+                result.CreatedAdminUser = true;
             }
-
-            adminUser = new IdentityUser(
-                GuidGenerator.Create(),
-                adminUserName,
-                adminEmail,
-                tenantId
-            )
-            {
-                Name = adminUserName
-            };
-
-            (await UserManager.CreateAsync(adminUser, adminPassword, validatePassword: false)).CheckErrors();
-            result.CreatedAdminUser = true;
 
             //"admin" role
             const string adminRoleName = "admin";
@@ -123,16 +124,19 @@ public class IdentityDataSeeder : ITransientDependency, IIdentityDataSeeder
 
                 (await RoleManager.CreateAsync(adminRole)).CheckErrors();
                 result.CreatedAdminRole = true;
-
-                await PermissionDataSeeder.SeedAsync(
-                    RolePermissionValueProvider.ProviderName,
-                    adminRoleName,
-                    DefaultAdminPermissions,
-                    tenantId
-                );
             }
 
-            (await UserManager.AddToRoleAsync(adminUser, adminRoleName)).CheckErrors();
+            await PermissionDataSeeder.SeedAsync(
+                RolePermissionValueProvider.ProviderName,
+                adminRoleName,
+                DefaultAdminPermissions,
+                tenantId
+            );
+
+            if (!await UserManager.IsInRoleAsync(adminUser, adminRoleName))
+            {
+                (await UserManager.AddToRoleAsync(adminUser, adminRoleName)).CheckErrors();
+            }
 
             if (tenantId == null)
             {

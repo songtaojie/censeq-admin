@@ -36,8 +36,14 @@ public class DynamicSettingDefinitionStoreInMemoryCache : IDynamicSettingDefinit
             var settingDefinition = new SettingDefinition(
                 record.Name,
                 record.DefaultValue,
-                LocalizableStringSerializer.Deserialize(record.DisplayName),
-                record.Description != null ? LocalizableStringSerializer.Deserialize(record.Description) : null,
+                !string.IsNullOrWhiteSpace(record.LocalizationKey)
+                    ? LocalizableStringSerializer.Deserialize(record.LocalizationKey)
+                    : new FixedLocalizableString(record.DisplayName),
+                record.Description != null
+                    ? (!string.IsNullOrWhiteSpace(record.DescriptionLocalizationKey)
+                        ? LocalizableStringSerializer.Deserialize(record.DescriptionLocalizationKey)
+                        : new FixedLocalizableString(record.Description))
+                    : null,
                 record.IsVisibleToClients,
                 record.IsInherited,
                 record.IsEncrypted);

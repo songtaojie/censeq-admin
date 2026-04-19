@@ -81,7 +81,11 @@ public class DynamicPermissionDefinitionStoreInMemoryCache : IDynamicPermissionD
 
         foreach (var permissionGroupRecord in permissionGroupRecords)
         {
-            var permissionGroup = context.AddGroup(permissionGroupRecord.Name,LocalizableStringSerializer.Deserialize(permissionGroupRecord.DisplayName));
+            var groupDisplayName = !string.IsNullOrWhiteSpace(permissionGroupRecord.LocalizationKey)
+                ? LocalizableStringSerializer.Deserialize(permissionGroupRecord.LocalizationKey)
+                : new FixedLocalizableString(permissionGroupRecord.DisplayName);
+
+            var permissionGroup = context.AddGroup(permissionGroupRecord.Name, groupDisplayName);
 
             PermissionGroupDefinitions[permissionGroup.Name] = permissionGroup;
 
@@ -139,7 +143,9 @@ public class DynamicPermissionDefinitionStoreInMemoryCache : IDynamicPermissionD
     {
         var permission = permissionContainer.AddPermission(
             permissionRecord.Name,
-            LocalizableStringSerializer.Deserialize(permissionRecord.DisplayName),
+            !string.IsNullOrWhiteSpace(permissionRecord.LocalizationKey)
+                ? LocalizableStringSerializer.Deserialize(permissionRecord.LocalizationKey)
+                : new FixedLocalizableString(permissionRecord.DisplayName),
             permissionRecord.MultiTenancySide,
             permissionRecord.IsEnabled
         );
