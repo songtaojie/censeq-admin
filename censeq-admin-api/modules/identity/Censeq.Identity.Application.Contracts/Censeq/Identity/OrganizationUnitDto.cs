@@ -12,4 +12,8 @@ public class OrganizationUnitDto : ExtensibleEntityDto<Guid>
     public string DisplayName { get; set; } = default!;
 
     public int EntityVersion { get; set; }
+
+    public int Status { get; set; } = 1;
+
+    public string? Remark { get; set; }
 }

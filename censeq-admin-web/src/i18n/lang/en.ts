@@ -7,7 +7,7 @@ export default {
 		systemMenu: 'systemMenu',
 		systemRole: 'systemRole',
 		systemUser: 'systemUser',
-		systemDept: 'systemDept',
+		systemDept: 'Org Management',
 		systemDic: 'systemDic',
 		systemTenant: 'Tenant management',
 		systemFeature: 'Features',

@@ -25,7 +25,8 @@ public class CenseqOpenIddictDomainSharedModule : AbpModule
             options.Resources
                 .Add<CenseqOpenIddictResource>("en")
                 .AddBaseTypes(typeof(AbpValidationResource))
-                .AddVirtualJson("Volo/Abp/OpenIddict/Localization/OpenIddict");
+                .AddVirtualJson("Volo/Abp/OpenIddict/Localization/OpenIddict")
+                .AddVirtualJson("/Censeq/OpenIddict/Localization/OpenIddict");
         });
 
         Configure<AbpExceptionLocalizationOptions>(options =>

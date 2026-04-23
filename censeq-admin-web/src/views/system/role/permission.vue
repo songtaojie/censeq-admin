@@ -1,6 +1,12 @@
 <template>
 	<div class="role-permission-dialog-container">
-		<el-dialog :title="`角色菜单授权【${state.roleName}】`" v-model="state.dialog.isShowDialog" width="720px" destroy-on-close>
+		<el-dialog v-model="state.dialog.isShowDialog" width="720px" destroy-on-close draggable :close-on-click-modal="false">
+			<template #header>
+				<div style="color: #fff">
+					<el-icon size="16" style="margin-right: 3px; display: inline; vertical-align: middle"><ele-Menu /></el-icon>
+					<span>角色菜单授权【{{ state.roleName }}】</span>
+				</div>
+			</template>
 			<div class="dialog-intro">
 				为当前角色配置可访问的菜单权限。树形勾选会同步影响角色可见菜单，保存后立即生效。
 			</div>

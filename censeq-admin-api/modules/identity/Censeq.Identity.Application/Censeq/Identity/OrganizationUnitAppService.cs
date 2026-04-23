@@ -48,6 +48,9 @@ public class OrganizationUnitAppService : IdentityAppServiceBase, IOrganizationU
             input.ParentId,
             CurrentTenant.Id);
 
+        entity.Status = input.Status;
+        entity.Remark = input.Remark;
+
         await OrganizationUnitManager.CreateAsync(entity);
         await CurrentUnitOfWork!.SaveChangesAsync();
 
@@ -59,6 +62,8 @@ public class OrganizationUnitAppService : IdentityAppServiceBase, IOrganizationU
     {
         var entity = await OrganizationUnitRepository.GetAsync(id);
         entity.DisplayName = input.DisplayName;
+        entity.Status = input.Status;
+        entity.Remark = input.Remark;
         await OrganizationUnitManager.UpdateAsync(entity);
         await CurrentUnitOfWork!.SaveChangesAsync();
 

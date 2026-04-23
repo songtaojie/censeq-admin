@@ -93,7 +93,7 @@ public class IdentityRoleAppService : IdentityAppServiceBase, IIdentityRoleAppSe
 
         role.SetConcurrencyStampIfNotNull(input.ConcurrencyStamp);
 
-        if (role.Name != input.Name)
+        if (!string.Equals(role.Name, input.Name, StringComparison.Ordinal))
         {
             (await RoleManager.SetRoleNameAsync(role, input.Name)).CheckErrors();
             // SetRoleNameAsync 已经更新了角色，需要重新获取以更新 ConcurrencyStamp

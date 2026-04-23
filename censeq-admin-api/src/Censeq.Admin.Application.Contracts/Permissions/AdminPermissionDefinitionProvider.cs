@@ -8,7 +8,7 @@ public class AdminPermissionDefinitionProvider : PermissionDefinitionProvider
 {
     public override void Define(IPermissionDefinitionContext context)
     {
-        var myGroup = context.AddGroup(AdminPermissions.GroupName);
+        var myGroup = context.AddGroup(AdminPermissions.GroupName, L("Permission:CenseqAdmin"));
 
         var menusPermission = myGroup.AddPermission(AdminPermissions.Menus.Default, L("Permission:Menus"));
         menusPermission.AddChild(AdminPermissions.Menus.Create, L("Permission:Create"));

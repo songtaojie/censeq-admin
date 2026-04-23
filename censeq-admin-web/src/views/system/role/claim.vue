@@ -1,6 +1,12 @@
 <template>
 	<div class="role-claim-dialog-container">
-		<el-dialog :title="`角色声明【${state.roleName}】`" v-model="state.dialog.isShowDialog" width="860px" destroy-on-close>
+		<el-dialog v-model="state.dialog.isShowDialog" width="860px" destroy-on-close draggable :close-on-click-modal="false">
+			<template #header>
+				<div style="color: #fff">
+					<el-icon size="16" style="margin-right: 3px; display: inline; vertical-align: middle"><ele-DocumentChecked /></el-icon>
+					<span>角色声明【{{ state.roleName }}】</span>
+				</div>
+			</template>
 			<div class="dialog-intro">
 				声明用于给角色附加结构化的业务信息，例如数据范围、部门标识或审批阈值。支持按声明类型动态维护值。
 			</div>
@@ -52,11 +58,7 @@
 						</template>
 						<template v-else>
 							<el-button type="primary" size="small" text @click="onEditClaim(scope.row)">修改</el-button>
-							<el-popconfirm title="确定删除该声明吗？" @confirm="onDeleteClaim(scope.row)">
-								<template #reference>
-									<el-button type="danger" size="small" text>删除</el-button>
-								</template>
-							</el-popconfirm>
+								<el-button type="danger" size="small" text @click="onConfirmDeleteClaim(scope.row)">删除</el-button>
 						</template>
 					</template>
 				</el-table-column>
@@ -83,7 +85,7 @@
 <script setup lang="ts" name="roleClaimDialog">
 import { reactive } from 'vue';
 import { useRouter } from 'vue-router';
-import { ElMessage } from 'element-plus';
+import { ElMessage, ElMessageBox } from 'element-plus';
 import { Plus } from '@element-plus/icons-vue';
 import { IdentityRoleDto, IdentityClaimTypeDto } from '/@/api/models/identity';
 import { useIdentityApi, useIdentityClaimTypeApi } from '/@/api/apis';
@@ -253,6 +255,20 @@ const onDeleteClaim = async (row: ClaimItem) => {
 	} catch (error) {
 		ElMessage.error('删除失败');
 	}
+};
+
+const onConfirmDeleteClaim = (row: ClaimItem) => {
+	ElMessageBox.confirm(
+		`确定要删除声明类型 <strong>「${row.claimType}」</strong> 吗？`,
+		'删除确认',
+		{
+			confirmButtonText: '确认删除',
+			cancelButtonText: '取消',
+			type: 'warning',
+			dangerouslyUseHTMLString: true,
+			confirmButtonClass: 'el-button--danger',
+		}
+	).then(() => onDeleteClaim(row)).catch(() => {});
 };
 
 const formatValueType = (valueType: string) => {

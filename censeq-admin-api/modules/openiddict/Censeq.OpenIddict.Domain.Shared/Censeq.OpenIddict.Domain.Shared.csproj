@@ -6,7 +6,13 @@
 		<AssemblyName>Censeq.OpenIddict.Domain.Shared</AssemblyName>
 		<PackageId>Censeq.OpenIddict.Domain.Shared</PackageId>
 		<RootNamespace />
+		<GenerateEmbeddedFilesManifest>true</GenerateEmbeddedFilesManifest>
 	</PropertyGroup>
+
+	<ItemGroup>
+		<EmbeddedResource Include="Censeq\OpenIddict\Localization\OpenIddict\*.json" />
+		<Content Remove="Censeq\OpenIddict\Localization\OpenIddict\*.json" />
+	</ItemGroup>
 
 	<ItemGroup>
 		<PackageReference Include="Volo.Abp.Validation" />

@@ -255,6 +255,25 @@
 	overflow-y: auto;
 	overflow-x: hidden;
 }
+.el-dialog__header {
+	margin: -16px -16px 0px -16px;
+	padding: 8px 0px 8px 20px;
+	background: var(--el-color-primary);
+}
+.el-dialog__title {
+	font-size: 14px;
+	color: #fff;
+	font-weight: 600;
+}
+.el-dialog__headerbtn {
+	margin-top: -5px;
+	.el-dialog__close {
+		color: #fff;
+	}
+}
+.el-dialog__headerbtn:hover .el-dialog__close {
+	color: var(--el-color-danger) !important;
+}
 
 /* Card 卡片
 ------------------------------- */

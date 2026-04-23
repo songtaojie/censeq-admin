@@ -16,15 +16,21 @@ export interface OrganizationUnitDto extends ExtensibleEntityDto<string> {
 	code?: string;
 	displayName?: string;
 	entityVersion?: number;
+	status?: number;
+	remark?: string | null;
 }
 
 export interface OrganizationUnitCreateDto {
 	displayName: string;
 	parentId?: string | null;
+	status?: number;
+	remark?: string | null;
 }
 
 export interface OrganizationUnitUpdateDto {
 	displayName: string;
+	status?: number;
+	remark?: string | null;
 }
 
 /** 用户所属组织机构 Id 列表 */

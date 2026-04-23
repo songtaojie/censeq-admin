@@ -7,7 +7,7 @@ export default {
 		systemMenu: '菜单管理',
 		systemRole: '角色管理',
 		systemUser: '用户管理',
-		systemDept: '部门管理',
+		systemDept: '机构管理',
 		systemDic: '字典管理',
 		systemTenant: '租户管理',
 		systemFeature: '特性管理',

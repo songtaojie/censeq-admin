@@ -35,6 +35,16 @@ public class OrganizationUnit : FullAuditedAggregateRoot<Guid>, IMultiTenant, IH
     public virtual string DisplayName { get; set; }
 
     /// <summary>
+    /// Status: 1=启用 0=禁用
+    /// </summary>
+    public virtual int Status { get; set; } = 1;
+
+    /// <summary>
+    /// Remark / description.
+    /// </summary>
+    public virtual string? Remark { get; set; }
+
+    /// <summary>
     /// A version value that is increased whenever the entity is changed.
     /// </summary>
     public virtual int EntityVersion { get; set; }

@@ -10,6 +10,14 @@
     "DoYouWantToGrantAccessToYourData": "是否要授予 {0} 访问你的数据的权限？",
     "ScopesRequested": "要求的Scope",
     "Accept": "接受",
-    "Deny": "拒绝"
+    "Deny": "拒绝",
+    "Permission:OpenIddict": "OpenIddict 管理",
+    "Permission:Applications": "应用管理",
+    "Permission:Create": "创建",
+    "Permission:Update": "编辑",
+    "Permission:Delete": "删除",
+    "Permission:Scopes": "作用域管理",
+    "Permission:Authorizations": "授权管理",
+    "Permission:Tokens": "令牌管理"
   }
 }

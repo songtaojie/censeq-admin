@@ -1,6 +1,12 @@
 <template>
 	<div class="system-user-dialog-container">
-		<el-dialog :title="state.dialog.title" v-model="state.dialog.isShowDialog" width="720px" destroy-on-close @closed="onClosed">
+		<el-dialog v-model="state.dialog.isShowDialog" width="720px" destroy-on-close draggable :close-on-click-modal="false" @closed="onClosed">
+			<template #header>
+				<div style="color: #fff">
+					<el-icon size="16" style="margin-right: 3px; display: inline; vertical-align: middle"><ele-User /></el-icon>
+					<span>{{ state.dialog.title }}</span>
+				</div>
+			</template>
 			<el-form ref="formRef" :model="state.ruleForm" :rules="formRules" label-width="108px" size="default">
 				<el-divider content-position="left">基本信息</el-divider>
 				<el-row :gutter="16">

@@ -107,6 +107,12 @@ const onQuery = () => {
 	getTableData();
 };
 
+const onResetQuery = () => {
+	state.tableData.param.search = '';
+	state.tableData.param.pageIndex = 1;
+	getTableData();
+};
+
 const onOpenAdd = (type: string) => {
 	userDialogRef.value.openDialog(type);
 };
@@ -148,9 +154,9 @@ onMounted(() => {
 <style scoped lang="scss">
 .system-user-container {
 	.system-user-padding {
-		.el-table {
-			flex: 1;
-		}
+		display: flex;
+		flex-direction: column;
+		gap: 0;
 	}
 }
 </style>

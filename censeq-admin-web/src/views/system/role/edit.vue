@@ -1,6 +1,12 @@
 <template>
 	<div class="role-edit-dialog-container">
-		<el-dialog :title="state.dialog.title" v-model="state.dialog.isShowDialog" width="560px" destroy-on-close>
+		<el-dialog v-model="state.dialog.isShowDialog" width="520px" destroy-on-close draggable :close-on-click-modal="false">
+			<template #header>
+				<div style="color: #fff">
+					<el-icon size="16" style="margin-right: 3px; display: inline; vertical-align: middle"><ele-Edit /></el-icon>
+					<span>{{ state.dialog.title }}</span>
+				</div>
+			</template>
 			<div class="dialog-intro">维护角色名称及其基础属性。默认角色会自动分配给新用户，公共角色可供其他用户查看和选择。</div>
 			<el-form ref="formRef" :model="state.ruleForm" :rules="rules" size="default" label-width="96px" class="role-form">
 				<el-form-item label="角色编码" prop="code">
@@ -15,7 +21,15 @@
 					<div class="form-tip">角色编码唯一；编码一旦设置，后续不允许修改。</div>
 				</el-form-item>
 				<el-form-item label="角色名称" prop="name">
-					<el-input v-model="state.ruleForm.name" placeholder="请输入角色名称" clearable maxlength="50" show-word-limit />
+					<el-input
+						v-model="state.ruleForm.name"
+						placeholder="请输入角色名称"
+						clearable
+						maxlength="50"
+						show-word-limit
+						:disabled="state.dialog.type === 'edit' && state.ruleForm.isStatic"
+					/>
+					<div v-if="state.dialog.type === 'edit' && state.ruleForm.isStatic" class="form-tip">静态角色名称不允许修改。</div>
 				</el-form-item>
 				<el-row :gutter="12">
 					<el-col :span="12">

@@ -1,89 +1,100 @@
 <template>
 	<div class="system-role-container layout-padding">
 		<div class="system-role-padding layout-padding-auto">
-			<el-card shadow="hover" :body-style="{ paddingBottom: '0' }" class="role-query-card">
-				<el-form :model="state.tableData.param" :inline="true">
+			<!-- 搜索栏 -->
+			<el-card shadow="never" class="search-card">
+				<el-form :model="state.tableData.param" :inline="true" class="search-form">
 					<el-form-item label="角色名称/编码">
-						<el-input v-model="state.tableData.param.search" placeholder="角色名称或编码" clearable class="role-search" @keyup.enter="onQuery" />
+						<el-input
+							v-model="state.tableData.param.search"
+							placeholder="输入角色名称或编码搜索"
+							clearable
+							class="search-input"
+							@keyup.enter="onQuery"
+						>
+							<template #prefix><el-icon><ele-Search /></el-icon></template>
+						</el-input>
 					</el-form-item>
 					<el-form-item>
-						<el-button-group>
-							<el-button type="primary" icon="ele-Search" @click="onQuery"> 查询 </el-button>
-							<el-button icon="ele-Refresh" @click="onResetQuery"> 重置 </el-button>
-						</el-button-group>
+						<el-button type="primary" icon="ele-Search" @click="onQuery">查询</el-button>
+						<el-button icon="ele-Refresh" @click="onResetQuery">重置</el-button>
 					</el-form-item>
-					<el-form-item>
-						<el-button type="primary" icon="ele-Plus" @click="onOpenAddRole"> 新增 </el-button>
+					<el-form-item class="add-btn-item">
+						<el-button type="primary" icon="ele-Plus" @click="onOpenAddRole">新增角色</el-button>
 					</el-form-item>
 				</el-form>
 			</el-card>
 
-			<el-card class="full-table role-table-card" shadow="hover" style="margin-top: 5px">
-				<el-table :data="state.tableData.data" v-loading="state.tableData.loading" style="width: 100%" stripe border highlight-current-row>
-				<el-table-column type="index" label="序号" width="60" />
-				<el-table-column prop="code" label="角色编码" width="160" show-overflow-tooltip>
-					<template #default="scope">
-						{{ scope.row.code || '-' }}
-					</template>
-				</el-table-column>
-				<el-table-column prop="name" label="角色名称" min-width="220" show-overflow-tooltip>
-					<template #default="scope">
-						<div class="role-name-cell">
-							<div class="role-name">{{ scope.row.name }}</div>
-							<div class="role-id">ID: {{ scope.row.id }}</div>
-						</div>
-					</template>
-				</el-table-column>
-				<el-table-column prop="isDefault" label="是否默认" width="100" align="center">
-					<template #default="scope">
-						<el-tag size="small" :type="scope.row.isDefault ? 'success' : 'info'">
-							{{ scope.row.isDefault ? '是' : '否' }}
-						</el-tag>
-					</template>
-				</el-table-column>
-				<el-table-column prop="isPublic" label="是否公共" width="100" align="center">
-					<template #default="scope">
-						<el-tag size="small" :type="scope.row.isPublic ? 'success' : 'info'">
-							{{ scope.row.isPublic ? '是' : '否' }}
-						</el-tag>
-					</template>
-				</el-table-column>
-				<el-table-column prop="isStatic" label="是否静态" width="100" align="center">
-					<template #default="scope">
-						<el-tag size="small" :type="scope.row.isStatic ? 'warning' : 'info'">
-							{{ scope.row.isStatic ? '是' : '否' }}
-						</el-tag>
-					</template>
-				</el-table-column>
-				<el-table-column label="操作" width="380" align="center" fixed="right">
-					<template #default="scope">
-						<el-button size="small" text type="primary" @click="onOpenEditRole(scope.row)">
-							<el-icon><ele-Edit /></el-icon>
-							编辑
-						</el-button>
-						<el-button size="small" text type="primary" @click="onOpenPermission(scope.row)">
-							<el-icon><ele-Menu /></el-icon>
-							授权菜单
-						</el-button>
-						<el-button size="small" text type="primary" @click="onOpenClaims(scope.row)">
-							<el-icon><ele-DocumentChecked /></el-icon>
-							角色声明
-						</el-button>
-						<el-popconfirm title="确定删除该角色吗？" @confirm="onRowDel(scope.row)">
-							<template #reference>
-								<el-button size="small" text type="danger" :disabled="scope.row.isDefault || scope.row.isStatic">
-									<el-icon><ele-Delete /></el-icon>
-									删除
-								</el-button>
-							</template>
-						</el-popconfirm>
-					</template>
-				</el-table-column>
+			<!-- 数据表格 -->
+			<el-card shadow="hover" style="margin-top: 5px" class="full-table table-card">
+				<el-table
+					:data="state.tableData.data"
+					v-loading="state.tableData.loading"
+					style="width: 100%"
+					border
+					stripe
+					highlight-current-row
+					row-key="id"
+				>
+					<el-table-column type="index" label="#" width="52" align="center" />
+
+					<el-table-column label="角色名称" min-width="180" show-overflow-tooltip>
+						<template #default="scope">
+							<div class="role-name-cell">
+								<el-icon v-if="scope.row.isStatic" class="static-icon" title="静态角色"><ele-Lock /></el-icon>
+								<span class="role-name">{{ scope.row.name }}</span>
+							</div>
+						</template>
+					</el-table-column>
+
+					<el-table-column prop="code" label="角色编码" width="160" show-overflow-tooltip>
+						<template #default="scope">
+							<el-text type="info" size="small">{{ scope.row.code || '—' }}</el-text>
+						</template>
+					</el-table-column>
+
+					<el-table-column label="属性" width="180" align="center">
+						<template #default="scope">
+							<div class="badge-group">
+								<el-tag v-if="scope.row.isStatic" size="small" type="warning" effect="light">静态</el-tag>
+								<el-tag v-if="scope.row.isDefault" size="small" type="success" effect="light">默认</el-tag>
+								<el-tag v-if="scope.row.isPublic" size="small" type="primary" effect="light">公共</el-tag>
+								<el-text v-if="!scope.row.isStatic && !scope.row.isDefault && !scope.row.isPublic" type="info" size="small">—</el-text>
+							</div>
+						</template>
+					</el-table-column>
+
+					<el-table-column label="操作" width="290" align="center" fixed="right">
+						<template #default="scope">
+							<el-button size="small" text type="primary" @click="onOpenEditRole(scope.row)">
+								<el-icon><ele-Edit /></el-icon>编辑
+							</el-button>
+							<el-divider direction="vertical" />
+							<el-button size="small" text type="primary" @click="onOpenPermission(scope.row)">
+								<el-icon><ele-Menu /></el-icon>授权菜单
+							</el-button>
+							<el-divider direction="vertical" />
+							<el-button size="small" text type="primary" @click="onOpenClaims(scope.row)">
+								<el-icon><ele-DocumentChecked /></el-icon>声明
+							</el-button>
+							<el-divider direction="vertical" />
+							<el-button
+								size="small"
+								text
+								type="danger"
+								:disabled="scope.row.isDefault || scope.row.isStatic"
+								@click="onConfirmDel(scope.row)"
+							>
+								<el-icon><ele-Delete /></el-icon>删除
+							</el-button>
+						</template>
+					</el-table-column>
 				</el-table>
+
 				<el-pagination
 					@size-change="onHandleSizeChange"
 					@current-change="onHandleCurrentChange"
-					class="mt15"
+					class="pagination"
 					:pager-count="5"
 					:page-sizes="[10, 20, 30]"
 					v-model:current-page="state.tableData.param.pageIndex"
@@ -91,8 +102,7 @@
 					v-model:page-size="state.tableData.param.pageSize"
 					layout="total, sizes, prev, pager, next, jumper"
 					:total="state.tableData.total"
-				>
-				</el-pagination>
+				/>
 			</el-card>
 		</div>
 
@@ -107,16 +117,14 @@
 
 <script setup lang="ts" name="systemRole">
 import { defineAsyncComponent, reactive, onMounted, ref } from 'vue';
-import { ElMessage } from 'element-plus';
+import { ElMessage, ElMessageBox } from 'element-plus';
 import { useIdentityApi } from '/@/api/apis';
 import { IdentityRoleDto } from '/@/api/models/identity';
 
-// 引入组件
 const RoleEditDialog = defineAsyncComponent(() => import('./edit.vue'));
 const RolePermissionDialog = defineAsyncComponent(() => import('./permission.vue'));
 const RoleClaimDialog = defineAsyncComponent(() => import('./claim.vue'));
 
-// 定义变量内容
 const roleEditRef = ref();
 const rolePermissionRef = ref();
 const roleClaimRef = ref();
@@ -134,7 +142,6 @@ const state = reactive({
 	},
 });
 
-// 初始化表格数据
 const getTableData = async () => {
 	state.tableData.loading = true;
 	try {
@@ -151,36 +158,24 @@ const getTableData = async () => {
 	}
 };
 
-// 打开新增角色弹窗
-const onOpenAddRole = () => {
-	roleEditRef.value.openDialog();
-};
+const onOpenAddRole = () => roleEditRef.value.openDialog();
+const onOpenEditRole = (row: IdentityRoleDto) => roleEditRef.value.openDialog(row);
+const onOpenPermission = (row: IdentityRoleDto) => rolePermissionRef.value.openDialog(row);
+const onOpenClaims = (row: IdentityRoleDto) => roleClaimRef.value.openDialog(row);
 
-// 打开编辑角色弹窗
-const onOpenEditRole = (row: IdentityRoleDto) => {
-	roleEditRef.value.openDialog(row);
-};
-
-// 打开授权菜单弹窗
-const onOpenPermission = (row: IdentityRoleDto) => {
-	rolePermissionRef.value.openDialog(row);
-};
-
-// 打开角色声明弹窗
-const onOpenClaims = (row: IdentityRoleDto) => {
-	roleClaimRef.value.openDialog(row);
-};
-
-// 删除角色
-const onRowDel = async (row: IdentityRoleDto) => {
-	try {
-		const { deleteRole } = useIdentityApi();
-		await deleteRole(row.id!);
-		ElMessage.success('删除成功');
-		await getTableData();
-	} catch (error) {
-		// 删除失败
-	}
+const onConfirmDel = (row: IdentityRoleDto) => {
+	ElMessageBox.confirm(`确定删除角色：【${row.name}】?`, '提示', {
+		confirmButtonText: '确定',
+		cancelButtonText: '取消',
+		type: 'warning',
+	})
+		.then(async () => {
+			const { deleteRole } = useIdentityApi();
+			await deleteRole(row.id!);
+			ElMessage.success('删除成功');
+			await getTableData();
+		})
+		.catch(() => {});
 };
 
 const onQuery = () => {
@@ -194,7 +189,6 @@ const onResetQuery = () => {
 	getTableData();
 };
 
-// 分页改变
 const onHandleSizeChange = (val: number) => {
 	state.tableData.param.pageSize = val;
 	getTableData();
@@ -217,18 +211,32 @@ onMounted(() => {
 	.system-role-padding {
 		display: flex;
 		flex-direction: column;
-		gap: 5px;
+		gap: 12px;
 		min-height: 100%;
 	}
 }
 
-.role-query-card {
+.search-card {
 	:deep(.el-card__body) {
 		padding-bottom: 0;
 	}
+
+	.search-form {
+		display: flex;
+		flex-wrap: wrap;
+		align-items: center;
+	}
+
+	.search-input {
+		width: 280px;
+	}
+
+	.add-btn-item {
+		margin-left: auto;
+	}
 }
 
-.role-table-card {
+.table-card {
 	flex: 1;
 	display: flex;
 	flex-direction: column;
@@ -237,6 +245,7 @@ onMounted(() => {
 		flex: 1;
 		display: flex;
 		flex-direction: column;
+		padding: 16px;
 	}
 
 	:deep(.el-table) {
@@ -244,30 +253,31 @@ onMounted(() => {
 	}
 }
 
-.role-search {
-	min-width: 260px;
-	width: 260px;
-}
 .role-name-cell {
 	display: flex;
-	flex-direction: column;
-	gap: 4px;
+	align-items: center;
+	gap: 6px;
 
-	.role-name {
-		font-weight: 600;
+	.static-icon {
+		color: var(--el-color-warning);
+		font-size: 14px;
+		flex-shrink: 0;
 	}
 
-	.role-id {
-		font-size: 12px;
-		color: var(--el-text-color-secondary);
+	.role-name {
+		font-weight: 500;
 	}
 }
 
-@media (max-width: 960px) {
-	.role-search {
-		width: 100%;
-		min-width: 0;
-		flex: 1;
-	}
+.badge-group {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 4px;
+	justify-content: center;
+}
+
+.pagination {
+	margin-top: 14px;
+	justify-content: flex-end;
 }
 </style>

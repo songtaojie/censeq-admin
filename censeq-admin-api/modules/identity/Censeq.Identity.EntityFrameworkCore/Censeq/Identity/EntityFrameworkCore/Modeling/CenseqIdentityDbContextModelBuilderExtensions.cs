@@ -145,6 +145,8 @@ namespace Censeq.Identity.EntityFrameworkCore.Modeling
 
                 b.Property(x => x.Code).IsRequired().HasMaxLength(OrganizationUnitConsts.MaxCodeLength);
                 b.Property(x => x.DisplayName).IsRequired().HasMaxLength(OrganizationUnitConsts.MaxDisplayNameLength);
+                b.Property(x => x.Status).HasDefaultValue(1);
+                b.Property(x => x.Remark).HasMaxLength(512);
 
                 b.HasIndex(x => x.Code);
                 b.ApplyObjectExtensionMappings();
