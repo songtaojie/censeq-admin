@@ -1,35 +1,37 @@
 <template>
-	<div class="openiddict-scope-container layout-padding">
-		<div class="openiddict-scope-padding layout-padding-auto layout-padding-view page-shell">
-			<el-card shadow="hover" :body-style="{ paddingBottom: '0' }" class="page-filter-card">
-				<el-form :model="state.searchForm" size="default" inline class="page-toolbar">
-					<el-form-item label="关键词">
-						<el-input v-model="state.searchForm.filter" class="page-search" placeholder="请输入名称或显示名称" clearable />
-					</el-form-item>
-					<el-form-item>
-						<el-button-group>
-							<el-button size="default" type="primary" @click="handleSearch">
-								<el-icon><ele-Search /></el-icon>查询
-							</el-button>
-							<el-button size="default" @click="resetSearch">
-								<el-icon><ele-RefreshLeft /></el-icon>重置
-							</el-button>
-						</el-button-group>
-					</el-form-item>
-					<el-form-item>
-						<el-button type="success" size="default" @click="handleCreate">
-							<el-icon><ele-Plus /></el-icon>新建作用域
+	<div class="scope-container layout-padding">
+		<el-card shadow="hover" :body-style="{ paddingBottom: '0' }">
+			<el-form ref="queryFormRef" :model="state.searchForm" :inline="true">
+				<el-form-item label="关键词">
+					<el-input v-model="state.searchForm.filter" placeholder="请输入名称或显示名称" clearable style="width: 220px" />
+				</el-form-item>
+				<el-form-item>
+					<el-button-group>
+						<el-button type="primary" @click="handleSearch">
+							<el-icon><ele-Search /></el-icon>查询
 						</el-button>
-					</el-form-item>
-				</el-form>
-			</el-card>
+						<el-button @click="resetSearch">
+							<el-icon><ele-RefreshLeft /></el-icon>重置
+						</el-button>
+					</el-button-group>
+				</el-form-item>
+				<el-form-item>
+					<el-button type="primary" @click="handleCreate">
+						<el-icon><ele-Plus /></el-icon>新建作用域
+					</el-button>
+				</el-form-item>
+			</el-form>
+		</el-card>
 
-			<el-card class="page-content-card" shadow="hover" style="margin-top: 5px">
-				<div class="page-table-body">
-					<el-table :data="state.dataList" v-loading="state.loading" border>
+		<el-card shadow="hover" style="margin-top: 8px">
+			<el-table :data="state.dataList" v-loading="state.loading" border stripe>
 				<el-table-column type="index" label="序号" width="60" align="center" />
-				<el-table-column prop="name" label="名称" min-width="120" show-overflow-tooltip />
-				<el-table-column prop="displayName" label="显示名称" min-width="150" show-overflow-tooltip>
+				<el-table-column prop="name" label="名称" min-width="140" show-overflow-tooltip>
+					<template #default="{ row }">
+						<span class="scope-name-text">{{ row.name }}</span>
+					</template>
+				</el-table-column>
+				<el-table-column prop="displayName" label="显示名称" min-width="140" show-overflow-tooltip>
 					<template #default="{ row }">
 						{{ row.displayName || '-' }}
 					</template>
@@ -39,9 +41,19 @@
 						{{ row.description || '-' }}
 					</template>
 				</el-table-column>
-				<el-table-column prop="resources" label="资源" min-width="150" show-overflow-tooltip>
+				<el-table-column prop="resources" label="资源" min-width="160" show-overflow-tooltip>
 					<template #default="{ row }">
-						{{ formatArray(row.resources) }}
+						<template v-if="row.resources && row.resources.length">
+							<el-tag
+								v-for="r in row.resources"
+								:key="r"
+								size="small"
+								type="info"
+								effect="light"
+								style="margin-right: 4px"
+							>{{ r }}</el-tag>
+						</template>
+						<span v-else>-</span>
 					</template>
 				</el-table-column>
 				<el-table-column prop="creationTime" label="创建时间" width="160" align="center">
@@ -49,42 +61,50 @@
 						{{ formatDateTime(row.creationTime) }}
 					</template>
 				</el-table-column>
-					<el-table-column label="操作" width="150" align="center" fixed="right">
+				<el-table-column label="操作" width="150" align="center" fixed="right">
 					<template #default="{ row }">
-						<el-button type="primary" link size="small" @click="handleEdit(row)">编辑</el-button>
-						<el-button type="danger" link size="small" @click="handleDelete(row)">删除</el-button>
+						<el-button icon="ele-Edit" size="small" text type="primary" @click="handleEdit(row)">编辑</el-button>
+						<el-button icon="ele-Delete" size="small" text type="danger" @click="handleDelete(row)">删除</el-button>
 					</template>
 				</el-table-column>
-					</el-table>
-
-					<el-pagination
+			</el-table>
+			<el-pagination
+				class="pagination"
 				v-model:current-page="state.searchForm.skipCount"
 				v-model:page-size="state.searchForm.maxResultCount"
 				:pager-count="5"
-				:page-sizes="[10, 20, 30, 50, 100]"
+				:page-sizes="[10, 20, 50, 100]"
 				:total="state.total"
 				layout="total, sizes, prev, pager, next, jumper"
 				background
+				size="small"
 				@size-change="handlePageSizeChange"
-					@current-change="getList"
-					></el-pagination>
-				</div>
-			</el-card>
-		</div>
+				@current-change="getList"
+			/>
+		</el-card>
 
 		<!-- 编辑弹窗 -->
 		<el-dialog
 			v-model="state.dialogVisible"
-			:title="state.isEdit ? '编辑作用域' : '新建作用域'"
 			width="500px"
 			destroy-on-close
+			draggable
+			:close-on-click-modal="false"
 		>
+			<template #header>
+				<div class="dialog-header">
+					<el-icon v-if="state.isEdit" color="#409EFF" size="18"><ele-Edit /></el-icon>
+					<el-icon v-else color="#67C23A" size="18"><ele-Plus /></el-icon>
+					<span>{{ state.isEdit ? '编辑作用域' : '新建作用域' }}</span>
+				</div>
+			</template>
 			<el-form
 				ref="formRef"
 				:model="state.form"
 				:rules="formRules"
 				label-width="100px"
 				label-position="right"
+				class="dialog-form"
 			>
 				<el-form-item label="名称" prop="name">
 					<el-input v-model="state.form.name" :disabled="state.isEdit" placeholder="请输入作用域名称" />
@@ -96,32 +116,35 @@
 					<el-input v-model="state.form.description" type="textarea" :rows="3" placeholder="请输入描述" />
 				</el-form-item>
 				<el-form-item label="资源" prop="resources">
-					<el-tag
-						v-for="(tag, index) in state.form.resources"
-						:key="index"
-						closable
-						@close="removeResource(index)"
-						class="mr5 mb5"
-					>
-						{{ tag }}
-					</el-tag>
-					<el-input
-						v-if="state.inputVisible"
-						ref="inputRef"
-						v-model="state.inputValue"
-						size="small"
-						@keyup.enter="handleInputConfirm"
-						@blur="handleInputConfirm"
-						style="width: 150px"
-					/>
-					<el-button v-else size="small" @click="showInput">+ 添加资源</el-button>
+					<div class="tag-input-area">
+						<el-tag
+							v-for="(tag, index) in state.form.resources"
+							:key="index"
+							closable
+							type="info"
+							effect="light"
+							@close="removeResource(index)"
+						>
+							{{ tag }}
+						</el-tag>
+						<el-input
+							v-if="state.inputVisible"
+							ref="inputRef"
+							v-model="state.inputValue"
+							size="small"
+							@keyup.enter="handleInputConfirm"
+							@blur="handleInputConfirm"
+							style="width: 150px"
+						/>
+						<el-button v-else size="small" plain @click="showInput">
+							<el-icon><ele-Plus /></el-icon>添加资源
+						</el-button>
+					</div>
 				</el-form-item>
 			</el-form>
 			<template #footer>
-				<div class="dialog-footer">
-					<el-button @click="state.dialogVisible = false">取消</el-button>
-					<el-button type="primary" @click="handleSubmit" :loading="state.submitLoading">确定</el-button>
-				</div>
+				<el-button icon="ele-CircleClose" @click="state.dialogVisible = false">取消</el-button>
+				<el-button type="primary" icon="ele-Select" @click="handleSubmit" :loading="state.submitLoading">保存</el-button>
 			</template>
 		</el-dialog>
 	</div>
@@ -135,6 +158,7 @@ import { useOpenIddictScopeApi, type OpenIddictScopeDto } from '/@/api/apis/open
 const { getList: getScopeList, create, update, delete: deleteScope } = useOpenIddictScopeApi();
 
 const formRef = ref<FormInstance>();
+const queryFormRef = ref();
 const inputRef = ref<HTMLInputElement>();
 
 const state = reactive({
@@ -316,13 +340,39 @@ getList();
 </script>
 
 <style scoped lang="scss">
-.openiddict-scope-container {
-	.mr5 {
-		margin-right: 5px;
-	}
+.scope-container {
+	display: flex;
+	flex-direction: column;
+}
 
-	.mb5 {
-		margin-bottom: 5px;
+.pagination {
+	margin-top: 14px;
+	justify-content: flex-end;
+}
+
+.scope-name-text {
+	color: var(--el-color-primary);
+	font-weight: 500;
+}
+
+.dialog-header {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	font-size: 16px;
+	font-weight: 600;
+}
+
+.dialog-form {
+	:deep(.el-form-item) {
+		margin-bottom: 20px !important;
 	}
+}
+
+.tag-input-area {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 6px;
+	align-items: center;
 }
 </style>

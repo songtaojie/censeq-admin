@@ -210,6 +210,20 @@ public class IdentityUserAppService : IdentityAppServiceBase, IIdentityUserAppSe
         return ObjectMapper.Map<IdentityUser, IdentityUserDto>(user);
     }
 
+    [Authorize(IdentityPermissions.Users.Update)]
+    public virtual async Task ResetPasswordAsync(Guid id, IdentityUserResetPasswordDto input)
+    {
+        await IdentityOptions.SetAsync();
+        var user = await UserManager.GetByIdAsync(id);
+        if (user == null)
+        {
+            throw new Volo.Abp.Domain.Entities.EntityNotFoundException(typeof(IdentityUser), id);
+        }
+        (await UserManager.RemovePasswordAsync(user)).CheckErrors();
+        (await UserManager.AddPasswordAsync(user, input.NewPassword)).CheckErrors();
+        await CurrentUnitOfWork!.SaveChangesAsync();
+    }
+
     protected virtual async Task UpdateUserByInput(IdentityUser user, IdentityUserCreateOrUpdateDtoBase input)
     {
         if (!string.Equals(user.Email, input.Email, StringComparison.InvariantCultureIgnoreCase))

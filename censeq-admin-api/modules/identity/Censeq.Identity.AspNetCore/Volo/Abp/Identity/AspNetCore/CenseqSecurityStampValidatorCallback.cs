@@ -6,21 +6,24 @@ using Microsoft.AspNetCore.Identity;
 
 namespace Censeq.Identity.AspNetCore;
 
+/// <summary>
+/// Censeq 安全戳验证器回调
+/// </summary>
 public class CenseqSecurityStampValidatorCallback
 {
     /// <summary>
-    /// Implements callback for SecurityStampValidator's OnRefreshingPrincipal event.
+    /// 实现 SecurityStampValidator 的 OnRefreshingPrincipal 事件的回调
     /// https://github.com/IdentityServer/IdentityServer4/blob/main/src/AspNetIdentity/src/SecurityStampValidatorCallback.cs
     /// </summary>
     public class SecurityStampValidatorCallback
     {
         /// <summary>
-        /// Maintains the claims captured at login time that are not being created by ASP.NET Identity.
-        /// This is needed to preserve claims such as idp, auth_time, amr.
+        /// 保留登录时捕获的声明，这些声明不是由 ASP.NET Identity 创建的
+        /// 需要保留 idp、auth_time、amr 等声明
         /// </summary>
-        /// <param name="context">The context.</param>
-        /// <param name="refreshingPrincipalOptions">The CenseqRefreshingPrincipalOptions.</param>
-        /// <returns></returns>
+        /// <param name="context">安全戳刷新主体上下文</param>
+        /// <param name="refreshingPrincipalOptions">刷新主体选项</param>
+        /// <returns>异步任务</returns>
         public static Task UpdatePrincipal(SecurityStampRefreshingPrincipalContext context, CenseqRefreshingPrincipalOptions refreshingPrincipalOptions)
         {
             if (context.NewPrincipal == null || context.CurrentPrincipal == null)

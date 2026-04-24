@@ -1,30 +1,54 @@
 <template>
 	<div class="system-tenant-container layout-padding">
-		<div class="system-tenant-padding layout-padding-auto layout-padding-view">
-			<div class="system-tenant-search mb15">
-				<el-input v-model="state.tableData.param.search" size="default" placeholder="租户名称或编码过滤" style="max-width: 200px" clearable @keyup.enter="onQuery" />
-				<el-button size="default" type="primary" class="ml10" @click="onQuery">
-					<el-icon>
-						<ele-Search />
-					</el-icon>
-					查询
-				</el-button>
-				<el-button size="default" type="success" class="ml10" @click="onOpenAddTenant('add')">
-					<el-icon>
-						<ele-FolderAdd />
-					</el-icon>
-					新增租户
-				</el-button>
-			</div>
-			<el-table :data="state.tableData.data" v-loading="state.tableData.loading" style="width: 100%">
-				<el-table-column type="index" label="序号" width="60" />
-				<el-table-column prop="name" label="租户名称" min-width="160" show-overflow-tooltip />
-				<el-table-column prop="code" label="租户编码" min-width="120" show-overflow-tooltip />
-				<el-table-column prop="id" label="租户 Id" min-width="280" show-overflow-tooltip />
-				<el-table-column label="操作" width="140" fixed="right">
+		<el-card shadow="hover" :body-style="{ paddingBottom: '0' }">
+			<el-form :model="state.tableData.param" ref="queryFormRef" :inline="true">
+				<el-form-item label="租户名称">
+					<el-input v-model="state.tableData.param.search" placeholder="租户名称或编码" clearable @keyup.enter="onQuery" />
+				</el-form-item>
+				<el-form-item>
+					<el-button-group>
+						<el-button type="primary" icon="ele-Search" @click="onQuery">查询</el-button>
+						<el-button icon="ele-Refresh" @click="onReset">重置</el-button>
+					</el-button-group>
+				</el-form-item>
+				<el-form-item>
+					<el-button type="primary" icon="ele-Plus" @click="onOpenAddTenant('add')">新增</el-button>
+				</el-form-item>
+			</el-form>
+		</el-card>
+
+		<el-card class="full-table" shadow="hover" style="margin-top: 5px">
+			<el-table :data="state.tableData.data" v-loading="state.tableData.loading" style="width: 100%" border stripe highlight-current-row>
+				<el-table-column type="index" label="序号" width="60" align="center" fixed />
+				<el-table-column prop="name" label="租户名称" min-width="140" show-overflow-tooltip>
 					<template #default="scope">
-						<el-button size="small" text type="primary" @click="onOpenEditTenant('edit', scope.row)">修改</el-button>
-						<el-button size="small" text type="primary" @click="onRowDel(scope.row)">删除</el-button>
+						<el-text type="primary" tag="b">{{ scope.row.name }}</el-text>
+					</template>
+				</el-table-column>
+				<el-table-column prop="code" label="租户编码" min-width="120" align="center" show-overflow-tooltip>
+					<template #default="scope">
+						<el-tag v-if="scope.row.code" size="small" effect="plain">{{ scope.row.code }}</el-tag>
+						<el-text v-else type="info" size="small">—</el-text>
+					</template>
+				</el-table-column>
+				<el-table-column label="连接字符串" min-width="120" align="center" show-overflow-tooltip>
+					<template #default="scope">
+						<el-tag
+							:type="scope.row._hasConnection ? 'success' : 'info'"
+							size="small"
+							effect="light"
+						>{{ scope.row._hasConnection ? '已配置' : '默认' }}</el-tag>
+					</template>
+				</el-table-column>
+				<el-table-column prop="id" label="租户 ID" min-width="290" show-overflow-tooltip>
+					<template #default="scope">
+						<el-text size="small" style="font-family: monospace">{{ scope.row.id }}</el-text>
+					</template>
+				</el-table-column>
+				<el-table-column label="操作" width="160" fixed="right" align="center">
+					<template #default="scope">
+						<el-button icon="ele-Edit" size="small" text type="primary" @click="onOpenEditTenant('edit', scope.row)">编辑</el-button>
+						<el-button icon="ele-Delete" size="small" text type="danger" @click="onRowDel(scope.row)">删除</el-button>
 					</template>
 				</el-table-column>
 			</el-table>
@@ -33,14 +57,16 @@
 				@current-change="onHandleCurrentChange"
 				class="mt15"
 				:pager-count="5"
-				:page-sizes="[10, 20, 30]"
+				:page-sizes="[10, 20, 50]"
 				v-model:current-page="state.tableData.param.pageIndex"
 				background
+				size="small"
 				v-model:page-size="state.tableData.param.pageSize"
 				layout="total, sizes, prev, pager, next, jumper"
 				:total="state.tableData.total"
 			/>
-		</div>
+		</el-card>
+
 		<TenantDialog ref="tenantDialogRef" @refresh="getTableData()" />
 	</div>
 </template>
@@ -54,10 +80,11 @@ import type { TenantDto } from '/@/api/models/tenant';
 const TenantDialog = defineAsyncComponent(() => import('/@/views/system/tenant/dialog.vue'));
 
 const tenantDialogRef = ref();
+const queryFormRef = ref();
 
 const state = reactive({
 	tableData: {
-		data: [] as TenantDto[],
+		data: [] as (TenantDto & { _hasConnection?: boolean })[],
 		total: 0,
 		loading: false,
 		param: {
@@ -71,13 +98,25 @@ const state = reactive({
 const getTableData = async () => {
 	state.tableData.loading = true;
 	try {
-		const { getTenantPage } = useTenantApi();
+		const { getTenantPage, getDefaultConnectionString } = useTenantApi();
 		const data = await getTenantPage({
 			filter: state.tableData.param.search || undefined,
 			skipCount: (state.tableData.param.pageIndex - 1) * state.tableData.param.pageSize,
 			maxResultCount: state.tableData.param.pageSize,
 		});
-		state.tableData.data = data.items ?? [];
+		const items = data.items ?? [];
+		// 异步并发检查各租户是否已配置连接字符串
+		const rows = await Promise.all(
+			items.map(async (item) => {
+				try {
+					const cs = await getDefaultConnectionString(item.id!);
+					return { ...item, _hasConnection: Boolean(cs) };
+				} catch {
+					return { ...item, _hasConnection: false };
+				}
+			}),
+		);
+		state.tableData.data = rows;
 		state.tableData.total = data.totalCount ?? 0;
 	} catch {
 		state.tableData.data = [];
@@ -88,6 +127,12 @@ const getTableData = async () => {
 };
 
 const onQuery = () => {
+	state.tableData.param.pageIndex = 1;
+	getTableData();
+};
+
+const onReset = () => {
+	state.tableData.param.search = '';
 	state.tableData.param.pageIndex = 1;
 	getTableData();
 };
@@ -133,7 +178,10 @@ onMounted(() => {
 
 <style scoped lang="scss">
 .system-tenant-container {
-	.system-tenant-padding {
+	.full-table {
+		:deep(.el-card__body) {
+			padding-bottom: 0;
+		}
 		.el-table {
 			flex: 1;
 		}

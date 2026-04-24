@@ -8,6 +8,9 @@ using Censeq.Identity.ObjectExtending;
 
 namespace Censeq.Identity;
 
+/// <summary>
+/// 身份认证应用契约模块
+/// </summary>
 [DependsOn(
     typeof(CenseqIdentityDomainSharedModule),
     typeof(AbpUsersAbstractionModule),
@@ -18,11 +21,19 @@ public class CenseqIdentityApplicationContractsModule : AbpModule
 {
     private static readonly OneTimeRunner OneTimeRunner = new OneTimeRunner();
 
+    /// <summary>
+    /// 配置服务
+    /// </summary>
+    /// <param name="context">服务配置上下文</param>
     public override void ConfigureServices(ServiceConfigurationContext context)
     {
 
     }
 
+    /// <summary>
+    /// 后配置服务
+    /// </summary>
+    /// <param name="context">服务配置上下文</param>
     public override void PostConfigureServices(ServiceConfigurationContext context)
     {
         OneTimeRunner.Run(() =>

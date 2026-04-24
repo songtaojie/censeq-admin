@@ -1,60 +1,64 @@
 <template>
-	<div class="openiddict-application-container layout-padding">
-		<div class="openiddict-application-padding layout-padding-auto layout-padding-view page-shell">
-			<el-card shadow="hover" :body-style="{ paddingBottom: '0' }" class="page-filter-card">
-				<el-form :model="state.searchForm" size="default" inline class="page-toolbar">
-					<el-form-item label="关键词">
-						<el-input v-model="state.searchForm.filter" class="page-search" placeholder="请输入客户端ID或名称" clearable />
-					</el-form-item>
-					<el-form-item label="客户端类型">
-						<el-select v-model="state.searchForm.clientType" placeholder="全部" clearable style="width: 120px">
-							<el-option label="机密" value="confidential" />
-							<el-option label="公开" value="public" />
-						</el-select>
-					</el-form-item>
-					<el-form-item>
-						<el-button-group>
-							<el-button size="default" type="primary" @click="handleSearch">
-								<el-icon><ele-Search /></el-icon>查询
-							</el-button>
-							<el-button size="default" @click="resetSearch">
-								<el-icon><ele-RefreshLeft /></el-icon>重置
-							</el-button>
-						</el-button-group>
-					</el-form-item>
-					<el-form-item>
-						<el-button type="success" size="default" @click="handleCreate">
-							<el-icon><ele-Plus /></el-icon>新建应用
+	<div class="app-container layout-padding">
+		<el-card shadow="hover" :body-style="{ paddingBottom: '0' }">
+			<el-form ref="queryFormRef" :model="state.searchForm" :inline="true">
+				<el-form-item label="关键词">
+					<el-input v-model="state.searchForm.filter" placeholder="请输入客户端ID或名称" clearable style="width: 200px" />
+				</el-form-item>
+				<el-form-item label="客户端类型">
+					<el-select v-model="state.searchForm.clientType" placeholder="全部" clearable style="width: 130px">
+						<el-option label="机密" value="confidential" />
+						<el-option label="公开" value="public" />
+					</el-select>
+				</el-form-item>
+				<el-form-item>
+					<el-button-group>
+						<el-button type="primary" @click="handleSearch">
+							<el-icon><ele-Search /></el-icon>查询
 						</el-button>
-					</el-form-item>
-				</el-form>
-			</el-card>
+						<el-button @click="resetSearch">
+							<el-icon><ele-RefreshLeft /></el-icon>重置
+						</el-button>
+					</el-button-group>
+				</el-form-item>
+				<el-form-item>
+					<el-button type="primary" @click="handleCreate">
+						<el-icon><ele-Plus /></el-icon>新建应用
+					</el-button>
+				</el-form-item>
+			</el-form>
+		</el-card>
 
-			<el-card class="page-content-card" shadow="hover" style="margin-top: 5px">
-				<div class="page-table-body">
-					<el-table :data="state.dataList" v-loading="state.loading" border>
+		<el-card shadow="hover" style="margin-top: 8px">
+			<el-table :data="state.dataList" v-loading="state.loading" border stripe>
 				<el-table-column type="index" label="序号" width="60" align="center" />
-				<el-table-column prop="clientId" label="客户端ID" min-width="150" show-overflow-tooltip />
-				<el-table-column prop="displayName" label="显示名称" min-width="150" show-overflow-tooltip>
+				<el-table-column prop="clientId" label="客户端ID" min-width="160" show-overflow-tooltip>
+					<template #default="{ row }">
+						<span class="client-id-text">{{ row.clientId }}</span>
+					</template>
+				</el-table-column>
+				<el-table-column prop="displayName" label="显示名称" min-width="140" show-overflow-tooltip>
 					<template #default="{ row }">
 						{{ row.displayName || '-' }}
 					</template>
 				</el-table-column>
-				<el-table-column prop="clientType" label="客户端类型" width="100" align="center">
+				<el-table-column prop="clientType" label="客户端类型" width="110" align="center">
 					<template #default="{ row }">
-						<el-tag v-if="row.clientType === 'confidential'" type="primary">机密</el-tag>
-						<el-tag v-else-if="row.clientType === 'public'" type="success">公开</el-tag>
-						<el-tag v-else>{{ row.clientType }}</el-tag>
+						<el-tag v-if="row.clientType === 'confidential'" type="primary" effect="light">机密</el-tag>
+						<el-tag v-else-if="row.clientType === 'public'" type="success" effect="light">公开</el-tag>
+						<el-tag v-else effect="light">{{ row.clientType }}</el-tag>
 					</template>
 				</el-table-column>
 				<el-table-column prop="applicationType" label="应用类型" width="100" align="center">
 					<template #default="{ row }">
-						<span>{{ row.applicationType === 'native' ? '原生' : 'Web' }}</span>
+						<el-tag :type="row.applicationType === 'native' ? 'warning' : 'info'" effect="light">
+							{{ row.applicationType === 'native' ? '原生' : 'Web' }}
+						</el-tag>
 					</template>
 				</el-table-column>
 				<el-table-column prop="redirectUris" label="回调地址" min-width="200" show-overflow-tooltip>
 					<template #default="{ row }">
-						{{ formatArray(row.redirectUris) }}
+						<span class="uri-text">{{ formatArray(row.redirectUris) }}</span>
 					</template>
 				</el-table-column>
 				<el-table-column prop="creationTime" label="创建时间" width="160" align="center">
@@ -62,141 +66,182 @@
 						{{ formatDateTime(row.creationTime) }}
 					</template>
 				</el-table-column>
-					<el-table-column label="操作" width="180" align="center" fixed="right">
+				<el-table-column label="操作" width="150" align="center" fixed="right">
 					<template #default="{ row }">
-						<el-button type="primary" link size="small" @click="handleEdit(row)">编辑</el-button>
-						<el-button type="danger" link size="small" @click="handleDelete(row)">删除</el-button>
+						<el-button icon="ele-Edit" size="small" text type="primary" @click="handleEdit(row)">编辑</el-button>
+						<el-button icon="ele-Delete" size="small" text type="danger" @click="handleDelete(row)">删除</el-button>
 					</template>
 				</el-table-column>
-					</el-table>
-
-					<el-pagination
+			</el-table>
+			<el-pagination
+				class="pagination"
 				v-model:current-page="state.searchForm.skipCount"
 				v-model:page-size="state.searchForm.maxResultCount"
 				:pager-count="5"
-				:page-sizes="[10, 20, 30, 50, 100]"
+				:page-sizes="[10, 20, 50, 100]"
 				:total="state.total"
 				layout="total, sizes, prev, pager, next, jumper"
 				background
+				size="small"
 				@size-change="handlePageSizeChange"
-					@current-change="getList"
-					></el-pagination>
-				</div>
-			</el-card>
-		</div>
+				@current-change="getList"
+			/>
+		</el-card>
 
 		<!-- 编辑弹窗 -->
 		<el-dialog
 			v-model="state.dialogVisible"
-			:title="state.isEdit ? '编辑应用' : '新建应用'"
 			width="700px"
 			destroy-on-close
+			draggable
+			:close-on-click-modal="false"
 		>
+			<template #header>
+				<div class="dialog-header">
+					<el-icon v-if="state.isEdit" color="#409EFF" size="18"><ele-Edit /></el-icon>
+					<el-icon v-else color="#67C23A" size="18"><ele-Plus /></el-icon>
+					<span>{{ state.isEdit ? '编辑应用' : '新建应用' }}</span>
+				</div>
+			</template>
 			<el-form
 				ref="formRef"
 				:model="state.form"
 				:rules="formRules"
 				label-width="120px"
 				label-position="right"
+				class="dialog-form"
 			>
-				<el-form-item label="客户端ID" prop="clientId">
-					<el-input v-model="state.form.clientId" :disabled="state.isEdit" placeholder="请输入客户端ID" />
-				</el-form-item>
-				<el-form-item label="显示名称" prop="displayName">
-					<el-input v-model="state.form.displayName" placeholder="请输入显示名称" />
-				</el-form-item>
-				<el-form-item label="客户端类型" prop="clientType">
-					<el-radio-group v-model="state.form.clientType" :disabled="state.isEdit">
-						<el-radio label="confidential">机密 (Confidential)</el-radio>
-						<el-radio label="public">公开 (Public)</el-radio>
-					</el-radio-group>
-				</el-form-item>
-				<el-form-item label="应用类型" prop="applicationType">
-					<el-radio-group v-model="state.form.applicationType">
-						<el-radio label="web">Web应用</el-radio>
-						<el-radio label="native">原生应用</el-radio>
-					</el-radio-group>
-				</el-form-item>
-				<el-form-item label="同意类型" prop="consentType">
-					<el-select v-model="state.form.consentType" style="width: 100%">
-						<el-option label="显式同意 (Explicit)" value="explicit" />
-						<el-option label="隐式同意 (Implicit)" value="implicit" />
-						<el-option label="外部同意 (External)" value="external" />
-					</el-select>
-				</el-form-item>
-				<el-form-item label="客户端密钥" prop="clientSecret">
-					<el-input
-						v-model="state.form.clientSecret"
-						type="password"
-						show-password
-						placeholder="留空则自动生成"
-					/>
-					<div class="form-tip">{{ state.isEdit ? '留空表示不修改' : '留空则自动生成32位随机密钥' }}</div>
-				</el-form-item>
+				<el-row :gutter="20">
+					<el-col :span="12">
+						<el-form-item label="客户端ID" prop="clientId">
+							<el-input v-model="state.form.clientId" :disabled="state.isEdit" placeholder="请输入客户端ID" />
+						</el-form-item>
+					</el-col>
+					<el-col :span="12">
+						<el-form-item label="显示名称" prop="displayName">
+							<el-input v-model="state.form.displayName" placeholder="请输入显示名称" />
+						</el-form-item>
+					</el-col>
+				</el-row>
+				<el-row :gutter="20">
+					<el-col :span="12">
+						<el-form-item label="客户端类型" prop="clientType">
+							<el-radio-group v-model="state.form.clientType" :disabled="state.isEdit">
+								<el-radio label="confidential">机密</el-radio>
+								<el-radio label="public">公开</el-radio>
+							</el-radio-group>
+						</el-form-item>
+					</el-col>
+					<el-col :span="12">
+						<el-form-item label="应用类型" prop="applicationType">
+							<el-radio-group v-model="state.form.applicationType">
+								<el-radio label="web">Web</el-radio>
+								<el-radio label="native">原生</el-radio>
+							</el-radio-group>
+						</el-form-item>
+					</el-col>
+				</el-row>
+				<el-row :gutter="20">
+					<el-col :span="12">
+						<el-form-item label="同意类型" prop="consentType">
+							<el-select v-model="state.form.consentType" style="width: 100%">
+								<el-option label="显式同意" value="explicit" />
+								<el-option label="隐式同意" value="implicit" />
+								<el-option label="外部同意" value="external" />
+							</el-select>
+						</el-form-item>
+					</el-col>
+					<el-col :span="12">
+						<el-form-item label="客户端密钥" prop="clientSecret">
+							<el-input
+								v-model="state.form.clientSecret"
+								type="password"
+								show-password
+								:placeholder="state.isEdit ? '留空表示不修改' : '留空则自动生成'"
+							/>
+						</el-form-item>
+					</el-col>
+				</el-row>
 				<el-form-item label="回调地址" prop="redirectUris">
-					<el-tag
-						v-for="(tag, index) in state.form.redirectUris"
-						:key="index"
-						closable
-						@close="removeRedirectUri(index)"
-						class="mr5 mb5"
-					>
-						{{ tag }}
-					</el-tag>
-					<el-input
-						v-if="state.inputVisible.redirectUri"
-						ref="redirectUriInputRef"
-						v-model="state.inputValue.redirectUri"
-						size="small"
-						@keyup.enter="handleInputConfirm('redirectUri')"
-						@blur="handleInputConfirm('redirectUri')"
-						style="width: 200px"
-					/>
-					<el-button v-else size="small" @click="showInput('redirectUri')">+ 添加</el-button>
+					<div class="tag-input-area">
+						<el-tag
+							v-for="(tag, index) in state.form.redirectUris"
+							:key="index"
+							closable
+							effect="light"
+							@close="removeRedirectUri(index)"
+						>
+							{{ tag }}
+						</el-tag>
+						<el-input
+							v-if="state.inputVisible.redirectUri"
+							ref="redirectUriInputRef"
+							v-model="state.inputValue.redirectUri"
+							size="small"
+							@keyup.enter="handleInputConfirm('redirectUri')"
+							@blur="handleInputConfirm('redirectUri')"
+							style="width: 200px"
+						/>
+						<el-button v-else size="small" plain @click="showInput('redirectUri')">
+							<el-icon><ele-Plus /></el-icon>添加
+						</el-button>
+					</div>
 				</el-form-item>
-				<el-form-item label="登出回调地址" prop="postLogoutRedirectUris">
-					<el-tag
-						v-for="(tag, index) in state.form.postLogoutRedirectUris"
-						:key="index"
-						closable
-						@close="removePostLogoutUri(index)"
-						class="mr5 mb5"
-					>
-						{{ tag }}
-					</el-tag>
-					<el-input
-						v-if="state.inputVisible.postLogoutUri"
-						ref="postLogoutUriInputRef"
-						v-model="state.inputValue.postLogoutUri"
-						size="small"
-						@keyup.enter="handleInputConfirm('postLogoutUri')"
-						@blur="handleInputConfirm('postLogoutUri')"
-						style="width: 200px"
-					/>
-					<el-button v-else size="small" @click="showInput('postLogoutUri')">+ 添加</el-button>
+				<el-form-item label="登出回调" prop="postLogoutRedirectUris">
+					<div class="tag-input-area">
+						<el-tag
+							v-for="(tag, index) in state.form.postLogoutRedirectUris"
+							:key="index"
+							closable
+							type="info"
+							effect="light"
+							@close="removePostLogoutUri(index)"
+						>
+							{{ tag }}
+						</el-tag>
+						<el-input
+							v-if="state.inputVisible.postLogoutUri"
+							ref="postLogoutUriInputRef"
+							v-model="state.inputValue.postLogoutUri"
+							size="small"
+							@keyup.enter="handleInputConfirm('postLogoutUri')"
+							@blur="handleInputConfirm('postLogoutUri')"
+							style="width: 200px"
+						/>
+						<el-button v-else size="small" plain @click="showInput('postLogoutUri')">
+							<el-icon><ele-Plus /></el-icon>添加
+						</el-button>
+					</div>
 				</el-form-item>
 				<el-form-item label="权限" prop="permissions">
-					<el-checkbox-group v-model="state.form.permissions">
-						<el-checkbox label="ept:token">Token端点</el-checkbox>
-						<el-checkbox label="ept:authorization">授权端点</el-checkbox>
-						<el-checkbox label="ept:logout">登出端点</el-checkbox>
-						<el-checkbox label="gt:authorization_code">授权码模式</el-checkbox>
-						<el-checkbox label="gt:client_credentials">客户端凭证模式</el-checkbox>
-						<el-checkbox label="gt:password">密码模式</el-checkbox>
-						<el-checkbox label="gt:refresh_token">刷新令牌</el-checkbox>
-						<el-checkbox label="scp:openid">OpenID</el-checkbox>
-						<el-checkbox label="scp:profile">Profile</el-checkbox>
-						<el-checkbox label="scp:email">Email</el-checkbox>
-						<el-checkbox label="scp:phone">Phone</el-checkbox>
-						<el-checkbox label="scp:roles">Roles</el-checkbox>
-					</el-checkbox-group>
+					<div class="permission-group">
+						<div class="permission-section">
+							<div class="permission-label">端点</div>
+							<el-checkbox v-model="state.form.permissions" label="ept:token">Token端点</el-checkbox>
+							<el-checkbox v-model="state.form.permissions" label="ept:authorization">授权端点</el-checkbox>
+							<el-checkbox v-model="state.form.permissions" label="ept:logout">登出端点</el-checkbox>
+						</div>
+						<div class="permission-section">
+							<div class="permission-label">授权模式</div>
+							<el-checkbox v-model="state.form.permissions" label="gt:authorization_code">授权码</el-checkbox>
+							<el-checkbox v-model="state.form.permissions" label="gt:client_credentials">客户端凭证</el-checkbox>
+							<el-checkbox v-model="state.form.permissions" label="gt:password">密码</el-checkbox>
+							<el-checkbox v-model="state.form.permissions" label="gt:refresh_token">刷新令牌</el-checkbox>
+						</div>
+						<div class="permission-section">
+							<div class="permission-label">作用域</div>
+							<el-checkbox v-model="state.form.permissions" label="scp:openid">OpenID</el-checkbox>
+							<el-checkbox v-model="state.form.permissions" label="scp:profile">Profile</el-checkbox>
+							<el-checkbox v-model="state.form.permissions" label="scp:email">Email</el-checkbox>
+							<el-checkbox v-model="state.form.permissions" label="scp:phone">Phone</el-checkbox>
+							<el-checkbox v-model="state.form.permissions" label="scp:roles">Roles</el-checkbox>
+						</div>
+					</div>
 				</el-form-item>
 			</el-form>
 			<template #footer>
-				<div class="dialog-footer">
-					<el-button @click="state.dialogVisible = false">取消</el-button>
-					<el-button type="primary" @click="handleSubmit" :loading="state.submitLoading">确定</el-button>
-				</div>
+				<el-button icon="ele-CircleClose" @click="state.dialogVisible = false">取消</el-button>
+				<el-button type="primary" icon="ele-Select" @click="handleSubmit" :loading="state.submitLoading">保存</el-button>
 			</template>
 		</el-dialog>
 	</div>
@@ -442,19 +487,69 @@ getList();
 </script>
 
 <style scoped lang="scss">
-.openiddict-application-container {
-	.form-tip {
-		font-size: 12px;
-		color: #909399;
-		margin-top: 4px;
-	}
+.app-container {
+	display: flex;
+	flex-direction: column;
+}
 
-	.mr5 {
-		margin-right: 5px;
-	}
+.pagination {
+	margin-top: 14px;
+	justify-content: flex-end;
+}
 
-	.mb5 {
-		margin-bottom: 5px;
+.client-id-text {
+	color: var(--el-color-primary);
+	font-weight: 500;
+}
+
+.uri-text {
+	font-size: 12px;
+	color: #606266;
+}
+
+.dialog-header {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	font-size: 16px;
+	font-weight: 600;
+}
+
+.dialog-form {
+	:deep(.el-form-item) {
+		margin-bottom: 20px !important;
 	}
+}
+
+.tag-input-area {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 6px;
+	align-items: center;
+}
+
+.permission-group {
+	display: flex;
+	flex-direction: column;
+	gap: 10px;
+	width: 100%;
+}
+
+.permission-section {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: 4px;
+	padding: 8px 10px;
+	background: var(--el-fill-color-lighter);
+	border-radius: 6px;
+}
+
+.permission-label {
+	font-size: 12px;
+	color: #909399;
+	font-weight: 600;
+	width: 52px;
+	flex-shrink: 0;
 }
 </style>

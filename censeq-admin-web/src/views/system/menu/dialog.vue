@@ -1,189 +1,211 @@
 <template>
 	<div class="system-menu-dialog-container">
-		<el-dialog :title="state.dialog.title" v-model="state.dialog.isShowDialog" width="900px" destroy-on-close>
-			<el-form ref="menuDialogFormRef" :model="state.ruleForm" :rules="rules" size="default" label-width="100px" v-loading="state.loading">
-				<el-row :gutter="35">
-					<el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24" class="mb20">
-						<el-form-item label="上级菜单" prop="parentId">
-							<el-tree-select
-								v-model="state.ruleForm.parentId"
-								:data="parentOptions"
-								:props="{ label: 'displayTitle', value: 'id', children: 'children', disabled: 'disabled' }"
-								check-strictly
-								clearable
-								default-expand-all
-								class="w100"
-								placeholder="请选择上级菜单"
-							/>
-						</el-form-item>
-					</el-col>
-					<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12" class="mb20">
-						<el-form-item label="菜单类型" prop="type">
-							<el-radio-group v-model="state.ruleForm.type" @change="onTypeChange">
-								<el-radio :label="1">目录</el-radio>
-								<el-radio :label="2">菜单</el-radio>
-								<el-radio :label="3">按钮</el-radio>
-							</el-radio-group>
-						</el-form-item>
-					</el-col>
-					<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12" class="mb20">
-						<el-form-item label="授权方式" prop="authorizationMode">
-							<el-select v-model="state.ruleForm.authorizationMode" class="w100">
-								<el-option label="匿名访问" :value="1" />
-								<el-option label="命中任一权限" :value="2" />
-								<el-option label="命中全部权限" :value="3" />
-							</el-select>
-						</el-form-item>
-					</el-col>
-					<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12" class="mb20">
-						<el-form-item label="菜单名称" prop="title">
-							<el-input v-model="state.ruleForm.title" placeholder="支持 i18n key 或直接标题" clearable></el-input>
-						</el-form-item>
-					</el-col>
-					<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12" class="mb20">
-						<el-form-item label="菜单编码" prop="name">
-							<el-input v-model="state.ruleForm.name" placeholder="唯一编码，例如 systemMenu" clearable></el-input>
-						</el-form-item>
-					</el-col>
-					<template v-if="state.ruleForm.type !== 3">
-						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12" class="mb20">
-							<el-form-item label="路由名称" prop="routeName">
-								<el-input v-model="state.ruleForm.routeName" placeholder="路由中的 name 值" clearable></el-input>
-							</el-form-item>
-						</el-col>
-						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12" class="mb20">
-							<el-form-item label="路由路径" prop="path">
-								<el-input v-model="state.ruleForm.path" placeholder="例如 /system/menu" clearable></el-input>
-							</el-form-item>
-						</el-col>
-						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12" class="mb20">
-							<el-form-item label="重定向">
-								<el-input v-model="state.ruleForm.redirect" placeholder="目录可配置默认跳转" clearable></el-input>
-							</el-form-item>
-						</el-col>
-						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12" class="mb20">
-							<el-form-item label="菜单图标">
-								<IconSelector placeholder="请输入菜单图标" v-model="state.ruleForm.icon" />
-							</el-form-item>
-						</el-col>
-						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12" class="mb20">
-							<el-form-item label="组件路径" prop="component">
-								<el-input v-model="state.ruleForm.component" placeholder="例如 system/menu/index 或 layout/routerView/parent" clearable></el-input>
-							</el-form-item>
-						</el-col>
-						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12" class="mb20">
-							<el-form-item label="链接地址" prop="externalUrl">
-								<el-input
-									v-model="state.ruleForm.externalUrl"
-									placeholder="外链/内嵌时链接地址（http:xxx.com）"
-									clearable
-									:disabled="!state.ruleForm.isExternal && !state.ruleForm.isIframe"
-								>
-								</el-input>
-							</el-form-item>
-						</el-col>
-						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12" class="mb20">
-							<el-form-item label="菜单排序" prop="sort">
-								<el-input-number v-model="state.ruleForm.sort" controls-position="right" placeholder="请输入排序" class="w100" />
-							</el-form-item>
-						</el-col>
-					</template>
-					<template v-else>
-						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12" class="mb20">
-							<el-form-item label="按钮编码" prop="buttonCode">
-								<el-input v-model="state.ruleForm.buttonCode" placeholder="例如 system.menu.create" clearable></el-input>
-							</el-form-item>
-						</el-col>
-						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12" class="mb20">
-							<el-form-item label="菜单排序" prop="sort">
-								<el-input-number v-model="state.ruleForm.sort" controls-position="right" placeholder="请输入排序" class="w100" />
-							</el-form-item>
-						</el-col>
-					</template>
-					<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12" class="mb20">
-						<el-form-item label="是否显示">
-							<el-switch v-model="state.ruleForm.visible" />
-						</el-form-item>
-					</el-col>
-					<template v-if="state.ruleForm.type !== 3">
-						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12" class="mb20">
-							<el-form-item label="页面缓存">
-								<el-switch v-model="state.ruleForm.keepAlive" />
-							</el-form-item>
-						</el-col>
-						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12" class="mb20">
-							<el-form-item label="是否固定">
-								<el-switch v-model="state.ruleForm.affix" />
-							</el-form-item>
-						</el-col>
-						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12" class="mb20">
-							<el-form-item label="是否外链">
-								<el-switch v-model="state.ruleForm.isExternal" @change="onExternalChange" :disabled="state.ruleForm.isIframe" />
-							</el-form-item>
-						</el-col>
-						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12" class="mb20">
-							<el-form-item label="是否内嵌">
-								<el-switch v-model="state.ruleForm.isIframe" @change="onSelectIframeChange" :disabled="state.ruleForm.isExternal" />
-							</el-form-item>
-						</el-col>
-					</template>
-					<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12" class="mb20">
-						<el-form-item label="启用状态">
-							<el-switch v-model="state.ruleForm.status" />
-						</el-form-item>
-					</el-col>
-					<el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24" class="mb20">
-						<el-form-item label="权限组">
-							<el-select
-								v-model="state.ruleForm.selectedPermissionGroups"
-								multiple
-								clearable
-								collapse-tags
-								collapse-tags-tooltip
-								placeholder="不选则展示全量权限组"
-								class="w100"
-								@change="onPermissionGroupsChange"
-							>
-								<el-option
-									v-for="group in state.allPermissionGroups"
-									:key="group.name"
-									:label="group.displayName"
-									:value="group.name"
-								/>
-							</el-select>
-						</el-form-item>
-					</el-col>
-					<el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24" class="mb20">
-						<el-form-item label="权限选择" prop="selectedPermissionNames">
-							<div class="permission-selector">
-								<div class="permission-selector__toolbar">
-									<el-tag type="info">已选 {{ state.ruleForm.selectedPermissionNames.length }} 项</el-tag>
-									<el-button text type="primary" @click="clearPermissionSelection">清空</el-button>
-								</div>
-								<el-tree
-									ref="permissionTreeRef"
-									:data="permissionTreeData"
-									node-key="name"
-									show-checkbox
-									default-expand-all
-									:props="permissionTreeProps"
-									class="permission-selector__tree"
-									@check="syncSelectedPermissions"
-								/>
-							</div>
-						</el-form-item>
-					</el-col>
-					<el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24" class="mb20">
-						<el-form-item label="备注">
-							<el-input v-model="state.ruleForm.remark" type="textarea" :rows="3" placeholder="备注信息" />
-							</el-form-item>
-						</el-col>
-				</el-row>
+		<el-dialog v-model="state.dialog.isShowDialog" width="860px" destroy-on-close draggable :close-on-click-modal="false">
+			<template #header>
+				<div style="color: #fff">
+					<el-icon size="16" style="margin-right: 4px; display: inline; vertical-align: middle">
+						<ele-Edit v-if="state.dialog.type === 'edit'" />
+						<ele-Plus v-else />
+					</el-icon>
+					<span>{{ state.dialog.title }}</span>
+				</div>
+			</template>
+			<el-form ref="menuDialogFormRef" :model="state.ruleForm" :rules="rules" size="default" label-width="90px" v-loading="state.loading">
+				<el-tabs v-model="state.activeTab" class="menu-dialog-tabs">
+					<!-- ========== Tab 1: 基本信息 ========== -->
+					<el-tab-pane label="基本信息" name="basic">
+						<el-row :gutter="20" class="tab-pane-row">
+							<!-- 上级菜单 - 全宽 -->
+							<el-col :span="24" class="mb16">
+								<el-form-item label="上级菜单" prop="parentId">
+									<el-tree-select
+										v-model="state.ruleForm.parentId"
+										:data="parentOptions"
+										:props="{ label: 'displayTitle', value: 'id', children: 'children', disabled: 'disabled' }"
+										check-strictly
+										clearable
+										default-expand-all
+										class="w100"
+										placeholder="请选择上级菜单（留空为顶级）"
+									/>
+								</el-form-item>
+							</el-col>
+							<!-- 菜单类型 -->
+							<el-col :span="24" class="mb16">
+								<el-form-item label="菜单类型" prop="type">
+									<el-radio-group v-model="state.ruleForm.type" @change="onTypeChange">
+										<el-radio :label="1">目录</el-radio>
+										<el-radio :label="2">菜单</el-radio>
+										<el-radio :label="3">按钮</el-radio>
+									</el-radio-group>
+								</el-form-item>
+							</el-col>
+							<!-- 菜单名称 / 菜单编码 -->
+							<el-col :xs="24" :sm="12" class="mb16">
+								<el-form-item label="菜单名称" prop="title">
+									<el-input v-model="state.ruleForm.title" placeholder="支持 i18n key 或直接标题" clearable />
+								</el-form-item>
+							</el-col>
+							<el-col :xs="24" :sm="12" class="mb16">
+								<el-form-item label="菜单编码" prop="name">
+									<el-input v-model="state.ruleForm.name" placeholder="唯一编码，如 systemMenu" clearable />
+								</el-form-item>
+							</el-col>
+							<!-- 按钮编码（仅 type=3） -->
+							<el-col v-if="state.ruleForm.type === 3" :xs="24" :sm="12" class="mb16">
+								<el-form-item label="按钮编码" prop="buttonCode">
+									<el-input v-model="state.ruleForm.buttonCode" placeholder="如 system.menu.create" clearable />
+								</el-form-item>
+							</el-col>
+							<!-- 排序 -->
+							<el-col :xs="24" :sm="12" class="mb16">
+								<el-form-item label="菜单排序" prop="sort">
+									<el-input-number v-model="state.ruleForm.sort" controls-position="right" placeholder="排序值" class="w100" :min="0" />
+								</el-form-item>
+							</el-col>
+							<!-- 授权方式 -->
+							<el-col :xs="24" :sm="12" class="mb16">
+								<el-form-item label="授权方式" prop="authorizationMode">
+									<el-select v-model="state.ruleForm.authorizationMode" class="w100">
+										<el-option label="匿名访问" :value="1" />
+										<el-option label="命中任一权限" :value="2" />
+										<el-option label="命中全部权限" :value="3" />
+									</el-select>
+								</el-form-item>
+							</el-col>
+							<!-- 开关区 -->
+							<el-col :xs="24" :sm="12" class="mb16">
+								<el-form-item label="是否显示">
+									<el-switch v-model="state.ruleForm.visible" active-text="显示" inactive-text="隐藏" inline-prompt />
+								</el-form-item>
+							</el-col>
+							<el-col :xs="24" :sm="12" class="mb16">
+								<el-form-item label="启用状态">
+									<el-switch v-model="state.ruleForm.status" active-text="启用" inactive-text="停用" inline-prompt />
+								</el-form-item>
+							</el-col>
+						</el-row>
+					</el-tab-pane>
+
+					<!-- ========== Tab 2: 路由配置（仅目录/菜单） ========== -->
+					<el-tab-pane v-if="state.ruleForm.type !== 3" label="路由配置" name="route">
+						<el-row :gutter="20" class="tab-pane-row">
+							<el-col :xs="24" :sm="12" class="mb16">
+								<el-form-item label="路由路径" prop="path">
+									<el-input v-model="state.ruleForm.path" placeholder="如 /system/menu" clearable />
+								</el-form-item>
+							</el-col>
+							<el-col :xs="24" :sm="12" class="mb16">
+								<el-form-item label="路由名称" prop="routeName">
+									<el-input v-model="state.ruleForm.routeName" placeholder="路由 name 值，如 systemMenu" clearable />
+								</el-form-item>
+							</el-col>
+							<el-col :xs="24" :sm="12" class="mb16">
+								<el-form-item label="组件路径" prop="component">
+									<el-input v-model="state.ruleForm.component" placeholder="如 system/menu/index" clearable />
+								</el-form-item>
+							</el-col>
+							<el-col :xs="24" :sm="12" class="mb16">
+								<el-form-item label="重定向">
+									<el-input v-model="state.ruleForm.redirect" placeholder="目录可配置默认子页跳转" clearable />
+								</el-form-item>
+							</el-col>
+							<el-col :xs="24" :sm="12" class="mb16">
+								<el-form-item label="菜单图标">
+									<IconSelector placeholder="请选择菜单图标" v-model="state.ruleForm.icon" />
+								</el-form-item>
+							</el-col>
+							<el-col :xs="24" :sm="12" class="mb16">
+								<el-form-item label="链接地址" prop="externalUrl">
+									<el-input
+										v-model="state.ruleForm.externalUrl"
+										placeholder="外链/内嵌 URL（https://...）"
+										clearable
+										:disabled="!state.ruleForm.isExternal && !state.ruleForm.isIframe"
+									/>
+								</el-form-item>
+							</el-col>
+							<!-- 开关行 -->
+							<el-col :xs="12" :sm="6" class="mb16">
+								<el-form-item label="页面缓存" label-width="80px">
+									<el-switch v-model="state.ruleForm.keepAlive" inline-prompt active-text="是" inactive-text="否" />
+								</el-form-item>
+							</el-col>
+							<el-col :xs="12" :sm="6" class="mb16">
+								<el-form-item label="是否固定" label-width="80px">
+									<el-switch v-model="state.ruleForm.affix" inline-prompt active-text="是" inactive-text="否" />
+								</el-form-item>
+							</el-col>
+							<el-col :xs="12" :sm="6" class="mb16">
+								<el-form-item label="是否外链" label-width="80px">
+									<el-switch v-model="state.ruleForm.isExternal" inline-prompt active-text="是" inactive-text="否" @change="onExternalChange" :disabled="state.ruleForm.isIframe" />
+								</el-form-item>
+							</el-col>
+							<el-col :xs="12" :sm="6" class="mb16">
+								<el-form-item label="是否内嵌" label-width="80px">
+									<el-switch v-model="state.ruleForm.isIframe" inline-prompt active-text="是" inactive-text="否" @change="onSelectIframeChange" :disabled="state.ruleForm.isExternal" />
+								</el-form-item>
+							</el-col>
+						</el-row>
+					</el-tab-pane>
+
+					<!-- ========== Tab 3: 权限配置 ========== -->
+					<el-tab-pane label="权限配置" name="permission">
+						<el-row :gutter="20" class="tab-pane-row">
+							<el-col :span="24" class="mb16">
+								<el-form-item label="权限组" label-width="70px">
+									<el-select
+										v-model="state.ruleForm.selectedPermissionGroups"
+										multiple
+										clearable
+										collapse-tags
+										collapse-tags-tooltip
+										placeholder="不选则展示全量权限组"
+										class="w100"
+										@change="onPermissionGroupsChange"
+									>
+										<el-option
+											v-for="group in state.allPermissionGroups"
+											:key="group.name"
+											:label="group.displayName"
+											:value="group.name"
+										/>
+									</el-select>
+								</el-form-item>
+							</el-col>
+							<el-col :span="24" class="mb16">
+								<el-form-item label="权限选择" prop="selectedPermissionNames" label-width="70px">
+									<div class="permission-selector">
+										<div class="permission-selector__toolbar">
+											<el-tag type="primary" size="small" effect="light">已选 {{ state.ruleForm.selectedPermissionNames.length }} 项</el-tag>
+											<el-button text type="danger" size="small" icon="ele-Delete" @click="clearPermissionSelection">清空</el-button>
+										</div>
+										<el-tree
+											ref="permissionTreeRef"
+											:data="permissionTreeData"
+											node-key="name"
+											show-checkbox
+											default-expand-all
+											:props="permissionTreeProps"
+											class="permission-selector__tree"
+											@check="syncSelectedPermissions"
+										/>
+									</div>
+								</el-form-item>
+							</el-col>
+							<el-col :span="24" class="mb16">
+								<el-form-item label="备注" label-width="70px">
+									<el-input v-model="state.ruleForm.remark" type="textarea" :rows="3" placeholder="备注信息" />
+								</el-form-item>
+							</el-col>
+						</el-row>
+					</el-tab-pane>
+				</el-tabs>
 			</el-form>
 			<template #footer>
 				<span class="dialog-footer">
-					<el-button @click="onCancel" size="default">取 消</el-button>
-					<el-button type="primary" @click="onSubmit" size="default" :loading="state.submitting">{{ state.dialog.submitTxt }}</el-button>
+					<el-button icon="ele-CircleClose" size="default" @click="onCancel">取 消</el-button>
+					<el-button type="primary" icon="ele-Select" size="default" :loading="state.submitting" @click="onSubmit">{{ state.dialog.submitTxt }}</el-button>
 				</span>
 			</template>
 		</el-dialog>
@@ -292,6 +314,7 @@ const state = reactive({
 	allPermissionGroups: [] as { name: string; displayName: string }[],
 	loading: false,
 	submitting: false,
+	activeTab: 'basic' as 'basic' | 'route' | 'permission',
 	dialog: {
 		isShowDialog: false,
 		type: 'add' as DialogMode,
@@ -504,6 +527,7 @@ const syncPermissionTreeState = () => {
 // 打开弹窗
 const openDialog = async (type: DialogMode, row?: MenuTreeItemDto) => {
 	state.loading = true;
+	state.activeTab = 'basic';
 	try {
 		state.dialog.type = type;
 		state.dialog.title = type === 'edit' ? '修改菜单' : '新增菜单';
@@ -682,6 +706,17 @@ defineExpose({
 </script>
 
 <style scoped lang="scss">
+.menu-dialog-tabs {
+	:deep(.el-tabs__content) {
+		overflow: visible;
+	}
+}
+
+.tab-pane-row {
+	padding: 4px 2px 0;
+	min-height: 260px;
+}
+
 .permission-selector {
 	width: 100%;
 
@@ -694,9 +729,9 @@ defineExpose({
 
 	&__tree {
 		border: 1px solid var(--el-border-color);
-		border-radius: var(--el-input-border-radius, var(--el-border-radius-base));
+		border-radius: var(--el-border-radius-base);
 		padding: 10px;
-		max-height: 300px;
+		max-height: 280px;
 		overflow-y: auto;
 	}
 }

@@ -1,82 +1,117 @@
 <template>
 	<div class="system-user-dialog-container">
-		<el-dialog v-model="state.dialog.isShowDialog" width="720px" destroy-on-close draggable :close-on-click-modal="false" @closed="onClosed">
+		<el-dialog v-model="state.dialog.isShowDialog" width="760px" destroy-on-close draggable :close-on-click-modal="false" @closed="onClosed">
 			<template #header>
 				<div style="color: #fff">
-					<el-icon size="16" style="margin-right: 3px; display: inline; vertical-align: middle"><ele-User /></el-icon>
+					<el-icon size="16" style="margin-right: 3px; display: inline; vertical-align: middle">
+						<ele-Edit v-if="state.dialog.type === 'edit'" />
+						<ele-Plus v-else />
+					</el-icon>
 					<span>{{ state.dialog.title }}</span>
 				</div>
 			</template>
-			<el-form ref="formRef" :model="state.ruleForm" :rules="formRules" label-width="108px" size="default">
-				<el-divider content-position="left">基本信息</el-divider>
-				<el-row :gutter="16">
-					<el-col :span="12">
-						<el-form-item label="用户名" prop="userName">
-							<el-input v-model="state.ruleForm.userName" placeholder="登录名" :disabled="state.dialog.type === 'edit'" clearable />
-						</el-form-item>
-					</el-col>
-					<el-col :span="12">
-						<el-form-item :label="state.dialog.type === 'add' ? '密码' : '新密码'" prop="password">
-							<el-input v-model="state.ruleForm.password" type="password" show-password clearable placeholder="编辑留空则不修改" />
-						</el-form-item>
-					</el-col>
-					<el-col :span="12">
-						<el-form-item label="名" prop="name">
-							<el-input v-model="state.ruleForm.name" placeholder="Name" clearable />
-						</el-form-item>
-					</el-col>
-					<el-col :span="12">
-						<el-form-item label="姓" prop="surname">
-							<el-input v-model="state.ruleForm.surname" placeholder="Surname" clearable />
-						</el-form-item>
-					</el-col>
-					<el-col :span="12">
-						<el-form-item label="邮箱" prop="email">
-							<el-input v-model="state.ruleForm.email" type="email" clearable />
-						</el-form-item>
-					</el-col>
-					<el-col :span="12">
-						<el-form-item label="手机">
-							<el-input v-model="state.ruleForm.phoneNumber" clearable />
-						</el-form-item>
-					</el-col>
-					<el-col :span="12">
-						<el-form-item label="启用">
-							<el-switch v-model="state.ruleForm.isActive" inline-prompt active-text="是" inactive-text="否" />
-						</el-form-item>
-					</el-col>
-					<el-col :span="12">
-						<el-form-item label="登录失败锁定">
-							<el-switch v-model="state.ruleForm.lockoutEnabled" inline-prompt active-text="开" inactive-text="关" />
-						</el-form-item>
-					</el-col>
-				</el-row>
 
-				<el-divider content-position="left">角色（ABP 角色名）</el-divider>
-				<el-form-item label="角色">
-					<el-select v-model="state.roleNames" multiple filterable collapse-tags collapse-tags-tooltip placeholder="请选择角色" class="w100">
-						<el-option v-for="r in state.roleOptions" :key="r.id" :label="r.name ?? ''" :value="r.name ?? ''" />
-					</el-select>
-				</el-form-item>
+			<el-tabs v-model="activeTab" class="user-dialog-tabs">
+				<!-- 基本信息 -->
+				<el-tab-pane label="基本信息" name="basic">
+					<el-form ref="formRef" :model="state.ruleForm" :rules="formRules" label-width="100px" size="default" class="user-form-grid">
+						<el-row :gutter="20">
+							<el-col :span="12">
+								<el-form-item label="用户名" prop="userName">
+									<el-input v-model="state.ruleForm.userName" placeholder="登录账号" :disabled="state.dialog.type === 'edit'" clearable />
+								</el-form-item>
+							</el-col>
+							<el-col :span="12">
+								<el-form-item
+									:label="state.dialog.type === 'add' ? '密码' : '新密码'"
+									prop="password"
+									:required="state.dialog.type === 'add'"
+								>
+									<el-input v-model="state.ruleForm.password" type="password" show-password clearable :placeholder="state.dialog.type === 'edit' ? '留空则不修改' : '请输入密码'" />
+								</el-form-item>
+							</el-col>
+						</el-row>
+						<el-row :gutter="20">
+							<el-col :span="12">
+								<el-form-item label="姓" prop="surname">
+									<el-input v-model="state.ruleForm.surname" placeholder="Surname" clearable />
+								</el-form-item>
+							</el-col>
+							<el-col :span="12">
+								<el-form-item label="名" prop="name">
+									<el-input v-model="state.ruleForm.name" placeholder="Name" clearable />
+								</el-form-item>
+							</el-col>
+						</el-row>
+						<el-row :gutter="20">
+							<el-col :span="12">
+								<el-form-item label="邮箱" prop="email">
+									<el-input v-model="state.ruleForm.email" type="email" clearable />
+								</el-form-item>
+							</el-col>
+							<el-col :span="12">
+								<el-form-item label="手机号码">
+									<el-input v-model="state.ruleForm.phoneNumber" clearable />
+								</el-form-item>
+							</el-col>
+						</el-row>
+						<el-row :gutter="20">
+							<el-col :span="12">
+								<el-form-item label="启用状态">
+									<el-switch v-model="state.ruleForm.isActive" inline-prompt active-text="启用" inactive-text="禁用" />
+								</el-form-item>
+							</el-col>
+							<el-col :span="12">
+								<el-form-item label="失败锁定">
+									<el-switch v-model="state.ruleForm.lockoutEnabled" inline-prompt active-text="开启" inactive-text="关闭" />
+								</el-form-item>
+							</el-col>
+						</el-row>
+					</el-form>
+				</el-tab-pane>
 
-				<el-divider content-position="left">组织机构</el-divider>
-				<el-form-item label="所属部门">
-					<el-select
-						v-model="state.organizationUnitIds"
-						multiple
-						filterable
-						collapse-tags
-						collapse-tags-tooltip
-						placeholder="可选多个组织单元"
-						class="w100"
-					>
-						<el-option v-for="ou in state.ouOptions" :key="ou.id" :label="ouLabel(ou)" :value="ou.id!" />
-					</el-select>
-				</el-form-item>
-			</el-form>
+				<!-- 角色授权 -->
+				<el-tab-pane label="角色授权" name="roles">
+					<el-form label-width="80px" size="default" style="margin-top: 8px">
+						<el-form-item label="所属角色">
+							<el-select v-model="state.roleNames" multiple filterable collapse-tags collapse-tags-tooltip placeholder="请选择角色" class="w100">
+								<el-option v-for="r in state.roleOptions" :key="r.id" :label="r.name ?? ''" :value="r.name ?? ''" />
+							</el-select>
+						</el-form-item>
+						<div class="role-hint">
+							<el-icon><ele-InfoFilled /></el-icon>
+							<span>用户将继承所选角色的所有权限</span>
+						</div>
+					</el-form>
+				</el-tab-pane>
+
+				<!-- 组织机构 -->
+				<el-tab-pane label="组织机构" name="orgs">
+					<el-form label-width="80px" size="default" style="margin-top: 8px">
+						<el-form-item label="所属机构">
+							<el-select
+								v-model="state.organizationUnitIds"
+								multiple
+								filterable
+								collapse-tags
+								collapse-tags-tooltip
+								placeholder="可选多个组织单元"
+								class="w100"
+							>
+								<el-option v-for="ou in state.ouOptions" :key="ou.id" :label="ouLabel(ou)" :value="ou.id!" />
+							</el-select>
+						</el-form-item>
+						<div class="role-hint">
+							<el-icon><ele-InfoFilled /></el-icon>
+							<span>可将用户归属到一个或多个组织机构</span>
+						</div>
+					</el-form>
+				</el-tab-pane>
+			</el-tabs>
+
 			<template #footer>
-				<el-button size="default" @click="onCancel">取 消</el-button>
-				<el-button type="primary" size="default" :loading="state.submitting" @click="onSubmit">{{ state.dialog.submitTxt }}</el-button>
+				<el-button icon="ele-CircleClose" @click="onCancel">取 消</el-button>
+				<el-button type="primary" icon="ele-Select" :loading="state.submitting" @click="onSubmit">{{ state.dialog.submitTxt }}</el-button>
 			</template>
 		</el-dialog>
 	</div>
@@ -92,6 +127,7 @@ import type { IdentityRoleDto, IdentityUserDto, OrganizationUnitDto } from '/@/a
 const emit = defineEmits(['refresh']);
 
 const formRef = ref<FormInstance>();
+const activeTab = ref('basic');
 
 interface RuleForm {
 	userId: string;
@@ -178,6 +214,7 @@ const openDialog = async (type: string, row?: IdentityUserDto) => {
 	state.ruleForm = emptyForm();
 	state.roleNames = [];
 	state.organizationUnitIds = [];
+	activeTab.value = 'basic';
 	state.dialog.isShowDialog = true;
 	state.dialog.title = type === 'edit' ? '修改用户' : '新增用户';
 	state.dialog.submitTxt = type === 'edit' ? '保 存' : '新 增';
@@ -264,3 +301,32 @@ const onSubmit = async () => {
 
 defineExpose({ openDialog });
 </script>
+
+<style scoped lang="scss">
+.user-dialog-tabs {
+	:deep(.el-tabs__header) {
+		margin-bottom: 16px;
+	}
+}
+
+.user-form-grid {
+	:deep(.el-form-item) {
+		margin-bottom: 20px !important;
+	}
+}
+
+.role-hint {
+	display: flex;
+	align-items: center;
+	gap: 6px;
+	color: var(--el-text-color-secondary);
+	font-size: 12px;
+	margin-top: -4px;
+	padding-left: 80px;
+
+	.el-icon {
+		color: var(--el-color-info);
+	}
+}
+</style>
+

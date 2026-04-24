@@ -26,4 +26,6 @@ public interface IIdentityUserAppService
     Task<IdentityUserDto> FindByUsernameAsync(string userName);
 
     Task<IdentityUserDto> FindByEmailAsync(string email);
+
+    Task ResetPasswordAsync(Guid id, IdentityUserResetPasswordDto input);
 }

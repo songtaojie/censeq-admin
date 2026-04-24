@@ -232,7 +232,7 @@ onMounted(() => {
 	}
 
 	.add-btn-item {
-		margin-left: auto;
+		margin-left: 0;
 	}
 }
 

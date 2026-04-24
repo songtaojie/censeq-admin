@@ -102,4 +102,11 @@ public class IdentityUserController : AbpControllerBase, IIdentityUserAppService
     {
         return UserAppService.FindByEmailAsync(email);
     }
+
+    [HttpPost]
+    [Route("{id}/reset-password")]
+    public virtual Task ResetPasswordAsync(Guid id, [FromBody] IdentityUserResetPasswordDto input)
+    {
+        return UserAppService.ResetPasswordAsync(id, input);
+    }
 }

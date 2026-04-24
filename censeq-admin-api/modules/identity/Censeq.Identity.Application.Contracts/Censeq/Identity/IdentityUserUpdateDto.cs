@@ -5,11 +5,20 @@ using Volo.Abp.Validation;
 
 namespace Censeq.Identity;
 
+/// <summary>
+/// 更新用户 DTO
+/// </summary>
 public class IdentityUserUpdateDto : IdentityUserCreateOrUpdateDtoBase, IHasConcurrencyStamp
 {
+    /// <summary>
+    /// 密码
+    /// </summary>
     [DisableAuditing]
     [DynamicStringLength(typeof(IdentityUserConsts), nameof(IdentityUserConsts.MaxPasswordLength))]
-    public string Password { get; set; }
+    public string? Password { get; set; }
 
-    public string ConcurrencyStamp { get; set; }
+    /// <summary>
+    /// 并发戳
+    /// </summary>
+    public string? ConcurrencyStamp { get; set; }
 }

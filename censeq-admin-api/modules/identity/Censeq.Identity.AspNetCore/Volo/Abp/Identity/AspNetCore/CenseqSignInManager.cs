@@ -12,14 +12,35 @@ using IdentityUser = Censeq.Identity.Entities.IdentityUser;
 
 namespace Censeq.Identity.AspNetCore;
 
+/// <summary>
+/// Censeq 登录管理器
+/// </summary>
 public class CenseqSignInManager : SignInManager<IdentityUser>
 {
+    /// <summary>
+    /// Censeq Identity 选项
+    /// </summary>
     protected CenseqIdentityOptions AbpOptions { get; }
 
+    /// <summary>
+    /// 设置提供程序
+    /// </summary>
     protected ISettingProvider SettingProvider { get; }
 
     private readonly IdentityUserManager _identityUserManager;
 
+    /// <summary>
+    /// 初始化 <see cref="CenseqSignInManager"/> 类的新实例
+    /// </summary>
+    /// <param name="userManager">用户管理器</param>
+    /// <param name="contextAccessor">HTTP 上下文访问器</param>
+    /// <param name="claimsFactory">用户声明主体工厂</param>
+    /// <param name="optionsAccessor">Identity 选项</param>
+    /// <param name="logger">日志记录器</param>
+    /// <param name="schemes">认证方案提供程序</param>
+    /// <param name="confirmation">用户确认接口</param>
+    /// <param name="options">Censeq Identity 选项</param>
+    /// <param name="settingProvider">设置提供程序</param>
     public CenseqSignInManager(
         IdentityUserManager userManager,
         IHttpContextAccessor contextAccessor,
@@ -43,6 +64,14 @@ public class CenseqSignInManager : SignInManager<IdentityUser>
         _identityUserManager = userManager;
     }
 
+    /// <summary>
+    /// 使用用户名和密码登录
+    /// </summary>
+    /// <param name="userName">用户名</param>
+    /// <param name="password">密码</param>
+    /// <param name="isPersistent">是否持久化登录</param>
+    /// <param name="lockoutOnFailure">失败时是否锁定</param>
+    /// <returns>登录结果</returns>
     public async override Task<SignInResult> PasswordSignInAsync(
         string userName,
         string password,
@@ -87,6 +116,11 @@ public class CenseqSignInManager : SignInManager<IdentityUser>
         return await base.PasswordSignInAsync(userName, password, isPersistent, lockoutOnFailure);
     }
 
+    /// <summary>
+    /// 登录前检查
+    /// </summary>
+    /// <param name="user">用户</param>
+    /// <returns>登录结果，如果检查通过则返回 null</returns>
     protected async override Task<SignInResult?> PreSignInCheck(IdentityUser user)
     {
         if (!user.IsActive)
@@ -110,13 +144,13 @@ public class CenseqSignInManager : SignInManager<IdentityUser>
     }
 
     /// <summary>
-    /// This is to call the protection method SignInOrTwoFactorAsync
+    /// 调用受保护的 SignInOrTwoFactorAsync 方法
     /// </summary>
-    /// <param name="user"></param>
-    /// <param name="isPersistent"></param>
-    /// <param name="loginProvider"></param>
-    /// <param name="bypassTwoFactor"></param>
-    /// <returns></returns>
+    /// <param name="user">用户</param>
+    /// <param name="isPersistent">是否持久化登录</param>
+    /// <param name="loginProvider">登录提供程序</param>
+    /// <param name="bypassTwoFactor">是否跳过双因素认证</param>
+    /// <returns>登录结果</returns>
     public virtual async Task<SignInResult> CallSignInOrTwoFactorAsync(IdentityUser user, bool isPersistent, string? loginProvider = null, bool bypassTwoFactor = false)
     {
         return await base.SignInOrTwoFactorAsync(user, isPersistent, loginProvider, bypassTwoFactor);

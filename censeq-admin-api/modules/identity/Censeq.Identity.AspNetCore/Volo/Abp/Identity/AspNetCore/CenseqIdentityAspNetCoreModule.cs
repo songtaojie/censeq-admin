@@ -8,11 +8,18 @@ using static Censeq.Identity.AspNetCore.CenseqSecurityStampValidatorCallback;
 
 namespace Censeq.Identity.AspNetCore;
 
+/// <summary>
+/// Censeq Identity AspNetCore 模块
+/// </summary>
 [DependsOn(
     typeof(CenseqIdentityDomainModule)
     )]
 public class CenseqIdentityAspNetCoreModule : AbpModule
 {
+    /// <summary>
+    /// 预配置服务
+    /// </summary>
+    /// <param name="context">服务配置上下文</param>
     public override void PreConfigureServices(ServiceConfigurationContext context)
     {
         PreConfigure<IdentityBuilder>(builder =>
@@ -25,6 +32,10 @@ public class CenseqIdentityAspNetCoreModule : AbpModule
         });
     }
 
+    /// <summary>
+    /// 配置服务
+    /// </summary>
+    /// <param name="context">服务配置上下文</param>
     public override void ConfigureServices(ServiceConfigurationContext context)
     {
         //(TODO: Extract an extension method like IdentityBuilder.AddCenseqSecurityStampValidator())
@@ -46,6 +57,10 @@ public class CenseqIdentityAspNetCoreModule : AbpModule
         }
     }
 
+    /// <summary>
+    /// 后配置服务
+    /// </summary>
+    /// <param name="context">服务配置上下文</param>
     public override void PostConfigureServices(ServiceConfigurationContext context)
     {
         context.Services.AddOptions<SecurityStampValidatorOptions>()

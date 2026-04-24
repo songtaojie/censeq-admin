@@ -115,5 +115,8 @@ export function useIdentityApi() {
 		revokeAllUserSessions: async (userId: string): Promise<void> => {
 			return await identityApi.delete<void>(`api/identity/sessions/user/${userId}/all`, undefined);
 		},
+		resetUserPassword: async (id: string, newPassword: string): Promise<void> => {
+			return await identityApi.request<void>(`api/identity/users/${id}/reset-password`, 'POST', { newPassword });
+		},
 	};
 }
