@@ -54,6 +54,8 @@ public class CreateMenuDto
 
     public MenuAuthorizationMode AuthorizationMode { get; set; } = MenuAuthorizationMode.Anonymous;
 
+    public MenuScope Scope { get; set; } = MenuScope.Platform;
+
     [StringLength(MenuConsts.MaxRemarkLength)]
     public string? Remark { get; set; }
 
@@ -131,6 +133,8 @@ public class MenuTreeItemDto : EntityDto<Guid>
     public bool Status { get; set; }
 
     public MenuAuthorizationMode AuthorizationMode { get; set; }
+
+    public MenuScope Scope { get; set; } = MenuScope.Platform;
 
     public string? ButtonCode { get; set; }
 

@@ -8,6 +8,7 @@ public class CenseqTenantManagementApplicationAutoMapperProfile : Profile
     public CenseqTenantManagementApplicationAutoMapperProfile()
     {
         CreateMap<Tenant, TenantDto>()
+            .ForMember(d => d.IsActive, opts => opts.MapFrom(s => s.IsActive))
             .MapExtraProperties();
     }
 }

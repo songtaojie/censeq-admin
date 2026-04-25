@@ -24,6 +24,7 @@ namespace Censeq.TenantManagement.EntityFrameworkCore
                 b.Property(t => t.Name).IsRequired().HasMaxLength(MaxNameLength);
                 b.Property(t => t.NormalizedName).IsRequired().HasMaxLength(MaxNameLength);
                 b.Property(t => t.Code).IsRequired(false).HasMaxLength(MaxCodeLength);
+                b.Property(t => t.IsActive).IsRequired().HasDefaultValue(true);
                 //b.HasMany(u => u.ConnectionStrings).WithOne().HasForeignKey(uc => uc.TenantId).IsRequired();
                 b.HasIndex(u => u.Name);
                 b.HasIndex(u => u.NormalizedName);

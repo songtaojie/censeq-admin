@@ -316,6 +316,7 @@ public class MenuAppService : AdminAppService, IMenuAppService
         menu.SetLinkOptions(input.IsExternal, input.ExternalUrl, input.IsIframe);
         menu.SetStatus(input.Status);
         menu.SetAuthorizationMode(input.AuthorizationMode);
+        menu.SetScope(input.Scope);
         menu.SetRemark(input.Remark);
         menu.SetButtonCode(input.ButtonCode);
         menu.SetPermissionGroups(input.PermissionGroups);
@@ -430,6 +431,7 @@ public class MenuAppService : AdminAppService, IMenuAppService
                     Visible = x.Visible,
                     Status = x.Status,
                     AuthorizationMode = x.AuthorizationMode,
+                    Scope = x.Scope,
                     ButtonCode = x.ButtonCode,
                     PermissionGroups = x.PermissionGroups,
                     PermissionNames = permissionLookup.GetValueOrDefault(x.Id) ?? []
@@ -464,6 +466,7 @@ public class MenuAppService : AdminAppService, IMenuAppService
             IsIframe = menu.IsIframe,
             Status = menu.Status,
             AuthorizationMode = menu.AuthorizationMode,
+            Scope = menu.Scope,
             Remark = menu.Remark,
             ButtonCode = menu.ButtonCode,
             PermissionGroups = menu.PermissionGroups,

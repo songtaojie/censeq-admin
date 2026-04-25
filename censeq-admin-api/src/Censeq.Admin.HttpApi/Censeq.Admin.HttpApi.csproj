@@ -17,6 +17,7 @@
     <ProjectReference Include="..\..\modules\tenant-management\Censeq.TenantManagement.HttpApi\Censeq.TenantManagement.HttpApi.csproj" />
     <ProjectReference Include="..\..\modules\permission-management\Censeq.PermissionManagement.HttpApi\Censeq.PermissionManagement.HttpApi.csproj" />
     <ProjectReference Include="..\Censeq.Admin.Application.Contracts\Censeq.Admin.Application.Contracts.csproj" />
+    <ProjectReference Include="..\Censeq.Admin.Application\Censeq.Admin.Application.csproj" />
   </ItemGroup>
 
   <ItemGroup>

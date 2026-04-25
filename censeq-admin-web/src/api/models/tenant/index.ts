@@ -5,6 +5,7 @@ export interface TenantDto {
 	id: string;
 	name?: string;
 	code?: string | null;
+	isActive: boolean;
 	concurrencyStamp?: string;
 	extraProperties?: Record<string, unknown>;
 }
@@ -19,6 +20,7 @@ export interface TenantCreateDto {
 export interface TenantUpdateDto {
 	name: string;
 	code?: string | null;
+	isActive: boolean;
 	concurrencyStamp?: string;
 }
 

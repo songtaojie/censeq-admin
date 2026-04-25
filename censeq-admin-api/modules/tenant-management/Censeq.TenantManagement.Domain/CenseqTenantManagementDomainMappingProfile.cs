@@ -28,8 +28,7 @@ public class CenseqTenantManagementDomainMappingProfile : Profile
 
                     return connStrings;
                 });
-            })
-            .ForMember(x => x.IsActive, x => x.Ignore());
+            });
 
         CreateMap<Tenant, TenantEto>();
     }

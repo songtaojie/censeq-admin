@@ -45,5 +45,9 @@ export function useTenantApi() {
 		deleteDefaultConnectionString: async (id: string): Promise<void> => {
 			return await tenantApi.request<void>(`${tenantsBasePath}/${id}/default-connection-string`, 'DELETE', undefined);
 		},
+
+		resetAdminPassword: async (id: string, newPassword: string): Promise<void> => {
+			return await tenantApi.request<void>(`api/admin/tenants/${id}/reset-admin-password`, 'POST', { newPassword });
+		},
 	};
 }

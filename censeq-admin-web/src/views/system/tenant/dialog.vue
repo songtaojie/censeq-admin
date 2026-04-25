@@ -42,8 +42,11 @@
 										<el-input v-model="state.ruleForm.adminPassword" type="password" placeholder="初始管理员密码" clearable show-password maxlength="128" />
 									</el-form-item>
 								</el-col>
-							</template>
-						</el-row>
+							</template>						<el-col v-if="state.dialog.type === 'edit'" :xs="24" :sm="12" class="mb20">
+							<el-form-item label="状态">
+								<el-switch v-model="state.ruleForm.isActive" inline-prompt active-text="启用" inactive-text="禁用" />
+							</el-form-item>
+						</el-col>						</el-row>
 					</el-tab-pane>
 					<el-tab-pane v-if="state.dialog.type === 'edit'" label="数据库连接" name="connection">
 						<div v-if="state.connectionStringUi.forbidden" class="mb15">
@@ -90,6 +93,7 @@ const formRef = ref<FormInstance>();
 const emptyForm = () => ({
 	name: '',
 	code: '',
+	isActive: true,
 	adminEmailAddress: '',
 	adminPassword: '',
 	defaultConnectionString: '',
@@ -156,6 +160,7 @@ const openDialog = async (type: string, row?: TenantDto) => {
 	if (type === 'edit' && row) {
 		state.ruleForm.name = row.name ?? '';
 		state.ruleForm.code = row.code ?? '';
+		state.ruleForm.isActive = row.isActive ?? true;
 		state.ruleForm.id = row.id!;
 		state.ruleForm.concurrencyStamp = row.concurrencyStamp ?? '';
 		state.dialog.title = '修改租户';
@@ -232,6 +237,7 @@ const onSubmit = async () => {
 				await updateTenant(state.ruleForm.id, {
 					name: state.ruleForm.name.trim(),
 					code: state.ruleForm.code.trim(),
+					isActive: state.ruleForm.isActive,
 					concurrencyStamp: state.ruleForm.concurrencyStamp,
 				});
 				if (state.connectionStringUi.visible) {

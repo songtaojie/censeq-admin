@@ -21,6 +21,7 @@ public class TenantManagementPermissionDefinitionProvider : PermissionDefinition
         tenantsPermission.AddChild(TenantManagementPermissions.Tenants.Delete, L("Permission:Delete"));
         tenantsPermission.AddChild(TenantManagementPermissions.Tenants.ManageFeatures, L("Permission:ManageFeatures"));
         tenantsPermission.AddChild(TenantManagementPermissions.Tenants.ManageConnectionStrings, L("Permission:ManageConnectionStrings"));
+        tenantsPermission.AddChild(TenantManagementPermissions.Tenants.ResetAdminPassword, L("Permission:ResetAdminPassword"));
     }
 
     private static LocalizableString L(string name)

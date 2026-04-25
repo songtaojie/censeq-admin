@@ -10,5 +10,7 @@ public class TenantDto : ExtensibleEntityDto<Guid>, IHasConcurrencyStamp
 
     public string? Code { get; set; }
 
+    public bool IsActive { get; set; }
+
     public string ConcurrencyStamp { get; set; }
 }

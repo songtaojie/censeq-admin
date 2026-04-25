@@ -107,6 +107,7 @@ public class TenantAppService : TenantManagementAppServiceBase, ITenantAppServic
 
         await TenantManager.ChangeNameAsync(tenant, input.Name);
         await TenantManager.ChangeCodeAsync(tenant, input.Code);
+        tenant.SetIsActive(input.IsActive);
 
         tenant.SetConcurrencyStampIfNotNull(input.ConcurrencyStamp);
         input.MapExtraPropertiesTo(tenant);

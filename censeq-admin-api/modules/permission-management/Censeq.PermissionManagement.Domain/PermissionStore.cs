@@ -15,7 +15,7 @@ public class PermissionStore : IPermissionStore, ITransientDependency
     /// <summary>
     /// 日志记录
     /// </summary>
-    protected ILogger<PermissionStore> Logger { get; }
+    protected ILogger<PermissionStore> Logger { get; set; }
 
     /// <summary>
     /// 权限授予存储库

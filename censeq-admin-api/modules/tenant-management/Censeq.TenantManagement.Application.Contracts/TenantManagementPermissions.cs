@@ -14,6 +14,7 @@ public static class TenantManagementPermissions
         public const string Delete = Default + ".Delete";
         public const string ManageFeatures = Default + ".ManageFeatures";
         public const string ManageConnectionStrings = Default + ".ManageConnectionStrings";
+        public const string ResetAdminPassword = Default + ".ResetAdminPassword";
     }
 
     public static string[] GetAll()

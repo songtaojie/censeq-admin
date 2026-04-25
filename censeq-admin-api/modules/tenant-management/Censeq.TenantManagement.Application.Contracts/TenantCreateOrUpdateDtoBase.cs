@@ -15,6 +15,8 @@ public abstract class TenantCreateOrUpdateDtoBase : ExtensibleObject
     [Display(Name = "TenantCode")]
     public string? Code { get; set; }
 
+    public bool IsActive { get; set; } = true;
+
     public TenantCreateOrUpdateDtoBase() : base(false)
     {
 

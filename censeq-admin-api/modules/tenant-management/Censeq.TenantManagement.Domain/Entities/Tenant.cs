@@ -17,6 +17,8 @@ public class Tenant : FullAuditedAggregateRoot<Guid>, IHasEntityVersion
 
     public virtual string? Code { get; protected set; }
 
+    public virtual bool IsActive { get; protected set; }
+
     public virtual int EntityVersion { get; protected set; }
 
     public virtual List<TenantConnectionString> ConnectionStrings { get; protected set; }
@@ -32,6 +34,7 @@ public class Tenant : FullAuditedAggregateRoot<Guid>, IHasEntityVersion
         SetName(name);
         SetNormalizedName(normalizedName);
         SetCode(code);
+        IsActive = true;
 
         ConnectionStrings = new List<TenantConnectionString>();
     }
@@ -120,5 +123,10 @@ public class Tenant : FullAuditedAggregateRoot<Guid>, IHasEntityVersion
     public virtual void SetCodePublic([CanBeNull] string? code)
     {
         SetCode(code);
+    }
+
+    public virtual void SetIsActive(bool isActive)
+    {
+        IsActive = isActive;
     }
 }

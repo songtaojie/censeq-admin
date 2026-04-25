@@ -7,6 +7,7 @@ using Censeq.Identity.Entities;
 using Censeq.Identity.EntityFrameworkCore;
 using Censeq.Identity.EntityFrameworkCore.Modeling;
 using Censeq.Admin.Menus;
+using Censeq.Admin.Permissions;
 using Censeq.OpenIddict.Applications;
 using Censeq.OpenIddict.Authorizations;
 using Censeq.OpenIddict.EntityFrameworkCore;
@@ -62,6 +63,8 @@ public class CenseqAdminDbContext(DbContextOptions<CenseqAdminDbContext> options
     public DbSet<Menu> Menus { get; set; }
     public DbSet<MenuPermission> MenuPermissions { get; set; }
 
+    public DbSet<TenantPermissionGrant> TenantPermissionGrants { get; set; }
+
     public DbSet<PermissionGroup> PermissionGroups { get; set; }
     public DbSet<PermissionDefinitionRecord> Permissions { get; set; }
     public DbSet<PermissionGrant> PermissionGrants { get; set; }
@@ -85,5 +88,6 @@ public class CenseqAdminDbContext(DbContextOptions<CenseqAdminDbContext> options
         builder.ConfigurePermissionManagement();
         builder.ConfigureSettingManagement();
         builder.ConfigureTenantManagement();
+        builder.ConfigureTenantPermissionGrants();
     }
 }

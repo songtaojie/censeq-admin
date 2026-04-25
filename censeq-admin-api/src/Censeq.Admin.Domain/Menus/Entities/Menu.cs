@@ -46,6 +46,9 @@ public class Menu : FullAuditedAggregateRoot<Guid>, IMultiTenant
 
     public virtual MenuAuthorizationMode AuthorizationMode { get; protected set; }
 
+    /// <summary>菜单作用域：Platform = 平台专属；Tenant = 可分配给租户。</summary>
+    public virtual MenuScope Scope { get; protected set; }
+
     public virtual string? Remark { get; protected set; }
 
     public virtual string? ButtonCode { get; protected set; }
@@ -169,6 +172,11 @@ public class Menu : FullAuditedAggregateRoot<Guid>, IMultiTenant
     public virtual void SetAuthorizationMode(MenuAuthorizationMode authorizationMode)
     {
         AuthorizationMode = authorizationMode;
+    }
+
+    public virtual void SetScope(MenuScope scope)
+    {
+        Scope = scope;
     }
 
     public virtual void SetRemark(string? remark)

@@ -24,6 +24,7 @@ public class MenuDataSeedContributor : DomainService, IDataSeedContributor, ITra
     [UnitOfWork]
     public virtual async Task SeedAsync(DataSeedContext context)
     {
+        // 菜单由平台统一定义（host 侧），租户通过 TenantPermissionGrant 控制菜单可见性，无需复制数据行。
         if (context.TenantId.HasValue)
         {
             return;
@@ -100,6 +101,7 @@ public class MenuDataSeedContributor : DomainService, IDataSeedContributor, ITra
         menu.SetLinkOptions(false, null, false);
         menu.SetStatus(true);
         menu.SetAuthorizationMode(definition.AuthorizationMode);
+        menu.SetScope(definition.Scope);
         menu.SetPermissionGroups(definition.PermissionGroups);
     }
 
@@ -123,20 +125,7 @@ public class MenuDataSeedContributor : DomainService, IDataSeedContributor, ITra
     {
         return new List<SeedMenuDefinition>
         {
-            new(
-                key: "home",
-                name: "home",
-                title: "首页",
-                routeName: "home",
-                path: "/home",
-                component: "home/index",
-                redirect: null,
-                icon: "iconfont icon-shouye",
-                type: MenuType.Menu,
-                sort: 10,
-                affix: true,
-                authorizationMode: MenuAuthorizationMode.Anonymous,
-                permissionNames: Array.Empty<string>()),
+            // ── 平台管理 ─────────────────────────────────────────────
             new(
                 key: "platform",
                 name: "platform",
@@ -144,12 +133,61 @@ public class MenuDataSeedContributor : DomainService, IDataSeedContributor, ITra
                 routeName: "platform",
                 path: "/platform",
                 component: "layout/routerView/parent",
-                redirect: "/platform/tenant",
+                redirect: "/platform/dashboard",
                 icon: "ele-Monitor",
                 type: MenuType.Directory,
-                sort: 20,
+                sort: 10,
                 authorizationMode: MenuAuthorizationMode.Anonymous,
-                permissionNames: Array.Empty<string>()),
+                permissionNames: Array.Empty<string>(),
+                scope: MenuScope.Platform),
+            new(
+                key: "platformDashboard",
+                parentKey: "platform",
+                name: "platformDashboard",
+                title: "平台概览",
+                routeName: "platformDashboard",
+                path: "/platform/dashboard",
+                component: "platform/dashboard/index",
+                redirect: null,
+                icon: "ele-DataBoard",
+                type: MenuType.Menu,
+                sort: 0,
+                affix: true,
+                authorizationMode: MenuAuthorizationMode.Anonymous,
+                permissionNames: Array.Empty<string>(),
+                scope: MenuScope.Platform),
+            new(
+                key: "platformUser",
+                parentKey: "platform",
+                name: "platformUser",
+                title: "平台用户管理",
+                routeName: "platformUser",
+                path: "/platform/users",
+                component: "system/user/index",
+                redirect: null,
+                icon: "iconfont icon-icon-",
+                type: MenuType.Menu,
+                sort: 5,
+                authorizationMode: MenuAuthorizationMode.Permission,
+                permissionNames: new[] { "CenseqIdentity.Users" },
+                scope: MenuScope.Platform,
+                permissionGroups: "CenseqIdentity"),
+            new(
+                key: "platformRole",
+                parentKey: "platform",
+                name: "platformRole",
+                title: "平台角色管理",
+                routeName: "platformRole",
+                path: "/platform/roles",
+                component: "system/role/index",
+                redirect: null,
+                icon: "ele-ColdDrink",
+                type: MenuType.Menu,
+                sort: 6,
+                authorizationMode: MenuAuthorizationMode.Permission,
+                permissionNames: new[] { "CenseqIdentity.Roles" },
+                scope: MenuScope.Platform,
+                permissionGroups: "CenseqIdentity"),
             new(
                 key: "systemTenant",
                 parentKey: "platform",
@@ -164,6 +202,7 @@ public class MenuDataSeedContributor : DomainService, IDataSeedContributor, ITra
                 sort: 10,
                 authorizationMode: MenuAuthorizationMode.Permission,
                 permissionNames: new[] { "TenantManagement.Tenants" },
+                scope: MenuScope.Platform,
                 permissionGroups: "TenantManagement"),
             new(
                 key: "systemFeature",
@@ -179,6 +218,7 @@ public class MenuDataSeedContributor : DomainService, IDataSeedContributor, ITra
                 sort: 20,
                 authorizationMode: MenuAuthorizationMode.Permission,
                 permissionNames: new[] { "CenseqFeatureManagement.ManageHostFeatures" },
+                scope: MenuScope.Platform,
                 permissionGroups: "CenseqFeatureManagement"),
             new(
                 key: "systemMenu",
@@ -194,7 +234,40 @@ public class MenuDataSeedContributor : DomainService, IDataSeedContributor, ITra
                 sort: 30,
                 authorizationMode: MenuAuthorizationMode.Permission,
                 permissionNames: new[] { "CenseqAdmin.Menus" },
+                scope: MenuScope.Platform,
                 permissionGroups: "Admin"),
+            new(
+                key: "systemClaimType",
+                parentKey: "platform",
+                name: "systemClaimType",
+                title: "声明类型管理",
+                routeName: "systemClaimType",
+                path: "/platform/claim-type",
+                component: "system/claim-type/index",
+                redirect: null,
+                icon: "ele-Collection",
+                type: MenuType.Menu,
+                sort: 40,
+                authorizationMode: MenuAuthorizationMode.Permission,
+                permissionNames: new[] { "CenseqIdentity.ClaimTypes" },
+                scope: MenuScope.Platform,
+                permissionGroups: "CenseqIdentity"),
+            new(
+                key: "systemPermissionDefinition",
+                parentKey: "platform",
+                name: "systemPermissionDefinition",
+                title: "权限定义管理",
+                routeName: "systemPermissionDefinition",
+                path: "/platform/permission-definition",
+                component: "system/permission-definition/index",
+                redirect: null,
+                icon: "ele-Key",
+                type: MenuType.Menu,
+                sort: 50,
+                authorizationMode: MenuAuthorizationMode.Permission,
+                permissionNames: new[] { "PermissionManagement.DefinitionManagement" },
+                scope: MenuScope.Platform,
+                permissionGroups: "PermissionManagement"),
             new(
                 key: "systemAuditLog",
                 parentKey: "platform",
@@ -206,10 +279,13 @@ public class MenuDataSeedContributor : DomainService, IDataSeedContributor, ITra
                 redirect: null,
                 icon: "ele-Document",
                 type: MenuType.Menu,
-                sort: 40,
+                sort: 60,
                 authorizationMode: MenuAuthorizationMode.Permission,
                 permissionNames: new[] { "AuditLogging.AuditLogs" },
+                scope: MenuScope.Platform,
                 permissionGroups: "AuditLogging"),
+
+            // ── 企业运营（租户可见，数据自动隔离；平台管理员通过 TenantPermissionGrant 控制可见范围） ─────────────
             new(
                 key: "system",
                 name: "system",
@@ -217,12 +293,29 @@ public class MenuDataSeedContributor : DomainService, IDataSeedContributor, ITra
                 routeName: "system",
                 path: "/system",
                 component: "layout/routerView/parent",
-                redirect: "/system/user",
+                redirect: "/system/dashboard",
                 icon: "iconfont icon-xitongshezhi",
                 type: MenuType.Directory,
-                sort: 30,
+                sort: 20,
                 authorizationMode: MenuAuthorizationMode.Anonymous,
-                permissionNames: Array.Empty<string>()),
+                permissionNames: Array.Empty<string>(),
+                scope: MenuScope.Tenant),
+            new(
+                key: "systemDashboard",
+                parentKey: "system",
+                name: "systemDashboard",
+                title: "企业概览",
+                routeName: "systemDashboard",
+                path: "/system/dashboard",
+                component: "system/dashboard/index",
+                redirect: null,
+                icon: "ele-DataAnalysis",
+                type: MenuType.Menu,
+                sort: 0,
+                affix: true,
+                authorizationMode: MenuAuthorizationMode.Anonymous,
+                permissionNames: Array.Empty<string>(),
+                scope: MenuScope.Tenant),
             new(
                 key: "systemRole",
                 parentKey: "system",
@@ -237,21 +330,7 @@ public class MenuDataSeedContributor : DomainService, IDataSeedContributor, ITra
                 sort: 10,
                 authorizationMode: MenuAuthorizationMode.Permission,
                 permissionNames: new[] { "CenseqIdentity.Roles" },
-                permissionGroups: "CenseqIdentity"),
-            new(
-                key: "systemClaimType",
-                parentKey: "system",
-                name: "systemClaimType",
-                title: "声明类型管理",
-                routeName: "systemClaimType",
-                path: "/system/claim-type",
-                component: "system/claim-type/index",
-                redirect: null,
-                icon: "ele-Collection",
-                type: MenuType.Menu,
-                sort: 20,
-                authorizationMode: MenuAuthorizationMode.Permission,
-                permissionNames: new[] { "CenseqIdentity.ClaimTypes" },
+                scope: MenuScope.Tenant,
                 permissionGroups: "CenseqIdentity"),
             new(
                 key: "systemUser",
@@ -264,9 +343,10 @@ public class MenuDataSeedContributor : DomainService, IDataSeedContributor, ITra
                 redirect: null,
                 icon: "iconfont icon-icon-",
                 type: MenuType.Menu,
-                sort: 30,
+                sort: 20,
                 authorizationMode: MenuAuthorizationMode.Permission,
                 permissionNames: new[] { "CenseqIdentity.Users" },
+                scope: MenuScope.Tenant,
                 permissionGroups: "CenseqIdentity"),
             new(
                 key: "systemDept",
@@ -279,10 +359,27 @@ public class MenuDataSeedContributor : DomainService, IDataSeedContributor, ITra
                 redirect: null,
                 icon: "ele-OfficeBuilding",
                 type: MenuType.Menu,
-                sort: 40,
+                sort: 30,
                 authorizationMode: MenuAuthorizationMode.Permission,
                 permissionNames: new[] { "CenseqIdentity.OrganizationUnits" },
+                scope: MenuScope.Tenant,
                 permissionGroups: "CenseqIdentity"),
+            new(
+                key: "systemDic",
+                parentKey: "system",
+                name: "systemDic",
+                title: "数据字典",
+                routeName: "systemDic",
+                path: "/system/dic",
+                component: "system/dic/index",
+                redirect: null,
+                icon: "ele-SetUp",
+                type: MenuType.Menu,
+                sort: 40,
+                authorizationMode: MenuAuthorizationMode.Permission,
+                permissionNames: Array.Empty<string>(),
+                scope: MenuScope.Tenant,
+                permissionGroups: null),
             new(
                 key: "systemSettings",
                 parentKey: "system",
@@ -297,22 +394,26 @@ public class MenuDataSeedContributor : DomainService, IDataSeedContributor, ITra
                 sort: 50,
                 authorizationMode: MenuAuthorizationMode.Permission,
                 permissionNames: new[] { "SettingManagement.Emailing", "SettingManagement.TimeZone" },
+                scope: MenuScope.Tenant,
                 permissionGroups: "SettingManagement"),
             new(
-                key: "systemPermissionDefinition",
+                key: "systemTenantMenu",
                 parentKey: "system",
-                name: "systemPermissionDefinition",
-                title: "权限定义管理",
-                routeName: "systemPermissionDefinition",
-                path: "/system/permission-definition",
-                component: "system/permission-definition/index",
+                name: "systemTenantMenu",
+                title: "菜单配置",
+                routeName: "systemTenantMenu",
+                path: "/system/tenant-menu",
+                component: "system/tenant-menu/index",
                 redirect: null,
-                icon: "ele-Key",
+                icon: "iconfont icon-caidan",
                 type: MenuType.Menu,
-                sort: 70,
+                sort: 60,
                 authorizationMode: MenuAuthorizationMode.Permission,
-                permissionNames: new[] { "PermissionManagement.DefinitionManagement" },
-                permissionGroups: "PermissionManagement"),
+                permissionNames: new[] { "CenseqAdmin.Menus.CopyFromHost" },
+                scope: MenuScope.Tenant,
+                permissionGroups: "Admin"),
+
+            // ── 认证中心 ──────────────────────────────────────────────
             new(
                 key: "openiddict",
                 name: "openiddict",
@@ -323,9 +424,10 @@ public class MenuDataSeedContributor : DomainService, IDataSeedContributor, ITra
                 redirect: "/openiddict/application",
                 icon: "ele-Lock",
                 type: MenuType.Directory,
-                sort: 40,
+                sort: 30,
                 authorizationMode: MenuAuthorizationMode.Anonymous,
-                permissionNames: Array.Empty<string>()),
+                permissionNames: Array.Empty<string>(),
+                scope: MenuScope.Platform),
             new(
                 key: "openiddictApplication",
                 parentKey: "openiddict",
@@ -340,6 +442,7 @@ public class MenuDataSeedContributor : DomainService, IDataSeedContributor, ITra
                 sort: 10,
                 authorizationMode: MenuAuthorizationMode.Permission,
                 permissionNames: new[] { "OpenIddict.Applications" },
+                scope: MenuScope.Platform,
                 permissionGroups: "OpenIddict"),
             new(
                 key: "openiddictScope",
@@ -355,6 +458,7 @@ public class MenuDataSeedContributor : DomainService, IDataSeedContributor, ITra
                 sort: 20,
                 authorizationMode: MenuAuthorizationMode.Permission,
                 permissionNames: new[] { "OpenIddict.Scopes" },
+                scope: MenuScope.Platform,
                 permissionGroups: "OpenIddict")
         };
     }
@@ -374,6 +478,7 @@ public class MenuDataSeedContributor : DomainService, IDataSeedContributor, ITra
             int sort,
             MenuAuthorizationMode authorizationMode,
             IReadOnlyList<string> permissionNames,
+            MenuScope scope,
             string? parentKey = null,
             bool visible = true,
             bool keepAlive = true,
@@ -396,41 +501,27 @@ public class MenuDataSeedContributor : DomainService, IDataSeedContributor, ITra
             Affix = affix;
             AuthorizationMode = authorizationMode;
             PermissionNames = permissionNames;
+            Scope = scope;
             PermissionGroups = permissionGroups;
         }
 
         public string Key { get; }
-
         public string? ParentKey { get; }
-
         public string Name { get; }
-
         public string Title { get; }
-
         public string RouteName { get; }
-
         public string Path { get; }
-
         public string Component { get; }
-
         public string? Redirect { get; }
-
         public string Icon { get; }
-
         public MenuType Type { get; }
-
         public int Sort { get; }
-
         public bool Visible { get; }
-
         public bool KeepAlive { get; }
-
         public bool Affix { get; }
-
         public MenuAuthorizationMode AuthorizationMode { get; }
-
         public IReadOnlyList<string> PermissionNames { get; }
-
+        public MenuScope Scope { get; }
         public string? PermissionGroups { get; }
     }
 }

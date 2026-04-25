@@ -50,22 +50,19 @@ public class CurrentUserMenuAppService : AdminAppService, ICurrentUserMenuAppSer
         };
     }
 
-    private async Task<List<Menu>> GetRuntimeMenusAsync()
+    private Task<List<Menu>> GetRuntimeMenusAsync()
     {
-        var currentTenantMenus = await GetMenusByTenantAsync(CurrentTenant.Id);
-        if (CurrentTenant.Id.HasValue && currentTenantMenus.Count == 0)
-        {
-            return await GetMenusByTenantAsync(null);
-        }
-
-        return currentTenantMenus;
+        // 平台用户（host，无租户上下文）→ 仅加载 Platform scope 菜单
+        // 租户用户 → 仅加载 Tenant scope 菜单（可见性由 TenantPermissionGrant 门控，在权限检查时自动过滤）
+        var scope = CurrentTenant.Id.HasValue ? MenuScope.Tenant : MenuScope.Platform;
+        return GetMenusByScopeAsync(scope);
     }
 
-    private async Task<List<Menu>> GetMenusByTenantAsync(Guid? tenantId)
+    private async Task<List<Menu>> GetMenusByScopeAsync(MenuScope scope)
     {
         var queryable = await _menuRepository.GetQueryableAsync();
         return await AsyncExecuter.ToListAsync(
-            queryable.Where(x => x.TenantId == tenantId && x.Status)
+            queryable.Where(x => x.TenantId == null && x.Scope == scope && x.Status)
                 .OrderBy(x => x.Sort)
                 .ThenBy(x => x.CreationTime));
     }

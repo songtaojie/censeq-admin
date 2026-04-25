@@ -45,9 +45,21 @@
 						<el-text size="small" style="font-family: monospace">{{ scope.row.id }}</el-text>
 					</template>
 				</el-table-column>
-				<el-table-column label="操作" width="160" fixed="right" align="center">
+				<el-table-column prop="isActive" label="状态" width="90" align="center">
+					<template #default="scope">
+						<el-switch
+							v-model="scope.row.isActive"
+							@change="onToggleStatus(scope.row)"
+							inline-prompt
+							active-text="启用"
+							inactive-text="禁用"
+						/>
+					</template>
+				</el-table-column>
+				<el-table-column label="操作" width="240" fixed="right" align="center">
 					<template #default="scope">
 						<el-button icon="ele-Edit" size="small" text type="primary" @click="onOpenEditTenant('edit', scope.row)">编辑</el-button>
+						<el-button icon="ele-Key" size="small" text type="warning" @click="onResetPassword(scope.row)">重置密码</el-button>
 						<el-button icon="ele-Delete" size="small" text type="danger" @click="onRowDel(scope.row)">删除</el-button>
 					</template>
 				</el-table-column>
@@ -157,6 +169,39 @@ const onRowDel = (row: TenantDto) => {
 			await deleteTenant(row.id!);
 			ElMessage.success('删除成功');
 			await getTableData();
+		})
+		.catch(() => {});
+};
+
+const onToggleStatus = async (row: TenantDto & { _hasConnection?: boolean }) => {
+	try {
+		const { updateTenant } = useTenantApi();
+		await updateTenant(row.id!, {
+			name: row.name!,
+			code: row.code,
+			isActive: row.isActive,
+			concurrencyStamp: row.concurrencyStamp,
+		});
+		ElMessage.success(row.isActive ? '已启用' : '已禁用');
+		await getTableData();
+	} catch {
+		// 回滚 UI 状态
+		row.isActive = !row.isActive;
+		ElMessage.error('操作失败');
+	}
+};
+
+const onResetPassword = (row: TenantDto) => {
+	ElMessageBox.prompt(`请输入租户「${row.name}」新的 admin 密码`, '重置管理员密码', {
+		confirmButtonText: '确认',
+		cancelButtonText: '取消',
+		inputType: 'password',
+		inputValidator: (val) => (val && val.length >= 6 ? true : '密码长度至少 6 位'),
+	})
+		.then(async ({ value }) => {
+			const { resetAdminPassword } = useTenantApi();
+			await resetAdminPassword(row.id!, value);
+			ElMessage.success('密码已重置');
 		})
 		.catch(() => {});
 };
