@@ -12,8 +12,14 @@ namespace Censeq.Identity;
 /// 用户会话应用服务
 /// </summary>
 [Authorize]
+/// <summary>
+/// 身份会话应用服务
+/// </summary>
 public class IdentitySessionAppService : IdentityAppServiceBase, IIdentitySessionAppService
 {
+    /// <summary>
+    /// 身份会话管理器
+    /// </summary>
     protected IdentitySessionManager SessionManager { get; }
 
     public IdentitySessionAppService(IdentitySessionManager sessionManager)
@@ -44,6 +50,9 @@ public class IdentitySessionAppService : IdentityAppServiceBase, IIdentitySessio
     /// 获取指定用户的所有会话（需要管理权限）
     /// </summary>
     [Authorize(IdentityPermissions.Sessions.Manage)]
+    /// <summary>
+    /// Task<List<Identity会话Dto>>
+    /// </summary>
     public virtual async Task<List<IdentitySessionDto>> GetUserSessionsAsync(Guid userId)
     {
         var sessions = await SessionManager.GetListAsync(userId);

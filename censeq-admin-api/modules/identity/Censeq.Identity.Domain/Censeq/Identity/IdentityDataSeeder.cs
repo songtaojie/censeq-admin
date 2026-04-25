@@ -12,6 +12,9 @@ using Volo.Abp.Uow;
 
 namespace Censeq.Identity;
 
+/// <summary>
+/// 身份Data种子数据
+/// </summary>
 public class IdentityDataSeeder : ITransientDependency, IIdentityDataSeeder
 {
     private static readonly string[] DefaultAdminPermissions =
@@ -27,16 +30,49 @@ public class IdentityDataSeeder : ITransientDependency, IIdentityDataSeeder
         "AuditLogging.AuditLogs"
     ];
 
+    /// <summary>
+    /// IGuidGenerator
+    /// </summary>
     protected IGuidGenerator GuidGenerator { get; }
+    /// <summary>
+    /// I身份角色仓储
+    /// </summary>
     protected IIdentityRoleRepository RoleRepository { get; }
+    /// <summary>
+    /// I身份声明类型仓储
+    /// </summary>
     protected IIdentityClaimTypeRepository ClaimTypeRepository { get; }
+    /// <summary>
+    /// I身份用户仓储
+    /// </summary>
     protected IIdentityUserRepository UserRepository { get; }
+    /// <summary>
+    /// I查找Normalizer
+    /// </summary>
     protected ILookupNormalizer LookupNormalizer { get; }
+    /// <summary>
+    /// 身份用户管理器
+    /// </summary>
     protected IdentityUserManager UserManager { get; }
+    /// <summary>
+    /// 身份角色管理器
+    /// </summary>
     protected IdentityRoleManager RoleManager { get; }
+    /// <summary>
+    /// 身份声明类型管理器
+    /// </summary>
     protected IdentityClaimTypeManager ClaimTypeManager { get; }
+    /// <summary>
+    /// I权限Data种子数据
+    /// </summary>
     protected IPermissionDataSeeder PermissionDataSeeder { get; }
+    /// <summary>
+    /// ICurrent租户
+    /// </summary>
     protected ICurrentTenant CurrentTenant { get; }
+    /// <summary>
+    /// IOptions<IdentityOptions>
+    /// </summary>
     protected IOptions<IdentityOptions> IdentityOptions { get; }
 
     public IdentityDataSeeder(
@@ -66,6 +102,9 @@ public class IdentityDataSeeder : ITransientDependency, IIdentityDataSeeder
     }
 
     [UnitOfWork]
+    /// <summary>
+    /// Task<IdentityData种子Result>
+    /// </summary>
     public virtual async Task<IdentityDataSeedResult> SeedAsync(
         string adminEmail,
         string adminPassword,

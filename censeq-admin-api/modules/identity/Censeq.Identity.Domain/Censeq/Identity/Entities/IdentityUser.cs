@@ -12,6 +12,9 @@ using Volo.Abp.Users;
 
 namespace Censeq.Identity.Entities;
 
+/// <summary>
+/// 身份用户
+/// </summary>
 public class IdentityUser : FullAuditedAggregateRoot<Guid>, IUser, IHasEntityVersion
 {
     public virtual Guid? TenantId { get; protected set; }
@@ -94,10 +97,10 @@ public class IdentityUser : FullAuditedAggregateRoot<Guid>, IUser, IHasEntityVer
     public virtual bool TwoFactorEnabled { get; protected internal set; }
 
     /// <summary>
-    /// Gets or sets the date and time, in UTC, when any user lockout ends.
+    /// 获取或设置用户锁定结束的UTC日期时间
     /// </summary>
     /// <remarks>
-    /// A value in the past means the user is not locked out.
+    /// 过去的时间值表示用户未被锁定
     /// </remarks>
     public virtual DateTimeOffset? LockoutEnd { get; protected internal set; }
 
@@ -234,6 +237,9 @@ public class IdentityUser : FullAuditedAggregateRoot<Guid>, IUser, IHasEntityVer
         }
     }
 
+    /// <summary>
+    /// 身份用户声明
+    /// </summary>
     public virtual IdentityUserClaim FindClaim([NotNull] Claim claim)
     {
         Check.NotNull(claim, nameof(claim));
@@ -287,6 +293,9 @@ public class IdentityUser : FullAuditedAggregateRoot<Guid>, IUser, IHasEntityVer
     }
 
     [CanBeNull]
+    /// <summary>
+    /// 身份用户令牌
+    /// </summary>
     public virtual IdentityUserToken FindToken(string loginProvider, string name)
     {
         return Tokens.FirstOrDefault(t => t.LoginProvider == loginProvider && t.Name == name)!;

@@ -16,8 +16,15 @@ namespace Censeq.Identity;
     typeof(AbpValidationModule),
     typeof(AbpFeaturesModule)
     )]
+/// <summary>
+/// Censeq 身份领域共享模块
+/// </summary>
 public class CenseqIdentityDomainSharedModule : AbpModule
 {
+    /// <summary>
+    /// 配置服务
+    /// </summary>
+    /// <param name="context">服务配置上下文</param>
     public override void ConfigureServices(ServiceConfigurationContext context)
     {
         Configure<AbpVirtualFileSystemOptions>(options =>

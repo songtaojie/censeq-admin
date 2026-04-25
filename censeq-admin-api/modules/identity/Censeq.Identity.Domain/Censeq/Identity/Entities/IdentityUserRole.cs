@@ -5,19 +5,19 @@ using Volo.Abp.MultiTenancy;
 namespace Censeq.Identity.Entities;
 
 /// <summary>
-/// Represents the link between a user and a role.
+/// 用户与角色的关联
 /// </summary>
 public class IdentityUserRole : Entity, IMultiTenant
 {
     public virtual Guid? TenantId { get; protected set; }
 
     /// <summary>
-    /// Gets or sets the primary key of the user that is linked to a role.
+    /// 关联用户的主键
     /// </summary>
     public virtual Guid UserId { get; protected set; }
 
     /// <summary>
-    /// Gets or sets the primary key of the role that is linked to the user.
+    /// 关联角色的主键
     /// </summary>
     public virtual Guid RoleId { get; protected set; }
 

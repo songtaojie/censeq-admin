@@ -11,5 +11,8 @@ public class IdentityUserUpdateRolesDto
     /// 角色名称列表
     /// </summary>
     [Required]
+    /// <summary>
+    /// string[]
+    /// </summary>
     public string[] RoleNames { get; set; }
 }

@@ -15,15 +15,39 @@ using Volo.Abp.Security.Claims;
 
 namespace Censeq.Identity;
 
+/// <summary>
+/// 身份动态声明主体贡献者缓存
+/// </summary>
 public class IdentityDynamicClaimsPrincipalContributorCache : ITransientDependency
 {
+    /// <summary>
+    /// ILogger<Identity动态声明主体贡献者Cache>
+    /// </summary>
     public ILogger<IdentityDynamicClaimsPrincipalContributorCache> Logger { get; set; }
 
+    /// <summary>
+    /// IDistributedCache<Abp动态声明缓存Item>
+    /// </summary>
     protected IDistributedCache<AbpDynamicClaimCacheItem> DynamicClaimCache { get; }
+    /// <summary>
+    /// ICurrent租户
+    /// </summary>
     protected ICurrentTenant CurrentTenant { get; }
+    /// <summary>
+    /// 身份用户管理器
+    /// </summary>
     protected IdentityUserManager UserManager { get; }
+    /// <summary>
+    /// I用户声明主体Factory<IdentityUser>
+    /// </summary>
     protected IUserClaimsPrincipalFactory<IdentityUser> UserClaimsPrincipalFactory { get; }
+    /// <summary>
+    /// IOptions<Abp声明主体工厂Options>
+    /// </summary>
     protected IOptions<AbpClaimsPrincipalFactoryOptions> AbpClaimsPrincipalFactoryOptions { get; }
+    /// <summary>
+    /// IOptions<Identity动态声明主体贡献者缓存Options>
+    /// </summary>
     protected IOptions<IdentityDynamicClaimsPrincipalContributorCacheOptions> CacheOptions { get; }
 
     public IdentityDynamicClaimsPrincipalContributorCache(
@@ -44,6 +68,9 @@ public class IdentityDynamicClaimsPrincipalContributorCache : ITransientDependen
         Logger = NullLogger<IdentityDynamicClaimsPrincipalContributorCache>.Instance;
     }
 
+    /// <summary>
+    /// Task<Abp动态声明缓存Item>
+    /// </summary>
     public virtual async Task<AbpDynamicClaimCacheItem> GetAsync(Guid userId, Guid? tenantId = null)
     {
         Logger.LogDebug($"Get dynamic claims cache for user: {userId}");

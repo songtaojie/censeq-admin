@@ -13,55 +13,55 @@ using Volo.Abp.MultiTenancy;
 namespace Censeq.Identity.Entities;
 
 /// <summary>
-/// Represents a role in the identity system
+/// 身份系统中的角色
 /// </summary>
 public class IdentityRole : AggregateRoot<Guid>, IMultiTenant, IHasEntityVersion
 {
     public virtual Guid? TenantId { get; protected set; }
 
     /// <summary>
-    /// Gets or sets the name for this role.
+    /// 角色名称
     /// </summary>
     public virtual string Name { get; protected internal set; }
 
     /// <summary>
-    /// Gets or sets the normalized name for this role.
+    /// 标准化角色名称
     /// </summary>
     [DisableAuditing]
     public virtual string NormalizedName { get; protected internal set; }
 
     /// <summary>
-    /// Gets or sets the business code for this role.
+    /// 角色业务代码
     /// </summary>
     public virtual string? Code { get; protected internal set; }
 
     /// <summary>
-    /// Navigation property for claims in this role.
+    /// 角色声明导航属性
     /// </summary>
     public virtual ICollection<IdentityRoleClaim> Claims { get; protected set; }
 
     /// <summary>
-    /// A default role is automatically assigned to a new user
+    /// 默认角色会自动分配给新用户
     /// </summary>
     public virtual bool IsDefault { get; set; }
 
     /// <summary>
-    /// A static role can not be deleted/renamed
+    /// 静态角色不能被删除或重命名
     /// </summary>
     public virtual bool IsStatic { get; set; }
 
     /// <summary>
-    /// A user can see other user's public roles
+    /// 用户可以看到其他用户的公开角色
     /// </summary>
     public virtual bool IsPublic { get; set; }
 
     /// <summary>
-    /// A version value that is increased whenever the entity is changed.
+    /// 实体变更时递增的版本值
     /// </summary>
     public virtual int EntityVersion { get; protected set; }
 
     /// <summary>
-    /// Initializes a new instance of <see cref="IdentityRole"/>.
+    /// 初始化 <see cref="IdentityRole"/> 的新实例
     /// </summary>
     protected IdentityRole() { }
 
@@ -97,6 +97,9 @@ public class IdentityRole : AggregateRoot<Guid>, IMultiTenant, IHasEntityVersion
         }
     }
 
+    /// <summary>
+    /// 身份角色声明
+    /// </summary>
     public virtual IdentityRoleClaim FindClaim([NotNull] Claim claim)
     {
         Check.NotNull(claim, nameof(claim));

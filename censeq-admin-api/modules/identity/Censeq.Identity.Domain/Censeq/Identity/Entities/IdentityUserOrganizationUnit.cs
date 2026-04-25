@@ -36,6 +36,9 @@ public class IdentityUserOrganizationUnit : CreationAuditedEntity, IMultiTenant
         TenantId = tenantId;
     }
 
+    /// <summary>
+    /// object[]
+    /// </summary>
     public override object[] GetKeys()
     {
         return new object[] { UserId, OrganizationUnitId };

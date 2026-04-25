@@ -7,6 +7,9 @@ using Volo.Abp.Domain.Repositories;
 
 namespace Censeq.Identity;
 
+/// <summary>
+/// I组织单元仓储接口
+/// </summary>
 public interface IOrganizationUnitRepository : IBasicRepository<OrganizationUnit, Guid>
 {
     Task<List<OrganizationUnit>> GetChildrenAsync(

@@ -6,6 +6,9 @@ using Volo.Abp.Domain.Repositories;
 
 namespace Censeq.Identity;
 
+/// <summary>
+/// I身份用户委托仓储接口
+/// </summary>
 public interface IIdentityUserDelegationRepository: IBasicRepository<IdentityUserDelegation, Guid>
 {
     Task<List<IdentityUserDelegation>> GetListAsync(

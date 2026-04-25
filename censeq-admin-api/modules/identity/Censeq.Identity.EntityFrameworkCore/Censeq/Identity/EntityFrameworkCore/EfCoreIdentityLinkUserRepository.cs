@@ -9,6 +9,9 @@ using Volo.Abp.EntityFrameworkCore;
 
 namespace Censeq.Identity.EntityFrameworkCore;
 
+/// <summary>
+/// Ef核心身份关联用户仓储
+/// </summary>
 public class EfCoreIdentityLinkUserRepository : EfCoreRepository<ICenseqIdentityDbContext, IdentityLinkUser, Guid>, IIdentityLinkUserRepository
 {
     public EfCoreIdentityLinkUserRepository(IDbContextProvider<ICenseqIdentityDbContext> dbContextProvider)
@@ -17,6 +20,9 @@ public class EfCoreIdentityLinkUserRepository : EfCoreRepository<ICenseqIdentity
 
     }
 
+    /// <summary>
+    /// Task<Identity关联User>
+    /// </summary>
     public virtual async Task<IdentityLinkUser> FindAsync(IdentityLinkUserInfo sourceLinkUserInfo, IdentityLinkUserInfo targetLinkUserInfo, CancellationToken cancellationToken = default)
     {
         return (await (await GetDbSetAsync())
@@ -29,6 +35,9 @@ public class EfCoreIdentityLinkUserRepository : EfCoreRepository<ICenseqIdentity
             , cancellationToken: GetCancellationToken(cancellationToken)))!;
     }
 
+    /// <summary>
+    /// Task<List<Identity关联User>>
+    /// </summary>
     public virtual async Task<List<IdentityLinkUser>> GetListAsync(IdentityLinkUserInfo linkUserInfo, List<IdentityLinkUserInfo>? excludes = null,
         CancellationToken cancellationToken = default)
     {

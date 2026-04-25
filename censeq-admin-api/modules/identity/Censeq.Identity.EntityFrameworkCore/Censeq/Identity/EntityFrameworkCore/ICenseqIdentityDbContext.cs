@@ -6,6 +6,9 @@ using Volo.Abp.EntityFrameworkCore;
 namespace Censeq.Identity.EntityFrameworkCore;
 
 [ConnectionStringName(CenseqIdentityDbProperties.ConnectionStringName)]
+/// <summary>
+/// ICenseq身份数据库上下文接口
+/// </summary>
 public interface ICenseqIdentityDbContext : IEfCoreDbContext
 {
     DbSet<IdentityUser> Users { get; }

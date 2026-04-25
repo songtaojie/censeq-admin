@@ -12,11 +12,17 @@ using Volo.Abp.Uow;
 
 namespace Censeq.Identity;
 
+/// <summary>
+/// 用户实体UpdatedOrDeleted事件处理器
+/// </summary>
 public class UserEntityUpdatedOrDeletedEventHandler :
     ILocalEventHandler<EntityUpdatedEventData<IdentityUser>>,
     ILocalEventHandler<EntityDeletedEventData<IdentityUser>>,
     ITransientDependency
 {
+    /// <summary>
+    /// ILogger<User实体UpdatedOrDeleted事件Handler>
+    /// </summary>
     public ILogger<UserEntityUpdatedOrDeletedEventHandler> Logger { get; set; }
 
     private readonly IDistributedCache<AbpDynamicClaimCacheItem> _dynamicClaimCache;

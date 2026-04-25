@@ -2,6 +2,9 @@ using System;
 
 namespace Censeq.Identity;
 
+/// <summary>
+/// 身份会话选项
+/// </summary>
 public class IdentitySessionOptions
 {
     /// <summary>

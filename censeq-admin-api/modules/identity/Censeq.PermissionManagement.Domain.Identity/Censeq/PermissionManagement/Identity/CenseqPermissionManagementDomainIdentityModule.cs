@@ -10,6 +10,9 @@ namespace Censeq.PermissionManagement.Identity;
     typeof(CenseqPermissionManagementDomainModule),
     typeof(AbpUsersAbstractionModule)
 )]
+/// <summary>
+/// Censeq权限管理领域身份模块
+/// </summary>
 public class CenseqPermissionManagementDomainIdentityModule : AbpModule
 {
     public override void ConfigureServices(ServiceConfigurationContext context)

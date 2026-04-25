@@ -4,6 +4,9 @@ using Volo.Abp.MultiTenancy;
 
 namespace Censeq.Identity.Entities;
 
+/// <summary>
+/// 身份用户委托
+/// </summary>
 public class IdentityUserDelegation : BasicAggregateRoot<Guid>, IMultiTenant
 {
     public virtual Guid? TenantId { get; protected set; }

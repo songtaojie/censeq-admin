@@ -5,6 +5,9 @@ using Volo.Abp.MultiTenancy;
 
 namespace Censeq.Identity.Entities;
 
+/// <summary>
+/// 身份会话
+/// </summary>
 public class IdentitySession : BasicAggregateRoot<Guid>, IMultiTenant
 {
     public virtual string SessionId { get; protected set; }
@@ -72,6 +75,9 @@ public class IdentitySession : BasicAggregateRoot<Guid>, IMultiTenant
         IpAddresses = JoinAsString(ipAddresses);
     }
 
+    /// <summary>
+    /// IEnumerable<string>
+    /// </summary>
     public IEnumerable<string> GetIpAddresses()
     {
         return GetArrayFromString(IpAddresses);

@@ -6,6 +6,9 @@ using Volo.Abp.Domain.Repositories;
 
 namespace Censeq.Identity;
 
+/// <summary>
+/// I身份声明类型仓储接口
+/// </summary>
 public interface IIdentityClaimTypeRepository : IBasicRepository<IdentityClaimType, Guid>
 {
     /// <summary>

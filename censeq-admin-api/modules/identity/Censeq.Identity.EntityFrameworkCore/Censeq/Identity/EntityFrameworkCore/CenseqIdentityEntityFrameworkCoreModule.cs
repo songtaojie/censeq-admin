@@ -8,6 +8,9 @@ namespace Censeq.Identity.EntityFrameworkCore;
 [DependsOn(
     typeof(CenseqIdentityDomainModule),
     typeof(AbpUsersEntityFrameworkCoreModule))]
+/// <summary>
+/// Censeq身份实体Framework核心模块
+/// </summary>
 public class CenseqIdentityEntityFrameworkCoreModule : AbpModule
 {
     public override void ConfigureServices(ServiceConfigurationContext context)

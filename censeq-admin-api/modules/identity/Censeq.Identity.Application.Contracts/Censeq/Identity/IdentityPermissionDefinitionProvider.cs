@@ -4,6 +4,9 @@ using Censeq.Identity.Localization;
 
 namespace Censeq.Identity;
 
+/// <summary>
+/// 身份权限Definition提供程序
+/// </summary>
 public class IdentityPermissionDefinitionProvider : PermissionDefinitionProvider
 {
     public override void Define(IPermissionDefinitionContext context)

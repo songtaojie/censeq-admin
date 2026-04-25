@@ -10,6 +10,9 @@ namespace Censeq.Identity
 {
     public class CenseqIdentityUserValidator : IUserValidator<IdentityUser>
     {
+        /// <summary>
+        /// IStringLocalizer<IdentityResource>
+        /// </summary>
         protected IStringLocalizer<IdentityResource> Localizer { get; }
 
         public CenseqIdentityUserValidator(IStringLocalizer<IdentityResource> localizer)
@@ -17,6 +20,9 @@ namespace Censeq.Identity
             Localizer = localizer;
         }
 
+        /// <summary>
+        /// Task<IdentityResult>
+        /// </summary>
         public virtual async Task<IdentityResult> ValidateAsync(UserManager<IdentityUser> manager, IdentityUser user)
         {
             var describer = new IdentityErrorDescriber();

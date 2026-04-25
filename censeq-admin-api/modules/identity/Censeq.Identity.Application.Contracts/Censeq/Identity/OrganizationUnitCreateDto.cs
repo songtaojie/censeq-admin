@@ -3,6 +3,9 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Censeq.Identity;
 
+/// <summary>
+/// 组织单元创建数据传输对象
+/// </summary>
 public class OrganizationUnitCreateDto
 {
     [Required]

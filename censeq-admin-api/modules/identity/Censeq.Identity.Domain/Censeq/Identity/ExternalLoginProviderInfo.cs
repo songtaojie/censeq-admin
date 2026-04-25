@@ -4,6 +4,9 @@ using Volo.Abp;
 
 namespace Censeq.Identity;
 
+/// <summary>
+/// 外部登录提供程序信息
+/// </summary>
 public class ExternalLoginProviderInfo
 {
     public string Name { get; }

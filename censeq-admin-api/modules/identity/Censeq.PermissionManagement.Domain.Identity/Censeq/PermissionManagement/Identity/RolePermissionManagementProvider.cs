@@ -10,10 +10,16 @@ using Censeq.PermissionManagement.Entities;
 
 namespace Censeq.PermissionManagement.Identity;
 
+/// <summary>
+/// 角色权限管理提供程序
+/// </summary>
 public class RolePermissionManagementProvider : PermissionManagementProvider
 {
     public override string Name => RolePermissionValueProvider.ProviderName;
 
+    /// <summary>
+    /// I用户角色Finder
+    /// </summary>
     protected IUserRoleFinder UserRoleFinder { get; }
 
     public RolePermissionManagementProvider(
@@ -29,6 +35,9 @@ public class RolePermissionManagementProvider : PermissionManagementProvider
         UserRoleFinder = userRoleFinder;
     }
 
+    /// <summary>
+    /// override Task<Permission值提供程序GrantInfo>
+    /// </summary>
     public async override Task<PermissionValueProviderGrantInfo> CheckAsync(string name, string providerName, string providerKey)
     {
         var multipleGrantInfo = await CheckAsync(new[] { name }, providerName, providerKey);
@@ -36,6 +45,9 @@ public class RolePermissionManagementProvider : PermissionManagementProvider
         return multipleGrantInfo.Result.Values.First();
     }
 
+    /// <summary>
+    /// override Task<Multiple权限值提供程序GrantInfo>
+    /// </summary>
     public async override Task<MultiplePermissionValueProviderGrantInfo> CheckAsync(string[] names, string providerName, string providerKey)
     {
         var multiplePermissionValueProviderGrantInfo = new MultiplePermissionValueProviderGrantInfo(names);

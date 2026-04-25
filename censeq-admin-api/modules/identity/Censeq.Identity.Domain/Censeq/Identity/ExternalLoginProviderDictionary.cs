@@ -3,6 +3,9 @@ using JetBrains.Annotations;
 
 namespace Censeq.Identity;
 
+/// <summary>
+/// 外部登录提供程序Dictionary
+/// </summary>
 public class ExternalLoginProviderDictionary : Dictionary<string, ExternalLoginProviderInfo>
 {
     /// <summary>

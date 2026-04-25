@@ -9,9 +9,18 @@ using Volo.Abp.Users;
 
 namespace Censeq.Identity;
 
+/// <summary>
+/// 身份用户仓储外部用户查找服务提供程序
+/// </summary>
 public class IdentityUserRepositoryExternalUserLookupServiceProvider : IExternalUserLookupServiceProvider, ITransientDependency
 {
+    /// <summary>
+    /// I身份用户仓储
+    /// </summary>
     protected IIdentityUserRepository UserRepository { get; }
+    /// <summary>
+    /// I查找Normalizer
+    /// </summary>
     protected ILookupNormalizer LookupNormalizer { get; }
 
     public IdentityUserRepositoryExternalUserLookupServiceProvider(
@@ -22,6 +31,9 @@ public class IdentityUserRepositoryExternalUserLookupServiceProvider : IExternal
         LookupNormalizer = lookupNormalizer;
     }
 
+    /// <summary>
+    /// Task<I用户Data>
+    /// </summary>
     public virtual async Task<IUserData> FindByIdAsync(
         Guid id,
         CancellationToken cancellationToken = default)
@@ -35,6 +47,9 @@ public class IdentityUserRepositoryExternalUserLookupServiceProvider : IExternal
             )?.ToAbpUserData()!;
     }
 
+    /// <summary>
+    /// Task<I用户Data>
+    /// </summary>
     public virtual async Task<IUserData> FindByUserNameAsync(
         string userName,
         CancellationToken cancellationToken = default)
@@ -48,6 +63,9 @@ public class IdentityUserRepositoryExternalUserLookupServiceProvider : IExternal
             )?.ToAbpUserData()!;
     }
 
+    /// <summary>
+    /// Task<List<I用户Data>>
+    /// </summary>
     public virtual async Task<List<IUserData>> SearchAsync(
         string? sorting = null,
         string? filter = null,
@@ -67,6 +85,9 @@ public class IdentityUserRepositoryExternalUserLookupServiceProvider : IExternal
         return users.Select(u => u.ToAbpUserData()).ToList();
     }
 
+    /// <summary>
+    /// Task<long>
+    /// </summary>
     public async Task<long> GetCountAsync(
         string? filter = null,
         CancellationToken cancellationToken = new CancellationToken())

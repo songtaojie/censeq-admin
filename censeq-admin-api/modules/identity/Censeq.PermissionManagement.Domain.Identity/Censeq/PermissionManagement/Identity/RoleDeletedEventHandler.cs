@@ -9,10 +9,16 @@ using Censeq.Identity;
 
 namespace Censeq.PermissionManagement.Identity;
 
+/// <summary>
+/// 角色Deleted事件处理器
+/// </summary>
 public class RoleDeletedEventHandler :
     IDistributedEventHandler<EntityDeletedEto<IdentityRoleEto>>,
     ITransientDependency
 {
+    /// <summary>
+    /// I权限管理器
+    /// </summary>
     protected IPermissionManager PermissionManager { get; }
 
     public RoleDeletedEventHandler(IPermissionManager permissionManager)

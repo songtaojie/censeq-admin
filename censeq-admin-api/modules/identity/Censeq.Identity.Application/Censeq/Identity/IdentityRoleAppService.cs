@@ -14,10 +14,22 @@ using Volo.Abp;
 namespace Censeq.Identity;
 
 [Authorize(IdentityPermissions.Roles.Default)]
+/// <summary>
+/// 身份角色应用服务
+/// </summary>
 public class IdentityRoleAppService : IdentityAppServiceBase, IIdentityRoleAppService
 {
+    /// <summary>
+    /// 身份角色管理器
+    /// </summary>
     protected IdentityRoleManager RoleManager { get; }
+    /// <summary>
+    /// I身份角色仓储
+    /// </summary>
     protected IIdentityRoleRepository RoleRepository { get; }
+    /// <summary>
+    /// I身份声明类型仓储
+    /// </summary>
     protected IIdentityClaimTypeRepository ClaimTypeRepository { get; }
 
     public IdentityRoleAppService(
@@ -30,6 +42,9 @@ public class IdentityRoleAppService : IdentityAppServiceBase, IIdentityRoleAppSe
         ClaimTypeRepository = claimTypeRepository;
     }
 
+    /// <summary>
+    /// Task<Identity角色Dto>
+    /// </summary>
     public virtual async Task<IdentityRoleDto> GetAsync(Guid id)
     {
         return ObjectMapper.Map<IdentityRole, IdentityRoleDto>(
@@ -37,6 +52,9 @@ public class IdentityRoleAppService : IdentityAppServiceBase, IIdentityRoleAppSe
         );
     }
 
+    /// <summary>
+    /// Task<List结果Dto<Identity角色Dto>>
+    /// </summary>
     public virtual async Task<ListResultDto<IdentityRoleDto>> GetAllListAsync()
     {
         var list = await RoleRepository.GetListAsync();
@@ -45,6 +63,9 @@ public class IdentityRoleAppService : IdentityAppServiceBase, IIdentityRoleAppSe
         );
     }
 
+    /// <summary>
+    /// Task<Paged结果Dto<Identity角色Dto>>
+    /// </summary>
     public virtual async Task<PagedResultDto<IdentityRoleDto>> GetListAsync(GetIdentityRolesInput input)
     {
         var list = await RoleRepository.GetListAsync(input.Sorting, input.MaxResultCount, input.SkipCount, input.Filter);
@@ -57,6 +78,9 @@ public class IdentityRoleAppService : IdentityAppServiceBase, IIdentityRoleAppSe
     }
 
     [Authorize(IdentityPermissions.Roles.Create)]
+    /// <summary>
+    /// Task<Identity角色Dto>
+    /// </summary>
     public virtual async Task<IdentityRoleDto> CreateAsync(IdentityRoleCreateDto input)
     {
         var normalizedCode = NormalizeRoleCode(input.Code);
@@ -83,6 +107,9 @@ public class IdentityRoleAppService : IdentityAppServiceBase, IIdentityRoleAppSe
     }
 
     [Authorize(IdentityPermissions.Roles.Update)]
+    /// <summary>
+    /// Task<Identity角色Dto>
+    /// </summary>
     public virtual async Task<IdentityRoleDto> UpdateAsync(Guid id, IdentityRoleUpdateDto input)
     {
         var role = await RoleManager.GetByIdAsync(id);
@@ -135,6 +162,9 @@ public class IdentityRoleAppService : IdentityAppServiceBase, IIdentityRoleAppSe
     }
 
     [Authorize(IdentityPermissions.Roles.Default)]
+    /// <summary>
+    /// Task<Identity角色声明列表Dto>
+    /// </summary>
     public virtual async Task<IdentityRoleClaimListDto> GetClaimsAsync(Guid roleId)
     {
         var role = await RoleRepository.FindByNormalizedNameAsync(

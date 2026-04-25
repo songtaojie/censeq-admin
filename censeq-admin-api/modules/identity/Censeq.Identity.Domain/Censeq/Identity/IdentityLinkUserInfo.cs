@@ -2,6 +2,9 @@
 
 namespace Censeq.Identity;
 
+/// <summary>
+/// 身份关联用户信息
+/// </summary>
 public class IdentityLinkUserInfo
 {
     public virtual Guid UserId { get; set; }

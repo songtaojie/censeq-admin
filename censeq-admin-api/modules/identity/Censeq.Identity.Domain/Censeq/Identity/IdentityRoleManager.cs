@@ -15,15 +15,39 @@ using Censeq.Identity.Localization;
 
 namespace Censeq.Identity;
 
+/// <summary>
+/// 身份角色管理器
+/// </summary>
 public class IdentityRoleManager : RoleManager<IdentityRole>, IDomainService
 {
+    /// <summary>
+    /// Cancellation令牌
+    /// </summary>
     protected override CancellationToken CancellationToken => CancellationTokenProvider.Token;
 
+    /// <summary>
+    /// IStringLocalizer<IdentityResource>
+    /// </summary>
     protected IStringLocalizer<IdentityResource> Localizer { get; }
+    /// <summary>
+    /// ICancellation令牌提供程序
+    /// </summary>
     protected ICancellationTokenProvider CancellationTokenProvider { get; }
+    /// <summary>
+    /// I身份用户仓储
+    /// </summary>
     protected IIdentityUserRepository UserRepository { get; }
+    /// <summary>
+    /// I组织单元仓储
+    /// </summary>
     protected IOrganizationUnitRepository OrganizationUnitRepository { get; }
+    /// <summary>
+    /// 组织单元管理器
+    /// </summary>
     protected OrganizationUnitManager OrganizationUnitManager { get; }
+    /// <summary>
+    /// IDistributedCache<Abp动态声明缓存Item>
+    /// </summary>
     protected IDistributedCache<AbpDynamicClaimCacheItem> DynamicClaimCache { get; }
 
     public IdentityRoleManager(
@@ -53,6 +77,9 @@ public class IdentityRoleManager : RoleManager<IdentityRole>, IDomainService
         DynamicClaimCache = dynamicClaimCache;
     }
 
+    /// <summary>
+    /// Task<IdentityRole>
+    /// </summary>
     public virtual async Task<IdentityRole> GetByIdAsync(Guid id)
     {
         var role = await Store.FindByIdAsync(id.ToString(), CancellationToken);
@@ -64,6 +91,9 @@ public class IdentityRoleManager : RoleManager<IdentityRole>, IDomainService
         return role;
     }
 
+    /// <summary>
+    /// override Task<IdentityResult>
+    /// </summary>
     public async override Task<IdentityResult> SetRoleNameAsync(IdentityRole role, string? name)
     {
         if (role.IsStatic && role.Name != name)
@@ -82,6 +112,9 @@ public class IdentityRoleManager : RoleManager<IdentityRole>, IDomainService
         return result;
     }
 
+    /// <summary>
+    /// override Task<IdentityResult>
+    /// </summary>
     public async override Task<IdentityResult> DeleteAsync(IdentityRole role)
     {
         if (role.IsStatic)

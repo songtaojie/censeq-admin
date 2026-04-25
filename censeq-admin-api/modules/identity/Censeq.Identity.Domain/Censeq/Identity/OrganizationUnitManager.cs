@@ -19,10 +19,25 @@ namespace Censeq.Identity;
 /// </summary>
 public class OrganizationUnitManager : DomainService
 {
+    /// <summary>
+    /// I组织单元仓储
+    /// </summary>
     protected IOrganizationUnitRepository OrganizationUnitRepository { get; }
+    /// <summary>
+    /// IStringLocalizer<IdentityResource>
+    /// </summary>
     protected IStringLocalizer<IdentityResource> Localizer { get; }
+    /// <summary>
+    /// I身份角色仓储
+    /// </summary>
     protected IIdentityRoleRepository IdentityRoleRepository { get; }
+    /// <summary>
+    /// IDistributedCache<Abp动态声明缓存Item>
+    /// </summary>
     protected IDistributedCache<AbpDynamicClaimCacheItem> DynamicClaimCache { get; }
+    /// <summary>
+    /// ICancellation令牌提供程序
+    /// </summary>
     protected ICancellationTokenProvider CancellationTokenProvider { get; }
 
     public OrganizationUnitManager(
@@ -54,6 +69,9 @@ public class OrganizationUnitManager : DomainService
         await RemoveDynamicClaimCacheAsync(organizationUnit);
     }
 
+    /// <summary>
+    /// Task<string>
+    /// </summary>
     public virtual async Task<string> GetNextChildCodeAsync(Guid? parentId)
     {
         var lastChild = await GetLastChildOrNullAsync(parentId);
@@ -72,6 +90,9 @@ public class OrganizationUnitManager : DomainService
         );
     }
 
+    /// <summary>
+    /// Task<OrganizationUnit>
+    /// </summary>
     public virtual async Task<OrganizationUnit> GetLastChildOrNullAsync(Guid? parentId)
     {
         var children = await OrganizationUnitRepository.GetChildrenAsync(parentId);
@@ -130,6 +151,9 @@ public class OrganizationUnitManager : DomainService
         await OrganizationUnitRepository.UpdateAsync(organizationUnit);
     }
 
+    /// <summary>
+    /// Task<string>
+    /// </summary>
     public virtual async Task<string> GetCodeOrDefaultAsync(Guid id)
     {
         var ou = await OrganizationUnitRepository.FindAsync(id);
@@ -149,6 +173,9 @@ public class OrganizationUnitManager : DomainService
         }
     }
 
+    /// <summary>
+    /// Task<List<OrganizationUnit>>
+    /// </summary>
     public async Task<List<OrganizationUnit>> FindChildrenAsync(Guid? parentId, bool recursive = false)
     {
         if (!recursive)
@@ -166,6 +193,9 @@ public class OrganizationUnitManager : DomainService
         return await OrganizationUnitRepository.GetAllChildrenWithParentCodeAsync(code, parentId, includeDetails: true);
     }
 
+    /// <summary>
+    /// Task<bool>
+    /// </summary>
     public virtual Task<bool> IsInOrganizationUnitAsync(IdentityUser user, OrganizationUnit ou)
     {
         return Task.FromResult(user.IsInOrganizationUnit(ou.Id));

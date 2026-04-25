@@ -10,6 +10,9 @@ namespace Censeq.Identity;
 
 public class CenseqIdentityOptionsManager : AbpDynamicOptionsManager<IdentityOptions>
 {
+    /// <summary>
+    /// ISetting提供程序
+    /// </summary>
     protected ISettingProvider SettingProvider { get; }
 
     public CenseqIdentityOptionsManager(IOptionsFactory<IdentityOptions> factory,

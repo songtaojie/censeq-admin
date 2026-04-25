@@ -55,6 +55,9 @@ public class CenseqSecurityStampValidator : SecurityStampValidator<IdentityUser>
     /// <param name="context">Cookie 验证主体上下文</param>
     /// <returns>异步任务</returns>
     [UnitOfWork]
+    /// <summary>
+    /// override Task
+    /// </summary>
     public async override Task ValidateAsync(CookieValidatePrincipalContext context)
     {
         TenantConfiguration? tenant = null;

@@ -8,9 +8,18 @@ using Volo.Abp.Application.Dtos;
 namespace Censeq.Identity;
 
 [Authorize(IdentityPermissions.OrganizationUnits.Default)]
+/// <summary>
+/// 组织单元应用服务
+/// </summary>
 public class OrganizationUnitAppService : IdentityAppServiceBase, IOrganizationUnitAppService
 {
+    /// <summary>
+    /// I组织单元仓储
+    /// </summary>
     protected IOrganizationUnitRepository OrganizationUnitRepository { get; }
+    /// <summary>
+    /// 组织单元管理器
+    /// </summary>
     protected OrganizationUnitManager OrganizationUnitManager { get; }
 
     public OrganizationUnitAppService(
@@ -21,12 +30,18 @@ public class OrganizationUnitAppService : IdentityAppServiceBase, IOrganizationU
         OrganizationUnitManager = organizationUnitManager;
     }
 
+    /// <summary>
+    /// Task<Organization单元Dto>
+    /// </summary>
     public virtual async Task<OrganizationUnitDto> GetAsync(Guid id)
     {
         var entity = await OrganizationUnitRepository.GetAsync(id);
         return ObjectMapper.Map<OrganizationUnit, OrganizationUnitDto>(entity);
     }
 
+    /// <summary>
+    /// Task<List结果Dto<Organization单元Dto>>
+    /// </summary>
     public virtual async Task<ListResultDto<OrganizationUnitDto>> GetAllListAsync()
     {
         var list = await OrganizationUnitRepository.GetListAsync(
@@ -40,6 +55,9 @@ public class OrganizationUnitAppService : IdentityAppServiceBase, IOrganizationU
     }
 
     [Authorize(IdentityPermissions.OrganizationUnits.Create)]
+    /// <summary>
+    /// Task<Organization单元Dto>
+    /// </summary>
     public virtual async Task<OrganizationUnitDto> CreateAsync(OrganizationUnitCreateDto input)
     {
         var entity = new OrganizationUnit(
@@ -58,6 +76,9 @@ public class OrganizationUnitAppService : IdentityAppServiceBase, IOrganizationU
     }
 
     [Authorize(IdentityPermissions.OrganizationUnits.Update)]
+    /// <summary>
+    /// Task<Organization单元Dto>
+    /// </summary>
     public virtual async Task<OrganizationUnitDto> UpdateAsync(Guid id, OrganizationUnitUpdateDto input)
     {
         var entity = await OrganizationUnitRepository.GetAsync(id);

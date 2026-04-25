@@ -9,6 +9,9 @@ using Volo.Abp.Domain.Repositories;
 
 namespace Censeq.Identity;
 
+/// <summary>
+/// I身份用户仓储接口
+/// </summary>
 public interface IIdentityUserRepository : IBasicRepository<IdentityUser, Guid>
 {
     Task<IdentityUser> FindByNormalizedUserNameAsync(

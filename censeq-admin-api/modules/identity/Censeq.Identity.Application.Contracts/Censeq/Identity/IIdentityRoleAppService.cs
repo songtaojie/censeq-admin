@@ -6,6 +6,9 @@ using Volo.Abp.Application.Services;
 
 namespace Censeq.Identity;
 
+/// <summary>
+/// 身份角色应用服务接口
+/// </summary>
 public interface IIdentityRoleAppService
     : ICrudAppService<
         IdentityRoleDto,
@@ -14,6 +17,9 @@ public interface IIdentityRoleAppService
         IdentityRoleCreateDto,
         IdentityRoleUpdateDto>
 {
+    /// <summary>
+    /// 获取所有角色列表
+    /// </summary>
     Task<ListResultDto<IdentityRoleDto>> GetAllListAsync();
 
     /// <summary>

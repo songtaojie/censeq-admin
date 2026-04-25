@@ -60,6 +60,9 @@ public static class CenseqIdentityResultExtensions
         throw new CenseqIdentityResultException(identityResult);
     }
 
+    /// <summary>
+    /// string[]
+    /// </summary>
     public static string[] GetValuesFromErrorMessage(this IdentityResult identityResult, IStringLocalizer localizer)
     {
         if (identityResult.Succeeded)

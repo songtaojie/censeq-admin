@@ -10,8 +10,14 @@ using Censeq.Identity.Localization;
 
 namespace Censeq.Identity;
 
+/// <summary>
+/// Censeq身份结果Exception
+/// </summary>
 public class CenseqIdentityResultException : BusinessException, ILocalizeErrorMessage
 {
+    /// <summary>
+    /// 身份结果
+    /// </summary>
     public IdentityResult IdentityResult { get; }
 
     public CenseqIdentityResultException([NotNull] IdentityResult identityResult)

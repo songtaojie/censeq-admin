@@ -4,6 +4,9 @@ using Volo.Abp.Validation;
 
 namespace Censeq.Identity;
 
+/// <summary>
+/// 身份角色创建Or更新数据传输对象基类
+/// </summary>
 public class IdentityRoleCreateOrUpdateDtoBase : ExtensibleObject
 {
     [Required]

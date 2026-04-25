@@ -2,6 +2,9 @@
 
 namespace Censeq.Identity;
 
+/// <summary>
+/// 外部登录用户信息
+/// </summary>
 public class ExternalLoginUserInfo
 {
     [CanBeNull]

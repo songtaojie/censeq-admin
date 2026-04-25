@@ -18,7 +18,7 @@ using Volo.Abp.Timing;
 namespace Censeq.Identity;
 
 /// <summary>
-/// Represents a new instance of a persistence store for the specified user and role types.
+/// 表示指定用户和角色类型的持久化存储的新实例。
 /// </summary>
 public class IdentityUserStore :
     IUserLoginStore<IdentityUser>,
@@ -40,22 +40,37 @@ public class IdentityUserStore :
     private const string RecoveryCodeTokenName = "RecoveryCodes";
 
     /// <summary>
-    /// Gets or sets the <see cref="IdentityErrorDescriber"/> for any error that occurred with the current operation.
+    /// 获取或设置当前操作发生错误时使用的 <see cref="IdentityErrorDescriber"/>。
     /// </summary>
     public IdentityErrorDescriber ErrorDescriber { get; set; }
 
     /// <summary>
-    /// Gets or sets a flag indicating if changes should be persisted after CreateAsync, UpdateAsync and DeleteAsync are called.
+    /// 获取或设置一个标志，指示是否在调用 CreateAsync、UpdateAsync 和 DeleteAsync 后自动持久化更改。
     /// </summary>
     /// <value>
-    /// True if changes should be automatically persisted, otherwise false.
+    /// 如果应自动持久化更改则为 true，否则为 false。
     /// </value>
     public bool AutoSaveChanges { get; set; } = true;
 
+    /// <summary>
+    /// I身份角色仓储
+    /// </summary>
     protected IIdentityRoleRepository RoleRepository { get; }
+    /// <summary>
+    /// IGuidGenerator
+    /// </summary>
     protected IGuidGenerator GuidGenerator { get; }
+    /// <summary>
+    /// ILogger<Identity角色Store>
+    /// </summary>
     protected ILogger<IdentityRoleStore> Logger { get; }
+    /// <summary>
+    /// I查找Normalizer
+    /// </summary>
     protected ILookupNormalizer LookupNormalizer { get; }
+    /// <summary>
+    /// I身份用户仓储
+    /// </summary>
     protected IIdentityUserRepository UserRepository { get; }
 
     public IdentityUserStore(
@@ -76,11 +91,11 @@ public class IdentityUserStore :
     }
 
     /// <summary>
-    /// Gets the user identifier for the specified <paramref name="user"/>.
+    /// 获取指定 <paramref name="user"/> 的用户标识符。
     /// </summary>
-    /// <param name="user">The user whose identifier should be retrieved.</param>
-    /// <param name="cancellationToken">The <see cref="CancellationToken"/> used to propagate notifications that the operation should be canceled.</param>
-    /// <returns>The <see cref="Task"/> that represents the asynchronous operation, containing the identifier for the specified <paramref name="user"/>.</returns>
+    /// <param name="user">要获取其标识符的用户。</param>
+    /// <param name="cancellationToken">用于传播操作取消通知的 <see cref="CancellationToken"/>。</param>
+    /// <returns>表示异步操作的 <see cref="Task"/>，包含指定 <paramref name="user"/> 的标识符。</returns>
     public virtual Task<string> GetUserIdAsync([NotNull] IdentityUser user, CancellationToken cancellationToken = default)
     {
         cancellationToken.ThrowIfCancellationRequested();
@@ -91,11 +106,11 @@ public class IdentityUserStore :
     }
 
     /// <summary>
-    /// Gets the user name for the specified <paramref name="user"/>.
+    /// 获取指定 <paramref name="user"/> 的用户名。
     /// </summary>
-    /// <param name="user">The user whose name should be retrieved.</param>
-    /// <param name="cancellationToken">The <see cref="CancellationToken"/> used to propagate notifications that the operation should be canceled.</param>
-    /// <returns>The <see cref="Task"/> that represents the asynchronous operation, containing the name for the specified <paramref name="user"/>.</returns>
+    /// <param name="user">要获取其名称的用户。</param>
+    /// <param name="cancellationToken">用于传播操作取消通知的 <see cref="CancellationToken"/>。</param>
+    /// <returns>表示异步操作的 <see cref="Task"/>，包含指定 <paramref name="user"/> 的名称。</returns>
     public virtual Task<string?> GetUserNameAsync([NotNull] IdentityUser user, CancellationToken cancellationToken = default)
     {
         cancellationToken.ThrowIfCancellationRequested();
@@ -106,12 +121,12 @@ public class IdentityUserStore :
     }
 
     /// <summary>
-    /// Sets the given <paramref name="userName" /> for the specified <paramref name="user"/>.
+    /// 为指定 <paramref name="user"/> 设置给定的 <paramref name="userName"/>。
     /// </summary>
-    /// <param name="user">The user whose name should be set.</param>
-    /// <param name="userName">The user name to set.</param>
-    /// <param name="cancellationToken">The <see cref="CancellationToken"/> used to propagate notifications that the operation should be canceled.</param>
-    /// <returns>The <see cref="Task"/> that represents the asynchronous operation.</returns>
+    /// <param name="user">要设置其名称的用户。</param>
+    /// <param name="userName">要设置的用户名。</param>
+    /// <param name="cancellationToken">用于传播操作取消通知的 <see cref="CancellationToken"/>。</param>
+    /// <returns>表示异步操作的 <see cref="Task"/>。</returns>
     public virtual Task SetUserNameAsync([NotNull] IdentityUser user, string? userName, CancellationToken cancellationToken = default)
     {
         cancellationToken.ThrowIfCancellationRequested();
@@ -124,11 +139,11 @@ public class IdentityUserStore :
     }
 
     /// <summary>
-    /// Gets the normalized user name for the specified <paramref name="user"/>.
+    /// 获取指定 <paramref name="user"/> 的标准化用户名。
     /// </summary>
-    /// <param name="user">The user whose normalized name should be retrieved.</param>
-    /// <param name="cancellationToken">The <see cref="CancellationToken"/> used to propagate notifications that the operation should be canceled.</param>
-    /// <returns>The <see cref="Task"/> that represents the asynchronous operation, containing the normalized user name for the specified <paramref name="user"/>.</returns>
+    /// <param name="user">要获取其标准化名称的用户。</param>
+    /// <param name="cancellationToken">用于传播操作取消通知的 <see cref="CancellationToken"/>。</param>
+    /// <returns>表示异步操作的 <see cref="Task"/>，包含指定 <paramref name="user"/> 的标准化用户名。</returns>
     public virtual Task<string?> GetNormalizedUserNameAsync([NotNull] IdentityUser user, CancellationToken cancellationToken = default)
     {
         cancellationToken.ThrowIfCancellationRequested();
@@ -139,12 +154,12 @@ public class IdentityUserStore :
     }
 
     /// <summary>
-    /// Sets the given normalized name for the specified <paramref name="user"/>.
+    /// 为指定 <paramref name="user"/> 设置给定的标准化名称。
     /// </summary>
-    /// <param name="user">The user whose name should be set.</param>
-    /// <param name="normalizedName">The normalized name to set.</param>
-    /// <param name="cancellationToken">The <see cref="CancellationToken"/> used to propagate notifications that the operation should be canceled.</param>
-    /// <returns>The <see cref="Task"/> that represents the asynchronous operation.</returns>
+    /// <param name="user">要设置其名称的用户。</param>
+    /// <param name="normalizedName">要设置的标准化名称。</param>
+    /// <param name="cancellationToken">用于传播操作取消通知的 <see cref="CancellationToken"/>。</param>
+    /// <returns>表示异步操作的 <see cref="Task"/>。</returns>
     public virtual Task SetNormalizedUserNameAsync([NotNull] IdentityUser user, string? normalizedName, CancellationToken cancellationToken = default)
     {
         cancellationToken.ThrowIfCancellationRequested();
@@ -157,11 +172,11 @@ public class IdentityUserStore :
     }
 
     /// <summary>
-    /// Creates the specified <paramref name="user"/> in the user store.
+    /// 在用户存储中创建指定的 <paramref name="user"/>。
     /// </summary>
-    /// <param name="user">The user to create.</param>
-    /// <param name="cancellationToken">The <see cref="CancellationToken"/> used to propagate notifications that the operation should be canceled.</param>
-    /// <returns>The <see cref="Task"/> that represents the asynchronous operation, containing the <see cref="IdentityResult"/> of the creation operation.</returns>
+    /// <param name="user">要创建的用户。</param>
+    /// <param name="cancellationToken">用于传播操作取消通知的 <see cref="CancellationToken"/>。</param>
+    /// <returns>表示异步操作的 <see cref="Task"/>，包含创建操作的 <see cref="IdentityResult"/>。</returns>
     public virtual async Task<IdentityResult> CreateAsync([NotNull] IdentityUser user, CancellationToken cancellationToken = default)
     {
         cancellationToken.ThrowIfCancellationRequested();
@@ -174,11 +189,11 @@ public class IdentityUserStore :
     }
 
     /// <summary>
-    /// Updates the specified <paramref name="user"/> in the user store.
+    /// 在用户存储中更新指定的 <paramref name="user"/>。
     /// </summary>
-    /// <param name="user">The user to update.</param>
-    /// <param name="cancellationToken">The <see cref="CancellationToken"/> used to propagate notifications that the operation should be canceled.</param>
-    /// <returns>The <see cref="Task"/> that represents the asynchronous operation, containing the <see cref="IdentityResult"/> of the update operation.</returns>
+    /// <param name="user">要更新的用户。</param>
+    /// <param name="cancellationToken">用于传播操作取消通知的 <see cref="CancellationToken"/>。</param>
+    /// <returns>表示异步操作的 <see cref="Task"/>，包含更新操作的 <see cref="IdentityResult"/>。</returns>
     public virtual async Task<IdentityResult> UpdateAsync([NotNull] IdentityUser user, CancellationToken cancellationToken = default)
     {
         cancellationToken.ThrowIfCancellationRequested();
@@ -199,11 +214,11 @@ public class IdentityUserStore :
     }
 
     /// <summary>
-    /// Deletes the specified <paramref name="user"/> from the user store.
+    /// 从用户存储中删除指定的 <paramref name="user"/>。
     /// </summary>
-    /// <param name="user">The user to delete.</param>
-    /// <param name="cancellationToken">The <see cref="CancellationToken"/> used to propagate notifications that the operation should be canceled.</param>
-    /// <returns>The <see cref="Task"/> that represents the asynchronous operation, containing the <see cref="IdentityResult"/> of the update operation.</returns>
+    /// <param name="user">要删除的用户。</param>
+    /// <param name="cancellationToken">用于传播操作取消通知的 <see cref="CancellationToken"/>。</param>
+    /// <returns>表示异步操作的 <see cref="Task"/>，包含删除操作的 <see cref="IdentityResult"/>。</returns>
     public virtual async Task<IdentityResult> DeleteAsync([NotNull] IdentityUser user, CancellationToken cancellationToken = default)
     {
         cancellationToken.ThrowIfCancellationRequested();
@@ -224,12 +239,12 @@ public class IdentityUserStore :
     }
 
     /// <summary>
-    /// Finds and returns a user, if any, who has the specified <paramref name="userId"/>.
+    /// 查找并返回具有指定 <paramref name="userId"/> 的用户（如果存在）。
     /// </summary>
-    /// <param name="userId">The user ID to search for.</param>
-    /// <param name="cancellationToken">The <see cref="CancellationToken"/> used to propagate notifications that the operation should be canceled.</param>
+    /// <param name="userId">要搜索的用户 ID。</param>
+    /// <param name="cancellationToken">用于传播操作取消通知的 <see cref="CancellationToken"/>。</param>
     /// <returns>
-    /// The <see cref="Task"/> that represents the asynchronous operation, containing the user matching the specified <paramref name="userId"/> if it exists.
+    /// 表示异步操作的 <see cref="Task"/>，包含与指定 <paramref name="userId"/> 匹配的用户（如果存在）。
     /// </returns>
     public virtual async Task<IdentityUser?> FindByIdAsync(string userId, CancellationToken cancellationToken = default)
     {
@@ -239,12 +254,12 @@ public class IdentityUserStore :
     }
 
     /// <summary>
-    /// Finds and returns a user, if any, who has the specified normalized user name.
+    /// 查找并返回具有指定标准化用户名的用户（如果存在）。
     /// </summary>
-    /// <param name="normalizedUserName">The normalized user name to search for.</param>
-    /// <param name="cancellationToken">The <see cref="CancellationToken"/> used to propagate notifications that the operation should be canceled.</param>
+    /// <param name="normalizedUserName">要搜索的标准化用户名。</param>
+    /// <param name="cancellationToken">用于传播操作取消通知的 <see cref="CancellationToken"/>。</param>
     /// <returns>
-    /// The <see cref="Task"/> that represents the asynchronous operation, containing the user matching the specified <paramref name="normalizedUserName"/> if it exists.
+    /// 表示异步操作的 <see cref="Task"/>，包含与指定 <paramref name="normalizedUserName"/> 匹配的用户（如果存在）。
     /// </returns>
     public virtual Task<IdentityUser?> FindByNameAsync([NotNull] string normalizedUserName, CancellationToken cancellationToken = default)
     {
@@ -256,12 +271,12 @@ public class IdentityUserStore :
     }
 
     /// <summary>
-    /// Sets the password hash for a user.
+    /// 设置用户的密码哈希。
     /// </summary>
-    /// <param name="user">The user to set the password hash for.</param>
-    /// <param name="passwordHash">The password hash to set.</param>
-    /// <param name="cancellationToken">The <see cref="CancellationToken"/> used to propagate notifications that the operation should be canceled.</param>
-    /// <returns>The <see cref="Task"/> that represents the asynchronous operation.</returns>
+    /// <param name="user">要设置密码哈希的用户。</param>
+    /// <param name="passwordHash">要设置的密码哈希。</param>
+    /// <param name="cancellationToken">用于传播操作取消通知的 <see cref="CancellationToken"/>。</param>
+    /// <returns>表示异步操作的 <see cref="Task"/>。</returns>
     public virtual Task SetPasswordHashAsync([NotNull] IdentityUser user, string? passwordHash, CancellationToken cancellationToken = default)
     {
         cancellationToken.ThrowIfCancellationRequested();
@@ -276,11 +291,11 @@ public class IdentityUserStore :
     }
 
     /// <summary>
-    /// Gets the password hash for a user.
+    /// 获取用户的密码哈希。
     /// </summary>
-    /// <param name="user">The user to retrieve the password hash for.</param>
-    /// <param name="cancellationToken">The <see cref="CancellationToken"/> used to propagate notifications that the operation should be canceled.</param>
-    /// <returns>A <see cref="Task{TResult}"/> that contains the password hash for the user.</returns>
+    /// <param name="user">要获取密码哈希的用户。</param>
+    /// <param name="cancellationToken">用于传播操作取消通知的 <see cref="CancellationToken"/>。</param>
+    /// <returns>包含用户密码哈希的 <see cref="Task{TResult}"/>。</returns>
     public virtual Task<string?> GetPasswordHashAsync([NotNull] IdentityUser user, CancellationToken cancellationToken = default)
     {
         cancellationToken.ThrowIfCancellationRequested();
@@ -291,12 +306,11 @@ public class IdentityUserStore :
     }
 
     /// <summary>
-    /// Returns a flag indicating if the specified user has a password.
+    /// 返回一个标志，指示指定用户是否设置了密码。
     /// </summary>
-    /// <param name="user">The user to retrieve the password hash for.</param>
-    /// <param name="cancellationToken">The <see cref="CancellationToken"/> used to propagate notifications that the operation should be canceled.</param>
-    /// <returns>A <see cref="Task{TResult}"/> containing a flag indicating if the specified user has a password. If the
-    /// user has a password the returned value with be true, otherwise it will be false.</returns>
+    /// <param name="user">要检查的用户。</param>
+    /// <param name="cancellationToken">用于传播操作取消通知的 <see cref="CancellationToken"/>。</param>
+    /// <returns>包含标志的 <see cref="Task{TResult}"/>，如果指定用户已设置密码则为 true，否则为 false。</returns>
     public virtual Task<bool> HasPasswordAsync([NotNull] IdentityUser user, CancellationToken cancellationToken = default)
     {
         cancellationToken.ThrowIfCancellationRequested();
@@ -307,12 +321,12 @@ public class IdentityUserStore :
     }
 
     /// <summary>
-    /// Adds the given <paramref name="normalizedRoleName"/> to the specified <paramref name="user"/>.
+    /// 将指定的 <paramref name="normalizedRoleName"/> 添加到指定的 <paramref name="user"/>。
     /// </summary>
-    /// <param name="user">The user to add the role to.</param>
-    /// <param name="normalizedRoleName">The role to add.</param>
-    /// <param name="cancellationToken">The <see cref="CancellationToken"/> used to propagate notifications that the operation should be canceled.</param>
-    /// <returns>The <see cref="Task"/> that represents the asynchronous operation.</returns>
+    /// <param name="user">要添加角色的用户。</param>
+    /// <param name="normalizedRoleName">要添加的角色。</param>
+    /// <param name="cancellationToken">用于传播操作取消通知的 <see cref="CancellationToken"/>。</param>
+    /// <returns>表示异步操作的 <see cref="Task"/>。</returns>
     public virtual async Task AddToRoleAsync([NotNull] IdentityUser user, [NotNull] string normalizedRoleName, CancellationToken cancellationToken = default)
     {
         cancellationToken.ThrowIfCancellationRequested();
@@ -337,12 +351,12 @@ public class IdentityUserStore :
     }
 
     /// <summary>
-    /// Removes the given <paramref name="normalizedRoleName"/> from the specified <paramref name="user"/>.
+    /// 从指定的 <paramref name="user"/> 中移除指定的 <paramref name="normalizedRoleName"/>。
     /// </summary>
-    /// <param name="user">The user to remove the role from.</param>
-    /// <param name="normalizedRoleName">The role to remove.</param>
-    /// <param name="cancellationToken">The <see cref="CancellationToken"/> used to propagate notifications that the operation should be canceled.</param>
-    /// <returns>The <see cref="Task"/> that represents the asynchronous operation.</returns>
+    /// <param name="user">要移除角色的用户。</param>
+    /// <param name="normalizedRoleName">要移除的角色。</param>
+    /// <param name="cancellationToken">用于传播操作取消通知的 <see cref="CancellationToken"/>。</param>
+    /// <returns>表示异步操作的 <see cref="Task"/>。</returns>
     public virtual async Task RemoveFromRoleAsync([NotNull] IdentityUser user, [NotNull] string normalizedRoleName, CancellationToken cancellationToken = default)
     {
         cancellationToken.ThrowIfCancellationRequested();
@@ -362,11 +376,11 @@ public class IdentityUserStore :
     }
 
     /// <summary>
-    /// Retrieves the roles the specified <paramref name="user"/> is a member of.
+    /// 获取指定 <paramref name="user"/> 所属的角色列表。
     /// </summary>
-    /// <param name="user">The user whose roles should be retrieved.</param>
-    /// <param name="cancellationToken">The <see cref="CancellationToken"/> used to propagate notifications that the operation should be canceled.</param>
-    /// <returns>A <see cref="Task{TResult}"/> that contains the roles the user is a member of.</returns>
+    /// <param name="user">要获取其角色的用户。</param>
+    /// <param name="cancellationToken">用于传播操作取消通知的 <see cref="CancellationToken"/>。</param>
+    /// <returns>包含用户所属角色的 <see cref="Task{TResult}"/>。</returns>
     public virtual async Task<IList<string>> GetRolesAsync([NotNull] IdentityUser user, CancellationToken cancellationToken = default)
     {
         cancellationToken.ThrowIfCancellationRequested();
@@ -383,13 +397,12 @@ public class IdentityUserStore :
     }
 
     /// <summary>
-    /// Returns a flag indicating if the specified user is a member of the give <paramref name="normalizedRoleName"/>.
+    /// 返回一个标志，指示指定用户是否是指定 <paramref name="normalizedRoleName"/> 的成员。
     /// </summary>
-    /// <param name="user">The user whose role membership should be checked.</param>
-    /// <param name="normalizedRoleName">The role to check membership of</param>
-    /// <param name="cancellationToken">The <see cref="CancellationToken"/> used to propagate notifications that the operation should be canceled.</param>
-    /// <returns>A <see cref="Task{TResult}"/> containing a flag indicating if the specified user is a member of the given group. If the
-    /// user is a member of the group the returned value with be true, otherwise it will be false.</returns>
+    /// <param name="user">要检查其角色成员资格的用户。</param>
+    /// <param name="normalizedRoleName">要检查成员资格的角色。</param>
+    /// <param name="cancellationToken">用于传播操作取消通知的 <see cref="CancellationToken"/>。</param>
+    /// <returns>包含标志的 <see cref="Task{TResult}"/>，如果指定用户是指定角色的成员则为 true，否则为 false。</returns>
     public virtual async Task<bool> IsInRoleAsync(
         [NotNull] IdentityUser user,
         [NotNull] string normalizedRoleName,
@@ -408,11 +421,11 @@ public class IdentityUserStore :
     }
 
     /// <summary>
-    /// Get the claims associated with the specified <paramref name="user"/> as an asynchronous operation.
+    /// 以异步操作获取与指定 <paramref name="user"/> 关联的声明。
     /// </summary>
-    /// <param name="user">The user whose claims should be retrieved.</param>
-    /// <param name="cancellationToken">The <see cref="CancellationToken"/> used to propagate notifications that the operation should be canceled.</param>
-    /// <returns>A <see cref="Task{TResult}"/> that contains the claims granted to a user.</returns>
+    /// <param name="user">要获取其声明的用户。</param>
+    /// <param name="cancellationToken">用于传播操作取消通知的 <see cref="CancellationToken"/>。</param>
+    /// <returns>包含授予用户的声明的 <see cref="Task{TResult}"/>。</returns>
     public virtual async Task<IList<Claim>> GetClaimsAsync([NotNull] IdentityUser user, CancellationToken cancellationToken = default)
     {
         cancellationToken.ThrowIfCancellationRequested();
@@ -425,12 +438,12 @@ public class IdentityUserStore :
     }
 
     /// <summary>
-    /// Adds the <paramref name="claims"/> given to the specified <paramref name="user"/>.
+    /// 将指定的 <paramref name="claims"/> 添加到指定的 <paramref name="user"/>。
     /// </summary>
-    /// <param name="user">The user to add the claim to.</param>
-    /// <param name="claims">The claim to add to the user.</param>
-    /// <param name="cancellationToken">The <see cref="CancellationToken"/> used to propagate notifications that the operation should be canceled.</param>
-    /// <returns>The <see cref="Task"/> that represents the asynchronous operation.</returns>
+    /// <param name="user">要添加声明的用户。</param>
+    /// <param name="claims">要添加到用户的声明。</param>
+    /// <param name="cancellationToken">用于传播操作取消通知的 <see cref="CancellationToken"/>。</param>
+    /// <returns>表示异步操作的 <see cref="Task"/>。</returns>
     public virtual async Task AddClaimsAsync([NotNull] IdentityUser user, [NotNull] IEnumerable<Claim> claims, CancellationToken cancellationToken = default)
     {
         cancellationToken.ThrowIfCancellationRequested();
@@ -444,13 +457,13 @@ public class IdentityUserStore :
     }
 
     /// <summary>
-    /// Replaces the <paramref name="claim"/> on the specified <paramref name="user"/>, with the <paramref name="newClaim"/>.
+    /// 在指定的 <paramref name="user"/> 上用 <paramref name="newClaim"/> 替换 <paramref name="claim"/>。
     /// </summary>
-    /// <param name="user">The user to replace the claim on.</param>
-    /// <param name="claim">The claim replace.</param>
-    /// <param name="newClaim">The new claim replacing the <paramref name="claim"/>.</param>
-    /// <param name="cancellationToken">The <see cref="CancellationToken"/> used to propagate notifications that the operation should be canceled.</param>
-    /// <returns>The <see cref="Task"/> that represents the asynchronous operation.</returns>
+    /// <param name="user">要替换声明的用户。</param>
+    /// <param name="claim">要替换的声明。</param>
+    /// <param name="newClaim">用于替换 <paramref name="claim"/> 的新声明。</param>
+    /// <param name="cancellationToken">用于传播操作取消通知的 <see cref="CancellationToken"/>。</param>
+    /// <returns>表示异步操作的 <see cref="Task"/>。</returns>
     public virtual async Task ReplaceClaimAsync([NotNull] IdentityUser user, [NotNull] Claim claim, [NotNull] Claim newClaim, CancellationToken cancellationToken = default)
     {
         cancellationToken.ThrowIfCancellationRequested();
@@ -465,12 +478,12 @@ public class IdentityUserStore :
     }
 
     /// <summary>
-    /// Removes the <paramref name="claims"/> given from the specified <paramref name="user"/>.
+    /// 从指定的 <paramref name="user"/> 中移除指定的 <paramref name="claims"/>。
     /// </summary>
-    /// <param name="user">The user to remove the claims from.</param>
-    /// <param name="claims">The claim to remove.</param>
-    /// <param name="cancellationToken">The <see cref="CancellationToken"/> used to propagate notifications that the operation should be canceled.</param>
-    /// <returns>The <see cref="Task"/> that represents the asynchronous operation.</returns>
+    /// <param name="user">要移除声明的用户。</param>
+    /// <param name="claims">要移除的声明。</param>
+    /// <param name="cancellationToken">用于传播操作取消通知的 <see cref="CancellationToken"/>。</param>
+    /// <returns>表示异步操作的 <see cref="Task"/>。</returns>
     public virtual async Task RemoveClaimsAsync([NotNull] IdentityUser user, [NotNull] IEnumerable<Claim> claims, CancellationToken cancellationToken = default)
     {
         cancellationToken.ThrowIfCancellationRequested();
@@ -484,12 +497,12 @@ public class IdentityUserStore :
     }
 
     /// <summary>
-    /// Adds the <paramref name="login"/> given to the specified <paramref name="user"/>.
+    /// 将指定的 <paramref name="login"/> 添加到指定的 <paramref name="user"/>。
     /// </summary>
-    /// <param name="user">The user to add the login to.</param>
-    /// <param name="login">The login to add to the user.</param>
-    /// <param name="cancellationToken">The <see cref="CancellationToken"/> used to propagate notifications that the operation should be canceled.</param>
-    /// <returns>The <see cref="Task"/> that represents the asynchronous operation.</returns>
+    /// <param name="user">要添加登录信息的用户。</param>
+    /// <param name="login">要添加到用户的登录信息。</param>
+    /// <param name="cancellationToken">用于传播操作取消通知的 <see cref="CancellationToken"/>。</param>
+    /// <returns>表示异步操作的 <see cref="Task"/>。</returns>
     public virtual async Task AddLoginAsync([NotNull] IdentityUser user, [NotNull] UserLoginInfo login, CancellationToken cancellationToken = default)
     {
         cancellationToken.ThrowIfCancellationRequested();
@@ -503,13 +516,13 @@ public class IdentityUserStore :
     }
 
     /// <summary>
-    /// Removes the <paramref name="loginProvider"/> given from the specified <paramref name="user"/>.
+    /// 从指定的 <paramref name="user"/> 中移除指定的 <paramref name="loginProvider"/>。
     /// </summary>
-    /// <param name="user">The user to remove the login from.</param>
-    /// <param name="loginProvider">The login to remove from the user.</param>
-    /// <param name="providerKey">The key provided by the <paramref name="loginProvider"/> to identify a user.</param>
-    /// <param name="cancellationToken">The <see cref="CancellationToken"/> used to propagate notifications that the operation should be canceled.</param>
-    /// <returns>The <see cref="Task"/> that represents the asynchronous operation.</returns>
+    /// <param name="user">要移除登录信息的用户。</param>
+    /// <param name="loginProvider">要移除的登录提供程序。</param>
+    /// <param name="providerKey">由 <paramref name="loginProvider"/> 提供的用于标识用户的密钥。</param>
+    /// <param name="cancellationToken">用于传播操作取消通知的 <see cref="CancellationToken"/>。</param>
+    /// <returns>表示异步操作的 <see cref="Task"/>。</returns>
     public virtual async Task RemoveLoginAsync([NotNull] IdentityUser user, [NotNull] string loginProvider, [NotNull] string providerKey, CancellationToken cancellationToken = default)
     {
         cancellationToken.ThrowIfCancellationRequested();
@@ -524,12 +537,12 @@ public class IdentityUserStore :
     }
 
     /// <summary>
-    /// Retrieves the associated logins for the specified <param ref="user"/>.
+    /// 获取指定 <paramref name="user"/> 的关联登录信息。
     /// </summary>
-    /// <param name="user">The user whose associated logins to retrieve.</param>
-    /// <param name="cancellationToken">The <see cref="CancellationToken"/> used to propagate notifications that the operation should be canceled.</param>
+    /// <param name="user">要获取其关联登录信息的用户。</param>
+    /// <param name="cancellationToken">用于传播操作取消通知的 <see cref="CancellationToken"/>。</param>
     /// <returns>
-    /// The <see cref="Task"/> for the asynchronous operation, containing a list of <see cref="UserLoginInfo"/> for the specified <paramref name="user"/>, if any.
+    /// 表示异步操作的 <see cref="Task"/>，包含指定 <paramref name="user"/> 的 <see cref="UserLoginInfo"/> 列表（如果有）。
     /// </returns>
     public virtual async Task<IList<UserLoginInfo>> GetLoginsAsync([NotNull] IdentityUser user, CancellationToken cancellationToken = default)
     {
@@ -543,13 +556,13 @@ public class IdentityUserStore :
     }
 
     /// <summary>
-    /// Retrieves the user associated with the specified login provider and login provider key..
+    /// 获取与指定登录提供程序和登录提供程序密钥关联的用户。
     /// </summary>
-    /// <param name="loginProvider">The login provider who provided the <paramref name="providerKey"/>.</param>
-    /// <param name="providerKey">The key provided by the <paramref name="loginProvider"/> to identify a user.</param>
-    /// <param name="cancellationToken">The <see cref="CancellationToken"/> used to propagate notifications that the operation should be canceled.</param>
+    /// <param name="loginProvider">提供 <paramref name="providerKey"/> 的登录提供程序。</param>
+    /// <param name="providerKey">由 <paramref name="loginProvider"/> 提供的用于标识用户的密钥。</param>
+    /// <param name="cancellationToken">用于传播操作取消通知的 <see cref="CancellationToken"/>。</param>
     /// <returns>
-    /// The <see cref="Task"/> for the asynchronous operation, containing the user, if any which matched the specified login provider and key.
+    /// 表示异步操作的 <see cref="Task"/>，包含与指定登录提供程序和密钥匹配的用户（如果有）。
     /// </returns>
     public virtual Task<IdentityUser?> FindByLoginAsync([NotNull] string loginProvider, [NotNull] string providerKey, CancellationToken cancellationToken = default)
     {
@@ -562,14 +575,12 @@ public class IdentityUserStore :
     }
 
     /// <summary>
-    /// Gets a flag indicating whether the email address for the specified <paramref name="user"/> has been verified, true if the email address is verified otherwise
-    /// false.
+    /// 获取一个标志，指示指定 <paramref name="user"/> 的电子邮箱地址是否已验证。
     /// </summary>
-    /// <param name="user">The user whose email confirmation status should be returned.</param>
-    /// <param name="cancellationToken">The <see cref="CancellationToken"/> used to propagate notifications that the operation should be canceled.</param>
+    /// <param name="user">要返回其邮箱确认状态的用户。</param>
+    /// <param name="cancellationToken">用于传播操作取消通知的 <see cref="CancellationToken"/>。</param>
     /// <returns>
-    /// The task object containing the results of the asynchronous operation, a flag indicating whether the email address for the specified <paramref name="user"/>
-    /// has been confirmed or not.
+    /// 包含异步操作结果的任务对象，一个标志，指示指定 <paramref name="user"/> 的电子邮箱地址是否已确认。
     /// </returns>
     public virtual Task<bool> GetEmailConfirmedAsync([NotNull] IdentityUser user, CancellationToken cancellationToken = default)
     {
@@ -581,12 +592,12 @@ public class IdentityUserStore :
     }
 
     /// <summary>
-    /// Sets the flag indicating whether the specified <paramref name="user"/>'s email address has been confirmed or not.
+    /// 设置标志，指示指定 <paramref name="user"/> 的电子邮箱地址是否已确认。
     /// </summary>
-    /// <param name="user">The user whose email confirmation status should be set.</param>
-    /// <param name="confirmed">A flag indicating if the email address has been confirmed, true if the address is confirmed otherwise false.</param>
-    /// <param name="cancellationToken">The <see cref="CancellationToken"/> used to propagate notifications that the operation should be canceled.</param>
-    /// <returns>The task object representing the asynchronous operation.</returns>
+    /// <param name="user">要设置其邮箱确认状态的用户。</param>
+    /// <param name="confirmed">指示电子邮箱地址是否已确认的标志，如果已确认则为 true，否则为 false。</param>
+    /// <param name="cancellationToken">用于传播操作取消通知的 <see cref="CancellationToken"/>。</param>
+    /// <returns>表示异步操作的任务对象。</returns>
     public virtual Task SetEmailConfirmedAsync([NotNull] IdentityUser user, bool confirmed, CancellationToken cancellationToken = default)
     {
         cancellationToken.ThrowIfCancellationRequested();
@@ -599,12 +610,12 @@ public class IdentityUserStore :
     }
 
     /// <summary>
-    /// Sets the <paramref name="email"/> address for a <paramref name="user"/>.
+    /// 为 <paramref name="user"/> 设置 <paramref name="email"/> 地址。
     /// </summary>
-    /// <param name="user">The user whose email should be set.</param>
-    /// <param name="email">The email to set.</param>
-    /// <param name="cancellationToken">The <see cref="CancellationToken"/> used to propagate notifications that the operation should be canceled.</param>
-    /// <returns>The task object representing the asynchronous operation.</returns>
+    /// <param name="user">要设置其邮箱的用户。</param>
+    /// <param name="email">要设置的邮箱地址。</param>
+    /// <param name="cancellationToken">用于传播操作取消通知的 <see cref="CancellationToken"/>。</param>
+    /// <returns>表示异步操作的任务对象。</returns>
     public virtual Task SetEmailAsync([NotNull] IdentityUser user, string? email, CancellationToken cancellationToken = default)
     {
         cancellationToken.ThrowIfCancellationRequested();
@@ -618,11 +629,11 @@ public class IdentityUserStore :
     }
 
     /// <summary>
-    /// Gets the email address for the specified <paramref name="user"/>.
+    /// 获取指定 <paramref name="user"/> 的电子邮箱地址。
     /// </summary>
-    /// <param name="user">The user whose email should be returned.</param>
-    /// <param name="cancellationToken">The <see cref="CancellationToken"/> used to propagate notifications that the operation should be canceled.</param>
-    /// <returns>The task object containing the results of the asynchronous operation, the email address for the specified <paramref name="user"/>.</returns>
+    /// <param name="user">要返回其邮箱的用户。</param>
+    /// <param name="cancellationToken">用于传播操作取消通知的 <see cref="CancellationToken"/>。</param>
+    /// <returns>包含异步操作结果的任务对象，即指定 <paramref name="user"/> 的电子邮箱地址。</returns>
     public virtual Task<string?> GetEmailAsync([NotNull] IdentityUser user, CancellationToken cancellationToken = default)
     {
         cancellationToken.ThrowIfCancellationRequested();
@@ -633,12 +644,12 @@ public class IdentityUserStore :
     }
 
     /// <summary>
-    /// Returns the normalized email for the specified <paramref name="user"/>.
+    /// 返回指定 <paramref name="user"/> 的标准化电子邮箱地址。
     /// </summary>
-    /// <param name="user">The user whose email address to retrieve.</param>
-    /// <param name="cancellationToken">The <see cref="CancellationToken"/> used to propagate notifications that the operation should be canceled.</param>
+    /// <param name="user">要获取其邮箱地址的用户。</param>
+    /// <param name="cancellationToken">用于传播操作取消通知的 <see cref="CancellationToken"/>。</param>
     /// <returns>
-    /// The task object containing the results of the asynchronous lookup operation, the normalized email address if any associated with the specified user.
+    /// 包含异步查找操作结果的任务对象，即与指定用户关联的标准化电子邮箱地址（如果有）。
     /// </returns>
     public virtual Task<string?> GetNormalizedEmailAsync([NotNull] IdentityUser user, CancellationToken cancellationToken = default)
     {
@@ -650,12 +661,12 @@ public class IdentityUserStore :
     }
 
     /// <summary>
-    /// Sets the normalized email for the specified <paramref name="user"/>.
+    /// 为指定 <paramref name="user"/> 设置标准化电子邮箱地址。
     /// </summary>
-    /// <param name="user">The user whose email address to set.</param>
-    /// <param name="normalizedEmail">The normalized email to set for the specified <paramref name="user"/>.</param>
-    /// <param name="cancellationToken">The <see cref="CancellationToken"/> used to propagate notifications that the operation should be canceled.</param>
-    /// <returns>The task object representing the asynchronous operation.</returns>
+    /// <param name="user">要设置其邮箱地址的用户。</param>
+    /// <param name="normalizedEmail">要为指定 <paramref name="user"/> 设置的标准化邮箱地址。</param>
+    /// <param name="cancellationToken">用于传播操作取消通知的 <see cref="CancellationToken"/>。</param>
+    /// <returns>表示异步操作的任务对象。</returns>
     public virtual Task SetNormalizedEmailAsync([NotNull] IdentityUser user, string? normalizedEmail, CancellationToken cancellationToken = default)
     {
         cancellationToken.ThrowIfCancellationRequested();
@@ -668,12 +679,12 @@ public class IdentityUserStore :
     }
 
     /// <summary>
-    /// Gets the user, if any, associated with the specified, normalized email address.
+    /// 获取与指定标准化电子邮箱地址关联的用户（如果有）。
     /// </summary>
-    /// <param name="normalizedEmail">The normalized email address to return the user for.</param>
-    /// <param name="cancellationToken">The <see cref="CancellationToken"/> used to propagate notifications that the operation should be canceled.</param>
+    /// <param name="normalizedEmail">要返回用户的标准化电子邮箱地址。</param>
+    /// <param name="cancellationToken">用于传播操作取消通知的 <see cref="CancellationToken"/>。</param>
     /// <returns>
-    /// The task object containing the results of the asynchronous lookup operation, the user if any associated with the specified normalized email address.
+    /// 包含异步查找操作结果的任务对象，即与指定标准化电子邮箱地址关联的用户（如果有）。
     /// </returns>
     public virtual Task<IdentityUser?> FindByEmailAsync(string normalizedEmail, CancellationToken cancellationToken = default)
     {
@@ -683,14 +694,13 @@ public class IdentityUserStore :
     }
 
     /// <summary>
-    /// Gets the last <see cref="DateTimeOffset"/> a user's last lockout expired, if any.
-    /// Any time in the past should be indicates a user is not locked out.
+    /// 获取用户上次锁定到期的时间（如果有）。
+    /// 过去任何时间都表示用户未被锁定。
     /// </summary>
-    /// <param name="user">The user whose lockout date should be retrieved.</param>
-    /// <param name="cancellationToken">The <see cref="CancellationToken"/> used to propagate notifications that the operation should be canceled.</param>
+    /// <param name="user">要获取其锁定日期的用户。</param>
+    /// <param name="cancellationToken">用于传播操作取消通知的 <see cref="CancellationToken"/>。</param>
     /// <returns>
-    /// A <see cref="Task{TResult}"/> that represents the result of the asynchronous query, a <see cref="DateTimeOffset"/> containing the last time
-    /// a user's lockout expired, if any.
+    /// 表示异步查询结果的 <see cref="Task{TResult}"/>，包含用户上次锁定到期的 <see cref="DateTimeOffset"/>（如果有）。
     /// </returns>
     public virtual Task<DateTimeOffset?> GetLockoutEndDateAsync([NotNull] IdentityUser user, CancellationToken cancellationToken = default)
     {
@@ -702,12 +712,12 @@ public class IdentityUserStore :
     }
 
     /// <summary>
-    /// Locks out a user until the specified end date has passed. Setting a end date in the past immediately unlocks a user.
+    /// 将用户锁定直到指定的结束日期过去。将结束日期设置为过去的时间会立即解锁用户。
     /// </summary>
-    /// <param name="user">The user whose lockout date should be set.</param>
-    /// <param name="lockoutEnd">The <see cref="DateTimeOffset"/> after which the <paramref name="user"/>'s lockout should end.</param>
-    /// <param name="cancellationToken">The <see cref="CancellationToken"/> used to propagate notifications that the operation should be canceled.</param>
-    /// <returns>The <see cref="Task"/> that represents the asynchronous operation.</returns>
+    /// <param name="user">要设置其锁定日期的用户。</param>
+    /// <param name="lockoutEnd"><paramref name="user"/> 的锁定应结束的 <see cref="DateTimeOffset"/>。</param>
+    /// <param name="cancellationToken">用于传播操作取消通知的 <see cref="CancellationToken"/>。</param>
+    /// <returns>表示异步操作的 <see cref="Task"/>。</returns>
     public virtual Task SetLockoutEndDateAsync([NotNull] IdentityUser user, DateTimeOffset? lockoutEnd, CancellationToken cancellationToken = default)
     {
         cancellationToken.ThrowIfCancellationRequested();
@@ -720,11 +730,11 @@ public class IdentityUserStore :
     }
 
     /// <summary>
-    /// Records that a failed access has occurred, incrementing the failed access count.
+    /// 记录一次失败的访问，增加失败访问计数。
     /// </summary>
-    /// <param name="user">The user whose cancellation count should be incremented.</param>
-    /// <param name="cancellationToken">The <see cref="CancellationToken"/> used to propagate notifications that the operation should be canceled.</param>
-    /// <returns>The <see cref="Task"/> that represents the asynchronous operation, containing the incremented failed access count.</returns>
+    /// <param name="user">要增加其失败访问计数的用户。</param>
+    /// <param name="cancellationToken">用于传播操作取消通知的 <see cref="CancellationToken"/>。</param>
+    /// <returns>表示异步操作的 <see cref="Task"/>，包含增加后的失败访问计数。</returns>
     public virtual Task<int> IncrementAccessFailedCountAsync([NotNull] IdentityUser user, CancellationToken cancellationToken = default)
     {
         cancellationToken.ThrowIfCancellationRequested();
@@ -737,12 +747,12 @@ public class IdentityUserStore :
     }
 
     /// <summary>
-    /// Resets a user's failed access count.
+    /// 重置用户的失败访问计数。
     /// </summary>
-    /// <param name="user">The user whose failed access count should be reset.</param>
-    /// <param name="cancellationToken">The <see cref="CancellationToken"/> used to propagate notifications that the operation should be canceled.</param>
-    /// <returns>The <see cref="Task"/> that represents the asynchronous operation.</returns>
-    /// <remarks>This is typically called after the account is successfully accessed.</remarks>
+    /// <param name="user">要重置其失败访问计数的用户。</param>
+    /// <param name="cancellationToken">用于传播操作取消通知的 <see cref="CancellationToken"/>。</param>
+    /// <returns>表示异步操作的 <see cref="Task"/>。</returns>
+    /// <remarks>通常在账户成功访问后调用。</remarks>
     public virtual Task ResetAccessFailedCountAsync([NotNull] IdentityUser user, CancellationToken cancellationToken = default)
     {
         cancellationToken.ThrowIfCancellationRequested();
@@ -755,11 +765,11 @@ public class IdentityUserStore :
     }
 
     /// <summary>
-    /// Retrieves the current failed access count for the specified <paramref name="user"/>..
+    /// 检索指定 <paramref name="user"/> 的当前失败访问计数。
     /// </summary>
-    /// <param name="user">The user whose failed access count should be retrieved.</param>
-    /// <param name="cancellationToken">The <see cref="CancellationToken"/> used to propagate notifications that the operation should be canceled.</param>
-    /// <returns>The <see cref="Task"/> that represents the asynchronous operation, containing the failed access count.</returns>
+    /// <param name="user">要获取其失败访问计数的用户。</param>
+    /// <param name="cancellationToken">用于传播操作取消通知的 <see cref="CancellationToken"/>。</param>
+    /// <returns>表示异步操作的 <see cref="Task"/>，包含失败访问计数。</returns>
     public virtual Task<int> GetAccessFailedCountAsync([NotNull] IdentityUser user, CancellationToken cancellationToken = default)
     {
         cancellationToken.ThrowIfCancellationRequested();
@@ -770,12 +780,12 @@ public class IdentityUserStore :
     }
 
     /// <summary>
-    /// Retrieves a flag indicating whether user lockout can enabled for the specified user.
+    /// 检索一个标志，指示是否可以为指定用户启用锁定。
     /// </summary>
-    /// <param name="user">The user whose ability to be locked out should be returned.</param>
-    /// <param name="cancellationToken">The <see cref="CancellationToken"/> used to propagate notifications that the operation should be canceled.</param>
+    /// <param name="user">要返回其可锁定状态的用户。</param>
+    /// <param name="cancellationToken">用于传播操作取消通知的 <see cref="CancellationToken"/>。</param>
     /// <returns>
-    /// The <see cref="Task"/> that represents the asynchronous operation, true if a user can be locked out, otherwise false.
+    /// 表示异步操作的 <see cref="Task"/>，如果用户可以锁定则为 true，否则为 false。
     /// </returns>
     public virtual Task<bool> GetLockoutEnabledAsync([NotNull] IdentityUser user, CancellationToken cancellationToken = default)
     {
@@ -787,12 +797,12 @@ public class IdentityUserStore :
     }
 
     /// <summary>
-    /// Set the flag indicating if the specified <paramref name="user"/> can be locked out..
+    /// 设置标志，指示是否可以为指定 <paramref name="user"/> 启用锁定。
     /// </summary>
-    /// <param name="user">The user whose ability to be locked out should be set.</param>
-    /// <param name="enabled">A flag indicating if lock out can be enabled for the specified <paramref name="user"/>.</param>
-    /// <param name="cancellationToken">The <see cref="CancellationToken"/> used to propagate notifications that the operation should be canceled.</param>
-    /// <returns>The <see cref="Task"/> that represents the asynchronous operation.</returns>
+    /// <param name="user">要设置其可锁定状态的用户。</param>
+    /// <param name="enabled">指示是否可以为指定 <paramref name="user"/> 启用锁定的标志。</param>
+    /// <param name="cancellationToken">用于传播操作取消通知的 <see cref="CancellationToken"/>。</param>
+    /// <returns>表示异步操作的 <see cref="Task"/>。</returns>
     public virtual Task SetLockoutEnabledAsync([NotNull] IdentityUser user, bool enabled, CancellationToken cancellationToken = default)
     {
         cancellationToken.ThrowIfCancellationRequested();
@@ -805,12 +815,12 @@ public class IdentityUserStore :
     }
 
     /// <summary>
-    /// Sets the telephone number for the specified <paramref name="user"/>.
+    /// 为指定 <paramref name="user"/> 设置电话号码。
     /// </summary>
-    /// <param name="user">The user whose telephone number should be set.</param>
-    /// <param name="phoneNumber">The telephone number to set.</param>
-    /// <param name="cancellationToken">The <see cref="CancellationToken"/> used to propagate notifications that the operation should be canceled.</param>
-    /// <returns>The <see cref="Task"/> that represents the asynchronous operation.</returns>
+    /// <param name="user">要设置其电话号码的用户。</param>
+    /// <param name="phoneNumber">要设置的电话号码。</param>
+    /// <param name="cancellationToken">用于传播操作取消通知的 <see cref="CancellationToken"/>。</param>
+    /// <returns>表示异步操作的 <see cref="Task"/>。</returns>
     public virtual Task SetPhoneNumberAsync([NotNull] IdentityUser user, string? phoneNumber, CancellationToken cancellationToken = default)
     {
         cancellationToken.ThrowIfCancellationRequested();
@@ -823,11 +833,11 @@ public class IdentityUserStore :
     }
 
     /// <summary>
-    /// Gets the telephone number, if any, for the specified <paramref name="user"/>.
+    /// 获取指定 <paramref name="user"/> 的电话号码（如果有）。
     /// </summary>
-    /// <param name="user">The user whose telephone number should be retrieved.</param>
-    /// <param name="cancellationToken">The <see cref="CancellationToken"/> used to propagate notifications that the operation should be canceled.</param>
-    /// <returns>The <see cref="Task"/> that represents the asynchronous operation, containing the user's telephone number, if any.</returns>
+    /// <param name="user">要获取其电话号码的用户。</param>
+    /// <param name="cancellationToken">用于传播操作取消通知的 <see cref="CancellationToken"/>。</param>
+    /// <returns>表示异步操作的 <see cref="Task"/>，包含用户的电话号码（如果有）。</returns>
     public virtual Task<string?> GetPhoneNumberAsync([NotNull] IdentityUser user, CancellationToken cancellationToken = default)
     {
         cancellationToken.ThrowIfCancellationRequested();
@@ -838,13 +848,12 @@ public class IdentityUserStore :
     }
 
     /// <summary>
-    /// Gets a flag indicating whether the specified <paramref name="user"/>'s telephone number has been confirmed.
+    /// 获取一个标志，指示指定 <paramref name="user"/> 的电话号码是否已确认。
     /// </summary>
-    /// <param name="user">The user to return a flag for, indicating whether their telephone number is confirmed.</param>
-    /// <param name="cancellationToken">The <see cref="CancellationToken"/> used to propagate notifications that the operation should be canceled.</param>
+    /// <param name="user">要返回其电话号码确认状态标志的用户。</param>
+    /// <param name="cancellationToken">用于传播操作取消通知的 <see cref="CancellationToken"/>。</param>
     /// <returns>
-    /// The <see cref="Task"/> that represents the asynchronous operation, returning true if the specified <paramref name="user"/> has a confirmed
-    /// telephone number otherwise false.
+    /// 表示异步操作的 <see cref="Task"/>，如果指定 <paramref name="user"/> 的电话号码已确认则返回 true，否则返回 false。
     /// </returns>
     public virtual Task<bool> GetPhoneNumberConfirmedAsync([NotNull] IdentityUser user, CancellationToken cancellationToken = default)
     {
@@ -856,12 +865,12 @@ public class IdentityUserStore :
     }
 
     /// <summary>
-    /// Sets a flag indicating if the specified <paramref name="user"/>'s phone number has been confirmed..
+    /// 设置标志，指示指定 <paramref name="user"/> 的电话号码是否已确认。
     /// </summary>
-    /// <param name="user">The user whose telephone number confirmation status should be set.</param>
-    /// <param name="confirmed">A flag indicating whether the user's telephone number has been confirmed.</param>
-    /// <param name="cancellationToken">The <see cref="CancellationToken"/> used to propagate notifications that the operation should be canceled.</param>
-    /// <returns>The <see cref="Task"/> that represents the asynchronous operation.</returns>
+    /// <param name="user">要设置其电话号码确认状态的用户。</param>
+    /// <param name="confirmed">指示用户电话号码是否已确认的标志。</param>
+    /// <param name="cancellationToken">用于传播操作取消通知的 <see cref="CancellationToken"/>。</param>
+    /// <returns>表示异步操作的 <see cref="Task"/>。</returns>
     public virtual Task SetPhoneNumberConfirmedAsync([NotNull] IdentityUser user, bool confirmed, CancellationToken cancellationToken = default)
     {
         cancellationToken.ThrowIfCancellationRequested();
@@ -874,12 +883,12 @@ public class IdentityUserStore :
     }
 
     /// <summary>
-    /// Sets the provided security <paramref name="stamp"/> for the specified <paramref name="user"/>.
+    /// 为指定 <paramref name="user"/> 设置提供的安全戳 <paramref name="stamp"/>。
     /// </summary>
-    /// <param name="user">The user whose security stamp should be set.</param>
-    /// <param name="stamp">The security stamp to set.</param>
-    /// <param name="cancellationToken">The <see cref="CancellationToken"/> used to propagate notifications that the operation should be canceled.</param>
-    /// <returns>The <see cref="Task"/> that represents the asynchronous operation.</returns>
+    /// <param name="user">要设置其安全戳的用户。</param>
+    /// <param name="stamp">要设置的安全戳。</param>
+    /// <param name="cancellationToken">用于传播操作取消通知的 <see cref="CancellationToken"/>。</param>
+    /// <returns>表示异步操作的 <see cref="Task"/>。</returns>
     public virtual Task SetSecurityStampAsync([NotNull] IdentityUser user, string stamp, CancellationToken cancellationToken = default)
     {
         cancellationToken.ThrowIfCancellationRequested();
@@ -892,11 +901,11 @@ public class IdentityUserStore :
     }
 
     /// <summary>
-    /// Get the security stamp for the specified <paramref name="user" />.
+    /// 获取指定 <paramref name="user"/> 的安全戳。
     /// </summary>
-    /// <param name="user">The user whose security stamp should be set.</param>
-    /// <param name="cancellationToken">The <see cref="CancellationToken"/> used to propagate notifications that the operation should be canceled.</param>
-    /// <returns>The <see cref="Task"/> that represents the asynchronous operation, containing the security stamp for the specified <paramref name="user"/>.</returns>
+    /// <param name="user">要获取其安全戳的用户。</param>
+    /// <param name="cancellationToken">用于传播操作取消通知的 <see cref="CancellationToken"/>。</param>
+    /// <returns>表示异步操作的 <see cref="Task"/>，包含指定 <paramref name="user"/> 的安全戳。</returns>
     public virtual Task<string?> GetSecurityStampAsync([NotNull] IdentityUser user, CancellationToken cancellationToken = default)
     {
         cancellationToken.ThrowIfCancellationRequested();
@@ -907,13 +916,12 @@ public class IdentityUserStore :
     }
 
     /// <summary>
-    /// Sets a flag indicating whether the specified <paramref name="user"/> has two factor authentication enabled or not,
-    /// as an asynchronous operation.
+    /// 以异步操作设置标志，指示指定 <paramref name="user"/> 是否启用了双重身份验证。
     /// </summary>
-    /// <param name="user">The user whose two factor authentication enabled status should be set.</param>
-    /// <param name="enabled">A flag indicating whether the specified <paramref name="user"/> has two factor authentication enabled.</param>
-    /// <param name="cancellationToken">The <see cref="CancellationToken"/> used to propagate notifications that the operation should be canceled.</param>
-    /// <returns>The <see cref="Task"/> that represents the asynchronous operation.</returns>
+    /// <param name="user">要设置其双重身份验证启用状态的用户。</param>
+    /// <param name="enabled">指示指定 <paramref name="user"/> 是否启用了双重身份验证的标志。</param>
+    /// <param name="cancellationToken">用于传播操作取消通知的 <see cref="CancellationToken"/>。</param>
+    /// <returns>表示异步操作的 <see cref="Task"/>。</returns>
     public virtual Task SetTwoFactorEnabledAsync([NotNull] IdentityUser user, bool enabled, CancellationToken cancellationToken = default)
     {
         cancellationToken.ThrowIfCancellationRequested();
@@ -926,14 +934,12 @@ public class IdentityUserStore :
     }
 
     /// <summary>
-    /// Returns a flag indicating whether the specified <paramref name="user"/> has two factor authentication enabled or not,
-    /// as an asynchronous operation.
+    /// 以异步操作返回一个标志，指示指定 <paramref name="user"/> 是否启用了双重身份验证。
     /// </summary>
-    /// <param name="user">The user whose two factor authentication enabled status should be set.</param>
-    /// <param name="cancellationToken">The <see cref="CancellationToken"/> used to propagate notifications that the operation should be canceled.</param>
+    /// <param name="user">要获取其双重身份验证启用状态的用户。</param>
+    /// <param name="cancellationToken">用于传播操作取消通知的 <see cref="CancellationToken"/>。</param>
     /// <returns>
-    /// The <see cref="Task"/> that represents the asynchronous operation, containing a flag indicating whether the specified
-    /// <paramref name="user"/> has two factor authentication enabled or not.
+    /// 表示异步操作的 <see cref="Task"/>，包含一个标志，指示指定 <paramref name="user"/> 是否启用了双重身份验证。
     /// </returns>
     public virtual Task<bool> GetTwoFactorEnabledAsync([NotNull] IdentityUser user, CancellationToken cancellationToken = default)
     {
@@ -945,12 +951,12 @@ public class IdentityUserStore :
     }
 
     /// <summary>
-    /// Retrieves all users with the specified claim.
+    /// 检索具有指定声明的所有用户。
     /// </summary>
-    /// <param name="claim">The claim whose users should be retrieved.</param>
-    /// <param name="cancellationToken">The <see cref="CancellationToken"/> used to propagate notifications that the operation should be canceled.</param>
+    /// <param name="claim">要检索其用户的声明。</param>
+    /// <param name="cancellationToken">用于传播操作取消通知的 <see cref="CancellationToken"/>。</param>
     /// <returns>
-    /// The <see cref="Task"/> contains a list of users, if any, that contain the specified claim.
+    /// 包含具有指定声明的用户列表（如果有）的 <see cref="Task"/>。
     /// </returns>
     public virtual async Task<IList<IdentityUser>> GetUsersForClaimAsync([NotNull] Claim claim, CancellationToken cancellationToken = default)
     {
@@ -962,12 +968,12 @@ public class IdentityUserStore :
     }
 
     /// <summary>
-    /// Retrieves all users in the specified role.
+    /// 检索指定角色中的所有用户。
     /// </summary>
-    /// <param name="normalizedRoleName">The role whose users should be retrieved.</param>
-    /// <param name="cancellationToken">The <see cref="CancellationToken"/> used to propagate notifications that the operation should be canceled.</param>
+    /// <param name="normalizedRoleName">要检索其用户的角色。</param>
+    /// <param name="cancellationToken">用于传播操作取消通知的 <see cref="CancellationToken"/>。</param>
     /// <returns>
-    /// The <see cref="Task"/> contains a list of users, if any, that are in the specified role.
+    /// 包含指定角色中的用户列表（如果有）的 <see cref="Task"/>。
     /// </returns>
     public virtual async Task<IList<IdentityUser>> GetUsersInRoleAsync([NotNull] string normalizedRoleName, CancellationToken cancellationToken = default)
     {
@@ -982,14 +988,14 @@ public class IdentityUserStore :
     }
 
     /// <summary>
-    /// Sets the token value for a particular user.
+    /// 为特定用户设置令牌值。
     /// </summary>
-    /// <param name="user">The user.</param>
-    /// <param name="loginProvider">The authentication provider for the token.</param>
-    /// <param name="name">The name of the token.</param>
-    /// <param name="value">The value of the token.</param>
-    /// <param name="cancellationToken">The <see cref="CancellationToken"/> used to propagate notifications that the operation should be canceled.</param>
-    /// <returns>The <see cref="Task"/> that represents the asynchronous operation.</returns>
+    /// <param name="user">用户。</param>
+    /// <param name="loginProvider">令牌的认证提供程序。</param>
+    /// <param name="name">令牌的名称。</param>
+    /// <param name="value">令牌的值。</param>
+    /// <param name="cancellationToken">用于传播操作取消通知的 <see cref="CancellationToken"/>。</param>
+    /// <returns>表示异步操作的 <see cref="Task"/>。</returns>
     public virtual async Task SetTokenAsync([NotNull] IdentityUser user, string loginProvider, string name, string? value, CancellationToken cancellationToken = default)
     {
         cancellationToken.ThrowIfCancellationRequested();
@@ -1002,13 +1008,13 @@ public class IdentityUserStore :
     }
 
     /// <summary>
-    /// Deletes a token for a user.
+    /// 删除用户的令牌。
     /// </summary>
-    /// <param name="user">The user.</param>
-    /// <param name="loginProvider">The authentication provider for the token.</param>
-    /// <param name="name">The name of the token.</param>
-    /// <param name="cancellationToken">The <see cref="CancellationToken"/> used to propagate notifications that the operation should be canceled.</param>
-    /// <returns>The <see cref="Task"/> that represents the asynchronous operation.</returns>
+    /// <param name="user">用户。</param>
+    /// <param name="loginProvider">令牌的认证提供程序。</param>
+    /// <param name="name">令牌的名称。</param>
+    /// <param name="cancellationToken">用于传播操作取消通知的 <see cref="CancellationToken"/>。</param>
+    /// <returns>表示异步操作的 <see cref="Task"/>。</returns>
     public virtual async Task RemoveTokenAsync(IdentityUser user, string loginProvider, string name, CancellationToken cancellationToken = default)
     {
         cancellationToken.ThrowIfCancellationRequested();
@@ -1021,13 +1027,13 @@ public class IdentityUserStore :
     }
 
     /// <summary>
-    /// Returns the token value.
+    /// 返回令牌值。
     /// </summary>
-    /// <param name="user">The user.</param>
-    /// <param name="loginProvider">The authentication provider for the token.</param>
-    /// <param name="name">The name of the token.</param>
-    /// <param name="cancellationToken">The <see cref="CancellationToken"/> used to propagate notifications that the operation should be canceled.</param>
-    /// <returns>The <see cref="Task"/> that represents the asynchronous operation.</returns>
+    /// <param name="user">用户。</param>
+    /// <param name="loginProvider">令牌的认证提供程序。</param>
+    /// <param name="name">令牌的名称。</param>
+    /// <param name="cancellationToken">用于传播操作取消通知的 <see cref="CancellationToken"/>。</param>
+    /// <returns>表示异步操作的 <see cref="Task"/>。</returns>
     public virtual async Task<string?> GetTokenAsync(IdentityUser user, string loginProvider, string name, CancellationToken cancellationToken = default)
     {
         cancellationToken.ThrowIfCancellationRequested();
@@ -1044,6 +1050,9 @@ public class IdentityUserStore :
         return SetTokenAsync(user, InternalLoginProvider, AuthenticatorKeyTokenName, key, cancellationToken);
     }
 
+    /// <summary>
+    /// Task<string?>
+    /// </summary>
     public virtual Task<string?> GetAuthenticatorKeyAsync(IdentityUser user, CancellationToken cancellationToken = default)
     {
         return GetTokenAsync(user, InternalLoginProvider, AuthenticatorKeyTokenName, cancellationToken);
@@ -1055,6 +1064,9 @@ public class IdentityUserStore :
     /// <param name="user">The user who owns the recovery code.</param>
     /// <param name="cancellationToken">The <see cref="CancellationToken"/> used to propagate notifications that the operation should be canceled.</param>
     /// <returns>The number of valid recovery codes for the user..</returns>
+    /// <summary>
+    /// Task<int>
+    /// </summary>
     public virtual async Task<int> CountCodesAsync(IdentityUser user, CancellationToken cancellationToken = default)
     {
         cancellationToken.ThrowIfCancellationRequested();
@@ -1091,6 +1103,9 @@ public class IdentityUserStore :
     /// <param name="code">The recovery code to use.</param>
     /// <param name="cancellationToken">The <see cref="CancellationToken"/> used to propagate notifications that the operation should be canceled.</param>
     /// <returns>True if the recovery code was found for the user.</returns>
+    /// <summary>
+    /// Task<bool>
+    /// </summary>
     public virtual async Task<bool> RedeemCodeAsync(IdentityUser user, string code, CancellationToken cancellationToken = default)
     {
         cancellationToken.ThrowIfCancellationRequested();
@@ -1109,16 +1124,25 @@ public class IdentityUserStore :
         return false;
     }
 
+    /// <summary>
+    /// Task<string>
+    /// </summary>
     public virtual Task<string> GetInternalLoginProviderAsync()
     {
         return Task.FromResult(InternalLoginProvider);
     }
 
+    /// <summary>
+    /// Task<string>
+    /// </summary>
     public virtual Task<string> GetAuthenticatorKeyTokenNameAsync()
     {
         return Task.FromResult(AuthenticatorKeyTokenName);
     }
 
+    /// <summary>
+    /// Task<string>
+    /// </summary>
     public virtual Task<string> GetRecoveryCodeTokenNameAsync()
     {
         return Task.FromResult(RecoveryCodeTokenName);

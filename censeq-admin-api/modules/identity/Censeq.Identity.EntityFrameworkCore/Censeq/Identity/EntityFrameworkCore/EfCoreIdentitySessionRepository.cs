@@ -12,6 +12,9 @@ using Volo.Abp.Timing;
 
 namespace Censeq.Identity.EntityFrameworkCore;
 
+/// <summary>
+/// Ef核心身份会话仓储
+/// </summary>
 public class EfCoreIdentitySessionRepository : EfCoreRepository<ICenseqIdentityDbContext, IdentitySession, Guid>, IIdentitySessionRepository
 {
     public EfCoreIdentitySessionRepository(IDbContextProvider<ICenseqIdentityDbContext> dbContextProvider)
@@ -20,11 +23,17 @@ public class EfCoreIdentitySessionRepository : EfCoreRepository<ICenseqIdentityD
 
     }
 
+    /// <summary>
+    /// Task<IdentitySession>
+    /// </summary>
     public virtual async Task<IdentitySession> FindAsync(string sessionId, CancellationToken cancellationToken = default)
     {
         return (await (await GetDbSetAsync()).FirstOrDefaultAsync(x => x.SessionId == sessionId, GetCancellationToken(cancellationToken)))!;
     }
 
+    /// <summary>
+    /// Task<IdentitySession>
+    /// </summary>
     public virtual async Task<IdentitySession> GetAsync(string sessionId, CancellationToken cancellationToken = default)
     {
         var session = await FindAsync(sessionId, cancellationToken);
@@ -36,16 +45,25 @@ public class EfCoreIdentitySessionRepository : EfCoreRepository<ICenseqIdentityD
         return session;
     }
 
+    /// <summary>
+    /// Task<bool>
+    /// </summary>
     public virtual async Task<bool> ExistAsync(Guid id, CancellationToken cancellationToken = default)
     {
         return await (await GetDbSetAsync()).AnyAsync(x => x.Id == id, GetCancellationToken(cancellationToken));
     }
 
+    /// <summary>
+    /// Task<bool>
+    /// </summary>
     public virtual async Task<bool> ExistAsync(string sessionId, CancellationToken cancellationToken = default)
     {
         return await (await GetDbSetAsync()).AnyAsync(x => x.SessionId == sessionId, GetCancellationToken(cancellationToken));
     }
 
+    /// <summary>
+    /// Task<List<IdentitySession>>
+    /// </summary>
     public virtual async Task<List<IdentitySession>> GetListAsync(
         string? sorting = null,
         int maxResultCount = int.MaxValue,
@@ -64,6 +82,9 @@ public class EfCoreIdentitySessionRepository : EfCoreRepository<ICenseqIdentityD
             .ToListAsync(GetCancellationToken(cancellationToken));
     }
 
+    /// <summary>
+    /// Task<long>
+    /// </summary>
     public virtual async Task<long> GetCountAsync(
         Guid? userId = null,
         string? device = null,

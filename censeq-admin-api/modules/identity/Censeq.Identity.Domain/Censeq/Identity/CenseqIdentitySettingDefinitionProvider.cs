@@ -5,6 +5,9 @@ using Volo.Abp.Settings;
 
 namespace Censeq.Identity;
 
+/// <summary>
+/// Censeq身份SettingDefinition提供程序
+/// </summary>
 public class CenseqIdentitySettingDefinitionProvider : SettingDefinitionProvider
 {
     public override void Define(ISettingDefinitionContext context)

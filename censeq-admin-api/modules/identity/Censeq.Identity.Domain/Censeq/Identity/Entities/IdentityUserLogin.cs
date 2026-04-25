@@ -7,29 +7,29 @@ using Volo.Abp.MultiTenancy;
 namespace Censeq.Identity.Entities;
 
 /// <summary>
-/// Represents a login and its associated provider for a user.
+/// 用户的登录及其关联提供程序
 /// </summary>
 public class IdentityUserLogin : Entity, IMultiTenant
 {
     public virtual Guid? TenantId { get; protected set; }
 
     /// <summary>
-    /// Gets or sets the of the primary key of the user associated with this login.
+    /// 关联用户的主键
     /// </summary>
     public virtual Guid UserId { get; protected set; }
 
     /// <summary>
-    /// Gets or sets the login provider for the login (e.g. facebook, google)
+    /// 登录提供程序（例如 facebook、google）
     /// </summary>
     public virtual string LoginProvider { get; protected set; }
 
     /// <summary>
-    /// Gets or sets the unique provider identifier for this login.
+    /// 登录的唯一提供程序标识符
     /// </summary>
     public virtual string ProviderKey { get; protected set; }
 
     /// <summary>
-    /// Gets or sets the friendly name used in a UI for this login.
+    /// 登录在 UI 中显示的友好名称
     /// </summary>
     public virtual string ProviderDisplayName { get; protected set; }
 
@@ -68,6 +68,9 @@ public class IdentityUserLogin : Entity, IMultiTenant
     {
     }
 
+    /// <summary>
+    /// 转换为用户登录信息
+    /// </summary>
     public virtual UserLoginInfo ToUserLoginInfo()
     {
         return new UserLoginInfo(LoginProvider, ProviderKey, ProviderDisplayName);

@@ -6,8 +6,14 @@ using Volo.Abp.Domain.Services;
 
 namespace Censeq.Identity;
 
+/// <summary>
+/// 身份用户委托管理器
+/// </summary>
 public class IdentityUserDelegationManager : DomainService
 {
+    /// <summary>
+    /// I身份用户委托仓储
+    /// </summary>
     protected IIdentityUserDelegationRepository IdentityUserDelegationRepository { get; }
 
     public IdentityUserDelegationManager(IIdentityUserDelegationRepository identityUserDelegationRepository)
@@ -15,16 +21,25 @@ public class IdentityUserDelegationManager : DomainService
         IdentityUserDelegationRepository = identityUserDelegationRepository;
     }
 
+    /// <summary>
+    /// Task<List<Identity用户Delegation>>
+    /// </summary>
     public virtual async Task<List<IdentityUserDelegation>> GetListAsync(Guid? sourceUserId = null, Guid? targetUserId = null, CancellationToken cancellationToken = default)
     {
         return await IdentityUserDelegationRepository.GetListAsync(sourceUserId, targetUserId, cancellationToken: cancellationToken);
     }
     
+    /// <summary>
+    /// Task<List<Identity用户Delegation>>
+    /// </summary>
     public virtual async Task<List<IdentityUserDelegation>> GetActiveDelegationsAsync(Guid targetUseId, CancellationToken cancellationToken = default)
     {
         return await IdentityUserDelegationRepository.GetActiveDelegationsAsync(targetUseId, cancellationToken: cancellationToken);
     }
 
+    /// <summary>
+    /// Task<Identity用户Delegation>
+    /// </summary>
     public virtual async Task<IdentityUserDelegation> FindActiveDelegationByIdAsync(Guid id, CancellationToken cancellationToken = default)
     {
         return await IdentityUserDelegationRepository.FindActiveDelegationByIdAsync(id, cancellationToken: cancellationToken);

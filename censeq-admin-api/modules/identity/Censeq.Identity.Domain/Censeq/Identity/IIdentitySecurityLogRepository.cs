@@ -6,6 +6,9 @@ using Volo.Abp.Domain.Repositories;
 
 namespace Censeq.Identity;
 
+/// <summary>
+/// I身份安全日志仓储接口
+/// </summary>
 public interface IIdentitySecurityLogRepository : IBasicRepository<IdentitySecurityLog, Guid>
 {
     Task<List<IdentitySecurityLog>> GetListAsync(

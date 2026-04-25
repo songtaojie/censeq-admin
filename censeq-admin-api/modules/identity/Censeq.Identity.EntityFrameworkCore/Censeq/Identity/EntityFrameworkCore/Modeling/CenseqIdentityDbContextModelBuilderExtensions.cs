@@ -5,6 +5,9 @@ using Censeq.Identity.Entities;
 
 namespace Censeq.Identity.EntityFrameworkCore.Modeling
 {
+    /// <summary>
+    /// Censeq身份数据库上下文模型构建器扩展
+    /// </summary>
     public static class CenseqIdentityDbContextModelBuilderExtensions
     {
         public static void ConfigureIdentity(this ModelBuilder builder)

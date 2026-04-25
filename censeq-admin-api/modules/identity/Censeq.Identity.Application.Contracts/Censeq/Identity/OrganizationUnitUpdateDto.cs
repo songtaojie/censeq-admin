@@ -2,6 +2,9 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Censeq.Identity;
 
+/// <summary>
+/// 组织单元更新数据传输对象
+/// </summary>
 public class OrganizationUnitUpdateDto
 {
     [Required]

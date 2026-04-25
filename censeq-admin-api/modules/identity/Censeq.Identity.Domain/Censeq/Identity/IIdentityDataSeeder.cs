@@ -4,6 +4,9 @@ using JetBrains.Annotations;
 
 namespace Censeq.Identity;
 
+/// <summary>
+/// I身份Data种子数据接口
+/// </summary>
 public interface IIdentityDataSeeder
 {
     Task<IdentityDataSeedResult> SeedAsync(

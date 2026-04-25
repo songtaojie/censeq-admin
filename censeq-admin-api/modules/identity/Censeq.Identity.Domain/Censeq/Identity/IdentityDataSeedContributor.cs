@@ -4,6 +4,9 @@ using Volo.Abp.DependencyInjection;
 
 namespace Censeq.Identity;
 
+/// <summary>
+/// 身份Data种子贡献者
+/// </summary>
 public class IdentityDataSeedContributor : IDataSeedContributor, ITransientDependency
 {
     public const string AdminEmailPropertyName = "AdminEmail";
@@ -13,6 +16,9 @@ public class IdentityDataSeedContributor : IDataSeedContributor, ITransientDepen
     public const string AdminPasswordPropertyName = "AdminPassword";
     public const string AdminPasswordDefaultValue = "1q2w3E*";
 
+    /// <summary>
+    /// I身份Data种子数据
+    /// </summary>
     protected IIdentityDataSeeder IdentityDataSeeder { get; }
 
     public IdentityDataSeedContributor(IIdentityDataSeeder identityDataSeeder)

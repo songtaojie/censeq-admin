@@ -14,6 +14,9 @@ public static class CenseqIdentityAspNetCoreServiceCollectionExtensions
     /// <param name="services">服务集合</param>
     /// <param name="jwtBearerScheme">JWT Bearer 方案名称，默认值为 "Bearer"</param>
     /// <returns>服务集合</returns>
+    /// <summary>
+    /// I服务Collection
+    /// </summary>
     public static IServiceCollection ForwardIdentityAuthenticationForBearer(this IServiceCollection services, string jwtBearerScheme = "Bearer")
     {
         services.ConfigureApplicationCookie(options =>

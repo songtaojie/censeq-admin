@@ -5,6 +5,9 @@ using Volo.Abp.Domain.Entities;
 
 namespace Censeq.Identity.Entities;
 
+/// <summary>
+/// 身份声明类型
+/// </summary>
 public class IdentityClaimType : AggregateRoot<Guid>
 {
     public virtual string Name { get; protected set; }
@@ -19,6 +22,9 @@ public class IdentityClaimType : AggregateRoot<Guid>
 
     public virtual string? Description { get; set; }
 
+    /// <summary>
+    /// 身份声明值类型
+    /// </summary>
     public virtual IdentityClaimValueType ValueType { get; set; }
 
     protected IdentityClaimType()

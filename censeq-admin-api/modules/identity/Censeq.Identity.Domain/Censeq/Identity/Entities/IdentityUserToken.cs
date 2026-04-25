@@ -6,29 +6,29 @@ using Volo.Abp.MultiTenancy;
 namespace Censeq.Identity.Entities;
 
 /// <summary>
-/// Represents an authentication token for a user.
+/// 用户认证令牌
 /// </summary>
 public class IdentityUserToken : Entity, IMultiTenant
 {
     public virtual Guid? TenantId { get; protected set; }
 
     /// <summary>
-    /// Gets or sets the primary key of the user that the token belongs to.
+    /// 令牌所属用户的主键
     /// </summary>
     public virtual Guid UserId { get; protected set; }
 
     /// <summary>
-    /// Gets or sets the LoginProvider this token is from.
+    /// 令牌的登录提供程序
     /// </summary>
     public virtual string LoginProvider { get; protected set; }
 
     /// <summary>
-    /// Gets or sets the name of the token.
+    /// 令牌名称
     /// </summary>
     public virtual string Name { get; protected set; }
 
     /// <summary>
-    /// Gets or sets the token value.
+    /// 令牌值
     /// </summary>
     public virtual string Value { get; set; }
 

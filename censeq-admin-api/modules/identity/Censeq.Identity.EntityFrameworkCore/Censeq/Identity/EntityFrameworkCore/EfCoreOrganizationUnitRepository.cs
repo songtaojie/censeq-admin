@@ -12,6 +12,9 @@ using Censeq.Identity.Entities;
 
 namespace Censeq.Identity.EntityFrameworkCore;
 
+/// <summary>
+/// Ef核心组织单元仓储
+/// </summary>
 public class EfCoreOrganizationUnitRepository
     : EfCoreRepository<ICenseqIdentityDbContext, OrganizationUnit, Guid>,
         IOrganizationUnitRepository
@@ -22,6 +25,9 @@ public class EfCoreOrganizationUnitRepository
     {
     }
 
+    /// <summary>
+    /// Task<List<OrganizationUnit>>
+    /// </summary>
     public virtual async Task<List<OrganizationUnit>> GetChildrenAsync(
         Guid? parentId,
         bool includeDetails = false,
@@ -33,6 +39,9 @@ public class EfCoreOrganizationUnitRepository
             .ToListAsync(GetCancellationToken(cancellationToken));
     }
 
+    /// <summary>
+    /// Task<List<OrganizationUnit>>
+    /// </summary>
     public virtual async Task<List<OrganizationUnit>> GetAllChildrenWithParentCodeAsync(
         string code,
         Guid? parentId,
@@ -45,6 +54,9 @@ public class EfCoreOrganizationUnitRepository
             .ToListAsync(GetCancellationToken(cancellationToken));
     }
 
+    /// <summary>
+    /// Task<List<OrganizationUnit>>
+    /// </summary>
     public virtual async Task<List<OrganizationUnit>> GetListAsync(
         string? sorting = null,
         int maxResultCount = int.MaxValue,
@@ -59,6 +71,9 @@ public class EfCoreOrganizationUnitRepository
             .ToListAsync(GetCancellationToken(cancellationToken));
     }
 
+    /// <summary>
+    /// Task<List<OrganizationUnit>>
+    /// </summary>
     public virtual async Task<List<OrganizationUnit>> GetListAsync(
         IEnumerable<Guid> ids,
         bool includeDetails = false,
@@ -70,6 +85,9 @@ public class EfCoreOrganizationUnitRepository
             .ToListAsync(GetCancellationToken(cancellationToken));
     }
 
+    /// <summary>
+    /// Task<List<OrganizationUnit>>
+    /// </summary>
     public virtual async Task<List<OrganizationUnit>> GetListByRoleIdAsync(
         Guid roleId,
         bool includeDetails = false,
@@ -85,6 +103,9 @@ public class EfCoreOrganizationUnitRepository
         return await query.ToListAsync(GetCancellationToken(cancellationToken));
     }
 
+    /// <summary>
+    /// Task<OrganizationUnit>
+    /// </summary>
     public virtual async Task<OrganizationUnit> GetAsync(
         string displayName,
         bool includeDetails = true,
@@ -99,6 +120,9 @@ public class EfCoreOrganizationUnitRepository
             ))!;
     }
 
+    /// <summary>
+    /// Task<List<IdentityRole>>
+    /// </summary>
     public virtual async Task<List<IdentityRole>> GetRolesAsync(
         OrganizationUnit organizationUnit,
         string? sorting = null,
@@ -121,6 +145,9 @@ public class EfCoreOrganizationUnitRepository
         return await query.ToListAsync(GetCancellationToken(cancellationToken));
     }
 
+    /// <summary>
+    /// Task<List<IdentityRole>>
+    /// </summary>
     public virtual async Task<List<IdentityRole>> GetRolesAsync(
         Guid[] organizationUnitIds,
         string? sorting = null,
@@ -143,6 +170,9 @@ public class EfCoreOrganizationUnitRepository
         return await query.ToListAsync(GetCancellationToken(cancellationToken));
     }
 
+    /// <summary>
+    /// Task<int>
+    /// </summary>
     public virtual async Task<int> GetRolesCountAsync(
         OrganizationUnit organizationUnit,
         CancellationToken cancellationToken = default)
@@ -157,6 +187,9 @@ public class EfCoreOrganizationUnitRepository
         return await query.CountAsync(GetCancellationToken(cancellationToken));
     }
 
+    /// <summary>
+    /// Task<List<IdentityRole>>
+    /// </summary>
     public virtual async Task<List<IdentityRole>> GetUnaddedRolesAsync(
         OrganizationUnit organizationUnit,
         string? sorting = null,
@@ -178,6 +211,9 @@ public class EfCoreOrganizationUnitRepository
             .ToListAsync(GetCancellationToken(cancellationToken));
     }
 
+    /// <summary>
+    /// Task<int>
+    /// </summary>
     public virtual async Task<int> GetUnaddedRolesCountAsync(
         OrganizationUnit organizationUnit,
         string? filter = null,
@@ -192,6 +228,9 @@ public class EfCoreOrganizationUnitRepository
             .CountAsync(GetCancellationToken(cancellationToken));
     }
 
+    /// <summary>
+    /// Task<List<IdentityUser>>
+    /// </summary>
     public virtual async Task<List<IdentityUser>> GetMembersAsync(
         OrganizationUnit organizationUnit,
         string? sorting = null,
@@ -208,6 +247,9 @@ public class EfCoreOrganizationUnitRepository
                     .ToListAsync(GetCancellationToken(cancellationToken));
     }
 
+    /// <summary>
+    /// Task<List<Guid>>
+    /// </summary>
     public virtual async Task<List<Guid>> GetMemberIdsAsync(Guid id, CancellationToken cancellationToken = default)
     {
         var dbContext = await GetDbContextAsync();
@@ -218,6 +260,9 @@ public class EfCoreOrganizationUnitRepository
             select user.Id).ToListAsync(cancellationToken);
     }
 
+    /// <summary>
+    /// Task<int>
+    /// </summary>
     public virtual async Task<int> GetMembersCountAsync(
         OrganizationUnit organizationUnit,
         string? filter = null,
@@ -228,6 +273,9 @@ public class EfCoreOrganizationUnitRepository
         return await query.CountAsync(GetCancellationToken(cancellationToken));
     }
 
+    /// <summary>
+    /// Task<List<IdentityUser>>
+    /// </summary>
     public virtual async Task<List<IdentityUser>> GetUnaddedUsersAsync(
         OrganizationUnit organizationUnit,
         string? sorting = null,
@@ -262,6 +310,9 @@ public class EfCoreOrganizationUnitRepository
             .ToListAsync(GetCancellationToken(cancellationToken));
     }
 
+    /// <summary>
+    /// Task<int>
+    /// </summary>
     public virtual async Task<int> GetUnaddedUsersCountAsync(
         OrganizationUnit organizationUnit,
         string? filter = null,
@@ -283,11 +334,17 @@ public class EfCoreOrganizationUnitRepository
     }
 
     [Obsolete("Use WithDetailsAsync method.")]
+    /// <summary>
+    /// IQueryable<OrganizationUnit>
+    /// </summary>
     public override IQueryable<OrganizationUnit> WithDetails()
     {
         return GetQueryable().IncludeDetails();
     }
 
+    /// <summary>
+    /// Task<IQueryable<OrganizationUnit>>
+    /// </summary>
     public override async Task<IQueryable<OrganizationUnit>> WithDetailsAsync()
     {
         return (await GetQueryableAsync()).IncludeDetails();
@@ -314,6 +371,9 @@ public class EfCoreOrganizationUnitRepository
         dbContext.Set<IdentityUserOrganizationUnit>().RemoveRange(ouMembersQuery);
     }
 
+    /// <summary>
+    /// Task<IQueryable<IdentityUser>>
+    /// </summary>
     protected virtual async Task<IQueryable<IdentityUser>> CreateGetMembersFilteredQueryAsync(OrganizationUnit organizationUnit, string? filter = null)
     {
         var dbContext = await GetDbContextAsync();

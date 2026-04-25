@@ -10,6 +10,9 @@ using Volo.Abp.EntityFrameworkCore;
 
 namespace Censeq.Identity.EntityFrameworkCore;
 
+/// <summary>
+/// Ef核心身份安全日志仓储
+/// </summary>
 public class EfCoreIdentitySecurityLogRepository : EfCoreRepository<ICenseqIdentityDbContext, IdentitySecurityLog, Guid>, IIdentitySecurityLogRepository
 {
     public EfCoreIdentitySecurityLogRepository(IDbContextProvider<ICenseqIdentityDbContext> dbContextProvider)
@@ -18,6 +21,9 @@ public class EfCoreIdentitySecurityLogRepository : EfCoreRepository<ICenseqIdent
 
     }
 
+    /// <summary>
+    /// Task<List<Identity安全Log>>
+    /// </summary>
     public virtual async Task<List<IdentitySecurityLog>> GetListAsync(
         string? sorting = null,
         int maxResultCount = int.MaxValue,
@@ -54,6 +60,9 @@ public class EfCoreIdentitySecurityLogRepository : EfCoreRepository<ICenseqIdent
             .ToListAsync(cancellationToken);
     }
 
+    /// <summary>
+    /// Task<long>
+    /// </summary>
     public virtual async Task<long> GetCountAsync(
         DateTime? startTime = null,
         DateTime? endTime = null,
@@ -84,6 +93,9 @@ public class EfCoreIdentitySecurityLogRepository : EfCoreRepository<ICenseqIdent
         return await query.LongCountAsync(cancellationToken);
     }
 
+    /// <summary>
+    /// Task<Identity安全Log>
+    /// </summary>
     public virtual async Task<IdentitySecurityLog> GetByUserIdAsync(Guid id, Guid userId, bool includeDetails = false, CancellationToken cancellationToken = default)
     {
         return (await (await GetDbSetAsync())
@@ -91,6 +103,9 @@ public class EfCoreIdentitySecurityLogRepository : EfCoreRepository<ICenseqIdent
             .FirstOrDefaultAsync(x => x.Id == id && x.UserId == userId, GetCancellationToken(cancellationToken)))!;
     }
 
+    /// <summary>
+    /// Task<IQueryable<Identity安全Log>>
+    /// </summary>
     protected virtual async Task<IQueryable<IdentitySecurityLog>> GetListQueryAsync(
           DateTime? startTime = null,
           DateTime? endTime = null,

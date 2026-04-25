@@ -3,6 +3,9 @@ using Volo.Abp.Application.Dtos;
 
 namespace Censeq.Identity;
 
+/// <summary>
+/// 组织单元数据传输对象
+/// </summary>
 public class OrganizationUnitDto : ExtensibleEntityDto<Guid>
 {
     public Guid? ParentId { get; set; }

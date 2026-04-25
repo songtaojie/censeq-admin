@@ -10,6 +10,9 @@ namespace Censeq.Identity;
 /// 用户查找应用服务接口
 /// </summary>
 [Obsolete("Use IIdentityUserIntegrationService for module-to-module (or service-to-service) communication.")]
+/// <summary>
+/// I身份用户查找应用服务接口
+/// </summary>
 public interface IIdentityUserLookupAppService : IApplicationService
 {
     /// <summary>

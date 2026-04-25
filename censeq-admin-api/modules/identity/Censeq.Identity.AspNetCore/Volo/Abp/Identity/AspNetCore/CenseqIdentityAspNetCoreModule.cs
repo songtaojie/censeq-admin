@@ -14,6 +14,9 @@ namespace Censeq.Identity.AspNetCore;
 [DependsOn(
     typeof(CenseqIdentityDomainModule)
     )]
+/// <summary>
+/// Censeq身份AspNet核心模块
+/// </summary>
 public class CenseqIdentityAspNetCoreModule : AbpModule
 {
     /// <summary>

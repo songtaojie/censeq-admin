@@ -13,6 +13,9 @@ using Volo.Abp.EntityFrameworkCore;
 
 namespace Censeq.Identity.EntityFrameworkCore;
 
+/// <summary>
+/// Ef核心身份用户仓储
+/// </summary>
 public class EfCoreIdentityUserRepository : EfCoreRepository<ICenseqIdentityDbContext, IdentityUser, Guid>, IIdentityUserRepository
 {
     public EfCoreIdentityUserRepository(IDbContextProvider<ICenseqIdentityDbContext> dbContextProvider)
@@ -20,6 +23,9 @@ public class EfCoreIdentityUserRepository : EfCoreRepository<ICenseqIdentityDbCo
     {
     }
 
+    /// <summary>
+    /// Task<IdentityUser>
+    /// </summary>
     public virtual async Task<IdentityUser> FindByNormalizedUserNameAsync(
         string normalizedUserName,
         bool includeDetails = true,
@@ -34,6 +40,9 @@ public class EfCoreIdentityUserRepository : EfCoreRepository<ICenseqIdentityDbCo
             ))!;
     }
 
+    /// <summary>
+    /// Task<List<string>>
+    /// </summary>
     public virtual async Task<List<string>> GetRoleNamesAsync(
         Guid id,
         CancellationToken cancellationToken = default)
@@ -57,6 +66,9 @@ public class EfCoreIdentityUserRepository : EfCoreRepository<ICenseqIdentityDbCo
         return await resultQuery.ToListAsync(GetCancellationToken(cancellationToken));
     }
 
+    /// <summary>
+    /// Task<List<Identity用户标识With角色Names>>
+    /// </summary>
     public virtual async Task<List<IdentityUserIdWithRoleNames>> GetRoleNamesAsync(
         IEnumerable<Guid> userIds,
         CancellationToken cancellationToken = default)
@@ -94,6 +106,9 @@ public class EfCoreIdentityUserRepository : EfCoreRepository<ICenseqIdentityDbCo
         return userRoles.Concat(orgUnitRoles).GroupBy(x => x.Id).Select(x => new IdentityUserIdWithRoleNames {Id = x.Key, RoleNames = x.SelectMany(y => y.RoleNames).Distinct().ToArray()}).ToList();
     }
 
+    /// <summary>
+    /// Task<List<string>>
+    /// </summary>
     public virtual async Task<List<string>> GetRoleNamesInOrganizationUnitAsync(
         Guid id,
         CancellationToken cancellationToken = default)
@@ -111,6 +126,9 @@ public class EfCoreIdentityUserRepository : EfCoreRepository<ICenseqIdentityDbCo
         return result;
     }
 
+    /// <summary>
+    /// Task<IdentityUser>
+    /// </summary>
     public virtual async Task<IdentityUser> FindByLoginAsync(
         string loginProvider,
         string providerKey,
@@ -124,6 +142,9 @@ public class EfCoreIdentityUserRepository : EfCoreRepository<ICenseqIdentityDbCo
             .FirstOrDefaultAsync(GetCancellationToken(cancellationToken)))!;
     }
 
+    /// <summary>
+    /// Task<IdentityUser>
+    /// </summary>
     public virtual async Task<IdentityUser> FindByNormalizedEmailAsync(
         string normalizedEmail,
         bool includeDetails = true,
@@ -135,6 +156,9 @@ public class EfCoreIdentityUserRepository : EfCoreRepository<ICenseqIdentityDbCo
             .FirstOrDefaultAsync(u => u.NormalizedEmail == normalizedEmail, GetCancellationToken(cancellationToken)))!;
     }
 
+    /// <summary>
+    /// Task<List<IdentityUser>>
+    /// </summary>
     public virtual async Task<List<IdentityUser>> GetListByClaimAsync(
         Claim claim,
         bool includeDetails = false,
@@ -160,6 +184,9 @@ public class EfCoreIdentityUserRepository : EfCoreRepository<ICenseqIdentityDbCo
         }
     }
 
+    /// <summary>
+    /// Task<List<IdentityUser>>
+    /// </summary>
     public virtual async Task<List<IdentityUser>> GetListByNormalizedRoleNameAsync(
         string normalizedRoleName,
         bool includeDetails = false,
@@ -183,12 +210,18 @@ public class EfCoreIdentityUserRepository : EfCoreRepository<ICenseqIdentityDbCo
             .ToListAsync(GetCancellationToken(cancellationToken));
     }
 
+    /// <summary>
+    /// Task<List<Guid>>
+    /// </summary>
     public virtual async Task<List<Guid>> GetUserIdListByRoleIdAsync(Guid roleId, CancellationToken cancellationToken = default)
     {
         return await (await GetDbContextAsync()).Set<IdentityUserRole>().Where(x => x.RoleId == roleId)
             .Select(x => x.UserId).ToListAsync(GetCancellationToken(cancellationToken));
     }
 
+    /// <summary>
+    /// Task<List<IdentityUser>>
+    /// </summary>
     public virtual async Task<List<IdentityUser>> GetListAsync(
         string? sorting = null,
         int maxResultCount = int.MaxValue,
@@ -238,6 +271,9 @@ public class EfCoreIdentityUserRepository : EfCoreRepository<ICenseqIdentityDbCo
             .ToListAsync(GetCancellationToken(cancellationToken));
     }
 
+    /// <summary>
+    /// Task<List<IdentityRole>>
+    /// </summary>
     public virtual async Task<List<IdentityRole>> GetRolesAsync(
         Guid id,
         bool includeDetails = false,
@@ -269,6 +305,9 @@ public class EfCoreIdentityUserRepository : EfCoreRepository<ICenseqIdentityDbCo
         return await resultQuery.ToListAsync(GetCancellationToken(cancellationToken));
     }
 
+    /// <summary>
+    /// Task<long>
+    /// </summary>
     public virtual async Task<long> GetCountAsync(
         string? filter = null,
         Guid? roleId = null,
@@ -309,6 +348,9 @@ public class EfCoreIdentityUserRepository : EfCoreRepository<ICenseqIdentityDbCo
         )).LongCountAsync(GetCancellationToken(cancellationToken));
     }
 
+    /// <summary>
+    /// Task<List<OrganizationUnit>>
+    /// </summary>
     public virtual async Task<List<OrganizationUnit>> GetOrganizationUnitsAsync(
         Guid id,
         bool includeDetails = false,
@@ -324,6 +366,9 @@ public class EfCoreIdentityUserRepository : EfCoreRepository<ICenseqIdentityDbCo
         return await query.ToListAsync(GetCancellationToken(cancellationToken));
     }
 
+    /// <summary>
+    /// Task<List<IdentityUser>>
+    /// </summary>
     public virtual async Task<List<IdentityUser>> GetUsersInOrganizationUnitAsync(
         Guid organizationUnitId,
         CancellationToken cancellationToken = default
@@ -339,6 +384,9 @@ public class EfCoreIdentityUserRepository : EfCoreRepository<ICenseqIdentityDbCo
         return await query.ToListAsync(GetCancellationToken(cancellationToken));
     }
 
+    /// <summary>
+    /// Task<List<IdentityUser>>
+    /// </summary>
     public virtual async Task<List<IdentityUser>> GetUsersInOrganizationsListAsync(
         List<Guid> organizationUnitIds,
         CancellationToken cancellationToken = default
@@ -354,6 +402,9 @@ public class EfCoreIdentityUserRepository : EfCoreRepository<ICenseqIdentityDbCo
         return await query.ToListAsync(GetCancellationToken(cancellationToken));
     }
 
+    /// <summary>
+    /// Task<List<IdentityUser>>
+    /// </summary>
     public virtual async Task<List<IdentityUser>> GetUsersInOrganizationUnitWithChildrenAsync(
         string code,
         CancellationToken cancellationToken = default
@@ -371,16 +422,25 @@ public class EfCoreIdentityUserRepository : EfCoreRepository<ICenseqIdentityDbCo
     }
 
     [Obsolete("Use WithDetailsAsync method.")]
+    /// <summary>
+    /// IQueryable<IdentityUser>
+    /// </summary>
     public override IQueryable<IdentityUser> WithDetails()
     {
         return GetQueryable().IncludeDetails();
     }
 
+    /// <summary>
+    /// Task<IQueryable<IdentityUser>>
+    /// </summary>
     public override async Task<IQueryable<IdentityUser>> WithDetailsAsync()
     {
         return (await GetQueryableAsync()).IncludeDetails();
     }
 
+    /// <summary>
+    /// Task<IdentityUser>
+    /// </summary>
     public virtual async Task<IdentityUser> FindByTenantIdAndUserNameAsync(
         [NotNull] string userName,
         Guid? tenantId,
@@ -395,6 +455,9 @@ public class EfCoreIdentityUserRepository : EfCoreRepository<ICenseqIdentityDbCo
             ))!;
     }
 
+    /// <summary>
+    /// Task<List<IdentityUser>>
+    /// </summary>
     public virtual async Task<List<IdentityUser>> GetListByIdsAsync(IEnumerable<Guid> ids, bool includeDetails = false, CancellationToken cancellationToken = default)
     {
         return await (await GetDbSetAsync())
@@ -431,6 +494,9 @@ public class EfCoreIdentityUserRepository : EfCoreRepository<ICenseqIdentityDbCo
         }
     }
 
+    /// <summary>
+    /// Task<IQueryable<IdentityUser>>
+    /// </summary>
     protected virtual async Task<IQueryable<IdentityUser>> GetFilteredQueryableAsync(
         string? filter = null,
         Guid? roleId = null,

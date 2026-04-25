@@ -21,16 +21,46 @@ using Censeq.Identity.Entities;
 
 namespace Censeq.Identity;
 
+/// <summary>
+/// 身份用户管理器
+/// </summary>
 public class IdentityUserManager : UserManager<IdentityUser>, IDomainService
 {
+    /// <summary>
+    /// I身份角色仓储
+    /// </summary>
     protected IIdentityRoleRepository RoleRepository { get; }
+    /// <summary>
+    /// I身份用户仓储
+    /// </summary>
     protected IIdentityUserRepository UserRepository { get; }
+    /// <summary>
+    /// I组织单元仓储
+    /// </summary>
     protected IOrganizationUnitRepository OrganizationUnitRepository { get; }
+    /// <summary>
+    /// ISetting提供程序
+    /// </summary>
     protected ISettingProvider SettingProvider { get; }
+    /// <summary>
+    /// ICancellation令牌提供程序
+    /// </summary>
     protected ICancellationTokenProvider CancellationTokenProvider { get; }
+    /// <summary>
+    /// IDistributed事件Bus
+    /// </summary>
     protected IDistributedEventBus DistributedEventBus { get; }
+    /// <summary>
+    /// I身份关联用户仓储
+    /// </summary>
     protected IIdentityLinkUserRepository IdentityLinkUserRepository { get; }
+    /// <summary>
+    /// IDistributedCache<Abp动态声明缓存Item>
+    /// </summary>
     protected IDistributedCache<AbpDynamicClaimCacheItem> DynamicClaimCache { get; }
+    /// <summary>
+    /// Cancellation令牌
+    /// </summary>
     protected override CancellationToken CancellationToken => CancellationTokenProvider.Token;
 
     public IdentityUserManager(
@@ -72,6 +102,9 @@ public class IdentityUserManager : UserManager<IdentityUser>, IDomainService
         CancellationTokenProvider = cancellationTokenProvider;
     }
 
+    /// <summary>
+    /// Task<IdentityResult>
+    /// </summary>
     public virtual async Task<IdentityResult> CreateAsync(IdentityUser user, string password, bool validatePassword)
     {
         var result = await UpdatePasswordHash(user, password, validatePassword);
@@ -83,6 +116,9 @@ public class IdentityUserManager : UserManager<IdentityUser>, IDomainService
         return await CreateAsync(user);
     }
 
+    /// <summary>
+    /// override Task<IdentityResult>
+    /// </summary>
     public async override Task<IdentityResult> DeleteAsync(IdentityUser user)
     {
         user.Claims.Clear();
@@ -96,6 +132,9 @@ public class IdentityUserManager : UserManager<IdentityUser>, IDomainService
         return await base.DeleteAsync(user);
     }
 
+    /// <summary>
+    /// override Task<IdentityResult>
+    /// </summary>
     protected async override Task<IdentityResult> UpdateUserAsync(IdentityUser user)
     {
         var result = await base.UpdateUserAsync(user);
@@ -108,6 +147,9 @@ public class IdentityUserManager : UserManager<IdentityUser>, IDomainService
         return result;
     }
 
+    /// <summary>
+    /// Task<IdentityUser>
+    /// </summary>
     public virtual async Task<IdentityUser> GetByIdAsync(Guid id)
     {
         var user = await Store.FindByIdAsync(id.ToString(), CancellationToken);
@@ -119,6 +161,9 @@ public class IdentityUserManager : UserManager<IdentityUser>, IDomainService
         return user;
     }
 
+    /// <summary>
+    /// Task<IdentityResult>
+    /// </summary>
     public virtual async Task<IdentityResult> SetRolesAsync([NotNull] IdentityUser user,
         [NotNull] IEnumerable<string> roleNames)
     {
@@ -142,12 +187,18 @@ public class IdentityUserManager : UserManager<IdentityUser>, IDomainService
         return IdentityResult.Success;
     }
 
+    /// <summary>
+    /// Task<bool>
+    /// </summary>
     public virtual async Task<bool> IsInOrganizationUnitAsync(Guid userId, Guid ouId)
     {
         var user = await UserRepository.GetAsync(userId, cancellationToken: CancellationToken);
         return user.IsInOrganizationUnit(ouId);
     }
 
+    /// <summary>
+    /// Task<bool>
+    /// </summary>
     public virtual async Task<bool> IsInOrganizationUnitAsync(IdentityUser user, OrganizationUnit ou)
     {
         await UserRepository.EnsureCollectionLoadedAsync(user, u => u.OrganizationUnits,
@@ -250,6 +301,9 @@ public class IdentityUserManager : UserManager<IdentityUser>, IDomainService
     }
 
     [UnitOfWork]
+    /// <summary>
+    /// Task<List<OrganizationUnit>>
+    /// </summary>
     public virtual async Task<List<OrganizationUnit>> GetOrganizationUnitsAsync(IdentityUser user,
         bool includeDetails = false)
     {
@@ -264,6 +318,9 @@ public class IdentityUserManager : UserManager<IdentityUser>, IDomainService
     }
 
     [UnitOfWork]
+    /// <summary>
+    /// Task<List<IdentityUser>>
+    /// </summary>
     public virtual async Task<List<IdentityUser>> GetUsersInOrganizationUnitAsync(
         OrganizationUnit organizationUnit,
         bool includeChildren = false)
@@ -280,6 +337,9 @@ public class IdentityUserManager : UserManager<IdentityUser>, IDomainService
         }
     }
 
+    /// <summary>
+    /// Task<IdentityResult>
+    /// </summary>
     public virtual async Task<IdentityResult> AddDefaultRolesAsync([NotNull] IdentityUser user)
     {
         await UserRepository.EnsureCollectionLoadedAsync(user, u => u.Roles, CancellationToken);
@@ -295,6 +355,9 @@ public class IdentityUserManager : UserManager<IdentityUser>, IDomainService
         return await UpdateUserAsync(user);
     }
 
+    /// <summary>
+    /// Task<bool>
+    /// </summary>
     public virtual async Task<bool> ShouldPeriodicallyChangePasswordAsync(IdentityUser user)
     {
         Check.NotNull(user, nameof(user));
@@ -326,6 +389,9 @@ public class IdentityUserManager : UserManager<IdentityUser>, IDomainService
         await identityUserStore.SetTokenAsync(user, await identityUserStore.GetInternalLoginProviderAsync(), await identityUserStore.GetRecoveryCodeTokenNameAsync(), string.Empty, CancellationToken);
     }
 
+    /// <summary>
+    /// override Task<IdentityResult>
+    /// </summary>
     public async override Task<IdentityResult> SetEmailAsync(IdentityUser user, string? email)
     {
         var oldMail = user.Email;
@@ -349,6 +415,9 @@ public class IdentityUserManager : UserManager<IdentityUser>, IDomainService
         return result;
     }
 
+    /// <summary>
+    /// override Task<IdentityResult>
+    /// </summary>
     public async override Task<IdentityResult> SetUserNameAsync(IdentityUser user, string? userName)
     {
         var oldUserName = user.UserName;
@@ -410,6 +479,9 @@ public class IdentityUserManager : UserManager<IdentityUser>, IDomainService
         await UserRepository.UpdateOrganizationAsync(sourceOrganizationId, targetOrganizationId, CancellationToken);
     }
 
+    /// <summary>
+    /// Task<bool>
+    /// </summary>
     public virtual async Task<bool> ValidateUserNameAsync(string userName, Guid? userId = null)
     {
         if (string.IsNullOrWhiteSpace(userName))
@@ -431,6 +503,9 @@ public class IdentityUserManager : UserManager<IdentityUser>, IDomainService
         return true;
     }
 
+    /// <summary>
+    /// Task<string>
+    /// </summary>
     public virtual Task<string> GetRandomUserNameAsync(int length)
     {
         var allowedUserNameCharacters = Options.User.AllowedUserNameCharacters;
@@ -449,6 +524,9 @@ public class IdentityUserManager : UserManager<IdentityUser>, IDomainService
         return Task.FromResult(randomUserName);
     }
 
+    /// <summary>
+    /// Task<string>
+    /// </summary>
     public virtual async Task<string> GetUserNameFromEmailAsync(string email)
     {
         const int maxTryCount = 20;

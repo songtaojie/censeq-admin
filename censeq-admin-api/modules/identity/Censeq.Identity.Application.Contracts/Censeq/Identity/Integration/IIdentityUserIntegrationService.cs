@@ -8,6 +8,9 @@ using Volo.Abp.Users;
 namespace Censeq.Identity.Integration;
 
 [IntegrationService]
+/// <summary>
+/// I身份用户集成服务接口
+/// </summary>
 public interface IIdentityUserIntegrationService : IApplicationService
 {
     Task<string[]> GetRoleNamesAsync(Guid id);

@@ -6,13 +6,22 @@ using Censeq.Identity.Entities;
 
 namespace Microsoft.Extensions.DependencyInjection;
 
+/// <summary>
+/// Censeq身份服务Collection扩展
+/// </summary>
 public static class CenseqIdentityServiceCollectionExtensions
 {
+    /// <summary>
+    /// 身份构建器
+    /// </summary>
     public static IdentityBuilder AddCenseqIdentity(this IServiceCollection services)
     {
         return services.AddCenseqIdentity(setupAction: null);
     }
 
+    /// <summary>
+    /// 身份构建器
+    /// </summary>
     public static IdentityBuilder AddCenseqIdentity(this IServiceCollection services, Action<IdentityOptions>? setupAction)
     {
         //AbpRoleManager

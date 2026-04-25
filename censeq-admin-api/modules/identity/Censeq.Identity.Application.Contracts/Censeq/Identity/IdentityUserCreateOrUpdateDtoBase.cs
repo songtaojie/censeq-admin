@@ -18,15 +18,9 @@ public abstract class IdentityUserCreateOrUpdateDtoBase : ExtensibleObject
     [DynamicStringLength(typeof(IdentityUserConsts), nameof(IdentityUserConsts.MaxUserNameLength))]
     public string UserName { get; set; }
 
-    /// <summary>
-    /// 名字
-    /// </summary>
     [DynamicStringLength(typeof(IdentityUserConsts), nameof(IdentityUserConsts.MaxNameLength))]
     public string? Name { get; set; }
 
-    /// <summary>
-    /// 姓氏
-    /// </summary>
     [DynamicStringLength(typeof(IdentityUserConsts), nameof(IdentityUserConsts.MaxSurnameLength))]
     public string? Surname { get; set; }
 
@@ -58,6 +52,9 @@ public abstract class IdentityUserCreateOrUpdateDtoBase : ExtensibleObject
     /// 角色名称列表
     /// </summary>
     [CanBeNull]
+    /// <summary>
+    /// string[]
+    /// </summary>
     public string[] RoleNames { get; set; }
 
     /// <summary>

@@ -72,6 +72,9 @@ public class CenseqSignInManager : SignInManager<IdentityUser>
     /// <param name="isPersistent">是否持久化登录</param>
     /// <param name="lockoutOnFailure">失败时是否锁定</param>
     /// <returns>登录结果</returns>
+    /// <summary>
+    /// override Task<SignInResult>
+    /// </summary>
     public async override Task<SignInResult> PasswordSignInAsync(
         string userName,
         string password,
@@ -121,6 +124,9 @@ public class CenseqSignInManager : SignInManager<IdentityUser>
     /// </summary>
     /// <param name="user">用户</param>
     /// <returns>登录结果，如果检查通过则返回 null</returns>
+    /// <summary>
+    /// override Task<SignInResult?>
+    /// </summary>
     protected async override Task<SignInResult?> PreSignInCheck(IdentityUser user)
     {
         if (!user.IsActive)
@@ -151,6 +157,9 @@ public class CenseqSignInManager : SignInManager<IdentityUser>
     /// <param name="loginProvider">登录提供程序</param>
     /// <param name="bypassTwoFactor">是否跳过双因素认证</param>
     /// <returns>登录结果</returns>
+    /// <summary>
+    /// Task<SignInResult>
+    /// </summary>
     public virtual async Task<SignInResult> CallSignInOrTwoFactorAsync(IdentityUser user, bool isPersistent, string? loginProvider = null, bool bypassTwoFactor = false)
     {
         return await base.SignInOrTwoFactorAsync(user, isPersistent, loginProvider, bypassTwoFactor);

@@ -3,6 +3,9 @@ using Censeq.Identity.Entities;
 
 namespace Censeq.Identity;
 
+/// <summary>
+/// I外部登录提供程序接口
+/// </summary>
 public interface IExternalLoginProvider
 {
     /// <summary>

@@ -6,8 +6,14 @@ using Volo.Abp.Authorization.Permissions;
 
 namespace Censeq.PermissionManagement;
 
+/// <summary>
+/// 角色权限管理器扩展
+/// </summary>
 public static class RolePermissionManagerExtensions
 {
+    /// <summary>
+    /// Task<PermissionWithGrantedProviders>
+    /// </summary>
     public static Task<PermissionWithGrantedProviders> GetForRoleAsync([NotNull] this IPermissionManager permissionManager, string roleName, string permissionName)
     {
         Check.NotNull(permissionManager, nameof(permissionManager));
@@ -15,6 +21,9 @@ public static class RolePermissionManagerExtensions
         return permissionManager.GetAsync(permissionName, RolePermissionValueProvider.ProviderName, roleName);
     }
 
+    /// <summary>
+    /// Task<List<PermissionWithGrantedProviders>>
+    /// </summary>
     public static Task<List<PermissionWithGrantedProviders>> GetAllForRoleAsync([NotNull] this IPermissionManager permissionManager, string roleName)
     {
         Check.NotNull(permissionManager, nameof(permissionManager));

@@ -10,12 +10,30 @@ using Volo.Abp.MultiTenancy;
 
 namespace Censeq.Identity;
 
+/// <summary>
+/// 外部登录提供程序基类
+/// </summary>
 public abstract class ExternalLoginProviderBase : IExternalLoginProvider
 {
+    /// <summary>
+    /// IGuidGenerator
+    /// </summary>
     protected IGuidGenerator GuidGenerator { get; }
+    /// <summary>
+    /// ICurrent租户
+    /// </summary>
     protected ICurrentTenant CurrentTenant { get; }
+    /// <summary>
+    /// 身份用户管理器
+    /// </summary>
     protected IdentityUserManager UserManager { get; }
+    /// <summary>
+    /// I身份用户仓储
+    /// </summary>
     protected IIdentityUserRepository IdentityUserRepository { get; }
+    /// <summary>
+    /// IOptions<IdentityOptions>
+    /// </summary>
     protected IOptions<IdentityOptions> IdentityOptions { get; }
     protected ExternalLoginProviderBase(
         IGuidGenerator guidGenerator,
@@ -31,10 +49,19 @@ public abstract class ExternalLoginProviderBase : IExternalLoginProvider
         IdentityOptions = identityOptions;
     }
 
+    /// <summary>
+    /// Task<bool>
+    /// </summary>
     public abstract Task<bool> TryAuthenticateAsync(string userName, string plainPassword);
 
+    /// <summary>
+    /// Task<bool>
+    /// </summary>
     public abstract Task<bool> IsEnabledAsync();
 
+    /// <summary>
+    /// Task<IdentityUser>
+    /// </summary>
     public virtual async Task<IdentityUser> CreateUserAsync(string userName, string providerName)
     {
         await IdentityOptions.SetAsync();
@@ -44,6 +71,9 @@ public abstract class ExternalLoginProviderBase : IExternalLoginProvider
         return await CreateUserAsync(externalUser, userName, providerName);
     }
     
+    /// <summary>
+    /// Task<IdentityUser>
+    /// </summary>
     protected virtual async Task<IdentityUser> CreateUserAsync(ExternalLoginUserInfo externalUser, string userName, string providerName)
     {
         NormalizeExternalLoginUserInfo(externalUser, userName);
@@ -157,8 +187,14 @@ public abstract class ExternalLoginProviderBase : IExternalLoginProvider
         (await UserManager.UpdateAsync(user)).CheckErrors();
     }
 
+    /// <summary>
+    /// Task<External登录用户Info>
+    /// </summary>
     protected abstract Task<ExternalLoginUserInfo> GetUserInfoAsync(string userName);
 
+    /// <summary>
+    /// Task<External登录用户Info>
+    /// </summary>
     protected virtual Task<ExternalLoginUserInfo> GetUserInfoAsync(IdentityUser user)
     {
         return GetUserInfoAsync(user.UserName);

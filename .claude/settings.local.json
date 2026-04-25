@@ -5,7 +5,9 @@
       "Bash(dotnet build:*)",
       "Bash(dotnet sln:*)",
       "Bash(taskkill -F -IM \"Censeq.Admin.HttpApi.Host.exe\")",
-      "Bash(npm run:*)"
+      "Bash(npm run:*)",
+      "Bash(python add_comments.py)",
+      "Bash(python cleanup_comments.py)"
     ]
   }
 }

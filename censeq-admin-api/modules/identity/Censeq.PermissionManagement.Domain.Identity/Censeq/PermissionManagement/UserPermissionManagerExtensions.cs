@@ -7,8 +7,14 @@ using Volo.Abp.Authorization.Permissions;
 
 namespace Censeq.PermissionManagement;
 
+/// <summary>
+/// 用户权限管理器扩展
+/// </summary>
 public static class UserPermissionManagerExtensions
 {
+    /// <summary>
+    /// Task<List<PermissionWithGrantedProviders>>
+    /// </summary>
     public static Task<List<PermissionWithGrantedProviders>> GetAllForUserAsync([NotNull] this IPermissionManager permissionManager, Guid userId)
     {
         Check.NotNull(permissionManager, nameof(permissionManager));

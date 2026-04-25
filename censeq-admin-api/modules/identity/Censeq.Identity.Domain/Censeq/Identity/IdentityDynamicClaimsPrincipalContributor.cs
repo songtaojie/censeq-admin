@@ -9,8 +9,14 @@ using Volo.Abp.Security.Claims;
 
 namespace Censeq.Identity;
 
+/// <summary>
+/// 身份动态声明主体贡献者
+/// </summary>
 public class IdentityDynamicClaimsPrincipalContributor : AbpDynamicClaimsPrincipalContributorBase
 {
+    /// <summary>
+    /// override Task
+    /// </summary>
     public async override Task ContributeAsync(AbpClaimsPrincipalContributorContext context)
     {
         var identity = context.ClaimsPrincipal.Identities.FirstOrDefault();

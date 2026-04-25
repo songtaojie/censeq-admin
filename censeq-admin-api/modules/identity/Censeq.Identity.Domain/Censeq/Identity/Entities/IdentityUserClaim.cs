@@ -5,12 +5,12 @@ using JetBrains.Annotations;
 namespace Censeq.Identity.Entities;
 
 /// <summary>
-/// Represents a claim that a user possesses. 
+/// 用户拥有的声明
 /// </summary>
 public class IdentityUserClaim : IdentityClaim
 {
     /// <summary>
-    /// Gets or sets the primary key of the user associated with this claim.
+    /// 关联用户的标识
     /// </summary>
     public virtual Guid UserId { get; protected set; }
 

@@ -3,6 +3,9 @@ using Volo.Abp.Data;
 
 namespace Censeq.Identity;
 
+/// <summary>
+/// Censeq身份数据库Properties
+/// </summary>
 public static class CenseqIdentityDbProperties
 {
     public static string DbTablePrefix { get; set; } = CenseqCommonDbProperties.DbTablePrefix;

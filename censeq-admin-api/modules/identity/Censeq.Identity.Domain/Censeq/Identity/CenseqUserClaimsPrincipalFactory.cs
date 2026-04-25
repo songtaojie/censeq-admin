@@ -15,7 +15,13 @@ namespace Censeq.Identity;
 public class CenseqUserClaimsPrincipalFactory : UserClaimsPrincipalFactory<IdentityUser, IdentityRole>,
     ITransientDependency
 {
+    /// <summary>
+    /// ICurrent主体Accessor
+    /// </summary>
     protected ICurrentPrincipalAccessor CurrentPrincipalAccessor { get; }
+    /// <summary>
+    /// IAbp声明主体工厂
+    /// </summary>
     protected IAbpClaimsPrincipalFactory AbpClaimsPrincipalFactory { get; }
 
     public CenseqUserClaimsPrincipalFactory(
@@ -34,6 +40,9 @@ public class CenseqUserClaimsPrincipalFactory : UserClaimsPrincipalFactory<Ident
     }
 
     [UnitOfWork]
+    /// <summary>
+    /// override Task<ClaimsPrincipal>
+    /// </summary>
     public async override Task<ClaimsPrincipal> CreateAsync(IdentityUser user)
     {
         var principal = await base.CreateAsync(user);

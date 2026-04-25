@@ -9,9 +9,6 @@ namespace Censeq.Identity;
 /// </summary>
 public class IdentityUserCreateDto : IdentityUserCreateOrUpdateDtoBase
 {
-    /// <summary>
-    /// 密码
-    /// </summary>
     [DisableAuditing]
     [Required]
     [DynamicStringLength(typeof(IdentityUserConsts), nameof(IdentityUserConsts.MaxPasswordLength))]

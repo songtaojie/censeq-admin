@@ -15,9 +15,18 @@ using Volo.Abp.Timing;
 
 namespace Censeq.Identity;
 
+/// <summary>
+/// 身份会话管理器
+/// </summary>
 public class IdentitySessionManager : DomainService
 {
+    /// <summary>
+    /// I身份会话仓储
+    /// </summary>
     protected IIdentitySessionRepository SessionRepository { get; }
+    /// <summary>
+    /// IOptions<Identity会话Options>
+    /// </summary>
     protected IOptions<IdentitySessionOptions> Options { get; }
 
     public IdentitySessionManager(

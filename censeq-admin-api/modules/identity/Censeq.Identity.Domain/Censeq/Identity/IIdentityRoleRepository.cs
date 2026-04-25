@@ -6,6 +6,9 @@ using Volo.Abp.Domain.Repositories;
 
 namespace Censeq.Identity;
 
+/// <summary>
+/// I身份角色仓储接口
+/// </summary>
 public interface IIdentityRoleRepository : IBasicRepository<IdentityRole, Guid>
 {
     Task<IdentityRole> FindByNormalizedNameAsync(

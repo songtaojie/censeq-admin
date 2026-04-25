@@ -10,6 +10,9 @@ using Volo.Abp.EntityFrameworkCore;
 
 namespace Censeq.Identity.EntityFrameworkCore;
 
+/// <summary>
+/// Ef核心身份声明类型仓储
+/// </summary>
 public class EfCoreIdentityClaimTypeRepository : EfCoreRepository<ICenseqIdentityDbContext, IdentityClaimType, Guid>, IIdentityClaimTypeRepository
 {
     public EfCoreIdentityClaimTypeRepository(IDbContextProvider<ICenseqIdentityDbContext> dbContextProvider)
@@ -17,6 +20,9 @@ public class EfCoreIdentityClaimTypeRepository : EfCoreRepository<ICenseqIdentit
     {
     }
 
+    /// <summary>
+    /// Task<bool>
+    /// </summary>
     public virtual async Task<bool> AnyAsync(
         string name,
         Guid? ignoredId = null,
@@ -27,6 +33,9 @@ public class EfCoreIdentityClaimTypeRepository : EfCoreRepository<ICenseqIdentit
             .CountAsync(ct => ct.Name == name, GetCancellationToken(cancellationToken)) > 0;
     }
 
+    /// <summary>
+    /// Task<List<Identity声明Type>>
+    /// </summary>
     public virtual async Task<List<IdentityClaimType>> GetListAsync(
         string? sorting,
         int maxResultCount,
@@ -50,6 +59,9 @@ public class EfCoreIdentityClaimTypeRepository : EfCoreRepository<ICenseqIdentit
         return identityClaimTypes;
     }
 
+    /// <summary>
+    /// Task<long>
+    /// </summary>
     public virtual async Task<long> GetCountAsync(
         string? filter = null,
         CancellationToken cancellationToken = default)
@@ -65,6 +77,9 @@ public class EfCoreIdentityClaimTypeRepository : EfCoreRepository<ICenseqIdentit
             ).LongCountAsync(GetCancellationToken(cancellationToken));
     }
 
+    /// <summary>
+    /// Task<List<Identity声明Type>>
+    /// </summary>
     public virtual async Task<List<IdentityClaimType>> GetListByNamesAsync(IEnumerable<string> names, CancellationToken cancellationToken = default)
     {
         return await (await GetDbSetAsync())

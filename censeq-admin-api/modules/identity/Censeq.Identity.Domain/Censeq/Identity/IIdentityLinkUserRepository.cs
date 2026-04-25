@@ -6,6 +6,9 @@ using Volo.Abp.Domain.Repositories;
 
 namespace Censeq.Identity;
 
+/// <summary>
+/// I身份关联用户仓储接口
+/// </summary>
 public interface IIdentityLinkUserRepository : IBasicRepository<IdentityLinkUser, Guid>
 {
     Task<IdentityLinkUser> FindAsync(

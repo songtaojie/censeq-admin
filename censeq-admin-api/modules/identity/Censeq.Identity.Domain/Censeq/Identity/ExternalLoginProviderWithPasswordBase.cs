@@ -8,6 +8,9 @@ using Volo.Abp.MultiTenancy;
 
 namespace Censeq.Identity;
 
+/// <summary>
+/// 外部登录提供程序With密码基类
+/// </summary>
 public abstract class ExternalLoginProviderWithPasswordBase : ExternalLoginProviderBase, IExternalLoginProviderWithPassword
 {
     public bool CanObtainUserInfoWithoutPassword { get; }
@@ -28,6 +31,9 @@ public abstract class ExternalLoginProviderWithPasswordBase : ExternalLoginProvi
         CanObtainUserInfoWithoutPassword = canObtainUserInfoWithoutPassword;
     }
     
+    /// <summary>
+    /// Task<IdentityUser>
+    /// </summary>
     public async Task<IdentityUser> CreateUserAsync(string userName, string providerName, string plainPassword)
     {
         if (CanObtainUserInfoWithoutPassword)
@@ -57,13 +63,22 @@ public abstract class ExternalLoginProviderWithPasswordBase : ExternalLoginProvi
         await UpdateUserAsync(user, externalUser, providerName);
     }
 
+    /// <summary>
+    /// Task<External登录用户Info>
+    /// </summary>
     protected override Task<ExternalLoginUserInfo> GetUserInfoAsync(string userName)
     {
         throw new NotImplementedException($"{nameof(GetUserInfoAsync)} is not implemented default. It should be overriden and implemented by the deriving class!");
     }
 
+    /// <summary>
+    /// Task<External登录用户Info>
+    /// </summary>
     protected abstract Task<ExternalLoginUserInfo> GetUserInfoAsync(string userName, string plainPassword);
     
+    /// <summary>
+    /// Task<External登录用户Info>
+    /// </summary>
     protected virtual Task<ExternalLoginUserInfo> GetUserInfoAsync(IdentityUser user, string plainPassword)
     {
         return GetUserInfoAsync(user.UserName, plainPassword);

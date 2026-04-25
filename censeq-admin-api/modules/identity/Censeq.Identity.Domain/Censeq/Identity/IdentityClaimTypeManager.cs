@@ -5,10 +5,22 @@ using Volo.Abp.Domain.Services;
 
 namespace Censeq.Identity;
 
+/// <summary>
+/// 身份声明类型管理器
+/// </summary>
 public class IdentityClaimTypeManager : DomainService
 {
+    /// <summary>
+    /// I身份声明类型仓储
+    /// </summary>
     protected IIdentityClaimTypeRepository IdentityClaimTypeRepository { get; }
+    /// <summary>
+    /// I身份用户仓储
+    /// </summary>
     protected IIdentityUserRepository IdentityUserRepository { get; }
+    /// <summary>
+    /// I身份角色仓储
+    /// </summary>
     protected IIdentityRoleRepository IdentityRoleRepository { get; }
 
     public IdentityClaimTypeManager(
@@ -21,6 +33,9 @@ public class IdentityClaimTypeManager : DomainService
         IdentityRoleRepository = identityRoleRepository;
     }
 
+    /// <summary>
+    /// Task<Identity声明Type>
+    /// </summary>
     public virtual async Task<IdentityClaimType> CreateAsync(IdentityClaimType claimType)
     {
         if (await IdentityClaimTypeRepository.AnyAsync(claimType.Name))
@@ -31,6 +46,9 @@ public class IdentityClaimTypeManager : DomainService
         return await IdentityClaimTypeRepository.InsertAsync(claimType);
     }
 
+    /// <summary>
+    /// Task<Identity声明Type>
+    /// </summary>
     public virtual async Task<IdentityClaimType> UpdateAsync(IdentityClaimType claimType)
     {
         if (await IdentityClaimTypeRepository.AnyAsync(claimType.Name, claimType.Id))

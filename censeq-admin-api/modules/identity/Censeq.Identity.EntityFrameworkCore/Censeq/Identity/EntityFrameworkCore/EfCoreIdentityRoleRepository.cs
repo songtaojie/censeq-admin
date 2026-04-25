@@ -10,6 +10,9 @@ using Volo.Abp.EntityFrameworkCore;
 
 namespace Censeq.Identity.EntityFrameworkCore;
 
+/// <summary>
+/// Ef核心身份角色仓储
+/// </summary>
 public class EfCoreIdentityRoleRepository : EfCoreRepository<ICenseqIdentityDbContext, IdentityRole, Guid>, IIdentityRoleRepository
 {
     public EfCoreIdentityRoleRepository(IDbContextProvider<ICenseqIdentityDbContext> dbContextProvider)
@@ -17,6 +20,9 @@ public class EfCoreIdentityRoleRepository : EfCoreRepository<ICenseqIdentityDbCo
     {
     }
 
+    /// <summary>
+    /// Task<IdentityRole>
+    /// </summary>
     public virtual async Task<IdentityRole> FindByNormalizedNameAsync(
         string normalizedRoleName,
         bool includeDetails = true,
@@ -28,6 +34,9 @@ public class EfCoreIdentityRoleRepository : EfCoreRepository<ICenseqIdentityDbCo
             .FirstOrDefaultAsync(r => r.NormalizedName == normalizedRoleName, GetCancellationToken(cancellationToken)))!;
     }
 
+    /// <summary>
+    /// Task<IdentityRole?>
+    /// </summary>
     public virtual async Task<IdentityRole?> FindByCodeAsync(
         string code,
         CancellationToken cancellationToken = default)
@@ -37,6 +46,9 @@ public class EfCoreIdentityRoleRepository : EfCoreRepository<ICenseqIdentityDbCo
             .FirstOrDefaultAsync(r => r.Code == code, GetCancellationToken(cancellationToken));
     }
 
+    /// <summary>
+    /// Task<List<Identity角色With用户Count>>
+    /// </summary>
     public virtual async Task<List<IdentityRoleWithUserCount>> GetListWithUserCountAsync(
         string? sorting = null,
         int maxResultCount = int.MaxValue,
@@ -61,6 +73,9 @@ public class EfCoreIdentityRoleRepository : EfCoreRepository<ICenseqIdentityDbCo
         return roles.Select(role => new IdentityRoleWithUserCount(role, userCount.FirstOrDefault(x => x.RoleId == role.Id)?.Count ?? 0)).ToList();
     }
 
+    /// <summary>
+    /// Task<List<IdentityRole>>
+    /// </summary>
     public virtual async Task<List<IdentityRole>> GetListAsync(
         string? sorting = null,
         int maxResultCount = int.MaxValue,
@@ -72,6 +87,9 @@ public class EfCoreIdentityRoleRepository : EfCoreRepository<ICenseqIdentityDbCo
         return await GetListInternalAsync(sorting , maxResultCount, skipCount, filter, includeDetails, cancellationToken);
     }
 
+    /// <summary>
+    /// Task<List<IdentityRole>>
+    /// </summary>
     public virtual async Task<List<IdentityRole>> GetListAsync(
         IEnumerable<Guid> ids,
         CancellationToken cancellationToken = default)
@@ -81,6 +99,9 @@ public class EfCoreIdentityRoleRepository : EfCoreRepository<ICenseqIdentityDbCo
             .ToListAsync(GetCancellationToken(cancellationToken));
     }
 
+    /// <summary>
+    /// Task<List<IdentityRole>>
+    /// </summary>
     public virtual async Task<List<IdentityRole>> GetDefaultOnesAsync(
         bool includeDetails = false, CancellationToken cancellationToken = default)
     {
@@ -90,6 +111,9 @@ public class EfCoreIdentityRoleRepository : EfCoreRepository<ICenseqIdentityDbCo
             .ToListAsync(GetCancellationToken(cancellationToken));
     }
 
+    /// <summary>
+    /// Task<long>
+    /// </summary>
     public virtual async Task<long> GetCountAsync(
         string? filter = null,
         CancellationToken cancellationToken = default)
@@ -116,6 +140,9 @@ public class EfCoreIdentityRoleRepository : EfCoreRepository<ICenseqIdentityDbCo
         }
     }
 
+    /// <summary>
+    /// Task<List<IdentityRole>>
+    /// </summary>
     protected virtual async Task<List<IdentityRole>> GetListInternalAsync(
         string? sorting = null,
         int maxResultCount = int.MaxValue,
@@ -136,11 +163,17 @@ public class EfCoreIdentityRoleRepository : EfCoreRepository<ICenseqIdentityDbCo
     }
 
     [Obsolete("Use WithDetailsAsync")]
+    /// <summary>
+    /// IQueryable<IdentityRole>
+    /// </summary>
     public override IQueryable<IdentityRole> WithDetails()
     {
         return GetQueryable().IncludeDetails();
     }
 
+    /// <summary>
+    /// Task<IQueryable<IdentityRole>>
+    /// </summary>
     public override async Task<IQueryable<IdentityRole>> WithDetailsAsync()
     {
         return (await GetQueryableAsync()).IncludeDetails();

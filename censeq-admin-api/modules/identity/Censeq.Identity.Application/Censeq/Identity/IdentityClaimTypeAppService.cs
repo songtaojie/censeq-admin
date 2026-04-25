@@ -9,9 +9,18 @@ using Volo.Abp.Application.Dtos;
 namespace Censeq.Identity;
 
 [Authorize(IdentityPermissions.ClaimTypes.Default)]
+/// <summary>
+/// 身份声明类型应用服务
+/// </summary>
 public class IdentityClaimTypeAppService : IdentityAppServiceBase, IIdentityClaimTypeAppService
 {
+    /// <summary>
+    /// I身份声明类型仓储
+    /// </summary>
     protected IIdentityClaimTypeRepository ClaimTypeRepository { get; }
+    /// <summary>
+    /// 身份声明类型管理器
+    /// </summary>
     protected IdentityClaimTypeManager ClaimTypeManager { get; }
 
     public IdentityClaimTypeAppService(
@@ -22,11 +31,17 @@ public class IdentityClaimTypeAppService : IdentityAppServiceBase, IIdentityClai
         ClaimTypeManager = claimTypeManager;
     }
 
+    /// <summary>
+    /// Task<Identity声明类型Dto>
+    /// </summary>
     public virtual async Task<IdentityClaimTypeDto> GetAsync(Guid id)
     {
         return MapToDto(await ClaimTypeRepository.GetAsync(id));
     }
 
+    /// <summary>
+    /// Task<List结果Dto<Identity声明类型Dto>>
+    /// </summary>
     public virtual async Task<ListResultDto<IdentityClaimTypeDto>> GetAllListAsync()
     {
         var list = await ClaimTypeRepository.GetListAsync(
@@ -38,6 +53,9 @@ public class IdentityClaimTypeAppService : IdentityAppServiceBase, IIdentityClai
         return new ListResultDto<IdentityClaimTypeDto>(MapToDtoList(list));
     }
 
+    /// <summary>
+    /// Task<Paged结果Dto<Identity声明类型Dto>>
+    /// </summary>
     public virtual async Task<PagedResultDto<IdentityClaimTypeDto>> GetListAsync(GetIdentityClaimTypesInput input)
     {
         var list = await ClaimTypeRepository.GetListAsync(
@@ -52,6 +70,9 @@ public class IdentityClaimTypeAppService : IdentityAppServiceBase, IIdentityClai
     }
 
     [Authorize(IdentityPermissions.ClaimTypes.Create)]
+    /// <summary>
+    /// Task<Identity声明类型Dto>
+    /// </summary>
     public virtual async Task<IdentityClaimTypeDto> CreateAsync(IdentityClaimTypeCreateDto input)
     {
         var claimType = new IdentityClaimType(
@@ -70,6 +91,9 @@ public class IdentityClaimTypeAppService : IdentityAppServiceBase, IIdentityClai
     }
 
     [Authorize(IdentityPermissions.ClaimTypes.Update)]
+    /// <summary>
+    /// Task<Identity声明类型Dto>
+    /// </summary>
     public virtual async Task<IdentityClaimTypeDto> UpdateAsync(Guid id, IdentityClaimTypeUpdateDto input)
     {
         var claimType = await ClaimTypeRepository.GetAsync(id);
@@ -91,6 +115,9 @@ public class IdentityClaimTypeAppService : IdentityAppServiceBase, IIdentityClai
         await ClaimTypeManager.DeleteAsync(id);
     }
 
+    /// <summary>
+    /// 身份声明类型数据传输对象
+    /// </summary>
     protected virtual IdentityClaimTypeDto MapToDto(IdentityClaimType claimType)
     {
         return new IdentityClaimTypeDto
@@ -106,6 +133,9 @@ public class IdentityClaimTypeAppService : IdentityAppServiceBase, IIdentityClai
         };
     }
 
+    /// <summary>
+    /// List<Identity声明类型Dto>
+    /// </summary>
     protected virtual List<IdentityClaimTypeDto> MapToDtoList(List<IdentityClaimType> claimTypes)
     {
         var list = new List<IdentityClaimTypeDto>();
@@ -117,6 +147,9 @@ public class IdentityClaimTypeAppService : IdentityAppServiceBase, IIdentityClai
         return list;
     }
 
+    /// <summary>
+    /// 身份声明值类型
+    /// </summary>
     protected virtual IdentityClaimValueType ParseValueType(string valueType)
     {
         return Enum.Parse<IdentityClaimValueType>(valueType, ignoreCase: true);

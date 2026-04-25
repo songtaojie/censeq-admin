@@ -4,6 +4,9 @@ using Volo.Abp.Users;
 
 namespace Censeq.Identity;
 
+/// <summary>
+/// 身份领域映射配置
+/// </summary>
 public class IdentityDomainMappingProfile : Profile
 {
     public IdentityDomainMappingProfile()

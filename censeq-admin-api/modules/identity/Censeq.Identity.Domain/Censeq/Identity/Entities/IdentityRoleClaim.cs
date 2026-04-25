@@ -5,12 +5,12 @@ using JetBrains.Annotations;
 namespace Censeq.Identity.Entities;
 
 /// <summary>
-/// Represents a claim that is granted to all users within a role.
+/// 表示授予角色内所有用户的声明。
 /// </summary>
 public class IdentityRoleClaim : IdentityClaim
 {
     /// <summary>
-    /// Gets or sets the of the primary key of the role associated with this claim.
+    /// 获取或设置与此声明关联的角色的主键。
     /// </summary>
     public virtual Guid RoleId { get; protected set; }
 
@@ -19,6 +19,9 @@ public class IdentityRoleClaim : IdentityClaim
 
     }
 
+    /// <summary>
+    /// 使用指定的角色和声明初始化 <see cref="IdentityRoleClaim"/> 类的新实例。
+    /// </summary>
     protected internal IdentityRoleClaim(
         Guid id,
         Guid roleId,

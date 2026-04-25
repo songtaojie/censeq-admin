@@ -14,12 +14,30 @@ using Volo.Abp.ObjectExtending;
 
 namespace Censeq.Identity;
 
+/// <summary>
+/// 身份用户应用服务
+/// </summary>
 public class IdentityUserAppService : IdentityAppServiceBase, IIdentityUserAppService
 {
+    /// <summary>
+    /// 身份用户管理器
+    /// </summary>
     protected IdentityUserManager UserManager { get; }
+    /// <summary>
+    /// I身份用户仓储
+    /// </summary>
     protected IIdentityUserRepository UserRepository { get; }
+    /// <summary>
+    /// I身份角色仓储
+    /// </summary>
     protected IIdentityRoleRepository RoleRepository { get; }
+    /// <summary>
+    /// IOptions<IdentityOptions>
+    /// </summary>
     protected IOptions<IdentityOptions> IdentityOptions { get; }
+    /// <summary>
+    /// I权限Checker
+    /// </summary>
     protected IPermissionChecker PermissionChecker { get; }
     public IdentityUserAppService(
         IdentityUserManager userManager,
@@ -37,6 +55,9 @@ public class IdentityUserAppService : IdentityAppServiceBase, IIdentityUserAppSe
 
     //TODO: [Authorize(IdentityPermissions.Users.Default)] should go the IdentityUserAppService class.
     [Authorize(IdentityPermissions.Users.Default)]
+    /// <summary>
+    /// Task<Identity用户Dto>
+    /// </summary>
     public virtual async Task<IdentityUserDto> GetAsync(Guid id)
     {
         return ObjectMapper.Map<IdentityUser, IdentityUserDto>(
@@ -45,6 +66,9 @@ public class IdentityUserAppService : IdentityAppServiceBase, IIdentityUserAppSe
     }
 
     [Authorize(IdentityPermissions.Users.Default)]
+    /// <summary>
+    /// Task<Paged结果Dto<Identity用户Dto>>
+    /// </summary>
     public virtual async Task<PagedResultDto<IdentityUserDto>> GetListAsync(GetIdentityUsersInput input)
     {
         var count = await UserRepository.GetCountAsync(input.Filter);
@@ -57,6 +81,9 @@ public class IdentityUserAppService : IdentityAppServiceBase, IIdentityUserAppSe
     }
 
     [Authorize(IdentityPermissions.Users.Default)]
+    /// <summary>
+    /// Task<List结果Dto<Identity角色Dto>>
+    /// </summary>
     public virtual async Task<ListResultDto<IdentityRoleDto>> GetRolesAsync(Guid id)
     {
         //TODO: Should also include roles of the related OUs.
@@ -69,6 +96,9 @@ public class IdentityUserAppService : IdentityAppServiceBase, IIdentityUserAppSe
     }
 
     [Authorize(IdentityPermissions.Users.Default)]
+    /// <summary>
+    /// Task<List结果Dto<Identity角色Dto>>
+    /// </summary>
     public virtual async Task<ListResultDto<IdentityRoleDto>> GetAssignableRolesAsync()
     {
         var list = await RoleRepository.GetListAsync();
@@ -77,6 +107,9 @@ public class IdentityUserAppService : IdentityAppServiceBase, IIdentityUserAppSe
     }
 
     [Authorize(IdentityPermissions.Users.Create)]
+    /// <summary>
+    /// Task<Identity用户Dto>
+    /// </summary>
     public virtual async Task<IdentityUserDto> CreateAsync(IdentityUserCreateDto input)
     {
         await IdentityOptions.SetAsync();
@@ -100,6 +133,9 @@ public class IdentityUserAppService : IdentityAppServiceBase, IIdentityUserAppSe
     }
 
     [Authorize(IdentityPermissions.Users.Update)]
+    /// <summary>
+    /// Task<Identity用户Dto>
+    /// </summary>
     public virtual async Task<IdentityUserDto> UpdateAsync(Guid id, IdentityUserUpdateDto input)
     {
         await IdentityOptions.SetAsync();
@@ -161,6 +197,9 @@ public class IdentityUserAppService : IdentityAppServiceBase, IIdentityUserAppSe
     }
 
     [Authorize(IdentityPermissions.Users.Default)]
+    /// <summary>
+    /// Task<List结果Dto<Organization单元Dto>>
+    /// </summary>
     public virtual async Task<ListResultDto<OrganizationUnitDto>> GetOrganizationUnitsAsync(Guid id)
     {
         var list = await UserRepository.GetOrganizationUnitsAsync(id, includeDetails: true);
@@ -189,6 +228,9 @@ public class IdentityUserAppService : IdentityAppServiceBase, IIdentityUserAppSe
     }
 
     [Authorize(IdentityPermissions.Users.Default)]
+    /// <summary>
+    /// Task<Identity用户Dto>
+    /// </summary>
     public virtual async Task<IdentityUserDto> FindByUsernameAsync(string userName)
     {
         var user = await UserManager.FindByNameAsync(userName);
@@ -200,6 +242,9 @@ public class IdentityUserAppService : IdentityAppServiceBase, IIdentityUserAppSe
     }
 
     [Authorize(IdentityPermissions.Users.Default)]
+    /// <summary>
+    /// Task<Identity用户Dto>
+    /// </summary>
     public virtual async Task<IdentityUserDto> FindByEmailAsync(string email)
     {
         var user = await UserManager.FindByEmailAsync(email);

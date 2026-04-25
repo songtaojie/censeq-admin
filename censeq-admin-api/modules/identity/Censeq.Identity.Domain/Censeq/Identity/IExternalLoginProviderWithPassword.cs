@@ -3,6 +3,9 @@ using Censeq.Identity.Entities;
 
 namespace Censeq.Identity
 {
+    /// <summary>
+    /// I外部登录提供程序With密码接口
+    /// </summary>
     public interface IExternalLoginProviderWithPassword
     {
         bool CanObtainUserInfoWithoutPassword { get; }

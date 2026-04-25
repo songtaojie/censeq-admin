@@ -6,6 +6,9 @@ using Volo.Abp.Domain.Repositories;
 
 namespace Censeq.Identity;
 
+/// <summary>
+/// I身份会话仓储接口
+/// </summary>
 public interface IIdentitySessionRepository : IBasicRepository<IdentitySession, Guid>
 {
     Task<IdentitySession> FindAsync(string sessionId, CancellationToken cancellationToken = default);

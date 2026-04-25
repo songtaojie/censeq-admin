@@ -6,6 +6,9 @@ using Volo.Abp.SecurityLog;
 
 namespace Censeq.Identity.Entities;
 
+/// <summary>
+/// 身份安全日志
+/// </summary>
 public class IdentitySecurityLog : AggregateRoot<Guid>, IMultiTenant
 {
     public Guid? TenantId { get; protected set; }

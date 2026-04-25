@@ -8,12 +8,24 @@ using Volo.Abp.MultiTenancy;
 
 namespace Censeq.Identity;
 
+/// <summary>
+/// 身份关联用户管理器
+/// </summary>
 public class IdentityLinkUserManager : DomainService
 {
+    /// <summary>
+    /// I身份关联用户仓储
+    /// </summary>
     protected IIdentityLinkUserRepository IdentityLinkUserRepository { get; }
 
+    /// <summary>
+    /// 身份用户管理器
+    /// </summary>
     protected IdentityUserManager UserManager { get; }
 
+    /// <summary>
+    /// new ICurrent租户
+    /// </summary>
     protected new ICurrentTenant CurrentTenant { get; }
 
     public IdentityLinkUserManager(IIdentityLinkUserRepository identityLinkUserRepository, IdentityUserManager userManager, ICurrentTenant currentTenant)
@@ -23,6 +35,9 @@ public class IdentityLinkUserManager : DomainService
         CurrentTenant = currentTenant;
     }
 
+    /// <summary>
+    /// Task<List<Identity关联User>>
+    /// </summary>
     public async Task<List<IdentityLinkUser>> GetListAsync(IdentityLinkUserInfo linkUserInfo, bool includeIndirect = false, CancellationToken cancellationToken = default)
     {
         using (CurrentTenant.Change(null))
@@ -93,6 +108,9 @@ public class IdentityLinkUserManager : DomainService
         }
     }
 
+    /// <summary>
+    /// Task<bool>
+    /// </summary>
     public virtual async Task<bool> IsLinkedAsync(IdentityLinkUserInfo sourceLinkUser, IdentityLinkUserInfo targetLinkUser, bool includeIndirect = false, CancellationToken cancellationToken = default)
     {
         using (CurrentTenant.Change(null))
@@ -124,6 +142,9 @@ public class IdentityLinkUserManager : DomainService
         }
     }
 
+    /// <summary>
+    /// Task<string>
+    /// </summary>
     public virtual async Task<string> GenerateLinkTokenAsync(IdentityLinkUserInfo targetLinkUser, string tokenPurpose, CancellationToken cancellationToken = default)
     {
         using (CurrentTenant.Change(targetLinkUser.TenantId))
@@ -136,6 +157,9 @@ public class IdentityLinkUserManager : DomainService
         }
     }
 
+    /// <summary>
+    /// Task<bool>
+    /// </summary>
     public virtual async Task<bool> VerifyLinkTokenAsync(IdentityLinkUserInfo targetLinkUser, string token, string tokenPurpose, CancellationToken cancellationToken = default)
     {
         using (CurrentTenant.Change(targetLinkUser.TenantId))

@@ -4,6 +4,9 @@ using Volo.Abp.Domain.Entities;
 
 namespace Censeq.Identity.Entities;
 
+/// <summary>
+/// 身份关联用户
+/// </summary>
 public class IdentityLinkUser : BasicAggregateRoot<Guid>
 {
     public virtual Guid SourceUserId { get; protected set; }

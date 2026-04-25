@@ -4,6 +4,9 @@ using Volo.Abp.Users;
 
 namespace Censeq.Identity.EntityFrameworkCore.Modeling
 {
+    /// <summary>
+    /// CenseqUsers数据库上下文模型Creating扩展
+    /// </summary>
     internal static class CenseqUsersDbContextModelCreatingExtensions
     {
         public static void ConfigureCenseqUser<TUser>(this EntityTypeBuilder<TUser> b)

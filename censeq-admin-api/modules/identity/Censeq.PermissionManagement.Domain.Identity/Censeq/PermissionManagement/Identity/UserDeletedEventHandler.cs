@@ -8,10 +8,16 @@ using Volo.Abp.Users;
 
 namespace Censeq.PermissionManagement.Identity;
 
+/// <summary>
+/// 用户Deleted事件处理器
+/// </summary>
 public class UserDeletedEventHandler :
     IDistributedEventHandler<EntityDeletedEto<UserEto>>,
     ITransientDependency
 {
+    /// <summary>
+    /// I权限管理器
+    /// </summary>
     protected IPermissionManager PermissionManager { get; }
 
     public UserDeletedEventHandler(IPermissionManager permissionManager)
