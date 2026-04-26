@@ -36,4 +36,11 @@ public class AdminTenantController : AdminController
     {
         return _appService.UpdatePermissionsAsync(id, input);
     }
+
+    /// <summary>批量获取多个租户的管理员账号信息</summary>
+    [HttpGet("admin-users")]
+    public virtual Task<List<TenantAdminUserDto>> GetAdminUsersAsync([FromQuery] List<Guid> tenantIds)
+    {
+        return _appService.GetAdminUsersAsync(tenantIds);
+    }
 }

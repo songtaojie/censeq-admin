@@ -1,4 +1,4 @@
-import type { GetTenantsInput, TenantCreateDto, TenantDto, TenantUpdateDto } from '/@/api/models/tenant';
+import type { GetTenantsInput, TenantAdminUserDto, TenantCreateDto, TenantDto, TenantUpdateDto } from '/@/api/models/tenant';
 import type { PagedResponseDto } from '/@/api/models/core';
 import { useBaseApi } from '../base';
 
@@ -56,6 +56,11 @@ export function useTenantApi() {
 
 		updatePermissions: async (id: string, grantedPermissions: string[]): Promise<void> => {
 			return await tenantApi.request<void>(`api/admin/tenants/${id}/permissions`, 'PUT', { grantedPermissions });
+		},
+
+		getAdminUsers: async (tenantIds: string[]): Promise<TenantAdminUserDto[]> => {
+			const qs = tenantIds.map((id) => `tenantIds=${encodeURIComponent(id)}`).join('&');
+			return await tenantApi.request<TenantAdminUserDto[]>(`api/admin/tenants/admin-users?${qs}`, 'GET');
 		},
 	};
 }

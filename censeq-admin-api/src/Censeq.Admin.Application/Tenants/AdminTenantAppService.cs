@@ -114,4 +114,38 @@ public class AdminTenantAppService : AdminAppService
         // 使缓存失效，下次权限检查时重新从数据库加载
         await _tenantScopeCache.RemoveAsync($"TenantScope:{tenantId}");
     }
+
+    /// <summary>
+    /// 批量获取指定租户的管理员账号信息（UserName + Email）。
+    /// 每个租户独立切换上下文查询，忽略查询失败的租户。
+    /// </summary>
+    [Authorize(TenantManagementPermissions.Tenants.Default)]
+    public virtual async Task<List<TenantAdminUserDto>> GetAdminUsersAsync(List<Guid> tenantIds)
+    {
+        var result = new List<TenantAdminUserDto>();
+
+        foreach (var tenantId in tenantIds)
+        {
+            try
+            {
+                using (_currentTenant.Change(tenantId))
+                {
+                    var adminUser = await _userManager.FindByNameAsync("admin");
+                    result.Add(new TenantAdminUserDto
+                    {
+                        TenantId = tenantId,
+                        UserName = adminUser?.UserName,
+                        Email = adminUser?.Email,
+                    });
+                }
+            }
+            catch
+            {
+                // 租户不可用时跳过，不影响整体列表加载
+                result.Add(new TenantAdminUserDto { TenantId = tenantId });
+            }
+        }
+
+        return result;
+    }
 }

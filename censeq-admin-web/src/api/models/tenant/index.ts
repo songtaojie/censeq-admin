@@ -24,6 +24,12 @@ export interface TenantUpdateDto {
 	concurrencyStamp?: string;
 }
 
+export interface TenantAdminUserDto {
+	tenantId: string;
+	userName?: string | null;
+	email?: string | null;
+}
+
 /** 对应 GetTenantsInput（ABP 分页查询参数为 camelCase） */
 export interface GetTenantsInput {
 	filter?: string;

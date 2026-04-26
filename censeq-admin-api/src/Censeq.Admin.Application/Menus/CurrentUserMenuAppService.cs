@@ -2,7 +2,9 @@ using System.Linq;
 using Censeq.Identity;
 using Microsoft.AspNetCore.Authorization;
 using Volo.Abp.Authorization.Permissions;
+using Volo.Abp.Data;
 using Volo.Abp.Domain.Repositories;
+using Volo.Abp.MultiTenancy;
 
 namespace Censeq.Admin.Menus;
 
@@ -13,17 +15,20 @@ public class CurrentUserMenuAppService : AdminAppService, ICurrentUserMenuAppSer
     private readonly IRepository<MenuPermission, Guid> _menuPermissionRepository;
     private readonly IUserRoleFinder _userRoleFinder;
     private readonly IPermissionChecker _permissionChecker;
+    private readonly IDataFilter _dataFilter;
 
     public CurrentUserMenuAppService(
         IRepository<Menu, Guid> menuRepository,
         IRepository<MenuPermission, Guid> menuPermissionRepository,
         IUserRoleFinder userRoleFinder,
-        IPermissionChecker permissionChecker)
+        IPermissionChecker permissionChecker,
+        IDataFilter dataFilter)
     {
         _menuRepository = menuRepository;
         _menuPermissionRepository = menuPermissionRepository;
         _userRoleFinder = userRoleFinder;
         _permissionChecker = permissionChecker;
+        _dataFilter = dataFilter;
     }
 
     public virtual async Task<CurrentUserMenuResultDto> GetAsync()
@@ -60,11 +65,15 @@ public class CurrentUserMenuAppService : AdminAppService, ICurrentUserMenuAppSer
 
     private async Task<List<Menu>> GetMenusByScopeAsync(MenuScope scope)
     {
-        var queryable = await _menuRepository.GetQueryableAsync();
-        return await AsyncExecuter.ToListAsync(
-            queryable.Where(x => x.TenantId == null && x.Scope == scope && x.Status)
-                .OrderBy(x => x.Sort)
-                .ThenBy(x => x.CreationTime));
+        // 菜单定义存在 host 侧（TenantId == null），租户用户访问时必须禁用多租户过滤器才能读到这些记录
+        using (_dataFilter.Disable<IMultiTenant>())
+        {
+            var queryable = await _menuRepository.GetQueryableAsync();
+            return await AsyncExecuter.ToListAsync(
+                queryable.Where(x => x.TenantId == null && x.Scope == scope && x.Status)
+                    .OrderBy(x => x.Sort)
+                    .ThenBy(x => x.CreationTime));
+        }
     }
 
     private async Task<Dictionary<Guid, List<string>>> GetPermissionLookupAsync(List<Guid> menuIds)
@@ -74,11 +83,15 @@ public class CurrentUserMenuAppService : AdminAppService, ICurrentUserMenuAppSer
             return new Dictionary<Guid, List<string>>();
         }
 
-        var queryable = await _menuPermissionRepository.GetQueryableAsync();
-        var permissions = await AsyncExecuter.ToListAsync(queryable.Where(x => menuIds.Contains(x.MenuId)));
-        return permissions
-            .GroupBy(x => x.MenuId)
-            .ToDictionary(x => x.Key, x => x.Select(y => y.PermissionName).OrderBy(y => y).ToList());
+        // MenuPermission 也属于 host 侧数据，租户上下文下同样需要禁用过滤器
+        using (_dataFilter.Disable<IMultiTenant>())
+        {
+            var queryable = await _menuPermissionRepository.GetQueryableAsync();
+            var permissions = await AsyncExecuter.ToListAsync(queryable.Where(x => menuIds.Contains(x.MenuId)));
+            return permissions
+                .GroupBy(x => x.MenuId)
+                .ToDictionary(x => x.Key, x => x.Select(y => y.PermissionName).OrderBy(y => y).ToList());
+        }
     }
 
     private async Task<Dictionary<string, bool>> GetGrantedPermissionLookupAsync(List<string> permissionNames)

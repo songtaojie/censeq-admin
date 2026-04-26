@@ -45,6 +45,17 @@
 						<el-text size="small" style="font-family: monospace">{{ scope.row.id }}</el-text>
 					</template>
 				</el-table-column>
+				<el-table-column label="管理员账号" min-width="160" show-overflow-tooltip>
+					<template #default="scope">
+						<template v-if="state.tableData.adminUsers.get(scope.row.id)?.userName">
+							<div>
+								<el-text size="small">{{ state.tableData.adminUsers.get(scope.row.id)?.userName }}</el-text>
+							</div>
+							<el-text size="small" type="info">{{ state.tableData.adminUsers.get(scope.row.id)?.email }}</el-text>
+						</template>
+						<el-text v-else type="info" size="small">—</el-text>
+					</template>
+				</el-table-column>
 				<el-table-column prop="isActive" label="状态" width="90" align="center">
 					<template #default="scope">
 						<el-switch
@@ -89,7 +100,7 @@
 import { defineAsyncComponent, reactive, onMounted, ref } from 'vue';
 import { ElMessageBox, ElMessage } from 'element-plus';
 import { useTenantApi } from '/@/api/apis';
-import type { TenantDto } from '/@/api/models/tenant';
+import type { TenantDto, TenantAdminUserDto } from '/@/api/models/tenant';
 
 const TenantDialog = defineAsyncComponent(() => import('/@/views/system/tenant/dialog.vue'));
 const TenantPermissionDialog = defineAsyncComponent(() => import('/@/views/system/tenant/tenant-permission-dialog.vue'));
@@ -103,6 +114,7 @@ const state = reactive({
 		data: [] as (TenantDto & { _hasConnection?: boolean })[],
 		total: 0,
 		loading: false,
+		adminUsers: new Map<string, TenantAdminUserDto>(),
 		param: {
 			search: '',
 			pageIndex: 1,
@@ -134,6 +146,18 @@ const getTableData = async () => {
 		);
 		state.tableData.data = rows;
 		state.tableData.total = data.totalCount ?? 0;
+
+		// 异步加载各租户的管理员账号（不阻塞主加载）
+		const ids = rows.map((r) => r.id!).filter(Boolean);
+		if (ids.length > 0) {
+			try {
+				const { getAdminUsers } = useTenantApi();
+				const adminList = await getAdminUsers(ids);
+				state.tableData.adminUsers = new Map(adminList.map((a) => [a.tenantId, a]));
+			} catch {
+				state.tableData.adminUsers = new Map();
+			}
+		}
 	} catch {
 		state.tableData.data = [];
 		state.tableData.total = 0;

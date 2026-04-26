@@ -99,7 +99,10 @@ public class OpenIddictDataSeedContributor : IDataSeedContributor, ITransientDep
                 scopes: commonScopes,
                 redirectUri: consoleAndAngularClientRedirectUri ?? consoleAndAngularClientRootUrl,
                 clientUri: consoleAndAngularClientClientUri ?? consoleAndAngularClientRootUrl,
-                postLogoutRedirectUri: consoleAndAngularClientPostLogoutRedirectUri ?? consoleAndAngularClientRootUrl
+                postLogoutRedirectUri: consoleAndAngularClientPostLogoutRedirectUri ?? consoleAndAngularClientRootUrl,
+                extraRedirectUris: consoleAndAngularClientRootUrl != null
+                    ? [$"{consoleAndAngularClientRootUrl}/silent-renew.html"]
+                    : null
             );
         }
 
@@ -134,7 +137,8 @@ public class OpenIddictDataSeedContributor : IDataSeedContributor, ITransientDep
         string? clientUri = null,
         string? redirectUri = null,
         string? postLogoutRedirectUri = null,
-        List<string>? permissions = null)
+        List<string>? permissions = null,
+        List<string>? extraRedirectUris = null)
     {
         if (!string.IsNullOrEmpty(secret) && string.Equals(type, OpenIddictConstants.ClientTypes.Public,
                 StringComparison.OrdinalIgnoreCase))
@@ -281,6 +285,20 @@ public class OpenIddictDataSeedContributor : IDataSeedContributor, ITransientDep
                 }
 
                 if (application.RedirectUris.All(x => x != uri))
+                {
+                    application.RedirectUris.Add(uri);
+                }
+            }
+        }
+
+        if (extraRedirectUris != null)
+        {
+            foreach (var extraUri in extraRedirectUris)
+            {
+                if (!extraUri.IsNullOrEmpty() &&
+                    Uri.TryCreate(extraUri, UriKind.Absolute, out var uri) &&
+                    uri.IsWellFormedOriginalString() &&
+                    application.RedirectUris.All(x => x != uri))
                 {
                     application.RedirectUris.Add(uri);
                 }
