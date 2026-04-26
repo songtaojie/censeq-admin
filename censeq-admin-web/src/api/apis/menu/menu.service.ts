@@ -35,6 +35,10 @@ export function useMenuApi() {
 			return await menuApi.request<ListResponseDto<string>>(`${menuBasePath}/referenced-permissions`, 'GET');
 		},
 
+		getTenantScopePermissionNames: async (): Promise<ListResponseDto<string>> => {
+			return await menuApi.request<ListResponseDto<string>>(`${menuBasePath}/tenant-scope-permissions`, 'GET');
+		},
+
 		getMenu: async (id: string): Promise<MenuDetailDto> => {
 			return await menuApi.request<MenuDetailDto>(`${menuBasePath}/${id}`, 'GET');
 		},

@@ -16,12 +16,24 @@ public class AdminTenantController : AdminController
         _appService = appService;
     }
 
-    /// <summary>
-    /// 重置租户管理员密码
-    /// </summary>
+    /// <summary>重置租户管理员密码</summary>
     [HttpPost("{id}/reset-admin-password")]
     public virtual Task ResetAdminPasswordAsync(Guid id, [FromBody] ResetTenantAdminPasswordDto input)
     {
         return _appService.ResetAdminPasswordAsync(id, input.NewPassword);
+    }
+
+    /// <summary>获取平台向指定租户开放的权限名称列表</summary>
+    [HttpGet("{id}/permissions")]
+    public virtual Task<List<string>> GetPermissionsAsync(Guid id)
+    {
+        return _appService.GetPermissionsAsync(id);
+    }
+
+    /// <summary>全量更新平台向指定租户开放的权限范围</summary>
+    [HttpPut("{id}/permissions")]
+    public virtual Task UpdatePermissionsAsync(Guid id, [FromBody] UpdateTenantPermissionsDto input)
+    {
+        return _appService.UpdatePermissionsAsync(id, input);
     }
 }

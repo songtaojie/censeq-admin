@@ -12,14 +12,14 @@ namespace Censeq.Identity;
 public interface IIdentityClaimTypeRepository : IBasicRepository<IdentityClaimType, Guid>
 {
     /// <summary>
-    /// Checks if there is a <see cref="IdentityClaimType"/> entity with given name.
+    /// 检查是否存在具有指定名称的 <see cref="IdentityClaimType"/> 实体。
     /// </summary>
-    /// <param name="name">Name to check</param>
+    /// <param name="name">要检查的名称</param>
     /// <param name="ignoredId">
-    /// An Id value to ignore on checking.
-    /// If there is an entity with given <paramref name="ignoredId"/> it's ignored.
+    /// 检查时要忽略的标识值。
+    /// 如果存在具有给定 <paramref name="ignoredId"/> 的实体，则忽略它。
     /// </param>
-    /// <param name="cancellationToken">Cancel token</param>
+    /// <param name="cancellationToken">取消令牌</param>
     Task<bool> AnyAsync(
         string name,
         Guid? ignoredId = null,

@@ -17,6 +17,10 @@ public class AdminPermissionDefinitionProvider : PermissionDefinitionProvider
         menusPermission.AddChild(AdminPermissions.Menus.ManageStatus, L("Permission:ChangeStatus"));
         menusPermission.AddChild(AdminPermissions.Menus.ManageOrder, L("Permission:ManageOrder"));
         menusPermission.AddChild(AdminPermissions.Menus.CopyFromHost, L("Permission:CopyFromHost"));
+
+        var tenantAdminPermission = myGroup.AddPermission(AdminPermissions.TenantAdmin.Default, L("Permission:TenantAdmin"));
+        var tenantPermsPermission = tenantAdminPermission.AddChild(AdminPermissions.TenantAdmin.TenantPermissions.Default, L("Permission:TenantPermissions"));
+        tenantPermsPermission.AddChild(AdminPermissions.TenantAdmin.TenantPermissions.Update, L("Permission:Edit"));
     }
 
     private static LocalizableString L(string name)

@@ -9,7 +9,7 @@ namespace Censeq.Identity;
 public class ExternalLoginProviderDictionary : Dictionary<string, ExternalLoginProviderInfo>
 {
     /// <summary>
-    /// Adds or replaces a provider.
+    /// 添加或替换提供程序。
     /// </summary>
     public void Add<TProvider>([NotNull] string name)
         where TProvider : IExternalLoginProvider

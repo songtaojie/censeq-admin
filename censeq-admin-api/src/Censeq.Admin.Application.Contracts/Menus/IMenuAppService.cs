@@ -8,6 +8,7 @@ public interface IMenuAppService : IApplicationService
     Task<ListResultDto<MenuPermissionGroupDto>> GetPermissionGroupsAsync(Guid? menuId = null, Guid? parentId = null);
 
     Task<ListResultDto<string>> GetReferencedPermissionNamesAsync();
+    Task<ListResultDto<string>> GetTenantScopePermissionNamesAsync();
 
     Task<ListResultDto<MenuTreeItemDto>> GetTreeAsync();
 

@@ -49,5 +49,13 @@ export function useTenantApi() {
 		resetAdminPassword: async (id: string, newPassword: string): Promise<void> => {
 			return await tenantApi.request<void>(`api/admin/tenants/${id}/reset-admin-password`, 'POST', { newPassword });
 		},
+
+		getPermissions: async (id: string): Promise<string[]> => {
+			return await tenantApi.request<string[]>(`api/admin/tenants/${id}/permissions`, 'GET');
+		},
+
+		updatePermissions: async (id: string, grantedPermissions: string[]): Promise<void> => {
+			return await tenantApi.request<void>(`api/admin/tenants/${id}/permissions`, 'PUT', { grantedPermissions });
+		},
 	};
 }

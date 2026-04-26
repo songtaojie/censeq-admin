@@ -1051,22 +1051,22 @@ public class IdentityUserStore :
     }
 
     /// <summary>
-    /// Task<string?>
+    /// 获取用户的身份验证器密钥。
     /// </summary>
+    /// <param name="user">用户。</param>
+    /// <param name="cancellationToken">用于传播操作取消通知的 <see cref="CancellationToken"/>。</param>
+    /// <returns>表示异步操作的 <see cref="Task"/>，包含身份验证器密钥。</returns>
     public virtual Task<string?> GetAuthenticatorKeyAsync(IdentityUser user, CancellationToken cancellationToken = default)
     {
         return GetTokenAsync(user, InternalLoginProvider, AuthenticatorKeyTokenName, cancellationToken);
     }
 
     /// <summary>
-    /// Returns how many recovery code are still valid for a user.
+    /// 返回用户仍有效的恢复码数量。
     /// </summary>
-    /// <param name="user">The user who owns the recovery code.</param>
-    /// <param name="cancellationToken">The <see cref="CancellationToken"/> used to propagate notifications that the operation should be canceled.</param>
-    /// <returns>The number of valid recovery codes for the user..</returns>
-    /// <summary>
-    /// Task<int>
-    /// </summary>
+    /// <param name="user">拥有恢复码的用户。</param>
+    /// <param name="cancellationToken">用于传播操作取消通知的 <see cref="CancellationToken"/>。</param>
+    /// <returns>用户有效的恢复码数量。</returns>
     public virtual async Task<int> CountCodesAsync(IdentityUser user, CancellationToken cancellationToken = default)
     {
         cancellationToken.ThrowIfCancellationRequested();
@@ -1083,12 +1083,12 @@ public class IdentityUserStore :
     }
 
     /// <summary>
-    /// Updates the recovery codes for the user while invalidating any previous recovery codes.
+    /// 更新用户的恢复码，同时使所有先前的恢复码失效。
     /// </summary>
-    /// <param name="user">The user to store new recovery codes for.</param>
-    /// <param name="recoveryCodes">The new recovery codes for the user.</param>
-    /// <param name="cancellationToken">The <see cref="CancellationToken"/> used to propagate notifications that the operation should be canceled.</param>
-    /// <returns>The new recovery codes for the user.</returns>
+    /// <param name="user">要为其存储新恢复码的用户。</param>
+    /// <param name="recoveryCodes">用户的新恢复码。</param>
+    /// <param name="cancellationToken">用于传播操作取消通知的 <see cref="CancellationToken"/>。</param>
+    /// <returns>表示异步操作的 <see cref="Task"/>。</returns>
     public virtual Task ReplaceCodesAsync(IdentityUser user, IEnumerable<string> recoveryCodes, CancellationToken cancellationToken = default)
     {
         var mergedCodes = string.Join(";", recoveryCodes);
@@ -1096,16 +1096,12 @@ public class IdentityUserStore :
     }
 
     /// <summary>
-    /// Returns whether a recovery code is valid for a user. Note: recovery codes are only valid
-    /// once, and will be invalid after use.
+    /// 返回恢复码对用户是否有效。注意：恢复码只能使用一次，使用后即失效。
     /// </summary>
-    /// <param name="user">The user who owns the recovery code.</param>
-    /// <param name="code">The recovery code to use.</param>
-    /// <param name="cancellationToken">The <see cref="CancellationToken"/> used to propagate notifications that the operation should be canceled.</param>
-    /// <returns>True if the recovery code was found for the user.</returns>
-    /// <summary>
-    /// Task<bool>
-    /// </summary>
+    /// <param name="user">拥有恢复码的用户。</param>
+    /// <param name="code">要使用的恢复码。</param>
+    /// <param name="cancellationToken">用于传播操作取消通知的 <see cref="CancellationToken"/>。</param>
+    /// <returns>如果找到用户的恢复码则为 true。</returns>
     public virtual async Task<bool> RedeemCodeAsync(IdentityUser user, string code, CancellationToken cancellationToken = default)
     {
         cancellationToken.ThrowIfCancellationRequested();
@@ -1125,24 +1121,27 @@ public class IdentityUserStore :
     }
 
     /// <summary>
-    /// Task<string>
+    /// 获取内部登录提供程序名称。
     /// </summary>
+    /// <returns>表示异步操作的 <see cref="Task"/>，包含内部登录提供程序名称。</returns>
     public virtual Task<string> GetInternalLoginProviderAsync()
     {
         return Task.FromResult(InternalLoginProvider);
     }
 
     /// <summary>
-    /// Task<string>
+    /// 获取身份验证器密钥令牌名称。
     /// </summary>
+    /// <returns>表示异步操作的 <see cref="Task"/>，包含身份验证器密钥令牌名称。</returns>
     public virtual Task<string> GetAuthenticatorKeyTokenNameAsync()
     {
         return Task.FromResult(AuthenticatorKeyTokenName);
     }
 
     /// <summary>
-    /// Task<string>
+    /// 获取恢复码令牌名称。
     /// </summary>
+    /// <returns>表示异步操作的 <see cref="Task"/>，包含恢复码令牌名称。</returns>
     public virtual Task<string> GetRecoveryCodeTokenNameAsync()
     {
         return Task.FromResult(RecoveryCodeTokenName);

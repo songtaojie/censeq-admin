@@ -20,7 +20,7 @@ public class IdentityUserDelegation : BasicAggregateRoot<Guid>, IMultiTenant
     public virtual DateTime EndTime { get; protected set; }
 
     /// <summary>
-    /// Initializes a new instance of <see cref="IdentityUserDelegation"/>.
+    /// 初始化 <see cref="IdentityUserDelegation"/> 类的新实例。
     /// </summary>
     protected IdentityUserDelegation()
     {

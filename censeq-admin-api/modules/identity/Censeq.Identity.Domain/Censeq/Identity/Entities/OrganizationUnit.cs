@@ -78,10 +78,10 @@ public class OrganizationUnit : FullAuditedAggregateRoot<Guid>, IMultiTenant, IH
     }
 
     /// <summary>
-    /// Creates code for given numbers.
-    /// Example: if numbers are 4,2 then returns "00004.00002";
+    /// 为给定数字创建代码。
+    /// 示例：如果数字是 4,2，则返回 "00004.00002"；
     /// </summary>
-    /// <param name="numbers">Numbers</param>
+    /// <param name="numbers">数字</param>
     public static string CreateCode(params int[] numbers)
     {
         if (numbers.IsNullOrEmpty())
@@ -93,11 +93,11 @@ public class OrganizationUnit : FullAuditedAggregateRoot<Guid>, IMultiTenant, IH
     }
 
     /// <summary>
-    /// Appends a child code to a parent code.
-    /// Example: if parentCode = "00001", childCode = "00042" then returns "00001.00042".
+    /// 将子代码追加到父代码。
+    /// 示例：如果 parentCode = "00001"，childCode = "00042"，则返回 "00001.00042"。
     /// </summary>
-    /// <param name="parentCode">Parent code. Can be null or empty if parent is a root.</param>
-    /// <param name="childCode">Child code.</param>
+    /// <param name="parentCode">父代码。如果父级是根节点，可以为 null 或空。</param>
+    /// <param name="childCode">子代码。</param>
     public static string AppendCode(string parentCode, string childCode)
     {
         if (childCode.IsNullOrEmpty())
@@ -114,11 +114,11 @@ public class OrganizationUnit : FullAuditedAggregateRoot<Guid>, IMultiTenant, IH
     }
 
     /// <summary>
-    /// Gets relative code to the parent.
-    /// Example: if code = "00019.00055.00001" and parentCode = "00019" then returns "00055.00001".
+    /// 获取相对于父级的代码。
+    /// 示例：如果 code = "00019.00055.00001" 且 parentCode = "00019"，则返回 "00055.00001"。
     /// </summary>
-    /// <param name="code">The code.</param>
-    /// <param name="parentCode">The parent code.</param>
+    /// <param name="code">代码。</param>
+    /// <param name="parentCode">父级代码。</param>
     public static string GetRelativeCode(string code, string parentCode)
     {
         if (code.IsNullOrEmpty())
@@ -140,10 +140,10 @@ public class OrganizationUnit : FullAuditedAggregateRoot<Guid>, IMultiTenant, IH
     }
 
     /// <summary>
-    /// Calculates next code for given code.
-    /// Example: if code = "00019.00055.00001" returns "00019.00055.00002".
+    /// 计算给定代码的下一个代码。
+    /// 示例：如果 code = "00019.00055.00001"，则返回 "00019.00055.00002"。
     /// </summary>
-    /// <param name="code">The code.</param>
+    /// <param name="code">代码。</param>
     public static string CalculateNextCode(string code)
     {
         if (code.IsNullOrEmpty())
@@ -158,10 +158,10 @@ public class OrganizationUnit : FullAuditedAggregateRoot<Guid>, IMultiTenant, IH
     }
 
     /// <summary>
-    /// Gets the last unit code.
-    /// Example: if code = "00019.00055.00001" returns "00001".
+    /// 获取最后一个单元代码。
+    /// 示例：如果 code = "00019.00055.00001"，则返回 "00001"。
     /// </summary>
-    /// <param name="code">The code.</param>
+    /// <param name="code">代码。</param>
     public static string GetLastUnitCode(string code)
     {
         if (code.IsNullOrEmpty())
@@ -174,10 +174,10 @@ public class OrganizationUnit : FullAuditedAggregateRoot<Guid>, IMultiTenant, IH
     }
 
     /// <summary>
-    /// Gets parent code.
-    /// Example: if code = "00019.00055.00001" returns "00019.00055".
+    /// 获取父级代码。
+    /// 示例：如果 code = "00019.00055.00001"，则返回 "00019.00055"。
     /// </summary>
-    /// <param name="code">The code.</param>
+    /// <param name="code">代码。</param>
     public static string GetParentCode(string code)
     {
         if (code.IsNullOrEmpty())

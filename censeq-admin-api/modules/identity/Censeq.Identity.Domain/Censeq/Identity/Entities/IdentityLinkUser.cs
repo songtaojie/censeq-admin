@@ -18,7 +18,7 @@ public class IdentityLinkUser : BasicAggregateRoot<Guid>
     public virtual Guid? TargetTenantId { get; protected set; }
 
     /// <summary>
-    /// Initializes a new instance of <see cref="IdentityLinkUser"/>.
+    /// 初始化 <see cref="IdentityLinkUser"/> 类的新实例。
     /// </summary>
     protected IdentityLinkUser()
     {

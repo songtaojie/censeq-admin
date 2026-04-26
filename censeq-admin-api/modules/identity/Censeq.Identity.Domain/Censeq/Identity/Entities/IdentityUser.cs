@@ -20,53 +20,53 @@ public class IdentityUser : FullAuditedAggregateRoot<Guid>, IUser, IHasEntityVer
     public virtual Guid? TenantId { get; protected set; }
 
     /// <summary>
-    /// Gets or sets the user name for this user.
+    /// 获取或设置此用户的用户名。
     /// </summary>
     public virtual string UserName { get; protected internal set; }
 
     /// <summary>
-    /// Gets or sets the normalized user name for this user.
+    /// 获取或设置此用户的标准化用户名。
     /// </summary>
     [DisableAuditing]
     public virtual string NormalizedUserName { get; protected internal set; }
 
     /// <summary>
-    /// Gets or sets the Name for the user.
+    /// 获取或设置用户的名称。
     /// </summary>
     [CanBeNull]
     public virtual string? Name { get; set; }
 
     /// <summary>
-    /// Gets or sets the Surname for the user.
+    /// 获取或设置用户的姓氏。
     /// </summary>
     [CanBeNull]
     public virtual string? Surname { get; set; }
 
     /// <summary>
-    /// Gets or sets the email address for this user.
+    /// 获取或设置此用户的电子邮箱地址。
     /// </summary>
     public virtual string Email { get; protected internal set; }
 
     /// <summary>
-    /// Gets or sets the normalized email address for this user.
+    /// 获取或设置此用户的标准化电子邮箱地址。
     /// </summary>
     [DisableAuditing]
     public virtual string NormalizedEmail { get; protected internal set; }
 
     /// <summary>
-    /// Gets or sets a flag indicating if a user has confirmed their email address.
+    /// 获取或设置一个标志，指示用户是否已确认其电子邮箱地址。
     /// </summary>
-    /// <value>True if the email address has been confirmed, otherwise false.</value>
+    /// <value>如果电子邮箱地址已确认则为 true，否则为 false。</value>
     public virtual bool EmailConfirmed { get; protected internal set; }
 
     /// <summary>
-    /// Gets or sets a salted and hashed representation of the password for this user.
+    /// 获取或设置此用户密码的加盐哈希表示。
     /// </summary>
     [DisableAuditing]
     public virtual string PasswordHash { get; protected internal set; }
 
     /// <summary>
-    /// A random value that must change whenever a users credentials change (password changed, login removed)
+    /// 一个随机值，每当用户凭据更改时（密码更改、登录移除）必须更改。
     /// </summary>
     [DisableAuditing]
     public virtual string SecurityStamp { get; protected internal set; }
@@ -74,26 +74,26 @@ public class IdentityUser : FullAuditedAggregateRoot<Guid>, IUser, IHasEntityVer
     public virtual bool IsExternal { get; set; }
 
     /// <summary>
-    /// Gets or sets a telephone number for the user.
+    /// 获取或设置用户的电话号码。
     /// </summary>
     [CanBeNull]
     public virtual string PhoneNumber { get; protected internal set; }
 
     /// <summary>
-    /// Gets or sets a flag indicating if a user has confirmed their telephone address.
+    /// 获取或设置一个标志，指示用户是否已确认其电话号码。
     /// </summary>
-    /// <value>True if the telephone number has been confirmed, otherwise false.</value>
+    /// <value>如果电话号码已确认则为 true，否则为 false。</value>
     public virtual bool PhoneNumberConfirmed { get; protected internal set; }
 
     /// <summary>
-    /// Gets or sets a flag indicating if the user is active.
+    /// 获取或设置一个标志，指示用户是否处于活动状态。
     /// </summary>
     public virtual bool IsActive { get; protected internal set; }
 
     /// <summary>
-    /// Gets or sets a flag indicating if two factor authentication is enabled for this user.
+    /// 获取或设置一个标志，指示是否为此用户启用了双重身份验证。
     /// </summary>
-    /// <value>True if 2fa is enabled, otherwise false.</value>
+    /// <value>如果启用了双重身份验证则为 true，否则为 false。</value>
     public virtual bool TwoFactorEnabled { get; protected internal set; }
 
     /// <summary>
@@ -105,55 +105,55 @@ public class IdentityUser : FullAuditedAggregateRoot<Guid>, IUser, IHasEntityVer
     public virtual DateTimeOffset? LockoutEnd { get; protected internal set; }
 
     /// <summary>
-    /// Gets or sets a flag indicating if the user could be locked out.
+    /// 获取或设置一个标志，指示是否可以锁定用户。
     /// </summary>
-    /// <value>True if the user could be locked out, otherwise false.</value>
+    /// <value>如果可以锁定用户则为 true，否则为 false。</value>
     public virtual bool LockoutEnabled { get; protected internal set; }
 
     /// <summary>
-    /// Gets or sets the number of failed login attempts for the current user.
+    /// 获取或设置当前用户的失败登录尝试次数。
     /// </summary>
     public virtual int AccessFailedCount { get; protected internal set; }
 
     /// <summary>
-    /// Should change password on next login.
+    /// 下次登录时是否应更改密码。
     /// </summary>
     public virtual bool ShouldChangePasswordOnNextLogin { get; protected internal set; }
 
     /// <summary>
-    /// A version value that is increased whenever the entity is changed.
+    /// 实体发生更改时递增的版本值。
     /// </summary>
     public virtual int EntityVersion { get; protected set; }
 
     /// <summary>
-    /// Gets or sets the last password change time for the user.
+    /// 获取或设置用户上次更改密码的时间。
     /// </summary>
     public virtual DateTimeOffset? LastPasswordChangeTime { get; protected set; }
 
     //TODO: Can we make collections readonly collection, which will provide encapsulation. But... can work for all ORMs?
 
     /// <summary>
-    /// Navigation property for the roles this user belongs to.
+    /// 此用户所属角色的导航属性。
     /// </summary>
     public virtual ICollection<IdentityUserRole> Roles { get; protected set; }
 
     /// <summary>
-    /// Navigation property for the claims this user possesses.
+    /// 此用户拥有的声明的导航属性。
     /// </summary>
     public virtual ICollection<IdentityUserClaim> Claims { get; protected set; }
 
     /// <summary>
-    /// Navigation property for this users login accounts.
+    /// 此用户登录账户的导航属性。
     /// </summary>
     public virtual ICollection<IdentityUserLogin> Logins { get; protected set; }
 
     /// <summary>
-    /// Navigation property for this users tokens.
+    /// 此用户令牌的导航属性。
     /// </summary>
     public virtual ICollection<IdentityUserToken> Tokens { get; protected set; }
 
     /// <summary>
-    /// Navigation property for this organization units.
+    /// 此用户所属组织单元的导航属性。
     /// </summary>
     public virtual ICollection<IdentityUserOrganizationUnit> OrganizationUnits { get; protected set; }
 
@@ -355,8 +355,8 @@ public class IdentityUser : FullAuditedAggregateRoot<Guid>, IUser, IHasEntityVer
     }
 
     /// <summary>
-    /// Use <see cref="IdentityUserManager.ConfirmEmailAsync"/> for regular email confirmation.
-    /// Using this skips the confirmation process and directly sets the <see cref="EmailConfirmed"/>.
+    /// 常规的邮箱确认请使用 <see cref="IdentityUserManager.ConfirmEmailAsync"/>。
+    /// 使用此方法将跳过确认过程并直接设置 <see cref="EmailConfirmed"/>。
     /// </summary>
     public virtual void SetEmailConfirmed(bool confirmed)
     {
@@ -369,13 +369,11 @@ public class IdentityUser : FullAuditedAggregateRoot<Guid>, IUser, IHasEntityVer
     }
 
     /// <summary>
-    /// Normally use <see cref="IdentityUserManager.ChangePhoneNumberAsync"/> to change the phone number
-    /// in the application code.
-    /// This method is to directly set it with a confirmation information.
+    /// 通常请在应用程序代码中使用 <see cref="IdentityUserManager.ChangePhoneNumberAsync"/> 来更改电话号码。
+    /// 此方法用于直接设置电话号码及其确认状态。
     /// </summary>
-    /// <param name="phoneNumber"></param>
-    /// <param name="confirmed"></param>
-    /// <exception cref="NotImplementedException"></exception>
+    /// <param name="phoneNumber">电话号码。</param>
+    /// <param name="confirmed">是否已确认。</param>
     public void SetPhoneNumber(string phoneNumber, bool confirmed)
     {
         PhoneNumber = phoneNumber;

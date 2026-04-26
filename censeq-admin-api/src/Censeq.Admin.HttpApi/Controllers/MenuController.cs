@@ -28,6 +28,12 @@ public class MenuController : AdminController, Menus.IMenuAppService
         return _menuAppService.GetReferencedPermissionNamesAsync();
     }
 
+    [HttpGet("tenant-scope-permissions")]
+    public virtual Task<ListResultDto<string>> GetTenantScopePermissionNamesAsync()
+    {
+        return _menuAppService.GetTenantScopePermissionNamesAsync();
+    }
+
     [HttpGet("tree")]
     public virtual Task<ListResultDto<Menus.MenuTreeItemDto>> GetTreeAsync()
     {

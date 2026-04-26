@@ -5,22 +5,22 @@ using Volo.Abp.MultiTenancy;
 namespace Censeq.Identity.Entities;
 
 /// <summary>
-/// Represents membership of a User to an OU.
+/// 表示用户与组织单元的成员关系。
 /// </summary>
 public class IdentityUserOrganizationUnit : CreationAuditedEntity, IMultiTenant
 {
     /// <summary>
-    /// TenantId of this entity.
+    /// 此实体的租户标识。
     /// </summary>
     public virtual Guid? TenantId { get; protected set; }
 
     /// <summary>
-    /// Id of the User.
+    /// 用户的标识。
     /// </summary>
     public virtual Guid UserId { get; protected set; }
 
     /// <summary>
-    /// Id of the related <see cref="OrganizationUnit"/>.
+    /// 关联 <see cref="OrganizationUnit"/> 的标识。
     /// </summary>
     public virtual Guid OrganizationUnitId { get; protected set; }
 
@@ -37,8 +37,9 @@ public class IdentityUserOrganizationUnit : CreationAuditedEntity, IMultiTenant
     }
 
     /// <summary>
-    /// object[]
+    /// 获取实体的复合主键。
     /// </summary>
+    /// <returns>复合主键数组。</returns>
     public override object[] GetKeys()
     {
         return new object[] { UserId, OrganizationUnitId };

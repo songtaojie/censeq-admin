@@ -120,6 +120,24 @@ public class MenuAppService : AdminAppService, IMenuAppService
         return new ListResultDto<string>(permissionNames);
     }
 
+    /// <summary>
+    /// 获取租户作用域菜单所引用的权限名称集合（用于平台配置租户权限范围时的可选项过滤）
+    /// </summary>
+    public virtual async Task<ListResultDto<string>> GetTenantScopePermissionNamesAsync()
+    {
+        var menuQueryable = await _menuRepository.GetQueryableAsync();
+        var permQueryable = await _menuPermissionRepository.GetQueryableAsync();
+
+        var permissionNames = await AsyncExecuter.ToListAsync(
+            from mp in permQueryable
+            join m in menuQueryable on mp.MenuId equals m.Id
+            where m.TenantId == null && m.Scope == MenuScope.Tenant
+            select mp.PermissionName into name
+            select name);
+
+        return new ListResultDto<string>(permissionNames.Distinct().ToList());
+    }
+
     public virtual async Task<ListResultDto<MenuTreeItemDto>> GetTreeAsync()
     {
         var menus = await GetManagementMenusAsync();

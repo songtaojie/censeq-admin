@@ -60,6 +60,7 @@
 					<template #default="scope">
 						<el-button icon="ele-Edit" size="small" text type="primary" @click="onOpenEditTenant('edit', scope.row)">编辑</el-button>
 						<el-button icon="ele-Key" size="small" text type="warning" @click="onResetPassword(scope.row)">重置密码</el-button>
+						<el-button icon="ele-Lock" size="small" text type="success" @click="onOpenPermission(scope.row)">权限配置</el-button>
 						<el-button icon="ele-Delete" size="small" text type="danger" @click="onRowDel(scope.row)">删除</el-button>
 					</template>
 				</el-table-column>
@@ -80,6 +81,7 @@
 		</el-card>
 
 		<TenantDialog ref="tenantDialogRef" @refresh="getTableData()" />
+		<TenantPermissionDialog ref="tenantPermissionDialogRef" />
 	</div>
 </template>
 
@@ -90,8 +92,10 @@ import { useTenantApi } from '/@/api/apis';
 import type { TenantDto } from '/@/api/models/tenant';
 
 const TenantDialog = defineAsyncComponent(() => import('/@/views/system/tenant/dialog.vue'));
+const TenantPermissionDialog = defineAsyncComponent(() => import('/@/views/system/tenant/tenant-permission-dialog.vue'));
 
 const tenantDialogRef = ref();
+const tenantPermissionDialogRef = ref();
 const queryFormRef = ref();
 
 const state = reactive({
@@ -155,6 +159,10 @@ const onOpenAddTenant = (type: string) => {
 
 const onOpenEditTenant = (type: string, row: TenantDto) => {
 	tenantDialogRef.value.openDialog(type, row);
+};
+
+const onOpenPermission = (row: TenantDto) => {
+	tenantPermissionDialogRef.value.open(row.id!, row.name ?? row.id);
 };
 
 const onRowDel = (row: TenantDto) => {
