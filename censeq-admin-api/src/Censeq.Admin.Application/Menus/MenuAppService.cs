@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Authorization;
 using Volo.Abp.Authorization.Permissions;
 using Volo.Abp;
 using Volo.Abp.Application.Dtos;
+using Volo.Abp.Data;
 using Volo.Abp.Domain.Repositories;
 using Volo.Abp.Localization;
 using Volo.Abp.MultiTenancy;
@@ -19,19 +20,22 @@ public class MenuAppService : AdminAppService, IMenuAppService
     private readonly MenuManager _menuManager;
     private readonly IPermissionDefinitionManager _permissionDefinitionManager;
     private readonly ISimpleStateCheckerManager<PermissionDefinition> _simpleStateCheckerManager;
+    private readonly IDataFilter _dataFilter;
 
     public MenuAppService(
         IRepository<Menu, Guid> menuRepository,
         IRepository<MenuPermission, Guid> menuPermissionRepository,
         MenuManager menuManager,
         IPermissionDefinitionManager permissionDefinitionManager,
-        ISimpleStateCheckerManager<PermissionDefinition> simpleStateCheckerManager)
+        ISimpleStateCheckerManager<PermissionDefinition> simpleStateCheckerManager,
+        IDataFilter dataFilter)
     {
         _menuRepository = menuRepository;
         _menuPermissionRepository = menuPermissionRepository;
         _menuManager = menuManager;
         _permissionDefinitionManager = permissionDefinitionManager;
         _simpleStateCheckerManager = simpleStateCheckerManager;
+        _dataFilter = dataFilter;
     }
 
     public virtual async Task<ListResultDto<MenuPermissionGroupDto>> GetPermissionGroupsAsync(Guid? menuId = null, Guid? parentId = null)
@@ -266,8 +270,13 @@ public class MenuAppService : AdminAppService, IMenuAppService
             }
         }
 
-        var hostMenus = await GetMenusByTenantAsync(null);
-        var permissionLookup = await GetPermissionLookupAsync(hostMenus.Select(x => x.Id).ToList());
+        List<Menu> hostMenus;
+        Dictionary<Guid, List<string>> permissionLookup;
+        using (_dataFilter.Disable<IMultiTenant>())
+        {
+            hostMenus = await GetTenantScopeHostMenusAsync();
+            permissionLookup = await GetPermissionLookupAsync(hostMenus.Select(x => x.Id).ToList());
+        }
         var childrenLookup = hostMenus
             .OrderBy(x => x.Sort)
             .ThenBy(x => x.CreationTime)
@@ -403,6 +412,15 @@ public class MenuAppService : AdminAppService, IMenuAppService
         var queryable = await _menuRepository.GetQueryableAsync();
         return await AsyncExecuter.ToListAsync(
             queryable.Where(x => x.TenantId == tenantId)
+                .OrderBy(x => x.Sort)
+                .ThenBy(x => x.CreationTime));
+    }
+
+    private async Task<List<Menu>> GetTenantScopeHostMenusAsync()
+    {
+        var queryable = await _menuRepository.GetQueryableAsync();
+        return await AsyncExecuter.ToListAsync(
+            queryable.Where(x => x.TenantId == null && x.Scope == MenuScope.Tenant)
                 .OrderBy(x => x.Sort)
                 .ThenBy(x => x.CreationTime));
     }

@@ -29,9 +29,9 @@ public static class CenseqAdminMenuDbContextModelCreatingExtensions
             b.Property(x => x.AuthorizationMode).HasConversion<byte>().IsRequired();
             b.Property(x => x.Scope).HasConversion<byte>().IsRequired().HasDefaultValue(Menus.MenuScope.Platform);
             b.HasIndex(x => new { x.TenantId, x.ParentId, x.Sort });
-            b.HasIndex(x => new { x.TenantId, x.Path }).IsUnique();
-            b.HasIndex(x => new { x.TenantId, x.RouteName }).IsUnique();
-            b.HasIndex(x => new { x.TenantId, x.ParentId, x.Name }).IsUnique();
+            b.HasIndex(x => new { x.TenantId, x.Path }).IsUnique().HasFilter("is_deleted = false");
+            b.HasIndex(x => new { x.TenantId, x.RouteName }).IsUnique().HasFilter("is_deleted = false");
+            b.HasIndex(x => new { x.TenantId, x.ParentId, x.Name }).IsUnique().HasFilter("is_deleted = false");
             b.HasOne<Menus.Menu>().WithMany().HasForeignKey(x => x.ParentId).OnDelete(DeleteBehavior.Restrict);
             b.HasMany(x => x.Permissions).WithOne().HasForeignKey(x => x.MenuId).OnDelete(DeleteBehavior.Cascade);
             b.ApplyObjectExtensionMappings();

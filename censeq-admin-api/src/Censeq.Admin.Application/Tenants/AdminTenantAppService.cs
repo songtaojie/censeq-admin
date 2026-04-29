@@ -1,4 +1,5 @@
 using System.Linq;
+using Censeq.Admin.Menus;
 using Censeq.Admin.Permissions;
 using Censeq.Identity;
 using Censeq.PermissionManagement;
@@ -8,6 +9,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Volo.Abp;
 using Volo.Abp.Caching;
+using Volo.Abp.Data;
 using Volo.Abp.Domain.Entities;
 using Volo.Abp.Domain.Repositories;
 using Volo.Abp.MultiTenancy;
@@ -25,19 +27,22 @@ public class AdminTenantAppService : AdminAppService
     private readonly ICurrentTenant _currentTenant;
     private readonly IRepository<TenantPermissionGrant, Guid> _tenantPermissionGrantRepository;
     private readonly IDistributedCache<TenantPermissionScopeCacheItem> _tenantScopeCache;
+    private readonly MenuDataSeedContributor _menuSeedContributor;
 
     public AdminTenantAppService(
         IRepository<Tenant, Guid> tenantRepository,
         IdentityUserManager userManager,
         ICurrentTenant currentTenant,
         IRepository<TenantPermissionGrant, Guid> tenantPermissionGrantRepository,
-        IDistributedCache<TenantPermissionScopeCacheItem> tenantScopeCache)
+        IDistributedCache<TenantPermissionScopeCacheItem> tenantScopeCache,
+        MenuDataSeedContributor menuSeedContributor)
     {
         _tenantRepository = tenantRepository;
         _userManager = userManager;
         _currentTenant = currentTenant;
         _tenantPermissionGrantRepository = tenantPermissionGrantRepository;
         _tenantScopeCache = tenantScopeCache;
+        _menuSeedContributor = menuSeedContributor;
     }
 
     /// <summary>
@@ -61,15 +66,11 @@ public class AdminTenantAppService : AdminAppService
                     .WithData("TenantName", tenant.Name);
             }
 
-            var removeResult = await _userManager.RemovePasswordAsync(adminUser);
-            if (!removeResult.Succeeded)
+            var resetToken = await _userManager.GeneratePasswordResetTokenAsync(adminUser);
+            var resetResult = await _userManager.ResetPasswordAsync(adminUser, resetToken, newPassword);
+            if (!resetResult.Succeeded)
             {
-                throw new BusinessException().WithData("errors", string.Join(", ", removeResult.Errors.Select(e => e.Description)));
-            }
-            var addResult = await _userManager.AddPasswordAsync(adminUser, newPassword);
-            if (!addResult.Succeeded)
-            {
-                throw new BusinessException().WithData("errors", string.Join(", ", addResult.Errors.Select(e => e.Description)));
+                throw new BusinessException().WithData("errors", string.Join(", ", resetResult.Errors.Select(e => e.Description)));
             }
         }
     }
@@ -113,6 +114,12 @@ public class AdminTenantAppService : AdminAppService
 
         // 使缓存失效，下次权限检查时重新从数据库加载
         await _tenantScopeCache.RemoveAsync($"TenantScope:{tenantId}");
+
+        // 权限首次配置后，自动为租户种子化 host Tenant scope 菜单（幂等，已有菜单时跳过）
+        using (_currentTenant.Change(tenantId))
+        {
+            await _menuSeedContributor.SeedTenantMenusAsync(tenantId);
+        }
     }
 
     /// <summary>

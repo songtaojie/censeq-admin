@@ -4,6 +4,7 @@ using Volo.Abp.Data;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Domain.Repositories;
 using Volo.Abp.Domain.Services;
+using Volo.Abp.MultiTenancy;
 using Volo.Abp.Uow;
 
 namespace Censeq.Admin.Menus;
@@ -12,21 +13,25 @@ public class MenuDataSeedContributor : DomainService, IDataSeedContributor, ITra
 {
     private readonly IRepository<Menu, Guid> _menuRepository;
     private readonly IRepository<MenuPermission, Guid> _menuPermissionRepository;
+    private readonly IDataFilter _dataFilter;
 
     public MenuDataSeedContributor(
         IRepository<Menu, Guid> menuRepository,
-        IRepository<MenuPermission, Guid> menuPermissionRepository)
+        IRepository<MenuPermission, Guid> menuPermissionRepository,
+        IDataFilter dataFilter)
     {
         _menuRepository = menuRepository;
         _menuPermissionRepository = menuPermissionRepository;
+        _dataFilter = dataFilter;
     }
 
     [UnitOfWork]
     public virtual async Task SeedAsync(DataSeedContext context)
     {
-        // 菜单由平台统一定义（host 侧），租户通过 TenantPermissionGrant 控制菜单可见性，无需复制数据行。
         if (context.TenantId.HasValue)
         {
+            // 租户上下文：自动将 host 侧 Tenant scope 菜单复制到当前租户（幂等，已有菜单时跳过）
+            await SeedTenantMenusAsync(context.TenantId.Value);
             return;
         }
 
@@ -103,6 +108,81 @@ public class MenuDataSeedContributor : DomainService, IDataSeedContributor, ITra
         menu.SetAuthorizationMode(definition.AuthorizationMode);
         menu.SetScope(definition.Scope);
         menu.SetPermissionGroups(definition.PermissionGroups);
+    }
+
+    /// <summary>
+    /// 将 host 侧 Tenant scope 菜单复制到指定租户。幂等：租户已有菜单时直接跳过。
+    /// </summary>
+    public virtual async Task SeedTenantMenusAsync(Guid tenantId)
+    {
+        using (_dataFilter.Disable<IMultiTenant>())
+        {
+            // 幂等检查：包含软删除记录——只要曾经存在过菜单（含已删除）就跳过，
+            // 避免与唯一索引上的软删除行发生冲突
+            bool hasAny;
+            using (_dataFilter.Disable<ISoftDelete>())
+            {
+                var anyList = await AsyncExecuter.ToListAsync(
+                    (await _menuRepository.GetQueryableAsync())
+                        .Where(x => x.TenantId == tenantId)
+                        .Take(1));
+                hasAny = anyList.Count > 0;
+            }
+            if (hasAny)
+                return;
+
+            // 读取 host 侧 Tenant scope 菜单
+            var hostMenus = await AsyncExecuter.ToListAsync(
+                (await _menuRepository.GetQueryableAsync())
+                    .Where(x => x.TenantId == null && x.Scope == MenuScope.Tenant)
+                    .OrderBy(x => x.Sort)
+                    .ThenBy(x => x.CreationTime));
+
+            if (hostMenus.Count == 0)
+                return;
+
+            var hostMenuIds = hostMenus.Select(x => x.Id).ToList();
+            var hostPermissions = await AsyncExecuter.ToListAsync(
+                (await _menuPermissionRepository.GetQueryableAsync())
+                    .Where(x => hostMenuIds.Contains(x.MenuId)));
+
+            var idMapping = new Dictionary<Guid, Guid>();
+            foreach (var source in hostMenus)
+            {
+                var newId = Guid.NewGuid();
+                idMapping[source.Id] = newId;
+
+                var newParentId = source.ParentId.HasValue && idMapping.TryGetValue(source.ParentId.Value, out var mappedId)
+                    ? mappedId
+                    : (Guid?)null;
+
+                var target = new Menu(newId, tenantId, source.Name, source.Title, source.Type);
+                target.SetParent(newParentId);
+                target.SetRouteName(source.RouteName);
+                target.SetPath(source.Path);
+                target.SetComponent(source.Component);
+                target.SetRedirect(source.Redirect);
+                target.SetIcon(source.Icon);
+                target.SetSort(source.Sort);
+                target.SetDisplayOptions(source.Visible, source.KeepAlive, source.Affix);
+                target.SetLinkOptions(source.IsExternal, source.ExternalUrl, source.IsIframe);
+                target.SetStatus(source.Status);
+                target.SetAuthorizationMode(source.AuthorizationMode);
+                target.SetScope(source.Scope);
+                target.SetRemark(source.Remark);
+                target.SetButtonCode(source.ButtonCode);
+                target.SetPermissionGroups(source.PermissionGroups);
+
+                await _menuRepository.InsertAsync(target, autoSave: true);
+
+                foreach (var perm in hostPermissions.Where(p => p.MenuId == source.Id))
+                {
+                    await _menuPermissionRepository.InsertAsync(
+                        new MenuPermission(Guid.NewGuid(), newId, perm.PermissionName),
+                        autoSave: true);
+                }
+            }
+        }
     }
 
     private async Task ReplacePermissionsAsync(Menu menu, IReadOnlyCollection<string> permissionNames)
