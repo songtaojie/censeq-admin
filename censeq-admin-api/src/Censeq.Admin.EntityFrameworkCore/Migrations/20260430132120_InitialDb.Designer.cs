@@ -13,8 +13,8 @@ using Volo.Abp.EntityFrameworkCore;
 namespace Censeq.Admin.Migrations
 {
     [DbContext(typeof(CenseqAdminDbContext))]
-    [Migration("20260429145132_PartialUniqueIndexForSoftDelete")]
-    partial class PartialUniqueIndexForSoftDelete
+    [Migration("20260430132120_InitialDb")]
+    partial class InitialDb
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -151,9 +151,7 @@ namespace Censeq.Admin.Migrations
                         .HasColumnName("route_name");
 
                     b.Property<byte>("Scope")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("smallint")
-                        .HasDefaultValue((byte)1)
                         .HasColumnName("scope");
 
                     b.Property<int>("Sort")

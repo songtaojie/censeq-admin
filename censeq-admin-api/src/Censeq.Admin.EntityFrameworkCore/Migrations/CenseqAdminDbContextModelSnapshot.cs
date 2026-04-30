@@ -148,9 +148,7 @@ namespace Censeq.Admin.Migrations
                         .HasColumnName("route_name");
 
                     b.Property<byte>("Scope")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("smallint")
-                        .HasDefaultValue((byte)1)
                         .HasColumnName("scope");
 
                     b.Property<int>("Sort")

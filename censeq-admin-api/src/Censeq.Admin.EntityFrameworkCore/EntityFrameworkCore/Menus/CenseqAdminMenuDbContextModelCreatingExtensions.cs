@@ -27,7 +27,7 @@ public static class CenseqAdminMenuDbContextModelCreatingExtensions
             b.Property(x => x.PermissionGroups).HasMaxLength(Menus.MenuConsts.MaxPermissionGroupsLength);
             b.Property(x => x.Type).HasConversion<byte>().IsRequired();
             b.Property(x => x.AuthorizationMode).HasConversion<byte>().IsRequired();
-            b.Property(x => x.Scope).HasConversion<byte>().IsRequired().HasDefaultValue(Menus.MenuScope.Platform);
+            b.Property(x => x.Scope).HasConversion<byte>().IsRequired();
             b.HasIndex(x => new { x.TenantId, x.ParentId, x.Sort });
             b.HasIndex(x => new { x.TenantId, x.Path }).IsUnique().HasFilter("is_deleted = false");
             b.HasIndex(x => new { x.TenantId, x.RouteName }).IsUnique().HasFilter("is_deleted = false");

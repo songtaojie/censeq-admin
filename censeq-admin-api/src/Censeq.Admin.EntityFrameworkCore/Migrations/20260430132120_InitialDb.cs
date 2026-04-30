@@ -281,6 +281,7 @@ namespace Censeq.Admin.Migrations
                     is_iframe = table.Column<bool>(type: "boolean", nullable: false),
                     status = table.Column<bool>(type: "boolean", nullable: false),
                     authorization_mode = table.Column<byte>(type: "smallint", nullable: false),
+                    scope = table.Column<byte>(type: "smallint", nullable: false),
                     remark = table.Column<string>(type: "character varying(512)", maxLength: 512, nullable: true),
                     button_code = table.Column<string>(type: "character varying(128)", maxLength: 128, nullable: true),
                     permission_groups = table.Column<string>(type: "character varying(512)", maxLength: 512, nullable: true),
@@ -435,6 +436,8 @@ namespace Censeq.Admin.Migrations
                     parent_id = table.Column<Guid>(type: "uuid", nullable: true),
                     code = table.Column<string>(type: "character varying(95)", maxLength: 95, nullable: false),
                     display_name = table.Column<string>(type: "character varying(128)", maxLength: 128, nullable: false),
+                    status = table.Column<int>(type: "integer", nullable: false, defaultValue: 1),
+                    remark = table.Column<string>(type: "character varying(512)", maxLength: 512, nullable: true),
                     entity_version = table.Column<int>(type: "integer", nullable: false),
                     extra_properties = table.Column<string>(type: "text", nullable: false),
                     concurrency_stamp = table.Column<string>(type: "character varying(40)", maxLength: 40, nullable: false),
@@ -547,6 +550,7 @@ namespace Censeq.Admin.Migrations
                     name = table.Column<string>(type: "character varying(64)", maxLength: 64, nullable: false),
                     normalized_name = table.Column<string>(type: "character varying(64)", maxLength: 64, nullable: false),
                     code = table.Column<string>(type: "character varying(64)", maxLength: 64, nullable: true),
+                    is_active = table.Column<bool>(type: "boolean", nullable: false, defaultValue: true),
                     entity_version = table.Column<int>(type: "integer", nullable: false),
                     extra_properties = table.Column<string>(type: "text", nullable: false),
                     concurrency_stamp = table.Column<string>(type: "character varying(40)", maxLength: 40, nullable: false),
@@ -561,6 +565,21 @@ namespace Censeq.Admin.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("pk_censeq_tenant", x => x.id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "censeq_tenant_permission_grants",
+                columns: table => new
+                {
+                    id = table.Column<Guid>(type: "uuid", nullable: false),
+                    tenant_id = table.Column<Guid>(type: "uuid", nullable: false),
+                    permission_name = table.Column<string>(type: "character varying(128)", maxLength: 128, nullable: false),
+                    CreationTime = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
+                    CreatorId = table.Column<Guid>(type: "uuid", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("pk_censeq_tenant_permission_grants", x => x.id);
                 });
 
             migrationBuilder.CreateTable(
@@ -1013,7 +1032,8 @@ namespace Censeq.Admin.Migrations
                 name: "ix_censeq_menu_tenant_id_parent_id_name",
                 table: "censeq_menu",
                 columns: new[] { "tenant_id", "parent_id", "name" },
-                unique: true);
+                unique: true,
+                filter: "is_deleted = false");
 
             migrationBuilder.CreateIndex(
                 name: "ix_censeq_menu_tenant_id_parent_id_sort",
@@ -1024,13 +1044,15 @@ namespace Censeq.Admin.Migrations
                 name: "ix_censeq_menu_tenant_id_path",
                 table: "censeq_menu",
                 columns: new[] { "tenant_id", "path" },
-                unique: true);
+                unique: true,
+                filter: "is_deleted = false");
 
             migrationBuilder.CreateIndex(
                 name: "ix_censeq_menu_tenant_id_route_name",
                 table: "censeq_menu",
                 columns: new[] { "tenant_id", "route_name" },
-                unique: true);
+                unique: true,
+                filter: "is_deleted = false");
 
             migrationBuilder.CreateIndex(
                 name: "ix_censeq_menu_permission_menu_id_permission_name",
@@ -1126,6 +1148,12 @@ namespace Censeq.Admin.Migrations
                 name: "ix_censeq_tenant_normalized_name",
                 table: "censeq_tenant",
                 column: "normalized_name");
+
+            migrationBuilder.CreateIndex(
+                name: "ix_censeq_tenant_permission_grants_tenant_id_permission_name",
+                table: "censeq_tenant_permission_grants",
+                columns: new[] { "tenant_id", "permission_name" },
+                unique: true);
         }
 
         /// <inheritdoc />
@@ -1214,6 +1242,9 @@ namespace Censeq.Admin.Migrations
 
             migrationBuilder.DropTable(
                 name: "censeq_tenant_connection_string");
+
+            migrationBuilder.DropTable(
+                name: "censeq_tenant_permission_grants");
 
             migrationBuilder.DropTable(
                 name: "censeq_entity_change");

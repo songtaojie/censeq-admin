@@ -207,6 +207,7 @@ CREATE TABLE censeq_menu (
     is_iframe boolean NOT NULL,
     status boolean NOT NULL,
     authorization_mode smallint NOT NULL,
+    scope smallint NOT NULL,
     remark character varying(512),
     button_code character varying(128),
     permission_groups character varying(512),
@@ -326,6 +327,8 @@ CREATE TABLE censeq_organization_unit (
     parent_id uuid,
     code character varying(95) NOT NULL,
     display_name character varying(128) NOT NULL,
+    status integer NOT NULL DEFAULT 1,
+    remark character varying(512),
     entity_version integer NOT NULL,
     extra_properties text NOT NULL,
     concurrency_stamp character varying(40) NOT NULL,
@@ -402,6 +405,7 @@ CREATE TABLE censeq_tenant (
     name character varying(64) NOT NULL,
     normalized_name character varying(64) NOT NULL,
     code character varying(64),
+    is_active boolean NOT NULL DEFAULT TRUE,
     entity_version integer NOT NULL,
     extra_properties text NOT NULL,
     concurrency_stamp character varying(40) NOT NULL,
@@ -413,6 +417,15 @@ CREATE TABLE censeq_tenant (
     deleter_id uuid,
     deletion_time timestamp without time zone,
     CONSTRAINT pk_censeq_tenant PRIMARY KEY (id)
+);
+
+CREATE TABLE censeq_tenant_permission_grants (
+    id uuid NOT NULL,
+    tenant_id uuid NOT NULL,
+    permission_name character varying(128) NOT NULL,
+    "CreationTime" timestamp without time zone NOT NULL,
+    "CreatorId" uuid,
+    CONSTRAINT pk_censeq_tenant_permission_grants PRIMARY KEY (id)
 );
 
 CREATE TABLE censeq_audit_log_action (
@@ -620,13 +633,13 @@ CREATE INDEX ix_censeq_identity_user_token_identity_user_id ON censeq_identity_u
 
 CREATE INDEX ix_censeq_menu_parent_id ON censeq_menu (parent_id);
 
-CREATE UNIQUE INDEX ix_censeq_menu_tenant_id_parent_id_name ON censeq_menu (tenant_id, parent_id, name);
+CREATE UNIQUE INDEX ix_censeq_menu_tenant_id_parent_id_name ON censeq_menu (tenant_id, parent_id, name) WHERE is_deleted = false;
 
 CREATE INDEX ix_censeq_menu_tenant_id_parent_id_sort ON censeq_menu (tenant_id, parent_id, sort);
 
-CREATE UNIQUE INDEX ix_censeq_menu_tenant_id_path ON censeq_menu (tenant_id, path);
+CREATE UNIQUE INDEX ix_censeq_menu_tenant_id_path ON censeq_menu (tenant_id, path) WHERE is_deleted = false;
 
-CREATE UNIQUE INDEX ix_censeq_menu_tenant_id_route_name ON censeq_menu (tenant_id, route_name);
+CREATE UNIQUE INDEX ix_censeq_menu_tenant_id_route_name ON censeq_menu (tenant_id, route_name) WHERE is_deleted = false;
 
 CREATE UNIQUE INDEX ix_censeq_menu_permission_menu_id_permission_name ON censeq_menu_permission (menu_id, permission_name);
 
@@ -662,8 +675,10 @@ CREATE INDEX ix_censeq_tenant_name ON censeq_tenant (name);
 
 CREATE INDEX ix_censeq_tenant_normalized_name ON censeq_tenant (normalized_name);
 
+CREATE UNIQUE INDEX ix_censeq_tenant_permission_grants_tenant_id_permission_name ON censeq_tenant_permission_grants (tenant_id, permission_name);
+
 INSERT INTO ef_migrations_history (migration_id, product_version)
-VALUES ('20260419144549_InitialDb', '8.0.16');
+VALUES ('20260430132120_InitialDb', '8.0.16');
 
 COMMIT;
 
