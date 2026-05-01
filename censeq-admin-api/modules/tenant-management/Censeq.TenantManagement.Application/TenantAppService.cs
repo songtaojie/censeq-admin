@@ -50,7 +50,7 @@ public class TenantAppService : TenantManagementAppServiceBase, ITenantAppServic
             input.Sorting = nameof(Tenant.Name);
         }
 
-        var count = await TenantRepository.GetCountAsync(input.Filter);
+        var count = await TenantRepository.GetCountAsync(input.Filter, input.IncludeDeleted);
         var list = await TenantRepository.GetListAsync(
             input.Sorting,
             input.MaxResultCount,
