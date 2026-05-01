@@ -6,6 +6,8 @@ using System.Threading;
 using System.Threading.Tasks;
 using Censeq.TenantManagement.Entities;
 using Microsoft.EntityFrameworkCore;
+using Volo.Abp;
+using Volo.Abp.Data;
 using Volo.Abp.Domain.Repositories.EntityFrameworkCore;
 using Volo.Abp.EntityFrameworkCore;
 
@@ -24,10 +26,14 @@ public class EfCoreTenantRepository : EfCoreRepository<ITenantManagementDbContex
         bool includeDetails = true,
         CancellationToken cancellationToken = default)
     {
-        return await (await GetDbSetAsync())
-            .IncludeDetails(includeDetails)
-            .OrderBy(t => t.Id)
-            .FirstOrDefaultAsync(t => t.NormalizedName == normalizedName, GetCancellationToken(cancellationToken));
+        // 包含软删除记录，确保唯一性校验能检测到已删除的同名租户
+        using (DataFilter.Disable<ISoftDelete>())
+        {
+            return await (await GetDbSetAsync())
+                .IncludeDetails(includeDetails)
+                .OrderBy(t => t.Id)
+                .FirstOrDefaultAsync(t => t.NormalizedName == normalizedName, GetCancellationToken(cancellationToken));
+        }
     }
 
     public virtual async Task<Tenant?> FindByCodeAsync(
@@ -41,10 +47,14 @@ public class EfCoreTenantRepository : EfCoreRepository<ITenantManagementDbContex
             return null;
         }
 
-        return await (await GetDbSetAsync())
-            .IncludeDetails(includeDetails)
-            .OrderBy(t => t.Id)
-            .FirstOrDefaultAsync(t => t.Code == normalized, GetCancellationToken(cancellationToken));
+        // 包含软删除记录，确保唯一性校验能检测到已删除的同编码租户
+        using (DataFilter.Disable<ISoftDelete>())
+        {
+            return await (await GetDbSetAsync())
+                .IncludeDetails(includeDetails)
+                .OrderBy(t => t.Id)
+                .FirstOrDefaultAsync(t => t.Code == normalized, GetCancellationToken(cancellationToken));
+        }
     }
 
     public virtual async Task<Tenant?> FindByDomainAsync(
@@ -58,10 +68,14 @@ public class EfCoreTenantRepository : EfCoreRepository<ITenantManagementDbContex
             return null;
         }
 
-        return await (await GetDbSetAsync())
-            .IncludeDetails(includeDetails)
-            .OrderBy(t => t.Id)
-            .FirstOrDefaultAsync(t => t.Domain == normalized, GetCancellationToken(cancellationToken));
+        // 包含软删除记录，确保唯一性校验能检测到已删除的同域名租户
+        using (DataFilter.Disable<ISoftDelete>())
+        {
+            return await (await GetDbSetAsync())
+                .IncludeDetails(includeDetails)
+                .OrderBy(t => t.Id)
+                .FirstOrDefaultAsync(t => t.Domain == normalized, GetCancellationToken(cancellationToken));
+        }
     }
 
     [Obsolete("Use FindByNameAsync method.")]
@@ -88,32 +102,42 @@ public class EfCoreTenantRepository : EfCoreRepository<ITenantManagementDbContex
         int skipCount = 0,
         string? filter = null,
         bool includeDetails = false,
+        bool includeDeleted = false,
         CancellationToken cancellationToken = default)
     {
-        return await (await GetDbSetAsync())
-            .IncludeDetails(includeDetails)
-            .WhereIf(
-                !filter.IsNullOrWhiteSpace(),
-                u =>
-                    u.Name.Contains(filter!) ||
-                    (u.Code != null && u.Code.Contains(filter!)) ||
-                    (u.Domain != null && u.Domain.Contains(filter!))
-            )
-            .OrderBy(sorting.IsNullOrEmpty() ? nameof(Tenant.Name) : sorting)
-            .PageBy(skipCount, maxResultCount)
-            .ToListAsync(GetCancellationToken(cancellationToken));
+        using (includeDeleted ? DataFilter.Disable<ISoftDelete>() : null)
+        {
+            return await (await GetDbSetAsync())
+                .IncludeDetails(includeDetails)
+                .WhereIf(
+                    !filter.IsNullOrWhiteSpace(),
+                    u =>
+                        u.Name.Contains(filter!) ||
+                        (u.Code != null && u.Code.Contains(filter!)) ||
+                        (u.Domain != null && u.Domain.Contains(filter!))
+                )
+                .OrderBy(sorting.IsNullOrEmpty() ? nameof(Tenant.Name) : sorting)
+                .PageBy(skipCount, maxResultCount)
+                .ToListAsync(GetCancellationToken(cancellationToken));
+        }
     }
 
-    public virtual async Task<long> GetCountAsync(string? filter = null, CancellationToken cancellationToken = default)
+    public virtual async Task<long> GetCountAsync(
+        string? filter = null,
+        bool includeDeleted = false,
+        CancellationToken cancellationToken = default)
     {
-        return await (await GetQueryableAsync())
-            .WhereIf(
-                !filter.IsNullOrWhiteSpace(),
-                u =>
-                    u.Name.Contains(filter!) ||
-                    (u.Code != null && u.Code.Contains(filter!)) ||
-                    (u.Domain != null && u.Domain.Contains(filter!))
-            ).CountAsync(cancellationToken: GetCancellationToken(cancellationToken));
+        using (includeDeleted ? DataFilter.Disable<ISoftDelete>() : null)
+        {
+            return await (await GetQueryableAsync())
+                .WhereIf(
+                    !filter.IsNullOrWhiteSpace(),
+                    u =>
+                        u.Name.Contains(filter!) ||
+                        (u.Code != null && u.Code.Contains(filter!)) ||
+                        (u.Domain != null && u.Domain.Contains(filter!))
+                ).CountAsync(cancellationToken: GetCancellationToken(cancellationToken));
+        }
     }
 
     [Obsolete("Use WithDetailsAsync method.")]

@@ -42,9 +42,11 @@ public interface ITenantRepository : IBasicRepository<Tenant, Guid>
         int skipCount = 0,
         string? filter = null,
         bool includeDetails = false,
+        bool includeDeleted = false,
         CancellationToken cancellationToken = default);
 
     Task<long> GetCountAsync(
         string? filter = null,
+        bool includeDeleted = false,
         CancellationToken cancellationToken = default);
 }

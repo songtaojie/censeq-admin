@@ -16,6 +16,7 @@ export interface TenantDto extends TenantProfileFields {
 	name?: string;
 	code?: string | null;
 	isActive: boolean;
+	isDeleted: boolean;
 	concurrencyStamp?: string;
 	extraProperties?: Record<string, unknown>;
 }
@@ -49,4 +50,5 @@ export interface GetTenantsInput {
 	sorting?: string;
 	skipCount?: number;
 	maxResultCount?: number;
+	includeDeleted?: boolean;
 }

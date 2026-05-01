@@ -9,6 +9,7 @@ public class CenseqTenantManagementApplicationAutoMapperProfile : Profile
     {
         CreateMap<Tenant, TenantDto>()
             .ForMember(d => d.IsActive, opts => opts.MapFrom(s => s.IsActive))
+            .ForMember(d => d.IsDeleted, opts => opts.MapFrom(s => s.IsDeleted))
             .MapExtraProperties();
     }
 }

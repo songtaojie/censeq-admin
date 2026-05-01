@@ -55,7 +55,8 @@ public class TenantAppService : TenantManagementAppServiceBase, ITenantAppServic
             input.Sorting,
             input.MaxResultCount,
             input.SkipCount,
-            input.Filter
+            input.Filter,
+            includeDeleted: input.IncludeDeleted
         );
 
         return new PagedResultDto<TenantDto>(

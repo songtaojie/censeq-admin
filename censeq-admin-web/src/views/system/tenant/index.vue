@@ -5,6 +5,9 @@
 				<el-form-item label="租户名称">
 					<el-input v-model="state.tableData.param.search" placeholder="租户名称、编码或域名" clearable @keyup.enter="onQuery" />
 				</el-form-item>
+				<el-form-item label="显示已删除">
+					<el-switch v-model="state.tableData.param.includeDeleted" @change="onQuery" />
+				</el-form-item>
 				<el-form-item>
 					<el-button-group>
 						<el-button type="primary" icon="ele-Search" @click="onQuery">查询</el-button>
@@ -18,22 +21,34 @@
 		</el-card>
 
 		<el-card class="full-table" shadow="hover" style="margin-top: 5px">
-			<el-table :data="state.tableData.data" v-loading="state.tableData.loading" style="width: 100%" border stripe highlight-current-row>
+			<el-table
+				:data="state.tableData.data"
+				v-loading="state.tableData.loading"
+				style="width: 100%"
+				border
+				stripe
+				highlight-current-row
+				:row-class-name="getRowClassName"
+			>
 				<el-table-column type="index" label="序号" width="60" align="center" fixed />
 				<el-table-column prop="name" label="租户名称" min-width="140" show-overflow-tooltip>
 					<template #default="scope">
-						<el-text type="primary" tag="b">{{ scope.row.name }}</el-text>
+						<el-text :type="scope.row.isDeleted ? 'info' : 'primary'" :tag="scope.row.isDeleted ? 'span' : 'b'">
+							{{ scope.row.name }}
+						</el-text>
+						<el-tag v-if="scope.row.isDeleted" type="danger" size="small" effect="plain" style="margin-left: 6px">已删除</el-tag>
 					</template>
 				</el-table-column>
 				<el-table-column prop="code" label="租户编码" min-width="120" align="center" show-overflow-tooltip>
 					<template #default="scope">
-						<el-tag v-if="scope.row.code" size="small" effect="plain">{{ scope.row.code }}</el-tag>
+						<el-tag v-if="scope.row.code" size="small" :effect="scope.row.isDeleted ? 'plain' : 'plain'" :type="scope.row.isDeleted ? 'info' : ''">{{ scope.row.code }}</el-tag>
 						<el-text v-else type="info" size="small">—</el-text>
 					</template>
 				</el-table-column>
 				<el-table-column prop="domain" label="域名" min-width="180" show-overflow-tooltip>
 					<template #default="scope">
-						<el-link v-if="scope.row.domain" type="primary" :underline="false" @click="onVisitDomain(scope.row)">{{ scope.row.domain }}</el-link>
+						<el-link v-if="scope.row.domain && !scope.row.isDeleted" type="primary" :underline="false" @click="onVisitDomain(scope.row)">{{ scope.row.domain }}</el-link>
+						<el-text v-else-if="scope.row.domain" type="info" size="small">{{ scope.row.domain }}</el-text>
 						<el-text v-else type="info" size="small">—</el-text>
 					</template>
 				</el-table-column>
@@ -45,7 +60,7 @@
 				</el-table-column>
 				<el-table-column label="备案信息" min-width="180" show-overflow-tooltip>
 					<template #default="scope">
-						<el-link v-if="scope.row.icpNo && scope.row.icpAddress" type="primary" :underline="false" :href="scope.row.icpAddress" target="_blank">{{ scope.row.icpNo }}</el-link>
+						<el-link v-if="scope.row.icpNo && scope.row.icpAddress && !scope.row.isDeleted" type="primary" :underline="false" :href="scope.row.icpAddress" target="_blank">{{ scope.row.icpNo }}</el-link>
 						<el-text v-else-if="scope.row.icpNo" size="small">{{ scope.row.icpNo }}</el-text>
 						<el-text v-else type="info" size="small">—</el-text>
 					</template>
@@ -53,15 +68,17 @@
 				<el-table-column label="连接字符串" min-width="120" align="center" show-overflow-tooltip>
 					<template #default="scope">
 						<el-tag
+							v-if="!scope.row.isDeleted"
 							:type="scope.row._hasConnection ? 'success' : 'info'"
 							size="small"
 							effect="light"
 						>{{ scope.row._hasConnection ? '已配置' : '默认' }}</el-tag>
+						<el-text v-else type="info" size="small">—</el-text>
 					</template>
 				</el-table-column>
 				<el-table-column label="管理员账号" min-width="160" show-overflow-tooltip>
 					<template #default="scope">
-						<template v-if="state.tableData.adminUsers.get(scope.row.id)?.userName">
+						<template v-if="!scope.row.isDeleted && state.tableData.adminUsers.get(scope.row.id)?.userName">
 							<div>
 								<el-text size="small">{{ state.tableData.adminUsers.get(scope.row.id)?.name || state.tableData.adminUsers.get(scope.row.id)?.userName }}</el-text>
 							</div>
@@ -78,20 +95,25 @@
 				<el-table-column prop="isActive" label="状态" width="90" align="center">
 					<template #default="scope">
 						<el-switch
+							v-if="!scope.row.isDeleted"
 							v-model="scope.row.isActive"
 							@change="onToggleStatus(scope.row)"
 							inline-prompt
 							active-text="启用"
 							inactive-text="禁用"
 						/>
+						<el-text v-else type="info" size="small">—</el-text>
 					</template>
 				</el-table-column>
 				<el-table-column label="操作" width="240" fixed="right" align="center">
 					<template #default="scope">
-						<el-button icon="ele-Edit" size="small" text type="primary" @click="onOpenEditTenant('edit', scope.row)">编辑</el-button>
-						<el-button icon="ele-Key" size="small" text type="warning" @click="onResetPassword(scope.row)">重置密码</el-button>
-						<el-button icon="ele-Lock" size="small" text type="success" @click="onOpenPermission(scope.row)">权限配置</el-button>
-						<el-button icon="ele-Delete" size="small" text type="danger" @click="onRowDel(scope.row)">删除</el-button>
+						<template v-if="!scope.row.isDeleted">
+							<el-button icon="ele-Edit" size="small" text type="primary" @click="onOpenEditTenant('edit', scope.row)">编辑</el-button>
+							<el-button icon="ele-Key" size="small" text type="warning" @click="onResetPassword(scope.row)">重置密码</el-button>
+							<el-button icon="ele-Lock" size="small" text type="success" @click="onOpenPermission(scope.row)">权限配置</el-button>
+							<el-button icon="ele-Delete" size="small" text type="danger" @click="onRowDel(scope.row)">删除</el-button>
+						</template>
+						<el-text v-else type="info" size="small">—</el-text>
 					</template>
 				</el-table-column>
 			</el-table>
@@ -138,9 +160,14 @@ const state = reactive({
 			search: '',
 			pageIndex: 1,
 			pageSize: 10,
+			includeDeleted: false,
 		},
 	},
 });
+
+const getRowClassName = ({ row }: { row: TenantDto }) => {
+	return row.isDeleted ? 'deleted-row' : '';
+};
 
 const getTableData = async () => {
 	state.tableData.loading = true;
@@ -150,11 +177,13 @@ const getTableData = async () => {
 			filter: state.tableData.param.search || undefined,
 			skipCount: (state.tableData.param.pageIndex - 1) * state.tableData.param.pageSize,
 			maxResultCount: state.tableData.param.pageSize,
+			includeDeleted: state.tableData.param.includeDeleted || undefined,
 		});
 		const items = data.items ?? [];
-		// 异步并发检查各租户是否已配置连接字符串
+		// 异步并发检查各租户是否已配置连接字符串（已删除的跳过）
 		const rows = await Promise.all(
 			items.map(async (item) => {
+				if (item.isDeleted) return { ...item, _hasConnection: false };
 				try {
 					const cs = await getDefaultConnectionString(item.id!);
 					return { ...item, _hasConnection: Boolean(cs) };
@@ -166,8 +195,8 @@ const getTableData = async () => {
 		state.tableData.data = rows;
 		state.tableData.total = data.totalCount ?? 0;
 
-		// 异步加载各租户的管理员账号（不阻塞主加载）
-		const ids = rows.map((r) => r.id!).filter(Boolean);
+		// 异步加载各租户的管理员账号（已删除的跳过）
+		const ids = rows.filter((r) => !r.isDeleted).map((r) => r.id!).filter(Boolean);
 		if (ids.length > 0) {
 			try {
 				const { getAdminUsers } = useTenantApi();
@@ -176,6 +205,8 @@ const getTableData = async () => {
 			} catch {
 				state.tableData.adminUsers = new Map();
 			}
+		} else {
+			state.tableData.adminUsers = new Map();
 		}
 	} catch {
 		state.tableData.data = [];
@@ -192,6 +223,7 @@ const onQuery = () => {
 
 const onReset = () => {
 	state.tableData.param.search = '';
+	state.tableData.param.includeDeleted = false;
 	state.tableData.param.pageIndex = 1;
 	getTableData();
 };
@@ -294,6 +326,14 @@ onMounted(() => {
 		}
 		.el-table {
 			flex: 1;
+		}
+		:deep(.deleted-row) {
+			opacity: 0.55;
+			background-color: var(--el-fill-color-light) !important;
+			td {
+				text-decoration: line-through;
+				text-decoration-color: var(--el-text-color-placeholder);
+			}
 		}
 	}
 }

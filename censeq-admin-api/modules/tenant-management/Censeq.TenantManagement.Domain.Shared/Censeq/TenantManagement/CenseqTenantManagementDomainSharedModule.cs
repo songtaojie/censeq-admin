@@ -31,7 +31,7 @@ public class CenseqTenantManagementDomainSharedModule : AbpModule
 
         Configure<AbpExceptionLocalizationOptions>(options =>
         {
-            options.MapCodeNamespace("CenseqTenantManagement", typeof(CenseqTenantManagementResource));
+            options.MapCodeNamespace("Censeq.TenantManagement", typeof(CenseqTenantManagementResource));
         });
     }
 }
