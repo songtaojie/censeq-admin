@@ -1,4 +1,5 @@
 ﻿using Censeq.PermissionManagement;
+using Censeq.TenantManagement;
 using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.AutoMapper;
 using Volo.Abp.Modularity;
@@ -9,6 +10,7 @@ namespace Censeq.Identity;
     typeof(CenseqIdentityDomainModule),
     typeof(CenseqIdentityApplicationContractsModule),
 typeof(AbpAutoMapperModule),
+    typeof(CenseqTenantManagementDomainModule),
     typeof(CenseqPermissionManagementApplicationModule)
     )]
 public class CenseqIdentityApplicationModule : AbpModule

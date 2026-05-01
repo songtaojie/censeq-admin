@@ -405,6 +405,13 @@ CREATE TABLE censeq_tenant (
     name character varying(64) NOT NULL,
     normalized_name character varying(64) NOT NULL,
     code character varying(64),
+    domain character varying(256),
+    icon character varying(512),
+    copyright character varying(256),
+    icp_no character varying(64),
+    icp_address character varying(512),
+    remark character varying(1024),
+    max_user_count integer NOT NULL DEFAULT 0,
     is_active boolean NOT NULL DEFAULT TRUE,
     entity_version integer NOT NULL,
     extra_properties text NOT NULL,
@@ -671,6 +678,8 @@ CREATE UNIQUE INDEX ix_censeq_setting_definition_record_name ON censeq_setting_d
 
 CREATE UNIQUE INDEX ix_censeq_tenant_code ON censeq_tenant (code);
 
+CREATE UNIQUE INDEX ix_censeq_tenant_domain ON censeq_tenant (domain);
+
 CREATE INDEX ix_censeq_tenant_name ON censeq_tenant (name);
 
 CREATE INDEX ix_censeq_tenant_normalized_name ON censeq_tenant (normalized_name);
@@ -678,7 +687,7 @@ CREATE INDEX ix_censeq_tenant_normalized_name ON censeq_tenant (normalized_name)
 CREATE UNIQUE INDEX ix_censeq_tenant_permission_grants_tenant_id_permission_name ON censeq_tenant_permission_grants (tenant_id, permission_name);
 
 INSERT INTO ef_migrations_history (migration_id, product_version)
-VALUES ('20260430132120_InitialDb', '8.0.16');
+VALUES ('20260430151123_InitialDb', '8.0.16');
 
 COMMIT;
 

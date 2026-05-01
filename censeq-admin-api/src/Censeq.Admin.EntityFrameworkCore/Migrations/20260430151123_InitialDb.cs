@@ -550,6 +550,13 @@ namespace Censeq.Admin.Migrations
                     name = table.Column<string>(type: "character varying(64)", maxLength: 64, nullable: false),
                     normalized_name = table.Column<string>(type: "character varying(64)", maxLength: 64, nullable: false),
                     code = table.Column<string>(type: "character varying(64)", maxLength: 64, nullable: true),
+                    domain = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
+                    icon = table.Column<string>(type: "character varying(512)", maxLength: 512, nullable: true),
+                    copyright = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
+                    icp_no = table.Column<string>(type: "character varying(64)", maxLength: 64, nullable: true),
+                    icp_address = table.Column<string>(type: "character varying(512)", maxLength: 512, nullable: true),
+                    remark = table.Column<string>(type: "character varying(1024)", maxLength: 1024, nullable: true),
+                    max_user_count = table.Column<int>(type: "integer", nullable: false, defaultValue: 0),
                     is_active = table.Column<bool>(type: "boolean", nullable: false, defaultValue: true),
                     entity_version = table.Column<int>(type: "integer", nullable: false),
                     extra_properties = table.Column<string>(type: "text", nullable: false),
@@ -1137,6 +1144,12 @@ namespace Censeq.Admin.Migrations
                 name: "ix_censeq_tenant_code",
                 table: "censeq_tenant",
                 column: "code",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "ix_censeq_tenant_domain",
+                table: "censeq_tenant",
+                column: "domain",
                 unique: true);
 
             migrationBuilder.CreateIndex(

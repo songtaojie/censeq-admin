@@ -109,7 +109,8 @@ public class IdentityDataSeeder : ITransientDependency, IIdentityDataSeeder
         string adminEmail,
         string adminPassword,
         Guid? tenantId = null,
-        string? adminUserName = null)
+        string? adminUserName = null,
+        string? adminName = null)
     {
         Check.NotNullOrWhiteSpace(adminEmail, nameof(adminEmail));
         Check.NotNullOrWhiteSpace(adminPassword, nameof(adminPassword));
@@ -125,6 +126,11 @@ public class IdentityDataSeeder : ITransientDependency, IIdentityDataSeeder
                 adminUserName = IdentityDataSeedContributor.AdminUserNameDefaultValue;
             }
 
+            if (adminName.IsNullOrWhiteSpace())
+            {
+                adminName = adminUserName;
+            }
+
             var adminUser = await UserRepository.FindByNormalizedUserNameAsync(
                 LookupNormalizer.NormalizeName(adminUserName)
             );
@@ -138,7 +144,7 @@ public class IdentityDataSeeder : ITransientDependency, IIdentityDataSeeder
                     tenantId
                 )
                 {
-                    Name = adminUserName
+                    Name = adminName
                 };
 
                 (await UserManager.CreateAsync(adminUser, adminPassword, validatePassword: false)).CheckErrors();

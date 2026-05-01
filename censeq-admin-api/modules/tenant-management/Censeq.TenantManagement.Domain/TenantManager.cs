@@ -74,6 +74,24 @@ public class TenantManager : DomainService, ITenantManager
         tenant.SetCodePublic(normalizedCode);
     }
 
+    public virtual async Task ChangeDomainAsync(Tenant tenant, string? domain)
+    {
+        Check.NotNull(tenant, nameof(tenant));
+
+        var normalizedDomain = Tenant.NormalizeDomain(domain);
+        if (normalizedDomain == tenant.Domain)
+        {
+            return;
+        }
+
+        if (normalizedDomain != null)
+        {
+            await ValidateDomainAsync(normalizedDomain, tenant.Id);
+        }
+
+        tenant.SetDomain(normalizedDomain);
+    }
+
     protected virtual async Task ValidateCodeAsync(string normalizedCode, Guid? expectedTenantId = null)
     {
         Check.NotNullOrWhiteSpace(normalizedCode, nameof(normalizedCode));
@@ -81,6 +99,16 @@ public class TenantManager : DomainService, ITenantManager
         if (existing != null && existing.Id != expectedTenantId)
         {
             throw new BusinessException("Censeq.TenantManagement:DuplicateTenantCode").WithData("Code", normalizedCode);
+        }
+    }
+
+    protected virtual async Task ValidateDomainAsync(string normalizedDomain, Guid? expectedTenantId = null)
+    {
+        Check.NotNullOrWhiteSpace(normalizedDomain, nameof(normalizedDomain));
+        var existing = await TenantRepository.FindByDomainAsync(normalizedDomain);
+        if (existing != null && existing.Id != expectedTenantId)
+        {
+            throw new BusinessException("Censeq.TenantManagement:DuplicateTenantDomain").WithData("Domain", normalizedDomain);
         }
     }
 

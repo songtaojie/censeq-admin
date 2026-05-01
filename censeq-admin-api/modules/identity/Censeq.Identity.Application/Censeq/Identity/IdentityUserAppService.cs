@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Censeq.Identity.Entities;
+using Censeq.TenantManagement;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Options;
@@ -39,18 +40,22 @@ public class IdentityUserAppService : IdentityAppServiceBase, IIdentityUserAppSe
     /// I权限Checker
     /// </summary>
     protected IPermissionChecker PermissionChecker { get; }
+    protected ITenantRepository TenantRepository { get; }
+
     public IdentityUserAppService(
         IdentityUserManager userManager,
         IIdentityUserRepository userRepository,
         IIdentityRoleRepository roleRepository,
         IOptions<IdentityOptions> identityOptions,
-        IPermissionChecker permissionChecker)
+        IPermissionChecker permissionChecker,
+        ITenantRepository tenantRepository)
     {
         UserManager = userManager;
         UserRepository = userRepository;
         RoleRepository = roleRepository;
         IdentityOptions = identityOptions;
         PermissionChecker = permissionChecker;
+        TenantRepository = tenantRepository;
     }
 
     //TODO: [Authorize(IdentityPermissions.Users.Default)] should go the IdentityUserAppService class.
@@ -113,6 +118,7 @@ public class IdentityUserAppService : IdentityAppServiceBase, IIdentityUserAppSe
     public virtual async Task<IdentityUserDto> CreateAsync(IdentityUserCreateDto input)
     {
         await IdentityOptions.SetAsync();
+        await CheckTenantUserQuotaAsync();
 
         var user = new IdentityUser(
             GuidGenerator.Create(),
@@ -130,6 +136,29 @@ public class IdentityUserAppService : IdentityAppServiceBase, IIdentityUserAppSe
         await CurrentUnitOfWork!.SaveChangesAsync();
 
         return ObjectMapper!.Map<IdentityUser, IdentityUserDto>(user!);
+    }
+
+    protected virtual async Task CheckTenantUserQuotaAsync()
+    {
+        if (!CurrentTenant.Id.HasValue)
+        {
+            return;
+        }
+
+        var tenant = await TenantRepository.GetAsync(CurrentTenant.Id.Value);
+        if (tenant.MaxUserCount <= 0)
+        {
+            return;
+        }
+
+        var currentUserCount = await UserRepository.GetCountAsync();
+        if (currentUserCount >= tenant.MaxUserCount)
+        {
+            throw new BusinessException("Censeq.TenantManagement:TenantUserQuotaExceeded")
+                .WithData("TenantId", tenant.Id)
+                .WithData("MaxUserCount", tenant.MaxUserCount)
+                .WithData("CurrentUserCount", currentUserCount);
+        }
     }
 
     [Authorize(IdentityPermissions.Users.Update)]

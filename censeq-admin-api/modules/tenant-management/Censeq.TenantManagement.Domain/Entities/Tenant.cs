@@ -17,6 +17,20 @@ public class Tenant : FullAuditedAggregateRoot<Guid>, IHasEntityVersion
 
     public virtual string? Code { get; protected set; }
 
+    public virtual string? Domain { get; protected set; }
+
+    public virtual string? Icon { get; protected set; }
+
+    public virtual string? Copyright { get; protected set; }
+
+    public virtual string? IcpNo { get; protected set; }
+
+    public virtual string? IcpAddress { get; protected set; }
+
+    public virtual string? Remark { get; protected set; }
+
+    public virtual int MaxUserCount { get; protected set; }
+
     public virtual bool IsActive { get; protected set; }
 
     public virtual int EntityVersion { get; protected set; }
@@ -34,6 +48,7 @@ public class Tenant : FullAuditedAggregateRoot<Guid>, IHasEntityVersion
         SetName(name);
         SetNormalizedName(normalizedName);
         SetCode(code);
+        MaxUserCount = 0;
         IsActive = true;
 
         ConnectionStrings = new List<TenantConnectionString>();
@@ -90,9 +105,9 @@ public class Tenant : FullAuditedAggregateRoot<Guid>, IHasEntityVersion
         Name = Check.NotNullOrWhiteSpace(name, nameof(name), TenantConsts.MaxNameLength);
     }
 
-    protected internal virtual void SetNormalizedName([CanBeNull] string normalizedName)
+    protected internal virtual void SetNormalizedName([CanBeNull] string? normalizedName)
     {
-        NormalizedName = normalizedName;
+        NormalizedName = normalizedName ?? Name;
     }
 
     /// <summary>
@@ -107,6 +122,31 @@ public class Tenant : FullAuditedAggregateRoot<Guid>, IHasEntityVersion
         }
 
         return raw.Trim().ToUpperInvariant();
+    }
+
+    [CanBeNull]
+    public static string? NormalizeDomain([CanBeNull] string? raw)
+    {
+        if (string.IsNullOrWhiteSpace(raw))
+        {
+            return null;
+        }
+
+        var value = raw.Trim();
+        if (Uri.TryCreate(value, UriKind.Absolute, out var absoluteUri))
+        {
+            value = absoluteUri.Authority;
+        }
+        else
+        {
+            var pathStart = value.IndexOf('/');
+            if (pathStart >= 0)
+            {
+                value = value[..pathStart];
+            }
+        }
+
+        return value.Trim().TrimEnd('/').ToLowerInvariant();
     }
 
     protected internal virtual void SetCode([CanBeNull] string? code)
@@ -125,8 +165,58 @@ public class Tenant : FullAuditedAggregateRoot<Guid>, IHasEntityVersion
         SetCode(code);
     }
 
+    public virtual void SetDomain([CanBeNull] string? domain)
+    {
+        Domain = NormalizeOptional(NormalizeDomain(domain), TenantConsts.MaxDomainLength, nameof(domain));
+    }
+
+    public virtual void SetIcon([CanBeNull] string? icon)
+    {
+        Icon = NormalizeOptional(icon, TenantConsts.MaxIconLength, nameof(icon));
+    }
+
+    public virtual void SetCopyright([CanBeNull] string? copyright)
+    {
+        Copyright = NormalizeOptional(copyright, TenantConsts.MaxCopyrightLength, nameof(copyright));
+    }
+
+    public virtual void SetIcpNo([CanBeNull] string? icpNo)
+    {
+        IcpNo = NormalizeOptional(icpNo, TenantConsts.MaxIcpNoLength, nameof(icpNo));
+    }
+
+    public virtual void SetIcpAddress([CanBeNull] string? icpAddress)
+    {
+        IcpAddress = NormalizeOptional(icpAddress, TenantConsts.MaxIcpAddressLength, nameof(icpAddress));
+    }
+
+    public virtual void SetRemark([CanBeNull] string? remark)
+    {
+        Remark = NormalizeOptional(remark, TenantConsts.MaxRemarkLength, nameof(remark));
+    }
+
+    public virtual void SetMaxUserCount(int maxUserCount)
+    {
+        if (maxUserCount < 0)
+        {
+            throw new BusinessException("Censeq.TenantManagement:InvalidMaxUserCount");
+        }
+
+        MaxUserCount = maxUserCount;
+    }
+
     public virtual void SetIsActive(bool isActive)
     {
         IsActive = isActive;
+    }
+
+    private static string? NormalizeOptional(string? value, int maxLength, string propertyName)
+    {
+        if (string.IsNullOrWhiteSpace(value))
+        {
+            return null;
+        }
+
+        return Check.Length(value.Trim(), propertyName, maxLength);
     }
 }

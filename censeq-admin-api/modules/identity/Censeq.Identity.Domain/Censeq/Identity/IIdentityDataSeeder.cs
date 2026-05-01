@@ -13,5 +13,6 @@ public interface IIdentityDataSeeder
         [NotNull] string adminEmail,
         [NotNull] string adminPassword,
         Guid? tenantId = null,
-        string? adminUserName = null);
+        string? adminUserName = null,
+        string? adminName = null);
 }

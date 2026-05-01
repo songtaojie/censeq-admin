@@ -13,4 +13,6 @@ public interface ITenantManager : IDomainService
     Task ChangeNameAsync([NotNull] Tenant tenant, [NotNull] string name);
 
     Task ChangeCodeAsync([NotNull] Tenant tenant, [CanBeNull] string? code);
+
+    Task ChangeDomainAsync([NotNull] Tenant tenant, [CanBeNull] string? domain);
 }

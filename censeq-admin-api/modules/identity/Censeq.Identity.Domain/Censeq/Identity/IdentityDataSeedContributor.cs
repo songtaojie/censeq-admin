@@ -13,6 +13,8 @@ public class IdentityDataSeedContributor : IDataSeedContributor, ITransientDepen
     public const string AdminEmailDefaultValue = "admin@abp.io";
     public const string AdminUserNamePropertyName = "AdminUserName";
     public const string AdminUserNameDefaultValue = "admin";
+    public const string AdminNamePropertyName = "AdminName";
+    public const string AdminNameDefaultValue = "admin";
     public const string AdminPasswordPropertyName = "AdminPassword";
     public const string AdminPasswordDefaultValue = "1q2w3E*";
 
@@ -32,7 +34,8 @@ public class IdentityDataSeedContributor : IDataSeedContributor, ITransientDepen
             context?[AdminEmailPropertyName] as string ?? AdminEmailDefaultValue,
             context?[AdminPasswordPropertyName] as string ?? AdminPasswordDefaultValue,
             context?.TenantId,
-            context?[AdminUserNamePropertyName] as string ?? AdminUserNameDefaultValue
+            context?[AdminUserNamePropertyName] as string ?? AdminUserNameDefaultValue,
+            context?[AdminNamePropertyName] as string ?? AdminNameDefaultValue
         );
     }
 }

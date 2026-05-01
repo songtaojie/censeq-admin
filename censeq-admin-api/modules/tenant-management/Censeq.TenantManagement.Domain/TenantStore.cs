@@ -81,7 +81,9 @@ public class TenantStore : ITenantStore, ITransientDependency
         {
             using (CurrentTenant.Change(null)) //TODO: No need this if we can implement to define host side (or tenant-independent) entities!
             {
-                var tenant = await TenantRepository.FindByNameAsync(normalizedName);
+                var tenant = await TenantRepository.FindByNameAsync(normalizedName)
+                    ?? await TenantRepository.FindByCodeAsync(normalizedName)
+                    ?? await TenantRepository.FindByDomainAsync(normalizedName);
                 return await SetCacheAsync(cacheKey, tenant);
             }
         }
@@ -121,7 +123,9 @@ public class TenantStore : ITenantStore, ITransientDependency
         {
             using (CurrentTenant.Change(null)) //TODO: No need this if we can implement to define host side (or tenant-independent) entities!
             {
-                var tenant = TenantRepository.FindByName(normalizedName);
+                var tenant = TenantRepository.FindByName(normalizedName)
+                    ?? TenantRepository.FindByCodeAsync(normalizedName).GetAwaiter().GetResult()
+                    ?? TenantRepository.FindByDomainAsync(normalizedName).GetAwaiter().GetResult();
                 return SetCache(cacheKey, tenant);
             }
         }

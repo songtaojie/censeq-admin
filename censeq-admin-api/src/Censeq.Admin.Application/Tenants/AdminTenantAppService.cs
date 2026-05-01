@@ -2,11 +2,11 @@ using System.Linq;
 using Censeq.Admin.Menus;
 using Censeq.Admin.Permissions;
 using Censeq.Identity;
+using Censeq.Identity.Entities;
 using Censeq.PermissionManagement;
 using Censeq.TenantManagement;
 using Censeq.TenantManagement.Entities;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
 using Volo.Abp;
 using Volo.Abp.Caching;
 using Volo.Abp.Data;
@@ -46,7 +46,7 @@ public class AdminTenantAppService : AdminAppService
     }
 
     /// <summary>
-    /// 重置指定租户的 admin 用户密码。
+    /// 重置指定租户的管理员用户密码。
     /// </summary>
     [Authorize(TenantManagementPermissions.Tenants.ResetAdminPassword)]
     public virtual async Task ResetAdminPasswordAsync(Guid tenantId, string newPassword)
@@ -58,8 +58,7 @@ public class AdminTenantAppService : AdminAppService
 
         using (_currentTenant.Change(tenant.Id, tenant.Name))
         {
-            // 在租户上下文中查找 admin 用户（按用户名）
-            var adminUser = await _userManager.FindByNameAsync("admin");
+            var adminUser = await FindTenantAdminUserAsync();
             if (adminUser == null)
             {
                 throw new BusinessException("Censeq.Admin:TenantAdminNotFound")
@@ -123,7 +122,7 @@ public class AdminTenantAppService : AdminAppService
     }
 
     /// <summary>
-    /// 批量获取指定租户的管理员账号信息（UserName + Email）。
+    /// 批量获取指定租户的管理员账号信息（UserName + Name + Email）。
     /// 每个租户独立切换上下文查询，忽略查询失败的租户。
     /// </summary>
     [Authorize(TenantManagementPermissions.Tenants.Default)]
@@ -137,11 +136,12 @@ public class AdminTenantAppService : AdminAppService
             {
                 using (_currentTenant.Change(tenantId))
                 {
-                    var adminUser = await _userManager.FindByNameAsync("admin");
+                    var adminUser = await FindTenantAdminUserAsync();
                     result.Add(new TenantAdminUserDto
                     {
                         TenantId = tenantId,
                         UserName = adminUser?.UserName,
+                        Name = adminUser?.Name,
                         Email = adminUser?.Email,
                     });
                 }
@@ -154,5 +154,11 @@ public class AdminTenantAppService : AdminAppService
         }
 
         return result;
+    }
+
+    private async Task<IdentityUser?> FindTenantAdminUserAsync()
+    {
+        var adminUsers = await _userManager.GetUsersInRoleAsync("admin");
+        return adminUsers.FirstOrDefault();
     }
 }

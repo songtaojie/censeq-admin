@@ -20,5 +20,45 @@ public static class TenantConsts
     /// <summary>
     /// Default value: 256
     /// </summary>
-    public static int MaxAdminEmailAddressLength { get; set; } = 256; 
+    public static int MaxAdminEmailAddressLength { get; set; } = 256;
+
+    /// <summary>
+    /// Default value: 256
+    /// </summary>
+    public static int MaxAdminUserNameLength { get; set; } = 256;
+
+    /// <summary>
+    /// Default value: 64
+    /// </summary>
+    public static int MaxAdminNameLength { get; set; } = 64;
+
+    /// <summary>
+    /// Default value: 256
+    /// </summary>
+    public static int MaxDomainLength { get; set; } = 256;
+
+    /// <summary>
+    /// Default value: 512
+    /// </summary>
+    public static int MaxIconLength { get; set; } = 512;
+
+    /// <summary>
+    /// Default value: 256
+    /// </summary>
+    public static int MaxCopyrightLength { get; set; } = 256;
+
+    /// <summary>
+    /// Default value: 64
+    /// </summary>
+    public static int MaxIcpNoLength { get; set; } = 64;
+
+    /// <summary>
+    /// Default value: 512
+    /// </summary>
+    public static int MaxIcpAddressLength { get; set; } = 512;
+
+    /// <summary>
+    /// Default value: 1024
+    /// </summary>
+    public static int MaxRemarkLength { get; set; } = 1024;
 }

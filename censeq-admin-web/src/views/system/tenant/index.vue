@@ -3,7 +3,7 @@
 		<el-card shadow="hover" :body-style="{ paddingBottom: '0' }">
 			<el-form :model="state.tableData.param" ref="queryFormRef" :inline="true">
 				<el-form-item label="租户名称">
-					<el-input v-model="state.tableData.param.search" placeholder="租户名称或编码" clearable @keyup.enter="onQuery" />
+					<el-input v-model="state.tableData.param.search" placeholder="租户名称、编码或域名" clearable @keyup.enter="onQuery" />
 				</el-form-item>
 				<el-form-item>
 					<el-button-group>
@@ -31,6 +31,25 @@
 						<el-text v-else type="info" size="small">—</el-text>
 					</template>
 				</el-table-column>
+				<el-table-column prop="domain" label="域名" min-width="180" show-overflow-tooltip>
+					<template #default="scope">
+						<el-link v-if="scope.row.domain" type="primary" :underline="false" @click="onVisitDomain(scope.row)">{{ scope.row.domain }}</el-link>
+						<el-text v-else type="info" size="small">—</el-text>
+					</template>
+				</el-table-column>
+				<el-table-column label="图标" width="80" align="center">
+					<template #default="scope">
+						<el-avatar v-if="scope.row.icon" :src="scope.row.icon" shape="square" :size="28" />
+						<el-text v-else type="info" size="small">—</el-text>
+					</template>
+				</el-table-column>
+				<el-table-column label="备案信息" min-width="180" show-overflow-tooltip>
+					<template #default="scope">
+						<el-link v-if="scope.row.icpNo && scope.row.icpAddress" type="primary" :underline="false" :href="scope.row.icpAddress" target="_blank">{{ scope.row.icpNo }}</el-link>
+						<el-text v-else-if="scope.row.icpNo" size="small">{{ scope.row.icpNo }}</el-text>
+						<el-text v-else type="info" size="small">—</el-text>
+					</template>
+				</el-table-column>
 				<el-table-column label="连接字符串" min-width="120" align="center" show-overflow-tooltip>
 					<template #default="scope">
 						<el-tag
@@ -40,20 +59,20 @@
 						>{{ scope.row._hasConnection ? '已配置' : '默认' }}</el-tag>
 					</template>
 				</el-table-column>
-				<el-table-column prop="id" label="租户 ID" min-width="290" show-overflow-tooltip>
-					<template #default="scope">
-						<el-text size="small" style="font-family: monospace">{{ scope.row.id }}</el-text>
-					</template>
-				</el-table-column>
 				<el-table-column label="管理员账号" min-width="160" show-overflow-tooltip>
 					<template #default="scope">
 						<template v-if="state.tableData.adminUsers.get(scope.row.id)?.userName">
 							<div>
-								<el-text size="small">{{ state.tableData.adminUsers.get(scope.row.id)?.userName }}</el-text>
+								<el-text size="small">{{ state.tableData.adminUsers.get(scope.row.id)?.name || state.tableData.adminUsers.get(scope.row.id)?.userName }}</el-text>
 							</div>
-							<el-text size="small" type="info">{{ state.tableData.adminUsers.get(scope.row.id)?.email }}</el-text>
+							<el-text size="small" type="info">{{ state.tableData.adminUsers.get(scope.row.id)?.userName }} / {{ state.tableData.adminUsers.get(scope.row.id)?.email }}</el-text>
 						</template>
 						<el-text v-else type="info" size="small">—</el-text>
+					</template>
+				</el-table-column>
+				<el-table-column prop="maxUserCount" label="用户上限" width="100" align="center">
+					<template #default="scope">
+						<el-tag size="small" :type="scope.row.maxUserCount > 0 ? 'warning' : 'info'">{{ scope.row.maxUserCount > 0 ? scope.row.maxUserCount : '不限' }}</el-tag>
 					</template>
 				</el-table-column>
 				<el-table-column prop="isActive" label="状态" width="90" align="center">
@@ -189,6 +208,13 @@ const onOpenPermission = (row: TenantDto) => {
 	tenantPermissionDialogRef.value.open(row.id!, row.name ?? row.id);
 };
 
+const getDomainUrl = (domain: string) => /^https?:\/\//i.test(domain) ? domain : `${window.location.protocol}//${domain}`;
+
+const onVisitDomain = (row: TenantDto) => {
+	if (!row.domain) return;
+	window.open(getDomainUrl(row.domain), '_blank');
+};
+
 const onRowDel = (row: TenantDto) => {
 	const name = row.name ?? row.id;
 	ElMessageBox.confirm(`此操作将永久删除租户「${name}」，是否继续?`, '提示', {
@@ -211,6 +237,13 @@ const onToggleStatus = async (row: TenantDto & { _hasConnection?: boolean }) => 
 		await updateTenant(row.id!, {
 			name: row.name!,
 			code: row.code,
+			domain: row.domain,
+			icon: row.icon,
+			copyright: row.copyright,
+			icpNo: row.icpNo,
+			icpAddress: row.icpAddress,
+			remark: row.remark,
+			maxUserCount: row.maxUserCount ?? 0,
 			isActive: row.isActive,
 			concurrencyStamp: row.concurrencyStamp,
 		});

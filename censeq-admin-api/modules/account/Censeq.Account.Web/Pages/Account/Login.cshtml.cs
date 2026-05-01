@@ -227,13 +227,13 @@ public class LoginModel : AccountPageModel
         {
             if (string.IsNullOrWhiteSpace(EnterpriseTenantCode))
             {
-                Alerts.Warning("请输入租户编码。");
+                Alerts.Warning("请输入租户编码或域名。");
                 return false;
             }
 
             if (!await TryResolveAndApplyTenantAsync(EnterpriseTenantCode.Trim()))
             {
-                Alerts.Warning("租户编码无效，请核对后重试。");
+                Alerts.Warning("租户编码或域名无效，请核对后重试。");
                 return false;
             }
 
@@ -258,7 +258,8 @@ public class LoginModel : AccountPageModel
         }
 
         var tenantRepository = LazyServiceProvider.LazyGetRequiredService<ITenantRepository>();
-        var tenant = await tenantRepository.FindByCodeAsync(raw.Trim());
+        var tenant = await tenantRepository.FindByCodeAsync(raw.Trim())
+            ?? await tenantRepository.FindByDomainAsync(raw.Trim());
         if (tenant == null)
         {
             return false;

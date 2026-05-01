@@ -68,6 +68,8 @@ public class TenantAppService : TenantManagementAppServiceBase, ITenantAppServic
     public virtual async Task<TenantDto> CreateAsync(TenantCreateDto input)
     {
         var tenant = await TenantManager.CreateAsync(input.Name, input.Code);
+        await TenantManager.ChangeDomainAsync(tenant, input.Domain);
+        ApplyProfileFields(tenant, input);
         input.MapExtraPropertiesTo(tenant);
 
         await TenantRepository.InsertAsync(tenant);
@@ -81,6 +83,8 @@ public class TenantAppService : TenantManagementAppServiceBase, ITenantAppServic
                 Name = tenant.Name,
                 Properties =
                 {
+                    { "AdminUserName", input.AdminUserName },
+                    { "AdminName", input.AdminName },
                         { "AdminEmail", input.AdminEmailAddress },
                         { "AdminPassword", input.AdminPassword }
                 }
@@ -92,6 +96,8 @@ public class TenantAppService : TenantManagementAppServiceBase, ITenantAppServic
             // TODO: Seeder might be triggered via event handler.
             await DataSeeder.SeedAsync(
                             new DataSeedContext(tenant.Id)
+                                .WithProperty("AdminUserName", input.AdminUserName)
+                                .WithProperty("AdminName", input.AdminName)
                                 .WithProperty("AdminEmail", input.AdminEmailAddress)
                                 .WithProperty("AdminPassword", input.AdminPassword)
                             );
@@ -107,6 +113,8 @@ public class TenantAppService : TenantManagementAppServiceBase, ITenantAppServic
 
         await TenantManager.ChangeNameAsync(tenant, input.Name);
         await TenantManager.ChangeCodeAsync(tenant, input.Code);
+        await TenantManager.ChangeDomainAsync(tenant, input.Domain);
+        ApplyProfileFields(tenant, input);
         tenant.SetIsActive(input.IsActive);
 
         tenant.SetConcurrencyStampIfNotNull(input.ConcurrencyStamp);
@@ -115,6 +123,16 @@ public class TenantAppService : TenantManagementAppServiceBase, ITenantAppServic
         await TenantRepository.UpdateAsync(tenant);
 
         return ObjectMapper.Map<Tenant, TenantDto>(tenant);
+    }
+
+    protected virtual void ApplyProfileFields(Tenant tenant, TenantCreateOrUpdateDtoBase input)
+    {
+        tenant.SetIcon(input.Icon);
+        tenant.SetCopyright(input.Copyright);
+        tenant.SetIcpNo(input.IcpNo);
+        tenant.SetIcpAddress(input.IcpAddress);
+        tenant.SetRemark(input.Remark);
+        tenant.SetMaxUserCount(input.MaxUserCount);
     }
 
     [Authorize(TenantManagementPermissions.Tenants.Delete)]

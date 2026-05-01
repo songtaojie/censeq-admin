@@ -16,6 +16,7 @@
 	<ItemGroup>
 		<ProjectReference Include="..\Censeq.Identity.Application.Contracts\Censeq.Identity.Application.Contracts.csproj" />
 		<ProjectReference Include="..\Censeq.Identity.Domain\Censeq.Identity.Domain.csproj" />
+		<ProjectReference Include="..\..\tenant-management\Censeq.TenantManagement.Domain\Censeq.TenantManagement.Domain.csproj" />
 		<ProjectReference Include="..\..\permission-management\Censeq.PermissionManagement.Application\Censeq.PermissionManagement.Application.csproj" />
 	</ItemGroup>
 

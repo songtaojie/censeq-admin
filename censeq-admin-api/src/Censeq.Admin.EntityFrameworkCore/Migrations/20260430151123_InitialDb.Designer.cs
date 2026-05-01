@@ -13,7 +13,7 @@ using Volo.Abp.EntityFrameworkCore;
 namespace Censeq.Admin.Migrations
 {
     [DbContext(typeof(CenseqAdminDbContext))]
-    [Migration("20260430132120_InitialDb")]
+    [Migration("20260430151123_InitialDb")]
     partial class InitialDb
     {
         /// <inheritdoc />
@@ -2280,6 +2280,11 @@ namespace Censeq.Admin.Migrations
                         .HasColumnType("character varying(40)")
                         .HasColumnName("concurrency_stamp");
 
+                    b.Property<string>("Copyright")
+                        .HasMaxLength(256)
+                        .HasColumnType("character varying(256)")
+                        .HasColumnName("copyright");
+
                     b.Property<DateTime>("CreationTime")
                         .HasColumnType("timestamp without time zone")
                         .HasColumnName("creation_time");
@@ -2296,6 +2301,11 @@ namespace Censeq.Admin.Migrations
                         .HasColumnType("timestamp without time zone")
                         .HasColumnName("deletion_time");
 
+                    b.Property<string>("Domain")
+                        .HasMaxLength(256)
+                        .HasColumnType("character varying(256)")
+                        .HasColumnName("domain");
+
                     b.Property<int>("EntityVersion")
                         .HasColumnType("integer")
                         .HasColumnName("entity_version");
@@ -2304,6 +2314,21 @@ namespace Censeq.Admin.Migrations
                         .IsRequired()
                         .HasColumnType("text")
                         .HasColumnName("extra_properties");
+
+                    b.Property<string>("Icon")
+                        .HasMaxLength(512)
+                        .HasColumnType("character varying(512)")
+                        .HasColumnName("icon");
+
+                    b.Property<string>("IcpAddress")
+                        .HasMaxLength(512)
+                        .HasColumnType("character varying(512)")
+                        .HasColumnName("icp_address");
+
+                    b.Property<string>("IcpNo")
+                        .HasMaxLength(64)
+                        .HasColumnType("character varying(64)")
+                        .HasColumnName("icp_no");
 
                     b.Property<bool>("IsActive")
                         .ValueGeneratedOnAdd()
@@ -2325,6 +2350,12 @@ namespace Censeq.Admin.Migrations
                         .HasColumnType("uuid")
                         .HasColumnName("last_modifier_id");
 
+                    b.Property<int>("MaxUserCount")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasDefaultValue(0)
+                        .HasColumnName("max_user_count");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(64)
@@ -2337,12 +2368,21 @@ namespace Censeq.Admin.Migrations
                         .HasColumnType("character varying(64)")
                         .HasColumnName("normalized_name");
 
+                    b.Property<string>("Remark")
+                        .HasMaxLength(1024)
+                        .HasColumnType("character varying(1024)")
+                        .HasColumnName("remark");
+
                     b.HasKey("Id")
                         .HasName("pk_censeq_tenant");
 
                     b.HasIndex("Code")
                         .IsUnique()
                         .HasDatabaseName("ix_censeq_tenant_code");
+
+                    b.HasIndex("Domain")
+                        .IsUnique()
+                        .HasDatabaseName("ix_censeq_tenant_domain");
 
                     b.HasIndex("Name")
                         .HasDatabaseName("ix_censeq_tenant_name");
