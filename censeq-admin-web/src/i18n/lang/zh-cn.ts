@@ -3,6 +3,9 @@ export default {
 	router: {
 		home: '首页',
 		platform: '平台管理',
+		platformLogs: '日志管理',
+		systemAuditLog: '操作日志',
+		systemSecurityLog: '登录日志',
 		enterprise: '企业运营',
 		systemMenu: '菜单管理',
 		systemRole: '角色管理',

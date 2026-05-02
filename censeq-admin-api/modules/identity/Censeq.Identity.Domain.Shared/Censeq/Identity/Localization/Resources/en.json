@@ -143,6 +143,7 @@
     "Session:RevokeSession": "Revoke session",
     "Session:RevokeAllOtherSessions": "Revoke all other sessions",
     "Session:ConfirmRevoke": "Are you sure you want to revoke this session?",
-    "Session:ConfirmRevokeAllOthers": "Are you sure you want to revoke all other sessions?"
+    "Session:ConfirmRevokeAllOthers": "Are you sure you want to revoke all other sessions?",
+    "Permission:SecurityLogManagement": "Security log management"
   }
 }

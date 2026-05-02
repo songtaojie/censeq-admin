@@ -21,5 +21,7 @@ public class CenseqIdentityApplicationModuleAutoMapperProfile : Profile
 
         CreateMap<IdentitySession, IdentitySessionDto>()
             .ForMember(dest => dest.IsCurrentSession, opt => opt.Ignore());
+
+        CreateMap<IdentitySecurityLog, IdentitySecurityLogDto>();
     }
 }

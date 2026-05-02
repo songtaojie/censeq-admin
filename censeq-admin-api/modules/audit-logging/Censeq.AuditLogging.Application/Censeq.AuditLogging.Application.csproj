@@ -6,7 +6,7 @@
 		<AssemblyName>Censeq.AuditLogging.Application</AssemblyName>
 		<PackageId>Censeq.AuditLogging.Application</PackageId>
 		<Nullable>enable</Nullable>
-		<RootNamespace>Censeq.AuditLogging</RootNamespace>
+		<RootNamespace/>
 	</PropertyGroup>
 
 	<ItemGroup>

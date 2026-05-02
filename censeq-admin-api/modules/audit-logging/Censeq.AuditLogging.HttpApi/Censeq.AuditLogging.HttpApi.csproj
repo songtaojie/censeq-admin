@@ -6,7 +6,7 @@
 		<AssemblyName>Censeq.AuditLogging.HttpApi</AssemblyName>
 		<PackageId>Censeq.AuditLogging.HttpApi</PackageId>
 		<Nullable>enable</Nullable>
-		<RootNamespace>Censeq.AuditLogging</RootNamespace>
+		<RootNamespace/>
 	</PropertyGroup>
 
 	<ItemGroup>

@@ -40,6 +40,9 @@ public class IdentityPermissionDefinitionProvider : PermissionDefinitionProvider
         claimTypesPermission.AddChild(IdentityPermissions.ClaimTypes.Update, L("Permission:Edit"));
         claimTypesPermission.AddChild(IdentityPermissions.ClaimTypes.Delete, L("Permission:Delete"));
 
+        var securityLogsPermission = identityGroup.AddPermission(IdentityPermissions.SecurityLogs.Default, L("Permission:SecurityLogManagement"));
+        securityLogsPermission.AddChild(IdentityPermissions.SecurityLogs.Delete, L("Permission:Delete"));
+
         identityGroup
             .AddPermission(IdentityPermissions.UserLookup.Default, L("Permission:UserLookup"))
             .WithProviders(ClientPermissionValueProvider.ProviderName);

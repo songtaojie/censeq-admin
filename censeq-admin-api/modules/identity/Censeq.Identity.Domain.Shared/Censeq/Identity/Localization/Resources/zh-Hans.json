@@ -144,6 +144,7 @@
     "Session:RevokeSession": "终止会话",
     "Session:RevokeAllOtherSessions": "终止其他所有会话",
     "Session:ConfirmRevoke": "确定要终止此会话吗？",
-    "Session:ConfirmRevokeAllOthers": "确定要终止其他所有会话吗？"
+    "Session:ConfirmRevokeAllOthers": "确定要终止其他所有会话吗？",
+    "Permission:SecurityLogManagement": "登录日志管理"
   }
 }

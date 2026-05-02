@@ -26,8 +26,7 @@ public class IdentityDataSeeder : ITransientDependency, IIdentityDataSeeder
         "CenseqAdmin.Menus.ManageStatus",
         "CenseqAdmin.Menus.ManageOrder",
         "CenseqAdmin.Menus.CopyFromHost",
-        "PermissionManagement.DefinitionManagement",
-        "AuditLogging.AuditLogs"
+        "PermissionManagement.DefinitionManagement"
     ];
 
     /// <summary>

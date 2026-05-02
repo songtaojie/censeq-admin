@@ -1,5 +1,5 @@
-<template>
-	<div class="system-audit-log-container layout-padding">
+﻿<template>
+	<div class="system-security-log-container layout-padding">
 		<el-card shadow="hover" :body-style="{ paddingBottom: '0' }">
 			<el-form ref="queryFormRef" :model="state.queryParam" :inline="true">
 				<el-form-item label="时间范围">
@@ -16,22 +16,16 @@
 				<el-form-item label="用户名">
 					<el-input v-model="state.queryParam.userName" placeholder="用户名" clearable style="width: 140px" @keyup.enter="onQuery" />
 				</el-form-item>
-				<el-form-item label="URL">
-					<el-input v-model="state.queryParam.url" placeholder="URL" clearable style="width: 200px" @keyup.enter="onQuery" />
-				</el-form-item>
-				<el-form-item label="HTTP方法">
-					<el-select v-model="state.queryParam.httpMethod" placeholder="全部" clearable style="width: 110px">
-						<el-option label="GET" value="GET" />
-						<el-option label="POST" value="POST" />
-						<el-option label="PUT" value="PUT" />
-						<el-option label="DELETE" value="DELETE" />
+				<el-form-item label="操作类型">
+					<el-select v-model="state.queryParam.action" placeholder="全部" clearable style="width: 160px">
+						<el-option label="登录成功" value="LoginSucceeded" />
+						<el-option label="登录失败（密码错误）" value="LoginFailed.InvalidUserNameOrPassword" />
+						<el-option label="登录失败（账户锁定）" value="LoginFailed.LockedOut" />
+						<el-option label="登出" value="Logout" />
 					</el-select>
 				</el-form-item>
-				<el-form-item label="状态">
-					<el-select v-model="state.queryParam.hasException" placeholder="全部" clearable style="width: 100px">
-						<el-option label="正常" :value="false" />
-						<el-option label="异常" :value="true" />
-					</el-select>
+				<el-form-item label="IP地址">
+					<el-input v-model="state.queryParam.clientIpAddress" placeholder="IP地址" clearable style="width: 140px" @keyup.enter="onQuery" />
 				</el-form-item>
 				<el-form-item>
 					<el-button-group>
@@ -45,9 +39,9 @@
 		<el-card class="full-table" shadow="hover" style="margin-top: 5px">
 			<el-table :data="state.tableData.data" v-loading="state.tableData.loading" style="width: 100%" border stripe>
 				<el-table-column type="index" label="序号" width="60" align="center" fixed />
-				<el-table-column label="执行时间" width="160" show-overflow-tooltip>
+				<el-table-column label="时间" width="160" show-overflow-tooltip>
 					<template #default="{ row }">
-						{{ formatDateTime(row.executionTime) }}
+						{{ formatDateTime(row.creationTime) }}
 					</template>
 				</el-table-column>
 				<el-table-column prop="userName" label="用户名" width="120" show-overflow-tooltip>
@@ -55,33 +49,29 @@
 						<span style="font-weight: 600; color: var(--el-color-primary)">{{ row.userName || '—' }}</span>
 					</template>
 				</el-table-column>
-				<el-table-column prop="httpMethod" label="HTTP方法" width="100" align="center">
+				<el-table-column prop="action" label="操作" width="160" align="center">
 					<template #default="{ row }">
-						<el-tag size="small" :type="getHttpMethodType(row.httpMethod)" effect="light">
-							{{ row.httpMethod }}
+						<el-tag size="small" :type="getActionTagType(row.action)" effect="light">
+							{{ formatAction(row.action) }}
 						</el-tag>
 					</template>
 				</el-table-column>
-				<el-table-column prop="url" label="URL" min-width="220" show-overflow-tooltip />
+				<el-table-column prop="identity" label="登录来源" width="120" show-overflow-tooltip>
+					<template #default="{ row }">
+						<el-tag v-if="row.identity" size="small" type="info" effect="plain">{{ row.identity }}</el-tag>
+						<span v-else>—</span>
+					</template>
+				</el-table-column>
 				<el-table-column prop="clientIpAddress" label="IP地址" width="130" show-overflow-tooltip />
-				<el-table-column prop="executionDuration" label="执行时长" width="100" align="center">
-					<template #default="{ row }">
-						<el-tag size="small" :type="row.executionDuration > 1000 ? 'warning' : 'success'" effect="light">
-							{{ row.executionDuration }}ms
-						</el-tag>
-					</template>
+				<el-table-column prop="clientId" label="客户端ID" width="140" show-overflow-tooltip>
+					<template #default="{ row }">{{ row.clientId || '—' }}</template>
 				</el-table-column>
-				<el-table-column label="状态" width="80" align="center">
-					<template #default="{ row }">
-						<el-tag size="small" :type="row.hasException ? 'danger' : 'success'" effect="light">
-							{{ row.hasException ? '异常' : '正常' }}
-						</el-tag>
-					</template>
+				<el-table-column prop="browserInfo" label="浏览器信息" min-width="180" show-overflow-tooltip>
+					<template #default="{ row }">{{ row.browserInfo || '—' }}</template>
 				</el-table-column>
-				<el-table-column label="操作" width="140" fixed="right" align="center">
+				<el-table-column label="操作" width="90" fixed="right" align="center">
 					<template #default="{ row }">
-						<el-button icon="ele-View" size="small" text type="primary" @click="onViewDetail(row)">详情</el-button>
-						<el-popconfirm title="确定删除该操作日志吗？" @confirm="onDelete(row)">
+						<el-popconfirm title="确定删除该登录日志吗？" @confirm="onDelete(row)">
 							<template #reference>
 								<el-button icon="ele-Delete" size="small" text type="danger">删除</el-button>
 							</template>
@@ -103,31 +93,26 @@
 				:total="state.tableData.total"
 			/>
 		</el-card>
-
-		<AuditLogDetailDialog ref="detailDialogRef" />
 	</div>
 </template>
 
-<script setup lang="ts" name="systemAuditLog">
-import { defineAsyncComponent, reactive, onMounted, ref } from 'vue';
+<script setup lang="ts" name="systemSecurityLog">
+import { reactive, onMounted, ref } from 'vue';
 import { ElMessage } from 'element-plus';
-import { useAuditLogApi } from '/@/api/apis';
-import type { AuditLogDto } from '/@/api/models/audit-logging';
+import { useSecurityLogApi } from '/@/api/apis';
+import type { IdentitySecurityLogDto } from '/@/api/models/identity';
 
-const AuditLogDetailDialog = defineAsyncComponent(() => import('./detail.vue'));
-
-const detailDialogRef = ref();
+const queryFormRef = ref();
 
 const state = reactive({
 	searchDateRange: [] as string[],
 	queryParam: {
 		userName: '',
-		url: '',
-		httpMethod: '',
-		hasException: undefined as boolean | undefined,
+		action: '',
+		clientIpAddress: '',
 	},
 	tableData: {
-		data: [] as AuditLogDto[],
+		data: [] as IdentitySecurityLogDto[],
 		total: 0,
 		loading: false,
 		param: {
@@ -142,29 +127,36 @@ const formatDateTime = (dateStr: string) => {
 	return dateStr.replace('T', ' ').substring(0, 19);
 };
 
-const getHttpMethodType = (method?: string): '' | 'success' | 'warning' | 'danger' | 'primary' | 'info' => {
-	switch (method) {
-		case 'GET': return 'success';
-		case 'POST': return 'primary';
-		case 'PUT': return 'warning';
-		case 'DELETE': return 'danger';
-		default: return 'info';
-	}
+const ACTION_MAP: Record<string, string> = {
+	LoginSucceeded: '登录成功',
+	Logout: '登出',
+};
+
+const formatAction = (action: string) => {
+	if (ACTION_MAP[action]) return ACTION_MAP[action];
+	if (action?.startsWith('LoginFailed')) return '登录失败';
+	return action ?? '—';
+};
+
+const getActionTagType = (action: string): 'success' | 'danger' | 'info' | 'warning' | '' => {
+	if (action === 'LoginSucceeded') return 'success';
+	if (action === 'Logout') return 'info';
+	if (action?.startsWith('LoginFailed')) return 'danger';
+	return '';
 };
 
 const getTableData = async () => {
 	state.tableData.loading = true;
 	try {
-		const { getAuditLogPage } = useAuditLogApi();
-		const data = await getAuditLogPage({
+		const { getSecurityLogPage } = useSecurityLogApi();
+		const data = await getSecurityLogPage({
 			skipCount: (state.tableData.param.pageIndex - 1) * state.tableData.param.pageSize,
 			maxResultCount: state.tableData.param.pageSize,
 			startTime: state.searchDateRange?.[0],
 			endTime: state.searchDateRange?.[1],
 			userName: state.queryParam.userName || undefined,
-			url: state.queryParam.url || undefined,
-			httpMethod: state.queryParam.httpMethod || undefined,
-			hasException: state.queryParam.hasException,
+			action: state.queryParam.action || undefined,
+			clientIpAddress: state.queryParam.clientIpAddress || undefined,
 		});
 		state.tableData.data = data.items ?? [];
 		state.tableData.total = data.totalCount ?? 0;
@@ -180,18 +172,14 @@ const onQuery = () => {
 
 const onReset = () => {
 	state.searchDateRange = [];
-	state.queryParam = { userName: '', url: '', httpMethod: '', hasException: undefined };
+	state.queryParam = { userName: '', action: '', clientIpAddress: '' };
 	onQuery();
 };
 
-const onViewDetail = (row: AuditLogDto) => {
-	detailDialogRef.value.openDialog(row);
-};
-
-const onDelete = async (row: AuditLogDto) => {
+const onDelete = async (row: IdentitySecurityLogDto) => {
 	try {
-		const { deleteAuditLog } = useAuditLogApi();
-		await deleteAuditLog(row.id);
+		const { deleteSecurityLog } = useSecurityLogApi();
+		await deleteSecurityLog(row.id);
 		ElMessage.success('删除成功');
 		await getTableData();
 	} catch {
@@ -215,7 +203,7 @@ onMounted(() => {
 </script>
 
 <style scoped lang="scss">
-.system-audit-log-container {
+.system-security-log-container {
 	:deep(.full-table) {
 		.el-card__body {
 			padding: 0;

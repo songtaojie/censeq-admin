@@ -3,6 +3,9 @@ export default {
 	router: {
 		home: 'home',
 		platform: 'Platform',
+		platformLogs: 'Logs',
+		systemAuditLog: 'Operation Logs',
+		systemSecurityLog: 'Login Logs',
 		enterprise: 'Tenant operations',
 		systemMenu: 'systemMenu',
 		systemRole: 'systemRole',

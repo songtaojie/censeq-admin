@@ -11,7 +11,7 @@
     "ScopesRequested": "要求的Scope",
     "Accept": "接受",
     "Deny": "拒绝",
-    "Permission:OpenIddict": "OpenIddict 管理",
+    "Permission:OpenIddict": "认证授权管理",
     "Permission:Applications": "应用管理",
     "Permission:Create": "创建",
     "Permission:Update": "编辑",

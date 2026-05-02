@@ -64,6 +64,15 @@ public static class IdentityPermissions
     }
 
     /// <summary>
+    /// 登录日志
+    /// </summary>
+    public static class SecurityLogs
+    {
+        public const string Default = GroupName + ".SecurityLogs";
+        public const string Delete = Default + ".Delete";
+    }
+
+    /// <summary>
     /// 声明Types
     /// </summary>
     public static class ClaimTypes

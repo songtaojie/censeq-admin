@@ -172,3 +172,27 @@ export interface IdentitySessionDto {
 	lastAccessed?: string;
 	isCurrentSession: boolean;
 }
+
+export interface GetSecurityLogsRequest extends PagedAndSortedRequestDto {
+	startTime?: string;
+	endTime?: string;
+	action?: string;
+	userName?: string;
+	clientIpAddress?: string;
+}
+
+export interface IdentitySecurityLogDto {
+	id: string;
+	tenantId?: string | null;
+	tenantName?: string | null;
+	applicationName?: string | null;
+	identity?: string | null;
+	action: string;
+	userId?: string | null;
+	userName?: string | null;
+	clientId?: string | null;
+	correlationId?: string | null;
+	clientIpAddress?: string | null;
+	browserInfo?: string | null;
+	creationTime: string;
+}
