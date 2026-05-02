@@ -43,6 +43,17 @@ export function useOidc() {
 		return await userManager.getUser();
 	};
 
+	/**
+	 * 获取当前用户的真实租户 ID。
+	 * ABP 对 Host 用户签发 tid = Guid.Empty（全零），此处过滤后返回 undefined，
+	 * 调用方可直接用 if (tenantId) 判断是否处于租户上下文。
+	 */
+	const getCurrentTenantId = async (): Promise<string | undefined> => {
+		const user = await userManager.getUser();
+		const raw: string | undefined = (user?.profile as any)?.tid ?? (user?.profile as any)?.tenantid;
+		return raw && raw !== '00000000-0000-0000-0000-000000000000' ? raw : undefined;
+	};
+
 	// 处理回调（callback 页面中调用）
 	const handleRedirectCallback = async () => {
 		try {
@@ -119,6 +130,7 @@ export function useOidc() {
 		trySilentRenew,
 		logout,
 		getCurrentUser,
+		getCurrentTenantId,
 		getAcessToken,
 		isAuthenticated,
 	};

@@ -94,7 +94,7 @@
 			</el-table>
 		</el-card>
 
-		<MenuDialog ref="menuDialogRef" @refresh="onDialogRefresh" />
+		<MenuDialog ref="menuDialogRef" :is-host="false" @refresh="onDialogRefresh" />
 	</div>
 </template>
 
@@ -106,7 +106,7 @@ import type { MenuTreeItemDto } from '/@/api/models/menu';
 import { setBackEndControlRefreshRoutes } from '/@/router/backEnd';
 import { i18n } from '/@/i18n/index';
 
-const MenuDialog = defineAsyncComponent(() => import('/@/views/system/menu/dialog.vue'));
+const MenuDialog = defineAsyncComponent(() => import('/@/views/platform/menu/dialog.vue'));
 
 const menuApi = useMenuApi();
 const menuDialogRef = ref();

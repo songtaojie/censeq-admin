@@ -109,12 +109,10 @@ const getMenuData = async () => {
 	state.loading = true;
 	try {
 		const { getPermissionList } = usePermissionApi();
-		const { getCurrentUser } = useOidc();
 		const menuApi = useMenuApi();
 
-		const oidcUser = await getCurrentUser();
-		// ABP JWT 中租户 ID 的 claim 名为 'tid'（来自 __tenant 或 tenantid）
-		const tenantId: string | undefined = (oidcUser?.profile as any)?.tid ?? (oidcUser?.profile as any)?.tenantid;
+		const { getCurrentTenantId } = useOidc();
+		const tenantId = await getCurrentTenantId();
 
 		const requests: Promise<any>[] = [
 			getPermissionList('R', state.roleId),

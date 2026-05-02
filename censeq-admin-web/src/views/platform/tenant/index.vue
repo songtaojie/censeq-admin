@@ -143,8 +143,8 @@ import { ElMessageBox, ElMessage } from 'element-plus';
 import { useTenantApi } from '/@/api/apis';
 import type { TenantDto, TenantAdminUserDto } from '/@/api/models/tenant';
 
-const TenantDialog = defineAsyncComponent(() => import('/@/views/system/tenant/dialog.vue'));
-const TenantPermissionDialog = defineAsyncComponent(() => import('/@/views/system/tenant/tenant-permission-dialog.vue'));
+const TenantDialog = defineAsyncComponent(() => import('/@/views/platform/tenant/dialog.vue'));
+const TenantPermissionDialog = defineAsyncComponent(() => import('/@/views/platform/tenant/tenant-permission-dialog.vue'));
 
 const tenantDialogRef = ref();
 const tenantPermissionDialogRef = ref();

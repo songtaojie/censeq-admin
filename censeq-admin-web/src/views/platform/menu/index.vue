@@ -32,7 +32,6 @@
 				row-key="id"
 				:tree-props="{ children: 'children', hasChildren: 'hasChildren' }"
 				border
-				default-expand-all
 			>
 				<el-table-column label="菜单名称" min-width="220" show-overflow-tooltip>
 					<template #default="scope">
@@ -75,7 +74,7 @@
 			</el-table>
 		</el-card>
 
-		<MenuDialog ref="menuDialogRef" @refresh="onDialogRefresh" />
+		<MenuDialog ref="menuDialogRef" :is-host="true" @refresh="onDialogRefresh" />
 	</div>
 </template>
 
@@ -88,7 +87,7 @@ import { setBackEndControlRefreshRoutes } from '/@/router/backEnd';
 import { i18n } from '/@/i18n/index';
 
 // 引入组件
-const MenuDialog = defineAsyncComponent(() => import('/@/views/system/menu/dialog.vue'));
+const MenuDialog = defineAsyncComponent(() => import('/@/views/platform/menu/dialog.vue'));
 
 const menuApi = useMenuApi();
 const menuDialogRef = ref();

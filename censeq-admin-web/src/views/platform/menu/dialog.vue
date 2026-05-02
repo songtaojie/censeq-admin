@@ -84,6 +84,15 @@
 									<el-switch v-model="state.ruleForm.status" active-text="启用" inactive-text="停用" inline-prompt />
 								</el-form-item>
 							</el-col>
+							<!-- 菜单范围：仅平台侧显示 -->
+							<el-col v-if="props.isHost" :xs="24" :sm="12" class="mb16">
+								<el-form-item label="菜单范围">
+									<el-radio-group v-model="state.ruleForm.scope">
+										<el-radio :label="1">平台专属</el-radio>
+										<el-radio :label="2">租户菜单</el-radio>
+									</el-radio-group>
+								</el-form-item>
+							</el-col>
 						</el-row>
 					</el-tab-pane>
 
@@ -149,8 +158,8 @@
 						</el-row>
 					</el-tab-pane>
 
-					<!-- ========== Tab 3: 权限配置 ========== -->
-					<el-tab-pane label="权限配置" name="permission">
+					<!-- ========== Tab 3: 权限配置（目录不可配置权限） ========== -->
+					<el-tab-pane v-if="state.ruleForm.type !== 1" label="权限配置" name="permission">
 						<el-row :gutter="20" class="tab-pane-row">
 							<el-col :span="24" class="mb16">
 								<el-form-item label="权限组" label-width="70px">
@@ -222,6 +231,7 @@ import type {
 	MenuDetailDto,
 	MenuPermissionDefinitionDto,
 	MenuPermissionGroupDto,
+	MenuScope,
 	MenuTreeItemDto,
 	UpdateMenuDto,
 } from '/@/api/models/menu';
@@ -229,6 +239,8 @@ import { i18n } from '/@/i18n/index';
 
 // 定义子组件向父组件传值/事件
 const emit = defineEmits(['refresh']);
+
+const props = withDefaults(defineProps<{ isHost?: boolean }>(), { isHost: false });
 
 // 引入组件
 const IconSelector = defineAsyncComponent(() => import('/@/components/iconSelector/index.vue'));
@@ -264,6 +276,7 @@ type MenuFormState = {
 	isIframe: boolean;
 	status: boolean;
 	authorizationMode: 1 | 2 | 3;
+	scope: MenuScope;
 	selectedPermissionNames: string[];
 	selectedPermissionGroups: string[];
 	remark: string;
@@ -298,6 +311,7 @@ const createDefaultForm = (): MenuFormState => ({
 	isIframe: false,
 	status: true,
 	authorizationMode: 1,
+	scope: 1,
 	selectedPermissionNames: [],
 	selectedPermissionGroups: [],
 	remark: '',
@@ -508,6 +522,7 @@ const fillForm = (detail: MenuDetailDto) => {
 		isIframe: detail.isIframe,
 		status: detail.status,
 		authorizationMode: detail.authorizationMode,
+		scope: detail.scope ?? 1,
 		selectedPermissionNames: [...(detail.permissionNames ?? [])],
 		selectedPermissionGroups: detail.permissionGroups
 			? detail.permissionGroups.split(',').map((s) => s.trim()).filter(Boolean)
@@ -619,6 +634,7 @@ const buildPayload = (): CreateMenuDto => {
 		isIframe: state.ruleForm.type === 3 ? false : state.ruleForm.isIframe,
 		status: state.ruleForm.status,
 		authorizationMode: state.ruleForm.authorizationMode,
+		scope: props.isHost ? state.ruleForm.scope : 2,
 		remark: normalizeOptional(state.ruleForm.remark),
 		buttonCode: state.ruleForm.type === 3 ? normalizeOptional(state.ruleForm.buttonCode) : undefined,
 		permissionGroups: state.ruleForm.selectedPermissionGroups.length > 0
@@ -652,8 +668,13 @@ const onTypeChange = () => {
 		state.ruleForm.isExternal = false;
 		state.ruleForm.isIframe = false;
 		state.ruleForm.externalUrl = '';
-	} else if (!state.ruleForm.component && state.ruleForm.type === 1) {
-		state.ruleForm.component = 'layout/routerView/parent';
+	} else if (state.ruleForm.type === 1) {
+		if (!state.ruleForm.component) {
+			state.ruleForm.component = 'layout/routerView/parent';
+		}
+		// 目录强制匿名访问，清空权限
+		state.ruleForm.authorizationMode = 1;
+		state.ruleForm.selectedPermissionNames = [];
 	}
 
 	if (state.ruleForm.type === 3 && !state.ruleForm.parentId) {

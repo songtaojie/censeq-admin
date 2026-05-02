@@ -96,7 +96,7 @@ export const dynamicRoutes: Array<RouteRecordRaw> = [
 					{
 						path: '/platform/users',
 						name: 'platformUser',
-						component: () => import('/@/views/system/user/index.vue'),
+						component: () => import('/@/views/platform/user/index.vue'),
 						meta: {
 							title: '平台用户管理',
 							isLink: '',
@@ -111,7 +111,7 @@ export const dynamicRoutes: Array<RouteRecordRaw> = [
 					{
 						path: '/platform/roles',
 						name: 'platformRole',
-						component: () => import('/@/views/system/role/index.vue'),
+						component: () => import('/@/views/platform/role/index.vue'),
 						meta: {
 							title: '平台角色管理',
 							isLink: '',
@@ -126,7 +126,7 @@ export const dynamicRoutes: Array<RouteRecordRaw> = [
 					{
 						path: '/platform/tenant',
 						name: 'systemTenant',
-						component: () => import('/@/views/system/tenant/index.vue'),
+						component: () => import('/@/views/platform/tenant/index.vue'),
 						meta: {
 							title: 'message.router.systemTenant',
 							isLink: '',
@@ -141,7 +141,7 @@ export const dynamicRoutes: Array<RouteRecordRaw> = [
 					{
 						path: '/platform/feature',
 						name: 'systemFeature',
-						component: () => import('/@/views/system/feature/index.vue'),
+						component: () => import('/@/views/platform/feature/index.vue'),
 						meta: {
 							title: 'message.router.systemFeature',
 							isLink: '',
@@ -156,7 +156,7 @@ export const dynamicRoutes: Array<RouteRecordRaw> = [
 					{
 						path: '/platform/menu',
 						name: 'systemMenu',
-						component: () => import('/@/views/system/menu/index.vue'),
+						component: () => import('/@/views/platform/menu/index.vue'),
 						meta: {
 							title: 'message.router.systemMenu',
 							isLink: '',
@@ -171,7 +171,7 @@ export const dynamicRoutes: Array<RouteRecordRaw> = [
 					{
 						path: '/platform/claim-type',
 						name: 'systemClaimType',
-						component: () => import('/@/views/system/claim-type/index.vue'),
+						component: () => import('/@/views/platform/claim-type/index.vue'),
 						meta: {
 							title: '声明类型管理',
 							isLink: '',
@@ -186,7 +186,7 @@ export const dynamicRoutes: Array<RouteRecordRaw> = [
 					{
 						path: '/platform/permission-definition',
 						name: 'systemPermissionDefinition',
-						component: () => import('/@/views/system/permission-definition/index.vue'),
+						component: () => import('/@/views/platform/permission-definition/index.vue'),
 						meta: {
 							title: '权限定义管理',
 							isLink: '',
@@ -201,7 +201,7 @@ export const dynamicRoutes: Array<RouteRecordRaw> = [
 					{
 						path: '/platform/audit-log',
 						name: 'systemAuditLog',
-						component: () => import('/@/views/system/audit-log/index.vue'),
+						component: () => import('/@/views/platform/audit-log/index.vue'),
 						meta: {
 							title: 'message.router.systemAuditLog',
 							isLink: '',

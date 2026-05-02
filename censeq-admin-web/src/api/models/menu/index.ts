@@ -2,6 +2,9 @@ export type MenuType = 1 | 2 | 3;
 
 export type MenuAuthorizationMode = 1 | 2 | 3;
 
+/** 1=Platform（平台专属） 2=Tenant（租户菜单） */
+export type MenuScope = 1 | 2;
+
 export interface CreateMenuDto {
 	parentId?: string | null;
 	name: string;
@@ -21,6 +24,7 @@ export interface CreateMenuDto {
 	isIframe: boolean;
 	status: boolean;
 	authorizationMode: MenuAuthorizationMode;
+	scope?: MenuScope;
 	remark?: string;
 	buttonCode?: string;
 	permissionGroups?: string | null;
@@ -78,6 +82,7 @@ export interface MenuTreeItemDto {
 
 export interface MenuDetailDto extends MenuTreeItemDto {
 	tenantId?: string | null;
+	scope?: MenuScope;
 	redirect?: string | null;
 	keepAlive: boolean;
 	affix: boolean;
