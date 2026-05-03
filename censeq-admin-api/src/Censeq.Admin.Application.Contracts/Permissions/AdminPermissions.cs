@@ -6,6 +6,7 @@ public static class AdminPermissions
 
     public static class Menus
     {
+        public const string MenusGroupName = GroupName + ".Menus";
         public const string Default = GroupName + ".Menus";
         public const string Create = Default + ".Create";
         public const string Update = Default + ".Update";

@@ -332,7 +332,7 @@ public class MenuDataSeedContributor : DomainService, IDataSeedContributor, ITra
                 authorizationMode: MenuAuthorizationMode.Permission,
                 permissionNames: new[] { "CenseqAdmin.Menus" },
                 scope: MenuScope.Platform,
-                permissionGroups: "Admin"),
+                permissionGroups: "CenseqAdmin.Menus"),
             new(
                 key: "systemClaimType",
                 parentKey: "platform",
@@ -353,7 +353,7 @@ public class MenuDataSeedContributor : DomainService, IDataSeedContributor, ITra
                 key: "systemPermissionDefinition",
                 parentKey: "platform",
                 name: "systemPermissionDefinition",
-                title: "权限定义管理",
+                title: "权限管理",
                 routeName: "systemPermissionDefinition",
                 path: "/platform/permission-definition",
                 component: "platform/permission-definition/index",
@@ -539,7 +539,7 @@ public class MenuDataSeedContributor : DomainService, IDataSeedContributor, ITra
                 authorizationMode: MenuAuthorizationMode.Permission,
                 permissionNames: new[] { "CenseqAdmin.Menus.CopyFromHost" },
                 scope: MenuScope.Tenant,
-                permissionGroups: "Admin"),
+                permissionGroups: "CenseqAdmin.Menus"),
 
             // ── 认证中心 ──────────────────────────────────────────────
             new(

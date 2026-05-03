@@ -17,7 +17,9 @@ using Volo.Abp.AspNetCore.MultiTenancy;
 using Volo.Abp.AspNetCore.Mvc.AntiForgery;
 using Volo.Abp.AspNetCore.Mvc.Libs;
 using Volo.Abp.AspNetCore.Serilog;
+using Volo.Abp.Auditing;
 using Volo.Abp.Autofac;
+using Volo.Abp.Domain.Entities.Auditing;
 using Volo.Abp.Modularity;
 using Volo.Abp.Security.Claims;
 using Volo.Abp.UI.Navigation.Urls;
@@ -87,6 +89,15 @@ public class CenseqHttpApiHostModule : AbpModule
         Configure<AbpMvcLibsOptions>(options =>
         {
             options.CheckLibs = false;
+        });
+
+        Configure<AbpAuditingOptions>(options =>
+        {
+            // 追踪实现了 IFullAuditedObject 或 IAuditedObject 的实体（用户、角色、租户等业务实体）
+            options.EntityHistorySelectors.Add(new NamedTypeSelector(
+                "AuditedEntities",
+                type => typeof(IAuditedObject).IsAssignableFrom(type)
+            ));
         });
 
         //Configure<AbpSecurityLogOptions>(options =>

@@ -1,5 +1,6 @@
 <template>
   <el-dialog title="审计日志详情" v-model="state.dialogVisible" width="900px" destroy-on-close>
+    <div v-loading="state.loading" style="min-height: 100px">
     <el-descriptions :column="2" border v-if="state.auditLog">
       <el-descriptions-item label="用户名称">{{ state.auditLog.userName || '-' }}</el-descriptions-item>
       <el-descriptions-item label="租户名称">{{ state.auditLog.tenantName || '-' }}</el-descriptions-item>
@@ -28,8 +29,12 @@
               <p><strong>服务：</strong>{{ action.serviceName }}</p>
               <p><strong>方法：</strong>{{ action.methodName }}</p>
               <p><strong>执行时长：</strong>{{ action.executionDuration }}ms</p>
-              <el-collapse v-if="action.parameters">
-                <el-collapse-item title="参数">
+              <el-collapse v-if="action.parameters" class="params-collapse">
+                <el-collapse-item name="params">
+                  <template #title>
+                    <el-icon style="margin-right: 4px"><ArrowRight /></el-icon>
+                    <strong style="color: var(--el-color-primary)">查看请求参数</strong>
+                  </template>
                   <pre>{{ formatJson(action.parameters) }}</pre>
                 </el-collapse-item>
               </el-collapse>
@@ -71,6 +76,7 @@
         </el-alert>
       </el-tab-pane>
     </el-tabs>
+    </div>
 
     <template #footer>
       <span class="dialog-footer">
@@ -82,20 +88,29 @@
 
 <script setup lang="ts" name="auditLogDetailDialog">
 import { reactive } from 'vue';
-import { Plus, Edit, Delete } from '@element-plus/icons-vue';
-import { AuditLogDto } from '/@/api/models/audit-logging';
+import { Plus, Edit, Delete, ArrowRight } from '@element-plus/icons-vue';
+import type { AuditLogDto } from '/@/api/models/audit-logging';
+import { useAuditLogApi } from '/@/api/apis';
 
 const state = reactive({
   dialogVisible: false,
   activeTab: 'actions',
+  loading: false,
   auditLog: null as AuditLogDto | null,
 });
 
 // 打开对话框
-const openDialog = (row: AuditLogDto) => {
-  state.auditLog = row;
-  state.activeTab = row.actions?.length ? 'actions' : row.entityChanges?.length ? 'entityChanges' : 'exception';
+const openDialog = async (row: AuditLogDto) => {
   state.dialogVisible = true;
+  state.loading = true;
+  try {
+    const { getAuditLog } = useAuditLogApi();
+    const detail = await getAuditLog(row.id);
+    state.auditLog = detail;
+    state.activeTab = detail.actions?.length ? 'actions' : detail.entityChanges?.length ? 'entityChanges' : 'exception';
+  } finally {
+    state.loading = false;
+  }
 };
 
 // 格式化日期时间
@@ -183,6 +198,25 @@ defineExpose({ openDialog });
 
 .text-success {
   color: #67c23a;
+}
+
+.params-collapse {
+  margin-top: 8px;
+  border: 1px solid var(--el-color-primary-light-7);
+  border-radius: 4px;
+
+  :deep(.el-collapse-item__header) {
+    background: var(--el-color-primary-light-9);
+    padding: 0 12px;
+    border-radius: 4px;
+    font-size: 13px;
+    height: 36px;
+    line-height: 36px;
+  }
+
+  :deep(.el-collapse-item__content) {
+    padding: 0;
+  }
 }
 
 pre {
