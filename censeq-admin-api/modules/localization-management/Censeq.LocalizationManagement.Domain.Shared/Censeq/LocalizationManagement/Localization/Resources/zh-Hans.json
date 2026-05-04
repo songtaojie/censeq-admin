@@ -1,0 +1,19 @@
+{
+  "culture": "zh-Hans",
+  "texts": {
+    "Menu:LocalizationManagement": "多语言管理",
+    "LocalizationResources": "本地化资源",
+    "LocalizationCultures": "语言管理",
+    "LocalizationTexts": "翻译管理",
+    "Permission:LocalizationManagement": "多语言管理",
+    "Permission:LocalizationManagement.Resources": "资源管理",
+    "Permission:LocalizationManagement.Cultures": "语言管理",
+    "Permission:LocalizationManagement.Texts": "翻译管理",
+    "Permission:LocalizationManagement.Texts.Create": "新增翻译",
+    "Permission:LocalizationManagement.Texts.Update": "编辑翻译",
+    "Permission:LocalizationManagement.Texts.Delete": "删除翻译",
+    "Permission:LocalizationManagement.Cultures.Create": "新增语言",
+    "Permission:LocalizationManagement.Cultures.Update": "编辑语言",
+    "Permission:LocalizationManagement.Cultures.Delete": "删除语言"
+  }
+}

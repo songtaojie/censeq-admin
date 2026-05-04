@@ -1,0 +1,19 @@
+{
+  "culture": "en",
+  "texts": {
+    "Menu:LocalizationManagement": "Localization Management",
+    "LocalizationResources": "Localization Resources",
+    "LocalizationCultures": "Language Management",
+    "LocalizationTexts": "Translation Management",
+    "Permission:LocalizationManagement": "Localization Management",
+    "Permission:LocalizationManagement.Resources": "Resources",
+    "Permission:LocalizationManagement.Cultures": "Languages",
+    "Permission:LocalizationManagement.Texts": "Translations",
+    "Permission:LocalizationManagement.Texts.Create": "Create Translation",
+    "Permission:LocalizationManagement.Texts.Update": "Update Translation",
+    "Permission:LocalizationManagement.Texts.Delete": "Delete Translation",
+    "Permission:LocalizationManagement.Cultures.Create": "Create Language",
+    "Permission:LocalizationManagement.Cultures.Update": "Update Language",
+    "Permission:LocalizationManagement.Cultures.Delete": "Delete Language"
+  }
+}

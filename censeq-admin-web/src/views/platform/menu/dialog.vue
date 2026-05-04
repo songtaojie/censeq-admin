@@ -93,20 +93,26 @@
 									</el-radio-group>
 								</el-form-item>
 							</el-col>
-						</el-row>
-					</el-tab-pane>
+						<!-- 菜单图标（目录/菜单才有图标） -->
+						<el-col v-if="state.ruleForm.type !== 3" :xs="24" :sm="12" class="mb16">
+							<el-form-item label="菜单图标">
+								<IconSelector placeholder="请选择菜单图标" v-model="state.ruleForm.icon" />
+							</el-form-item>
+						</el-col>
+					</el-row>
+				</el-tab-pane>
 
-					<!-- ========== Tab 2: 路由配置（仅目录/菜单） ========== -->
-					<el-tab-pane v-if="state.ruleForm.type !== 3" label="路由配置" name="route">
-						<el-row :gutter="20" class="tab-pane-row">
-							<el-col :xs="24" :sm="12" class="mb16">
-								<el-form-item label="路由路径" prop="path">
-									<el-input v-model="state.ruleForm.path" placeholder="如 /system/menu" clearable />
-								</el-form-item>
-							</el-col>
-							<el-col :xs="24" :sm="12" class="mb16">
-								<el-form-item label="路由名称" prop="routeName">
-									<el-input v-model="state.ruleForm.routeName" placeholder="路由 name 值，如 systemMenu" clearable />
+				<!-- ========== Tab 2: 路由配置（仅目录/菜单） ========== -->
+				<el-tab-pane v-if="state.ruleForm.type !== 3" label="路由配置" name="route">
+					<el-row :gutter="20" class="tab-pane-row">
+						<el-col :xs="24" :sm="12" class="mb16">
+							<el-form-item label="路由路径" prop="path">
+								<el-input v-model="state.ruleForm.path" placeholder="如 /system/menu" clearable />
+							</el-form-item>
+						</el-col>
+						<el-col :xs="24" :sm="12" class="mb16">
+							<el-form-item label="路由名称" prop="routeName">
+								<el-input v-model="state.ruleForm.routeName" placeholder="路由 name 值，如 systemMenu" clearable />
 								</el-form-item>
 							</el-col>
 							<el-col :xs="24" :sm="12" class="mb16">
@@ -120,11 +126,7 @@
 								</el-form-item>
 							</el-col>
 							<el-col :xs="24" :sm="12" class="mb16">
-								<el-form-item label="菜单图标">
-									<IconSelector placeholder="请选择菜单图标" v-model="state.ruleForm.icon" />
-								</el-form-item>
-							</el-col>
-							<el-col :xs="24" :sm="12" class="mb16">
+
 								<el-form-item label="链接地址" prop="externalUrl">
 									<el-input
 										v-model="state.ruleForm.externalUrl"

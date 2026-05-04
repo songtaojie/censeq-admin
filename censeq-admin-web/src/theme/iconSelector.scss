@@ -5,16 +5,10 @@
 	.icon-selector-warp {
 		height: 260px;
 		overflow: hidden;
-		position: relative;
 		.icon-selector-warp-title {
-			position: absolute;
-			height: 40px;
-			line-height: 40px;
-			left: 15px;
+			display: none;
 		}
 		.el-tabs__header {
-			display: flex;
-			justify-content: flex-end;
 			padding: 0 15px;
 			border-bottom: 1px solid var(--el-border-color-light);
 			margin: 0 !important;

@@ -11,6 +11,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\modules\audit-logging\Censeq.AuditLogging.Domain\Censeq.AuditLogging.Domain.csproj" />
     <ProjectReference Include="..\..\modules\feature-management\Censeq.FeatureManagement.Domain\Censeq.FeatureManagement.Domain.csproj" />
+    <ProjectReference Include="..\..\modules\localization-management\Censeq.LocalizationManagement.Domain\Censeq.LocalizationManagement.Domain.csproj" />
     <ProjectReference Include="..\..\modules\identity\Censeq.Identity.Domain\Censeq.Identity.Domain.csproj" />
     <ProjectReference Include="..\..\modules\identity\Censeq.PermissionManagement.Domain.Identity\Censeq.PermissionManagement.Domain.Identity.csproj" />
     <ProjectReference Include="..\..\modules\openiddict\Censeq.OpenIddict.Domain\Censeq.OpenIddict.Domain.csproj" />

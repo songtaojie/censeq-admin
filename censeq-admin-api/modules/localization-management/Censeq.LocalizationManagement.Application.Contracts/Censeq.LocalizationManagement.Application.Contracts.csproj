@@ -1,0 +1,22 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+	<Import Project="..\..\..\common.props" />
+
+	<PropertyGroup>
+		<AssemblyName>Censeq.LocalizationManagement.Application.Contracts</AssemblyName>
+		<PackageId>Censeq.LocalizationManagement.Application.Contracts</PackageId>
+		<Nullable>enable</Nullable>
+		<RootNamespace>Censeq.LocalizationManagement</RootNamespace>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Volo.Abp.Ddd.Application.Contracts" />
+		<PackageReference Include="Volo.Abp.Authorization.Abstractions" />
+		<PackageReference Include="Volo.Abp.Json" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\Censeq.LocalizationManagement.Domain.Shared\Censeq.LocalizationManagement.Domain.Shared.csproj" />
+	</ItemGroup>
+
+</Project>

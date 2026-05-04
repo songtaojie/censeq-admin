@@ -1,0 +1,21 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+	<Import Project="..\..\..\common.props" />
+
+	<PropertyGroup>
+		<AssemblyName>Censeq.LocalizationManagement.HttpApi</AssemblyName>
+		<PackageId>Censeq.LocalizationManagement.HttpApi</PackageId>
+		<Nullable>enable</Nullable>
+		<RootNamespace>Censeq.LocalizationManagement</RootNamespace>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Volo.Abp.AspNetCore.Mvc" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\Censeq.LocalizationManagement.Application.Contracts\Censeq.LocalizationManagement.Application.Contracts.csproj" />
+		<ProjectReference Include="..\Censeq.LocalizationManagement.Domain.Shared\Censeq.LocalizationManagement.Domain.Shared.csproj" />
+	</ItemGroup>
+
+</Project>

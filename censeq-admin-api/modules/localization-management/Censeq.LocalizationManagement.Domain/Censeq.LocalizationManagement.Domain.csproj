@@ -1,0 +1,22 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+	<Import Project="..\..\..\common.props" />
+
+	<PropertyGroup>
+		<AssemblyName>Censeq.LocalizationManagement.Domain</AssemblyName>
+		<PackageId>Censeq.LocalizationManagement.Domain</PackageId>
+		<Nullable>enable</Nullable>
+		<RootNamespace>Censeq.LocalizationManagement</RootNamespace>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Volo.Abp.Ddd.Domain" />
+		<PackageReference Include="Volo.Abp.Caching" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\..\..\framework\Censeq.Framework.Core\Censeq.Framework.Core.csproj" />
+		<ProjectReference Include="..\Censeq.LocalizationManagement.Domain.Shared\Censeq.LocalizationManagement.Domain.Shared.csproj" />
+	</ItemGroup>
+
+</Project>

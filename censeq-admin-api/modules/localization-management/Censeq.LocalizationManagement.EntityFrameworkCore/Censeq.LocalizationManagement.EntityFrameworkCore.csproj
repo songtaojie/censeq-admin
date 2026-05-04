@@ -1,0 +1,17 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+	<Import Project="..\..\..\common.props" />
+
+	<PropertyGroup>
+		<AssemblyName>Censeq.LocalizationManagement.EntityFrameworkCore</AssemblyName>
+		<PackageId>Censeq.LocalizationManagement.EntityFrameworkCore</PackageId>
+		<Nullable>enable</Nullable>
+		<RootNamespace>Censeq.LocalizationManagement</RootNamespace>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\..\..\framework\Censeq.Framework.EntityFrameworkCore\Censeq.Framework.EntityFrameworkCore.csproj" />
+		<ProjectReference Include="..\Censeq.LocalizationManagement.Domain\Censeq.LocalizationManagement.Domain.csproj" />
+	</ItemGroup>
+
+</Project>

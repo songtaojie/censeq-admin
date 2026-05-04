@@ -8,6 +8,8 @@ using Censeq.Identity.EntityFrameworkCore;
 using Censeq.Identity.EntityFrameworkCore.Modeling;
 using Censeq.Admin.Menus;
 using Censeq.Admin.Permissions;
+using Censeq.LocalizationManagement.Entities;
+using Censeq.LocalizationManagement.EntityFrameworkCore;
 using Censeq.OpenIddict.Applications;
 using Censeq.OpenIddict.Authorizations;
 using Censeq.OpenIddict.EntityFrameworkCore;
@@ -39,7 +41,8 @@ public class CenseqAdminDbContext(DbContextOptions<CenseqAdminDbContext> options
         IFeatureManagementDbContext,
         IPermissionManagementDbContext,
         ISettingManagementDbContext,
-        ITenantManagementDbContext
+        ITenantManagementDbContext,
+        ILocalizationManagementDbContext
 {
     public DbSet<AuditLog> AuditLogs { get; set; }
 
@@ -76,6 +79,10 @@ public class CenseqAdminDbContext(DbContextOptions<CenseqAdminDbContext> options
     public DbSet<Setting> Settings { get; set; }
     public DbSet<SettingDefinitionRecord> SettingDefinitionRecords { get; set; }
 
+    public DbSet<LocalizationResource> LocalizationResources { get; set; }
+    public DbSet<LocalizationCulture> LocalizationCultures { get; set; }
+    public DbSet<LocalizationText> LocalizationTexts { get; set; }
+
     protected override void OnModelCreating(ModelBuilder builder)
     {
         base.OnModelCreating(builder);
@@ -89,5 +96,6 @@ public class CenseqAdminDbContext(DbContextOptions<CenseqAdminDbContext> options
         builder.ConfigureSettingManagement();
         builder.ConfigureTenantManagement();
         builder.ConfigureTenantPermissionGrants();
+        builder.ConfigureLocalizationManagement();
     }
 }

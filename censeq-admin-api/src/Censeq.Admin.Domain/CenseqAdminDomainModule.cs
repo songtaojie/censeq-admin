@@ -2,12 +2,14 @@
 using Censeq.AuditLogging;
 using Censeq.FeatureManagement;
 using Censeq.Identity;
+using Censeq.LocalizationManagement;
 using Censeq.OpenIddict;
 using Censeq.PermissionManagement.Identity;
 using Censeq.PermissionManagement.OpenIddict;
 using Censeq.TenantManagement;
 using MailKit.Security;
 using Volo.Abp.Features;
+using Volo.Abp.Localization;
 
 namespace Censeq.Admin;
 
@@ -24,7 +26,8 @@ namespace Censeq.Admin;
     typeof(AbpCachingModule),
     typeof(CenseqAuditLoggingDomainModule),
     typeof(CenseqTenantManagementDomainModule),
-    typeof(CenseqFeatureManagementDomainModule)
+    typeof(CenseqFeatureManagementDomainModule),
+    typeof(CenseqLocalizationManagementDomainModule)
 )]
 public class CenseqAdminDomainModule : AbpModule
 {
@@ -64,5 +67,18 @@ public class CenseqAdminDomainModule : AbpModule
         //#if DEBUG
         //        context.Services.Replace(ServiceDescriptor.Singleton<IEmailSender, NullEmailSender>());
         //#endif
+    }
+
+    public override void PostConfigureServices(ServiceConfigurationContext context)
+    {
+        // 在所有模块注册完成后，为每个已注册资源添加数据库翻译贡献者
+        // 优先级：租户 DB > Host DB > JSON 文件（JSON contributor 先加载，DB contributor 后加载覆盖）
+        Configure<AbpLocalizationOptions>(options =>
+        {
+            foreach (var resource in options.Resources.Values)
+            {
+                resource.Contributors.Add(new DbLocalizationResourceContributor());
+            }
+        });
     }
 }
