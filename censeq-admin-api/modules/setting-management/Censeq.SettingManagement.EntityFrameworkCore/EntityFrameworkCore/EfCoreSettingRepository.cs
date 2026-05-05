@@ -37,9 +37,9 @@ public class EfCoreSettingRepository : EfCoreRepository<ISettingManagementDbCont
         CancellationToken cancellationToken = default)
     {
         return await (await GetDbSetAsync())
-            .Where(
-                s => s.ProviderName == providerName && s.ProviderKey == providerKey
-            ).ToListAsync(GetCancellationToken(cancellationToken));
+            .Where(s => providerName == null || s.ProviderName == providerName)
+            .Where(s => providerKey == null || s.ProviderKey == providerKey)
+            .ToListAsync(GetCancellationToken(cancellationToken));
     }
 
     public virtual async Task<List<Setting>> GetListAsync(
@@ -49,8 +49,9 @@ public class EfCoreSettingRepository : EfCoreRepository<ISettingManagementDbCont
         CancellationToken cancellationToken = default)
     {
         return await (await GetDbSetAsync())
-            .Where(
-                s => names.Contains(s.Name) && s.ProviderName == providerName && s.ProviderKey == providerKey
-            ).ToListAsync(GetCancellationToken(cancellationToken));
+            .Where(s => names.Contains(s.Name))
+            .Where(s => providerName == null || s.ProviderName == providerName)
+            .Where(s => providerKey == null || s.ProviderKey == providerKey)
+            .ToListAsync(GetCancellationToken(cancellationToken));
     }
 }

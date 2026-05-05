@@ -17,6 +17,11 @@ public class SettingManagementPermissionDefinitionProvider : PermissionDefinitio
         emailPermission.AddChild(SettingManagementPermissions.EmailingTest, L("Permission:EmailingTest"));
 
         moduleGroup.AddPermission(SettingManagementPermissions.TimeZone, L("Permission:TimeZone"));
+
+        var settingDefinitionPermission = moduleGroup.AddPermission(SettingManagementPermissions.SettingDefinitions.Default, L("Permission:SettingDefinitions"));
+        settingDefinitionPermission.AddChild(SettingManagementPermissions.SettingDefinitions.Create, L("Permission:Create"));
+        settingDefinitionPermission.AddChild(SettingManagementPermissions.SettingDefinitions.Update, L("Permission:Update"));
+        settingDefinitionPermission.AddChild(SettingManagementPermissions.SettingDefinitions.Delete, L("Permission:Delete"));
     }
 
     private static LocalizableString L(string name)

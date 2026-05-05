@@ -77,6 +77,7 @@
         "LongWelcomeMessage": "欢迎使用本应用程序。这是一个基于 ABP 框架的启动项目。更多信息，请访问 abp.io。",
         "Permission:CenseqAdmin": "管理平台",
         "Permission:Menus": "菜单管理",
+        "Permission:SystemConfigs": "应用配置",
         "Permission:Create": "创建",
         "Permission:Edit": "编辑",
         "Permission:Delete": "删除",

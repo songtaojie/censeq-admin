@@ -2,6 +2,15 @@
 
 public static class SettingConsts
 {
+    public static class ProviderNames
+    {
+        public const string Global = "G";
+
+        public const string Tenant = "T";
+
+        public const string User = "U";
+    }
+
     /// <summary>
     /// Default value: 128
     /// </summary>

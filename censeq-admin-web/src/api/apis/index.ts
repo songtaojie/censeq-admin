@@ -2,6 +2,7 @@ export * from './audit-logging/audit-log.service';
 export * from './feature-management/features.service';
 export * from './identity/identity-claim-type.service';
 export * from './identity/identity-role.service';
+export * from './identity/identity-user.service';
 export * from './identity/security-log.service';
 export * from './localization-management/localization.service';
 export * from './menu/menu.service';

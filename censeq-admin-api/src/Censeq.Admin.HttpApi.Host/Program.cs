@@ -36,10 +36,6 @@ public class Program
             await builder.AddApplicationAsync<CenseqHttpApiHostModule>();
             var app = builder.Build();
             await app.InitializeApplicationAsync();
-            if (app.Services.GetRequiredService<IHostEnvironment>().IsDevelopment())
-            {
-                await app.Services.GetRequiredService<AdminDbMigrationService>().MigrateAsync();
-            }
             await app.RunAsync();
             return 0;
         }
