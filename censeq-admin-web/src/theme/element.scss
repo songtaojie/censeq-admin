@@ -287,6 +287,10 @@
 	.el-button.is-text {
 		padding: 0;
 	}
+	th.el-table__cell {
+		background-color: #f5f7fa !important;
+		color: #606266;
+	}
 }
 
 /* scrollbar

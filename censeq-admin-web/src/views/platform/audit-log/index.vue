@@ -225,6 +225,8 @@ onMounted(() => {
 		}
 		.pagination {
 			padding: 15px;
+			margin-top: 0;
+			justify-content: flex-end;
 		}
 	}
 }

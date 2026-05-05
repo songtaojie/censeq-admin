@@ -345,11 +345,6 @@ getList();
 	flex-direction: column;
 }
 
-.pagination {
-	margin-top: 14px;
-	justify-content: flex-end;
-}
-
 .scope-name-text {
 	color: var(--el-color-primary);
 	font-weight: 500;

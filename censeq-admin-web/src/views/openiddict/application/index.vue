@@ -492,11 +492,6 @@ getList();
 	flex-direction: column;
 }
 
-.pagination {
-	margin-top: 14px;
-	justify-content: flex-end;
-}
-
 .client-id-text {
 	color: var(--el-color-primary);
 	font-weight: 500;

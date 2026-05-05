@@ -311,8 +311,4 @@ onMounted(() => {
 	gap: 0;
 }
 
-.pagination {
-	margin-top: 14px;
-	justify-content: flex-end;
-}
 </style>

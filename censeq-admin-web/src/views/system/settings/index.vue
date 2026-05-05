@@ -71,18 +71,17 @@
 				</el-table-column>
 			</el-table>
 			<!-- 分页 -->
-			<div class="table-pagination">
-				<el-pagination
-					v-model:current-page="page.current"
-					v-model:page-size="page.size"
-					:page-sizes="[10, 20, 50, 100]"
-					:total="state.total"
-					layout="total, sizes, prev, pager, next, jumper"
-					background
-					@current-change="onPageChange"
-					@size-change="() => { page.current = 1; onPageChange(); }"
-				/>
-			</div>
+			<el-pagination
+				class="pagination"
+				v-model:current-page="page.current"
+				v-model:page-size="page.size"
+				:page-sizes="[10, 20, 50, 100]"
+				:total="state.total"
+				layout="total, sizes, prev, pager, next, jumper"
+				background
+				@current-change="onPageChange"
+				@size-change="() => { page.current = 1; onPageChange(); }"
+			/>
 		</el-card>
 
 		<!-- 新增 / 编辑 弹窗 -->
@@ -566,17 +565,6 @@ onMounted(() => {
 	font-size: 14px;
 	color: #606266;
 	white-space: nowrap;
-}
-
-.table-pagination {
-	display: flex;
-	justify-content: flex-end;
-	padding: 16px 0 4px;
-}
-
-.settings-table-card :deep(.el-table__header-wrapper th.el-table__cell) {
-	background: #f5f7fa;
-	color: #606266;
 }
 
 .settings-dialog__title {

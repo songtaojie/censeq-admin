@@ -99,6 +99,7 @@
 					:page-sizes="[10, 20, 30]"
 					v-model:current-page="state.tableData.param.pageIndex"
 					background
+					size="small"
 					v-model:page-size="state.tableData.param.pageSize"
 					layout="total, sizes, prev, pager, next, jumper"
 					:total="state.tableData.total"
@@ -276,8 +277,4 @@ onMounted(() => {
 	justify-content: center;
 }
 
-.pagination {
-	margin-top: 14px;
-	justify-content: flex-end;
-}
 </style>

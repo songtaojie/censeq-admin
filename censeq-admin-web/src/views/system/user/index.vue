@@ -271,9 +271,5 @@ onMounted(() => {
 	}
 }
 
-.pagination {
-	margin-top: 14px;
-	justify-content: flex-end;
-}
 </style>
 

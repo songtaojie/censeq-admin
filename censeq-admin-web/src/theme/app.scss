@@ -276,6 +276,13 @@ body,
 	flex-direction: column;
 }
 
+/* 分页统一样式
+------------------------------- */
+.pagination {
+	justify-content: flex-end;
+	margin-top: 14px;
+}
+
 /* cursor 鼠标形状
 ------------------------------- */
 // 默认
