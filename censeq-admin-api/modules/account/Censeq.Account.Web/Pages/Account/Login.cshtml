@@ -60,10 +60,10 @@
                                     </li>
                                 </ul>
                             </div>
-                            <div class="row mb-3 col-12 platform-hint text-muted small" style="display: @(Model.AutoSelectEnterpriseTab ? "none" : "block")">
+                            <div class="mb-3 col-12 platform-hint text-muted small" style="display: @(Model.AutoSelectEnterpriseTab ? "none" : "block")">
                                 使用平台（宿主）管理员账号登录。
                             </div>
-                            <div class="row mb-4 col-12 enterprise-tenant-field" style="display: @(Model.AutoSelectEnterpriseTab ? "block" : "none")">
+                            <div class="mb-4 col-12 enterprise-tenant-field" style="display: @(Model.AutoSelectEnterpriseTab ? "block" : "none")">
                                 <div class="input-group">
                                     <span class="input-group-text"><i class="fa-solid fa-building"></i></span>
                                     @if (Model.IsEnterpriseTenantPresetFromLink)
@@ -87,7 +87,7 @@
                                 </span>
                             </div>
 
-                            <div class="row mb-4 col-12">
+                            <div class="mb-4 col-12">
                                 <div class="input-group">
                                     <span class="input-group-text"><i class="fa-solid fa-user"></i></span>
                                     <input asp-for="LoginInput.UserNameOrEmailAddress" value="admin@abp.io" placeholder="@Html.DisplayNameFor(m => m.LoginInput.UserNameOrEmailAddress)" class="form-control" />
@@ -95,7 +95,7 @@
                                 <span asp-validation-for="LoginInput.UserNameOrEmailAddress" class="text-danger"></span>
                             </div>
 
-                            <div class="row mb-4  col-12">
+                            <div class="mb-4  col-12">
                                 <div class="input-group">
                                     <span class="input-group-text"><i class="fa-solid fa-lock"></i></span>
                                     <input type="password" value="1q2w3E*" placeholder="@Html.DisplayNameFor(m => m.LoginInput.Password)" class="form-control" autocomplete="new-password" maxlength="@IdentityUserConsts.MaxPasswordLength" asp-for="LoginInput.Password" />
@@ -107,7 +107,7 @@
                             </div>
                             @if (Model.EnableRememberMe)
                             {
-                                <div class="row mb-4 col-12">
+                                <div class="mb-4 col-12">
                                     <label asp-for="LoginInput.RememberMe">
                                         <input asp-for="LoginInput.RememberMe">
                                         <strong>记住我</strong>
@@ -115,12 +115,12 @@
                                 </div>
                             }
 
-                            <div class="row mb-4 col-12">
-                                <div class="btn-group" role="group" aria-label="Basic mixed styles example">
-                                    <button type="submit" class="btn btn-primary" name="Action" value="Login">@L["Login"]</button>
+                            <div class="mb-4 col-12">
+                                <div class="d-grid gap-2" @(Model.ShowCancelButton ? "style=grid-template-columns:repeat(2,minmax(0,1fr));" : "")>
+                                    <button type="submit" class="btn btn-primary w-100" name="Action" value="Login">@L["Login"]</button>
                                     @if (Model.ShowCancelButton)
                                     {
-                                        <button type="button" name="Action" value="Cancel" class="btn btn-outline-secondary ms-2">@L["Cancel"]</button>
+                                        <button type="button" name="Action" value="Cancel" class="btn btn-outline-secondary w-100">@L["Cancel"]</button>
                                     }
                                 </div>
                             </div>

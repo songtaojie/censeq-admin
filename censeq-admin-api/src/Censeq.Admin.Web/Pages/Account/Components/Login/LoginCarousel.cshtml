@@ -1,24 +1,133 @@
-﻿<div id="loginCarousel" class="carousel slide top-50 login-carousel d-none d-xl-block mx-4" >
-   @*  <div class="carousel-indicators">
-        <button type="button" data-bs-target="#loginCarousel" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
-        <button type="button" data-bs-target="#loginCarousel" data-bs-slide-to="1" aria-label="Slide 2"></button>
-        <button type="button" data-bs-target="#loginCarousel" data-bs-slide-to="2" aria-label="Slide 3"></button>
-    </div> *@
-    <div class="carousel-inner" style="height:32rem;">
-        <div class="carousel-item h-100 active" data-bs-interval="5000">
-            <img src="\images\login-icon-two.svg" class="d-block w-100 login-icon-group-icon">
-        </div>
-        <div class="carousel-item h-100" data-bs-interval="5000">
-            <img src="\images\login-icon-two1.svg" class="d-block w-100 login-icon-group-icon">
-        </div>
-        <div class="carousel-item h-100" data-bs-interval="5000">
-            <img src="\images\login-icon-two2.svg" class="d-block w-100 login-icon-group-icon">
-        </div>
+﻿<div class="login-scene d-none d-xl-flex">
+    <!-- 粒子画布 -->
+    <canvas id="loginParticleCanvas" class="login-particle-canvas"></canvas>
+
+    <!-- SVG 几何装饰层 -->
+    <svg class="login-geo-svg" viewBox="0 0 480 520" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <!-- 大环 -->
+        <circle class="geo-ring geo-ring-1" cx="240" cy="260" r="180" />
+        <circle class="geo-ring geo-ring-2" cx="240" cy="260" r="130" />
+        <circle class="geo-ring geo-ring-3" cx="240" cy="260" r="80" />
+        <!-- 旋转六边形 -->
+        <polygon class="geo-hex geo-hex-1" points="240,80 296,112 296,176 240,208 184,176 184,112" />
+        <polygon class="geo-hex geo-hex-2" points="240,100 288,126 288,178 240,204 192,178 192,126" />
+        <!-- 扫描线 -->
+        <line class="geo-scan" x1="60" y1="260" x2="420" y2="260" />
+        <!-- 十字准星 -->
+        <g class="geo-crosshair">
+            <line x1="240" y1="220" x2="240" y2="300" />
+            <line x1="200" y1="260" x2="280" y2="260" />
+            <circle cx="240" cy="260" r="8" />
+            <circle cx="240" cy="260" r="14" />
+        </g>
+        <!-- 角落装饰框 -->
+        <g class="geo-corner geo-corner-tl"><path d="M60,120 L60,80 L100,80" /></g>
+        <g class="geo-corner geo-corner-tr"><path d="M380,80 L420,80 L420,120" /></g>
+        <g class="geo-corner geo-corner-bl"><path d="M60,400 L60,440 L100,440" /></g>
+        <g class="geo-corner geo-corner-br"><path d="M420,400 L420,440 L380,440" /></g>
+        <!-- 数据节点连线 -->
+        <g class="geo-nodes">
+            <line x1="120" y1="160" x2="240" y2="260" />
+            <line x1="360" y1="160" x2="240" y2="260" />
+            <line x1="120" y1="360" x2="240" y2="260" />
+            <line x1="360" y1="360" x2="240" y2="260" />
+            <circle cx="120" cy="160" r="5" />
+            <circle cx="360" cy="160" r="5" />
+            <circle cx="120" cy="360" r="5" />
+            <circle cx="360" cy="360" r="5" />
+        </g>
+        <!-- 浮动数字标签 -->
+        <text class="geo-label geo-label-1" x="80" y="155">SYS.INIT</text>
+        <text class="geo-label geo-label-2" x="340" y="155">AUTH.OK</text>
+        <text class="geo-label geo-label-3" x="68" y="375">NODE.01</text>
+        <text class="geo-label geo-label-4" x="338" y="375">SEC.LVL</text>
+        <!-- 中心脉冲圆 -->
+        <circle class="geo-pulse" cx="240" cy="260" r="40" />
+        <circle class="geo-pulse geo-pulse-2" cx="240" cy="260" r="40" />
+    </svg>
+
+    <!-- 底部文字 -->
+    <div class="login-scene-caption">
+        <span class="login-scene-caption-dot"></span>
+        <span>系统安全认证中心</span>
+        <span class="login-scene-caption-dot"></span>
     </div>
-    <button class="carousel-control-prev" type="button" data-bs-target="#loginCarousel" data-bs-slide="prev">
-        <i class="fa-solid fa-chevron-left"></i>
-    </button>
-    <button class="carousel-control-next" type="button" data-bs-target="#loginCarousel" data-bs-slide="next">
-        <i class="fa-solid fa-chevron-right"></i>
-    </button>
 </div>
+
+<script>
+(function () {
+    function initParticles() {
+        var canvas = document.getElementById('loginParticleCanvas');
+        if (!canvas) return;
+        var ctx = canvas.getContext('2d');
+        var W, H, pts = [], animId;
+
+        function resize() {
+            var parent = canvas.parentElement;
+            W = canvas.width = parent.offsetWidth;
+            H = canvas.height = parent.offsetHeight;
+        }
+
+        function rand(a, b) { return a + Math.random() * (b - a); }
+
+        function spawnParticles() {
+            pts = [];
+            var count = Math.floor(W * H / 10000);
+            for (var i = 0; i < count; i++) {
+                pts.push({
+                    x: rand(0, W), y: rand(0, H),
+                    vx: rand(-0.25, 0.25), vy: rand(-0.25, 0.25),
+                    r: rand(1, 2.5),
+                    a: rand(0.3, 0.9)
+                });
+            }
+        }
+
+        function draw() {
+            ctx.clearRect(0, 0, W, H);
+            var linkDist = 110;
+            for (var i = 0; i < pts.length; i++) {
+                var p = pts[i];
+                p.x += p.vx; p.y += p.vy;
+                if (p.x < 0) p.x = W; if (p.x > W) p.x = 0;
+                if (p.y < 0) p.y = H; if (p.y > H) p.y = 0;
+                ctx.beginPath();
+                ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+                ctx.fillStyle = 'rgba(180,160,255,' + p.a + ')';
+                ctx.fill();
+                for (var j = i + 1; j < pts.length; j++) {
+                    var q = pts[j];
+                    var dx = p.x - q.x, dy = p.y - q.y;
+                    var dist = Math.sqrt(dx * dx + dy * dy);
+                    if (dist < linkDist) {
+                        var alpha = (1 - dist / linkDist) * 0.35;
+                        ctx.beginPath();
+                        ctx.moveTo(p.x, p.y);
+                        ctx.lineTo(q.x, q.y);
+                        ctx.strokeStyle = 'rgba(160,130,255,' + alpha + ')';
+                        ctx.lineWidth = 0.6;
+                        ctx.stroke();
+                    }
+                }
+            }
+            animId = requestAnimationFrame(draw);
+        }
+
+        resize();
+        spawnParticles();
+        draw();
+        window.addEventListener('resize', function () {
+            cancelAnimationFrame(animId);
+            resize();
+            spawnParticles();
+            draw();
+        });
+    }
+
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', initParticles);
+    } else {
+        initParticles();
+    }
+}());
+</script>

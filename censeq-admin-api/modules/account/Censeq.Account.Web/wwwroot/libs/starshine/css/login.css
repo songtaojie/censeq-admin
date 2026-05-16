@@ -1,121 +1,572 @@
-﻿.login-container {
-    background-color: #353e54;
+﻿/* ===== Login Page — Aurora Gradient Theme ===== */
+
+:root {
+    --login-accent: #764ba2;
+    --login-text-primary: #ffffff;
+    --login-text-secondary: rgba(255,255,255,0.7);
+    --login-input-bg: rgba(255,255,255,0.12);
+    --login-input-border: rgba(255,255,255,0.25);
+    --login-card-bg: rgba(255,255,255,0.13);
+    --login-card-border: rgba(255,255,255,0.28);
 }
-    .login-container .login-right {
-        float: right;
-        background: var(--bs-white);
-        background-image: url(/images/bg.svg);
-        background-size: 100% auto;
-        background-position: 50% calc(50% - 15px);
-        background-attachment: fixed;
-        background-repeat: no-repeat;
-    }
-    .login-container .login-left .login-left-logo {
-        top: 2rem;
-        left: 2rem;
-        z-index: 1;
-        animation: logoAnimation .3s ease;
-    }
 
-        .login-container .login-left .login-left-logo img {
-            height: 4rem;
-        }
+/* ---- Container ---- */
+.login-container {
+    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 25%, #0f3460 50%, #533483 75%, #e94560 100%);
+    background-size: 400% 400%;
+    animation: auroraShift 18s ease infinite;
+    min-height: 100vh;
+    position: relative;
+    overflow: hidden;
+}
 
-    .login-container .login-left .login-carousel {
-        transform: translateY(-50%);
-    }
+.login-container::before {
+    content: '';
+    position: absolute;
+    width: 70vw; height: 70vw;
+    max-width: 900px; max-height: 900px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(102,126,234,0.35) 0%, transparent 65%);
+    top: -25%; left: -15%;
+    animation: orbDrift 14s ease-in-out infinite;
+    pointer-events: none; z-index: 0;
+}
 
-    .login-container .login-right .login-right-warp {
-        border: 1px solid rgba(var(--bs-primary-rgb), 0.5);
-        min-height: 31.25rem;
-    }
+.login-container::after {
+    content: '';
+    position: absolute;
+    width: 55vw; height: 55vw;
+    max-width: 700px; max-height: 700px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(233,69,96,0.28) 0%, transparent 65%);
+    bottom: -20%; right: -10%;
+    animation: orbDrift 10s ease-in-out infinite reverse;
+    pointer-events: none; z-index: 0;
+}
 
+/* ---- Left panel ---- */
+.login-container .login-left {
+    position: relative; z-index: 1; background: transparent;
+    display: flex; align-items: center; justify-content: center;
+}
+
+.login-container .login-left .login-left-logo {
+    top: 2rem; left: 2rem; z-index: 2;
+    animation: fadeSlideDown 0.6s cubic-bezier(0.16,1,0.3,1) both;
+}
+
+.login-container .login-left .login-left-logo img {
+    height: 4rem;
+    filter: drop-shadow(0 0 16px rgba(255,255,255,0.4)) brightness(1.2);
+}
+
+/* ---- Login Scene (粒子+几何) ---- */
+.login-scene {
+    position: relative;
+    width: 100%; min-height: 100vh;
+    flex: 1;
+    display: flex; align-items: center; justify-content: center;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+.login-particle-canvas {
+    position: absolute;
+    inset: 0; width: 100%; height: 100%;
+    pointer-events: none; z-index: 0;
+}
+
+.login-geo-svg {
+    position: relative; z-index: 1;
+    width: min(420px, 75%);
+    height: auto;
+    overflow: visible;
+    animation: fadeSlideDown 1s cubic-bezier(0.16,1,0.3,1) both;
+    animation-delay: 0.2s;
+}
+
+/* 大环 */
+.geo-ring {
+    fill: none;
+    stroke-width: 1;
+    transform-box: fill-box;
+    transform-origin: center center;
+}
+.geo-ring-1 {
+    stroke: rgba(180,160,255,0.18);
+    stroke-dasharray: 8 6;
+    animation: spinCW 40s linear infinite;
+}
+.geo-ring-2 {
+    stroke: rgba(233,69,96,0.2);
+    stroke-dasharray: 4 8;
+    animation: spinCCW 28s linear infinite;
+}
+.geo-ring-3 {
+    stroke: rgba(255,255,255,0.25);
+    stroke-dasharray: 2 4;
+    animation: spinCW 18s linear infinite;
+}
+
+/* 六边形 */
+.geo-hex {
+    fill: none;
+    stroke-width: 1;
+    transform-box: fill-box;
+    transform-origin: center center;
+}
+.geo-hex-1 {
+    stroke: rgba(150,130,255,0.35);
+    animation: spinCW 22s linear infinite;
+}
+.geo-hex-2 {
+    stroke: rgba(255,255,255,0.15);
+    animation: spinCCW 16s linear infinite;
+}
+
+/* 扫描线 */
+.geo-scan {
+    stroke: rgba(102,200,255,0.5);
+    stroke-width: 0.8;
+    stroke-dasharray: 360;
+    stroke-dashoffset: 360;
+    animation: scanLine 3s ease-in-out infinite;
+}
+
+/* 准星 */
+.geo-crosshair line, .geo-crosshair circle {
+    stroke: rgba(255,255,255,0.5);
+    fill: none;
+    stroke-width: 0.8;
+}
+.geo-crosshair circle:last-child {
+    transform-box: fill-box;
+    transform-origin: center center;
+    animation: pulseFade 2s ease-in-out infinite;
+}
+
+/* 角落框 */
+.geo-corner path {
+    fill: none;
+    stroke: rgba(255,255,255,0.45);
+    stroke-width: 1.5;
+    stroke-linecap: round;
+}
+
+/* 数据节点线 */
+.geo-nodes line {
+    stroke: rgba(160,130,255,0.2);
+    stroke-width: 0.6;
+    stroke-dasharray: 3 4;
+    animation: dashFlow 4s linear infinite;
+}
+.geo-nodes circle {
+    fill: rgba(200,180,255,0.7);
+    animation: nodeGlow 3s ease-in-out infinite alternate;
+}
+
+/* 标签文字 */
+.geo-label {
+    font-family: 'Courier New', monospace;
+    font-size: 8px;
+    fill: rgba(255,255,255,0.45);
+    letter-spacing: 0.08em;
+}
+.geo-label-1 { animation: labelBlink 4s step-end infinite; }
+.geo-label-2 { animation: labelBlink 4s step-end infinite 1.2s; }
+.geo-label-3 { animation: labelBlink 4s step-end infinite 2.4s; }
+.geo-label-4 { animation: labelBlink 4s step-end infinite 3.2s; }
+
+/* 脉冲圆 — 用 scale 代替 r 动画，兼容所有浏览器 */
+.geo-pulse {
+    fill: none;
+    stroke: rgba(233,69,96,0.6);
+    stroke-width: 1;
+    transform-box: fill-box;
+    transform-origin: center center;
+    animation: pulseExpand 2.5s ease-out infinite;
+}
+.geo-pulse-2 {
+    stroke: rgba(150,130,255,0.5);
+    transform-box: fill-box;
+    transform-origin: center center;
+    animation: pulseExpand 2.5s ease-out infinite 1.25s;
+}
+
+/* 底部说明文字 */
+.login-scene-caption {
+    position: relative; z-index: 2;
+    margin-top: 1.5rem;
+    display: flex; align-items: center; gap: 0.75rem;
+    font-size: 0.7rem; letter-spacing: 0.2em; text-transform: uppercase;
+    color: rgba(255,255,255,0.4);
+    font-family: 'Courier New', monospace;
+    animation: fadeSlideDown 1s cubic-bezier(0.16,1,0.3,1) both;
+    animation-delay: 0.6s;
+}
+.login-scene-caption-dot {
+    width: 4px; height: 4px; border-radius: 50%;
+    background: rgba(233,69,96,0.7);
+    animation: nodeGlow 2s ease-in-out infinite alternate;
+}
+
+/* ---- 新增 keyframes ---- */
+@keyframes spinCW  { to { transform: rotate(360deg);  } }
+@keyframes spinCCW { to { transform: rotate(-360deg); } }
+
+@keyframes scanLine {
+    0%   { stroke-dashoffset: 360; opacity: 0; }
+    10%  { opacity: 1; }
+    80%  { stroke-dashoffset: 0;   opacity: 1; }
+    100% { stroke-dashoffset: 0;   opacity: 0; }
+}
+
+@keyframes pulseFade {
+    0%,100% { opacity: 0.3; transform: scale(1); }
+    50%     { opacity: 0.9; transform: scale(1.15); }
+}
+
+@keyframes pulseExpand {
+    0%   { transform: scale(1);    opacity: 0.8; }
+    100% { transform: scale(2.25); opacity: 0; }
+}
+
+@keyframes dashFlow {
+    to { stroke-dashoffset: -14; }
+}
+
+@keyframes nodeGlow {
+    from { opacity: 0.4; }
+    to   { opacity: 1; }
+}
+
+@keyframes labelBlink {
+    0%,48%,52%,100% { opacity: 1; }
+    50%             { opacity: 0.1; }
+}
+
+/* ---- Right panel ---- */
+.login-container .login-right {
+    position: relative; z-index: 1;
+    background: transparent !important;
+    background-image: none !important;
+    display: flex; align-items: center; justify-content: center;
+}
+
+/* ---- Card ---- */
+.login-container .login-right .login-right-warp {
+    border: 1px solid var(--login-card-border) !important;
+    border-radius: 24px;
+    min-height: 31.25rem;
+    background: var(--login-card-bg);
+    backdrop-filter: blur(32px) saturate(1.4);
+    -webkit-backdrop-filter: blur(32px) saturate(1.4);
+    box-shadow:
+        0 0 0 1px rgba(255,255,255,0.08),
+        0 24px 80px rgba(0,0,0,0.35),
+        inset 0 1px 0 rgba(255,255,255,0.25),
+        inset 0 -1px 0 rgba(255,255,255,0.05);
+    animation: cardReveal 0.8s cubic-bezier(0.16,1,0.3,1) both;
+    animation-delay: 0.1s;
+    overflow: hidden;
+    position: relative;
+}
+
+/* Shimmer top edge */
+.login-container .login-right .login-right-warp::before {
+    content: '';
+    position: absolute;
+    top: 0; left: -100%;
+    width: 300%; height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.6), rgba(255,255,255,0.2), transparent);
+    animation: shimmerSlide 5s linear infinite;
+    z-index: 3;
+}
+
+/* ---- Animated border light (hidden for aurora theme) ---- */
 .login-container .login-right .login-right-warp .login-right-warp-one,
 .login-container .login-right .login-right-warp .login-right-warp-two {
-    position: absolute;
-    display: block;
-    width: inherit;
-    height: inherit;
-}
-    .login-container .login-right .login-right-warp .login-right-warp-one:before, 
-    .login-container .login-right .login-right-warp .login-right-warp-one:after, 
-    .login-container .login-right .login-right-warp .login-right-warp-two:before, 
-    .login-container .login-right .login-right-warp .login-right-warp-two:after {
-        content: "";
-        position: absolute;
-        z-index: 1;
-    }
-
-    .login-container .login-right .login-right-warp .login-right-warp-one:before {
-        filter: hue-rotate(0deg);
-        top: 0px;
-        left: 0;
-        width: 100%;
-        height: 1px;
-        background: linear-gradient(90deg, transparent, var(--el-color-primary));
-        animation: loginLeft 3s linear infinite;
-    }
-    .login-container .login-right .login-right-warp .login-right-warp-one:after {
-        filter: hue-rotate(0deg);
-        top: -100%;
-        right: 2px;
-        width: 1px;
-        height: 100%;
-        background: linear-gradient(180deg, transparent, var(--el-color-primary));
-        animation: loginTop 3s linear infinite;
-        animation-delay: 0.7s;
-    }
-
-    .login-container .login-right .login-right-warp .login-right-warp-two:before {
-        filter: hue-rotate(0deg);
-        bottom: 2px;
-        right: -100%;
-        width: 100%;
-        height: 1px;
-        background: linear-gradient(270deg, transparent, var(--el-color-primary));
-        animation: loginRight 3s linear infinite;
-        animation-delay: 1.4s;
-    }
-    .login-container .login-right .login-right-warp .login-right-warp-two:after {
-        filter: hue-rotate(0deg);
-        bottom: -100%;
-        left: 0px;
-        width: 1px;
-        height: 100%;
-        background: linear-gradient(360deg, transparent, var(--el-color-primary));
-        animation: loginBottom 3s linear infinite;
-        animation-delay: 2.1s;
-    }
-        .login-container .login-right .login-right-warp .login-right-warp-main {
-            background-color: var(--bs-white);
-        }
-
-            .login-container .login-right .login-right-warp .login-right-warp-main .login-right-warp-main-title {
-                height: 8rem;
-                line-height: 8rem;
-                animation: logoAnimation .3s ease;
-                animation-delay: .3s;
-                color: var(--bs-primary);
-            }
-
-.login-container .login-left .login-icon-group-icon {
-    width: 85%;
-    height: 85%;
-    position: absolute;
-    left: 10%;
-    top: 50%;
-    transform: translateY(-50%) translateZ(0);
+    display: none;
 }
 
+/* border pseudo-elements not used in aurora theme */
+
+/* ---- Card inner ---- */
+.login-container .login-right .login-right-warp .login-right-warp-main {
+    background: transparent !important;
+    position: relative; z-index: 2;
+}
+
+/* ---- Title ---- */
+.login-container .login-right .login-right-warp .login-right-warp-main .login-right-warp-main-title {
+    height: auto !important;
+    line-height: 1.2 !important;
+    padding: 2.5rem 0 1.5rem;
+    animation: fadeSlideDown 0.6s cubic-bezier(0.16,1,0.3,1) both;
+    animation-delay: 0.3s;
+    color: #ffffff !important;
+    font-size: 1.8rem !important;
+    font-weight: 800 !important;
+    letter-spacing: -0.03em;
+    text-shadow: 0 2px 20px rgba(0,0,0,0.3);
+}
+
+/* ---- Tabs ---- */
+.login-right-warp-main .nav-tabs {
+    border-bottom: 1px solid rgba(255,255,255,0.2);
+}
+
+.login-right-warp-main .nav-tabs .nav-link {
+    color: rgba(255,255,255,0.6);
+    border: none;
+    border-bottom: 2px solid transparent;
+    background: transparent;
+    padding: 0.5rem 1.25rem;
+    font-size: 0.875rem; font-weight: 500;
+    border-radius: 0;
+    transition: all 0.2s ease;
+}
+
+.login-right-warp-main .nav-tabs .nav-link:hover {
+    color: #ffffff;
+    background: rgba(255,255,255,0.08);
+}
+
+.login-right-warp-main .nav-tabs .nav-link.active {
+    color: #ffffff !important;
+    background: transparent !important;
+    border-bottom-color: rgba(255,255,255,0.9);
+}
+
+/* ---- Inputs ---- */
+/* 隐藏浏览器原生密码显示/填充图标 */
+.login-right-warp-main input[type="password"]::-ms-reveal,
+.login-right-warp-main input[type="password"]::-ms-clear { display: none !important; }
+.login-right-warp-main input::-webkit-credentials-auto-fill-button,
+.login-right-warp-main input::-webkit-contacts-auto-fill-button {
+    visibility: hidden !important; pointer-events: none !important;
+    width: 0 !important; height: 0 !important; margin: 0 !important;
+}
+
+/*
+ * 将左侧图标改为绝对定位（浮于输入框内部），
+ * form-control 保留完整四边边框并留出左侧 padding，
+ * 彻底避免任何元素覆盖输入文字。
+ */
+.login-right-warp-main .input-group {
+    position: relative;
+    display: flex;
+    align-items: stretch;
+    border-radius: 10px;
+    transition: border-color 0.25s ease;
+}
+
+/* 聚焦时高亮边框 */
+.login-right-warp-main .input-group:focus-within .form-control,
+.login-right-warp-main .input-group:focus-within .btn.btn-secondary {
+    border-color: rgba(255,255,255,0.75);
+}
+
+/* 左侧图标绝对定位在输入框内，不占 flex 宽度，不影响文字区域 */
+.login-right-warp-main .input-group-text {
+    position: absolute;
+    left: 0; top: 0; bottom: 0; z-index: 4;
+    display: flex; align-items: center; justify-content: center;
+    width: 2.75rem;
+    background: transparent !important;
+    border: none !important;
+    color: rgba(255,255,255,0.65);
+    pointer-events: none;
+    padding: 0;
+}
+
+/* 输入框：完整四边边框 + 左侧 padding 为图标留出空间 */
+.login-right-warp-main .form-control {
+    background: var(--login-input-bg);
+    border: 1px solid var(--login-input-border);
+    border-radius: 10px !important;
+    color: #ffffff !important;
+    padding: 0.68rem 1rem 0.68rem 2.75rem;
+    font-size: 0.9rem;
+    outline: none !important;
+    transition: background 0.2s, border-color 0.25s;
+    flex: 1; min-width: 0;
+}
+
+.login-right-warp-main .form-control::placeholder {
+    color: rgba(255,255,255,0.45);
+}
+
+.login-right-warp-main .form-control:focus {
+    background: rgba(255,255,255,0.18);
+    border-color: rgba(255,255,255,0.75);
+    box-shadow: none !important;
+    outline: none !important;
+    color: #ffffff !important;
+}
+
+/* 密码框：右侧有按钮，去掉右侧圆角和右边框 */
+.login-right-warp-main .input-group .form-control[type="password"] {
+    border-radius: 10px 0 0 10px !important;
+    border-right: none;
+}
+
+/* 密码可见性切换按钮 */
+.login-right-warp-main .btn.btn-secondary {
+    background: rgba(255,255,255,0.1);
+    border: 1px solid var(--login-input-border);
+    border-left: none;
+    border-radius: 0 10px 10px 0 !important;
+    color: rgba(255,255,255,0.7);
+    display: flex; align-items: center; padding: 0 0.875rem;
+    transition: all 0.2s;
+    outline: none !important;
+}
+
+.login-right-warp-main .btn.btn-secondary:hover {
+    background: rgba(255,255,255,0.2);
+    color: #ffffff;
+}
+
+.login-right-warp-main .btn.btn-secondary:focus {
+    box-shadow: none !important;
+    outline: none !important;
+}
+
+/* ---- Submit button ---- */
+.login-right-warp-main .btn-primary {
+    background: #ffffff;
+    border: none; border-radius: 12px;
+    padding: 0.7rem 2.5rem;
+    font-weight: 700; font-size: 0.95rem;
+    letter-spacing: 0.01em;
+    color: #764ba2 !important;
+    box-shadow: 0 6px 24px rgba(0,0,0,0.2);
+    transition: all 0.25s ease;
+    position: relative; overflow: hidden;
+}
+
+.login-right-warp-main .btn-primary::after {
+    content: ''; position: absolute; inset: 0;
+    background: linear-gradient(135deg, rgba(255,255,255,0.3) 0%, transparent 60%);
+    pointer-events: none;
+}
+
+.login-right-warp-main .btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 32px rgba(0,0,0,0.3);
+    background: rgba(255,255,255,0.92);
+    color: #533483 !important;
+}
+
+.login-right-warp-main .btn-primary:active { transform: translateY(0); box-shadow: 0 4px 12px rgba(0,0,0,0.2); }
+
+/* ---- Misc ---- */
+.login-right-warp-main label {
+    color: var(--login-text-secondary);
+    font-size: 0.875rem; cursor: pointer;
+    display: flex; align-items: center; gap: 0.5rem;
+}
+
+.login-right-warp-main input[type="checkbox"] {
+    accent-color: var(--login-accent); width: 16px; height: 16px;
+}
+
+.login-right-warp-main a {
+    color: rgba(255,255,255,0.9) !important;
+    text-decoration: none !important;
+    font-size: 0.875rem; font-weight: 500; transition: opacity 0.2s;
+}
+
+.login-right-warp-main a:hover { opacity: 0.7; }
+
+.login-right-warp-main strong {
+    color: rgba(255,255,255,0.65);
+    font-weight: 400; font-size: 0.875rem;
+}
+
+.login-right-warp-main .platform-hint {
+    color: rgba(255,255,255,0.55) !important; font-size: 0.8rem;
+}
+
+.login-right-warp-main .fs-6.text-secondary {
+    color: rgba(255,255,255,0.4) !important;
+    font-size: 0.75rem !important; line-height: 1.6;
+    border-top: 1px solid rgba(255,255,255,0.12);
+    padding-top: 1rem;
+}
+
+.login-right-warp-main .text-danger { font-size: 0.78rem; margin-top: 0.25rem; color: #ffb3c1 !important; }
+.login-right-warp-main .form-text { color: rgba(255,255,255,0.55); font-size: 0.78rem; }
+
+/* ---- Responsive ---- */
 @media screen and (min-width: 1200px) {
-    .login-right-warp {
-        max-width: 32rem;
-    }
+    .login-right-warp { max-width: 32rem; width: 32rem; }
 }
-
 
 @media (min-width: 992px) {
-    .login-right-warp {
-        max-width: 30rem;
-    }
+    .login-right-warp { max-width: 30rem; width: 30rem; }
+}
+
+@media (max-width: 576px) {
+    .login-right-warp { border-radius: 18px; margin: 1rem; }
+}
+
+/* ===== Keyframes ===== */
+
+@keyframes auroraShift {
+    0%   { background-position: 0% 50%; }
+    50%  { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+@keyframes orbDrift {
+    0%,100% { transform: translate(0,0) scale(1); }
+    30%     { transform: translate(3%,-4%) scale(1.06); }
+    70%     { transform: translate(-3%,3%) scale(0.95); }
+}
+
+@keyframes shimmerSlide {
+    0%   { left: -100%; }
+    100% { left: 100%; }
+}
+
+@keyframes fadeSlideDown {
+    from { opacity: 0; transform: translateY(-14px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes cardReveal {
+    from { opacity: 0; transform: translateY(24px) scale(0.96); }
+    to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+@keyframes iconFloat {
+    0%,100% { transform: translateY(-50%) translateY(0); }
+    50%     { transform: translateY(-50%) translateY(-16px); }
+}
+
+@keyframes logoAnimation {
+    from { opacity: 0; transform: translateY(-8px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes loginLeft {
+    0%   { transform: translateX(-100%); }
+    100% { transform: translateX(100%); }
+}
+
+@keyframes loginTop {
+    0%   { transform: translateY(-100%); }
+    100% { transform: translateY(100%); }
+}
+
+@keyframes loginRight {
+    0%   { transform: translateX(100%); }
+    100% { transform: translateX(-100%); }
+}
+
+@keyframes loginBottom {
+    0%   { transform: translateY(100%); }
+    100% { transform: translateY(-100%); }
 }

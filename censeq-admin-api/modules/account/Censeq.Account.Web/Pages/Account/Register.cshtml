@@ -1,95 +1,296 @@
 @page
 @using Microsoft.AspNetCore.Mvc.Localization
 @using Censeq.Account.Localization
-@using Volo.Abp.AspNetCore.Mvc.UI.Theming;
+@using Volo.Abp.AspNetCore.Mvc.UI.Theming
 @model Censeq.Account.Web.Pages.Account.RegisterModel
 @inject IHtmlLocalizer<AccountResource> L
 @inject IThemeManager ThemeManager
-@section styles {
-	<link href="~/libs/starshine/css/register.css" rel="stylesheet" asp-append-version="true" />
+@{
+    Layout = ThemeManager.CurrentTheme.GetAccountLayout();
 }
-<div class="card shadow-sm rounded mb-5 align-self-center vw-sm-80 vw-lg-60 vw-xl-50">
-	<div class="card-body p-0 d-flex ">
-		<div class="left-panel d-flex flex-column justify-content-center w-50 p-5 text-white"
-			 style="background: linear-gradient(135deg, #979fa7, #353e54);">
-			<h2 class="fw-bold">企业级 DevOps 研发管理平台</h2>
-			<p>Gitee 已成为开发工作的依赖，从个人私有仓库到企业版，每一项解决方案都旨在流畅。</p>
-		</div>
-		<div class="flex-grow-1  p-5">
-			<div class="d-flex justify-content-between align-items-center">
-				<h4 class="mb-0">@L["Register"]</h4>
-				<strong class="text-secondary">
-					@L["AlreadyRegistered"]
-					<a href="@Url.Page("./Login", new { returnUrl = Model.ReturnUrl, returnUrlHash = Model.ReturnUrlHash })"
-					   class="text-decoration-none">@L["Login"]</a>
-				</strong>
-			</div>
+@section styles {
+    <link rel="stylesheet" href="~/libs/starshine/css/login.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/libs/starshine/css/login.bg.css" asp-append-version="true" />
+    <style>
+        /* ===== Register — Identity Genesis 嵌合卡片 ===== */
+        .reg-scene {
+            display: flex; align-items: center; justify-content: center;
+            min-height: 100vh; width: 100%; padding: 2rem 1rem;
+        }
 
-			@if (Model.EnableLocalRegister || Model.IsExternalLogin)
-			{
-				<form method="post" class="mt-4">
-					@if (Model.EnableLocalRegister || Model.IsExternalLogin)
-					{
-						<div class="mb-4">
-							<div class="input-group">
-								<span class="input-group-text"><i class="fa-solid fa-user"></i></span>
-								<input asp-for="Input.UserName" placeholder="@Html.DisplayNameFor(m => m.Input.UserName)" class="form-control" />
-							</div>
-							<span asp-validation-for="Input.UserName" class="text-danger"></span>
-						</div>
-					}
-					@if (Model.EnableLocalRegister || Model.IsExternalLogin)
-					{
-						<div class="mb-4">
-							<div class="input-group">
-								<span class="input-group-text"><i class="fa-solid fa-envelope"></i></span>
-								<input asp-for="Input.EmailAddress" placeholder="@Html.DisplayNameFor(m => m.Input.EmailAddress)" class="form-control" />
-							</div>
-							<span asp-validation-for="Input.EmailAddress" class="text-danger"></span>
-						</div>
-					}
+        /* 主卡片 — 横向双区嵌合 */
+        .reg-card {
+            display: flex;
+            width: min(56rem, calc(100vw - 2rem));
+            border-radius: 28px;
+            overflow: hidden;
+            background: rgba(255,255,255,0.08);
+            border: 1px solid rgba(255,255,255,0.2);
+            box-shadow:
+                0 0 0 1px rgba(255,255,255,0.07),
+                0 32px 100px rgba(0,0,0,0.45),
+                inset 0 1px 0 rgba(255,255,255,0.18);
+            backdrop-filter: blur(40px) saturate(1.5);
+            -webkit-backdrop-filter: blur(40px) saturate(1.5);
+            animation: cardReveal 0.9s cubic-bezier(0.16,1,0.3,1) both;
+        }
 
-					@if (!Model.IsExternalLogin && Model.EnableLocalRegister)
-					{
-						<div class="mb-4">
-							<div class="input-group">
-								<span class="input-group-text"><i class="fa-solid fa-lock"></i></span>
-								<input asp-for="Input.Password" placeholder="@Html.DisplayNameFor(m => m.Input.Password)" class="form-control" />
-							</div>
-							<span asp-validation-for="Input.Password" class="text-danger"></span>
-						</div>
-					}
+        /* ── 左侧装饰条 ── */
+        .reg-accent {
+            flex: 1 1 50%; min-width: 0;
+            position: relative; overflow: hidden;
+            display: flex; flex-direction: column;
+            align-items: center; justify-content: center;
+            gap: 2rem; padding: 2.5rem 1rem;
+            background: linear-gradient(160deg,
+                rgba(80,60,180,0.85) 0%,
+                rgba(140,60,160,0.8) 40%,
+                rgba(220,60,100,0.7) 100%
+            );
+        }
 
-					@if (Model.EnableLocalRegister || Model.IsExternalLogin)
-					{
-						<div class="mb-4 d-grid">
-							<div class="input-group">
-								<button type="submit" class="btn btn-primary w-100" name="button" value="login">@L["Register"]</button>
-							</div>
-						</div>
-					}
-				</form>
-			}
+        /* 极光扫光层 */
+        .reg-accent::before {
+            content: '';
+            position: absolute; inset: 0;
+            background: linear-gradient(135deg,
+                rgba(255,255,255,0.18) 0%,
+                transparent 45%,
+                rgba(255,255,255,0.06) 100%
+            );
+            animation: auroraShift 10s ease-in-out infinite;
+        }
 
-			@if (!Model.IsExternalLogin && Model.VisibleExternalProviders != null && Model.VisibleExternalProviders.Any())
-			{
-				<div class="mt-2">
-					<h5>@L["OrRegisterWith"]</h5>
-					<form asp-page="./Login" asp-page-handler="ExternalLogin" asp-route-returnUrl="@Model.ReturnUrl"
-						  asp-route-returnUrlHash="@Model.ReturnUrlHash" method="post">
-						@foreach (var provider in Model.VisibleExternalProviders)
-						{
-							<button type="submit" class="btn btn-primary m-1" name="provider" value="@provider.AuthenticationScheme"
-									title="@L["RegisterUsingYourProviderAccount", provider.DisplayName]">
-								@provider.DisplayName
-							</button>
-						}
-					</form>
-				</div>
-			}
+        /* 底部暗角遮罩 */
+        .reg-accent::after {
+            content: '';
+            position: absolute; bottom: 0; left: 0; right: 0;
+            height: 40%;
+            background: linear-gradient(to top, rgba(0,0,0,0.25), transparent);
+            pointer-events: none;
+        }
 
-		</div>
-	</div>
+        /* 圆形图标容器 */
+        .reg-accent-icon {
+            position: relative; z-index: 1;
+            width: 4.5rem; height: 4.5rem;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.15);
+            border: 1px solid rgba(255,255,255,0.35);
+            display: flex; align-items: center; justify-content: center;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.25), inset 0 1px 0 rgba(255,255,255,0.25);
+            animation: iconFloat 6s ease-in-out infinite;
+        }
+
+        .reg-accent-icon svg {
+            width: 2rem; height: 2rem;
+            fill: none; stroke: #fff;
+            stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round;
+        }
+
+        /* 装饰点阵 */
+        .reg-accent-dots {
+            position: absolute; z-index: 1;
+            top: 1.5rem; right: 1.2rem;
+            display: grid;
+            grid-template-columns: repeat(3, 6px);
+            gap: 5px;
+        }
+        .reg-accent-dots span {
+            width: 4px; height: 4px; border-radius: 50%;
+            background: rgba(255,255,255,0.35);
+            display: block;
+        }
+        .reg-accent-dots span:nth-child(even) { opacity: 0.55; }
+
+        /* 竖排标题 */
+        .reg-accent-label {
+            position: relative; z-index: 1;
+            writing-mode: vertical-rl;
+            text-orientation: upright;
+            font-size: 1.05rem; font-weight: 800;
+            letter-spacing: 0.2em;
+            color: rgba(255,255,255,0.92);
+            text-shadow: 0 2px 16px rgba(0,0,0,0.3);
+        }
+
+        /* 底部细分割线 */
+        .reg-accent-footer {
+            position: absolute; z-index: 1;
+            bottom: 1.5rem;
+            font-size: 0.6rem;
+            letter-spacing: 0.18em;
+            color: rgba(255,255,255,0.35);
+            font-family: 'Courier New', monospace;
+        }
+
+        /* ── 右侧表单区 ── */
+        .reg-form-panel {
+            flex: 1 1 50%; min-width: 0;
+            display: flex; flex-direction: column;
+            justify-content: center; padding: 2.5rem 3rem;
+            animation: fadeSlideDown 0.7s cubic-bezier(0.16,1,0.3,1) both;
+            animation-delay: 0.2s;
+        }
+
+        .reg-form-title {
+            font-size: 1.55rem; font-weight: 800;
+            color: #fff; letter-spacing: -0.02em;
+            margin-bottom: 0.35rem;
+            text-shadow: 0 2px 20px rgba(0,0,0,0.25);
+        }
+
+        .reg-form-sub {
+            font-size: 0.8rem;
+            color: rgba(255,255,255,0.5);
+            margin-bottom: 1.75rem;
+        }
+
+        .reg-form-sub a {
+            color: rgba(200,160,255,0.9) !important;
+            text-decoration: none !important;
+            font-weight: 600;
+            transition: color 0.2s;
+        }
+        .reg-form-sub a:hover { color: #fff !important; }
+
+        /* 表单本体复用 login-right-warp-main 输入框样式 */
+        .reg-form-panel .login-right-warp-main { width: 100%; }
+
+        /* 外部登录分隔 */
+        .reg-ext-divider {
+            display: flex; align-items: center; gap: 0.75rem;
+            margin: 1.25rem 0 1rem;
+        }
+        .reg-ext-divider::before, .reg-ext-divider::after {
+            content: ''; flex: 1; height: 1px;
+            background: rgba(255,255,255,0.12);
+        }
+        .reg-ext-divider span {
+            font-size: 0.68rem; letter-spacing: 0.12em;
+            color: rgba(255,255,255,0.3);
+            font-family: 'Courier New', monospace;
+        }
+
+        /* 响应式 — 小屏堆叠 */
+        @@media (max-width: 640px) {
+            .reg-card { flex-direction: column; }
+            .reg-accent {
+                width: 100%; flex-direction: row;
+                padding: 1.25rem 1.5rem;
+                justify-content: flex-start; gap: 1rem;
+            }
+            .reg-accent-label {
+                writing-mode: horizontal-tb;
+                text-orientation: mixed;
+                letter-spacing: 0.05em;
+                font-size: 0.95rem;
+            }
+            .reg-accent::after { display: none; }
+            .reg-accent-footer { display: none; }
+            .reg-form-panel { padding: 1.75rem 1.5rem; }
+        }
+    </style>
+}
+
+<div class="login-container reg-scene">
+    <div class="reg-card">
+
+        <!-- 左侧装饰条 -->
+        <div class="reg-accent">
+            <!-- 点阵装饰 -->
+            <div class="reg-accent-dots">
+                @for (int i = 0; i < 9; i++) { <span></span> }
+            </div>
+
+            <!-- 用户图标 -->
+            <div class="reg-accent-icon">
+                <svg viewBox="0 0 24 24">
+                    <circle cx="12" cy="8" r="4"/>
+                    <path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/>
+                    <line x1="19" y1="8" x2="23" y2="8"/>
+                    <line x1="21" y1="6" x2="21" y2="10"/>
+                </svg>
+            </div>
+
+            <!-- 竖排标题 -->
+            <div class="reg-accent-label">账户注册</div>
+
+            <!-- 底部标签 -->
+            <div class="reg-accent-footer">NEW · IDENTITY</div>
+        </div>
+
+        <!-- 右侧表单区 -->
+        <div class="reg-form-panel">
+            <div class="reg-form-title">@L["Register"]</div>
+            <div class="reg-form-sub">
+                @L["AlreadyRegistered"]
+                <a href="@Url.Page("./Login", new { returnUrl = Model.ReturnUrl, returnUrlHash = Model.ReturnUrlHash })">@L["Login"]</a>
+            </div>
+
+            @if (Model.EnableLocalRegister || Model.IsExternalLogin)
+            {
+                <form method="post" class="needs-validation" novalidate>
+                    <div class="login-right-warp-main">
+                        @if (Model.EnableLocalRegister || Model.IsExternalLogin)
+                        {
+                            <div class="mb-3">
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="fa-solid fa-user"></i></span>
+                                    <input asp-for="Input.UserName" placeholder="@Html.DisplayNameFor(m => m.Input.UserName)" class="form-control" />
+                                </div>
+                                <span asp-validation-for="Input.UserName" class="text-danger"></span>
+                            </div>
+                        }
+                        @if (Model.EnableLocalRegister || Model.IsExternalLogin)
+                        {
+                            <div class="mb-3">
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="fa-solid fa-envelope"></i></span>
+                                    <input asp-for="Input.EmailAddress" placeholder="@Html.DisplayNameFor(m => m.Input.EmailAddress)" class="form-control" />
+                                </div>
+                                <span asp-validation-for="Input.EmailAddress" class="text-danger"></span>
+                            </div>
+                        }
+                        @if (!Model.IsExternalLogin && Model.EnableLocalRegister)
+                        {
+                            <div class="mb-4">
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="fa-solid fa-lock"></i></span>
+                                    <input asp-for="Input.Password" placeholder="@Html.DisplayNameFor(m => m.Input.Password)" class="form-control" />
+                                </div>
+                                <span asp-validation-for="Input.Password" class="text-danger"></span>
+                            </div>
+                        }
+                        @if (Model.EnableLocalRegister || Model.IsExternalLogin)
+                        {
+                            <div class="d-grid mb-3">
+                                <button type="submit" class="btn btn-primary" name="button" value="login">@L["Register"]</button>
+                            </div>
+                        }
+                    </div>
+                </form>
+            }
+
+            @if (!Model.IsExternalLogin && Model.VisibleExternalProviders != null && Model.VisibleExternalProviders.Any())
+            {
+                <div class="reg-ext-divider"><span>@L["OrRegisterWith"]</span></div>
+                <form asp-page="./Login" asp-page-handler="ExternalLogin"
+                      asp-route-returnUrl="@Model.ReturnUrl"
+                      asp-route-returnUrlHash="@Model.ReturnUrlHash" method="post">
+                    @foreach (var provider in Model.VisibleExternalProviders)
+                    {
+                        <button type="submit" class="btn btn-primary m-1" name="provider"
+                                value="@provider.AuthenticationScheme"
+                                title="@L["RegisterUsingYourProviderAccount", provider.DisplayName]">
+                            @provider.DisplayName
+                        </button>
+                    }
+                </form>
+            }
+        </div>
+
+    </div>
 </div>
 
 
