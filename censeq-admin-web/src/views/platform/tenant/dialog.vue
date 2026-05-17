@@ -150,26 +150,48 @@
 							</el-row>
 						</div>
 					</el-tab-pane>
-					<el-tab-pane v-if="state.dialog.type === 'edit'" label="数据库连接" name="connection">
-						<div v-if="state.connectionStringUi.forbidden" class="mb15">
-							<el-alert type="info" show-icon :closable="false" title="当前账号无「管理连接串」权限，仅可修改租户名称与编码。" />
-						</div>
-						<template v-else>
+					<el-tab-pane label="数据隔离" name="connection">
+						<div class="tenant-isolation-panel">
+							<el-alert
+								type="info"
+								show-icon
+								:closable="false"
+								title="共享库模式使用系统默认连接串并依赖 TenantId 隔离；独立库模式会为当前租户保存默认数据库连接串。"
+							/>
+							<el-alert
+								v-if="state.connectionStringUi.forbidden"
+								type="warning"
+								show-icon
+								:closable="false"
+								title="当前账号无「管理连接串」权限，仅可查看当前隔离方式，不能修改连接串配置。"
+							/>
 							<el-row :gutter="24">
 								<el-col :span="24" class="mb20">
-									<el-form-item label="连接字符串" label-width="90px">
-										<el-input v-model="state.ruleForm.defaultConnectionString" type="textarea"
-											:rows="5" placeholder="留空则使用系统默认连接串" />
+									<el-form-item label="隔离方式" label-width="90px">
+										<el-radio-group v-model="state.isolationMode" :disabled="state.connectionStringUi.forbidden" @change="onIsolationModeChange">
+											<el-radio label="shared">共享库（TenantId 隔离）</el-radio>
+											<el-radio label="dedicated">独立库（连接串隔离）</el-radio>
+										</el-radio-group>
 									</el-form-item>
 								</el-col>
-								<el-col v-if="state.connectionStringUi.hasExisting" :span="24" class="mb10">
-									<el-form-item label-width="90px">
-										<el-button type="danger" plain size="small" icon="ele-Delete"
-											@click="onClearConnectionString">清除已保存的连接串</el-button>
+								<el-col :span="24" class="mb20">
+									<div v-if="state.isolationMode === 'shared'" class="isolation-tip-card shared">
+										<strong>当前将使用共享库模式</strong>
+										<p>租户数据会写入系统默认数据库，并通过 TenantId 进行逻辑隔离。此模式下无需配置租户专属连接串。</p>
+									</div>
+									<div v-else class="isolation-tip-card dedicated">
+										<strong>当前将使用独立库模式</strong>
+										<p>需要为该租户保存默认数据库连接串。保存后，该租户的数据库迁移与运行时解析都会走租户独立库。</p>
+									</div>
+								</el-col>
+								<el-col v-if="state.isolationMode === 'dedicated' && !state.connectionStringUi.forbidden" :span="24" class="mb20">
+									<el-form-item label="连接字符串" label-width="90px" prop="defaultConnectionString">
+										<el-input v-model="state.ruleForm.defaultConnectionString" type="textarea"
+											:rows="5" placeholder="请输入租户独立库连接串" />
 									</el-form-item>
 								</el-col>
 							</el-row>
-						</template>
+						</div>
 					</el-tab-pane>
 				</el-tabs>
 			</el-form>
@@ -187,13 +209,16 @@
 <script setup lang="ts" name="systemTenantDialog">
 import { reactive, ref, nextTick, computed } from 'vue';
 import type { FormInstance, FormRules } from 'element-plus';
-import { ElMessage, ElMessageBox } from 'element-plus';
+import { ElMessage } from 'element-plus';
 import { useTenantApi } from '/@/api/apis';
 import type { TenantDto } from '/@/api/models/tenant';
 
 const emit = defineEmits(['refresh']);
 
 const formRef = ref<FormInstance>();
+
+type IsolationMode = 'shared' | 'dedicated';
+type TenantDialogRow = TenantDto & { _hasConnection?: boolean };
 
 const emptyForm = () => ({
 	name: '',
@@ -223,6 +248,7 @@ const state = reactive({
 		title: '',
 		submitTxt: '',
 	},
+	isolationMode: 'shared' as IsolationMode,
 	activeTab: 'basic',
 	submitting: false,
 	connectionStringUi: {
@@ -249,6 +275,10 @@ const formRules = computed<FormRules>(() => {
 		icon: [{ max: 512, message: '最大 512 个字符', trigger: 'blur' }],
 		copyright: [{ max: 256, message: '最大 256 个字符', trigger: 'blur' }],
 		icpNo: [{ max: 64, message: '最大 64 个字符', trigger: 'blur' }],
+		defaultConnectionString:
+			state.isolationMode === 'dedicated' && !state.connectionStringUi.forbidden
+				? [{ required: true, message: '独立库模式下请输入连接字符串', trigger: 'blur' }]
+				: [],
 		icpAddress: [
 			{ type: 'url', message: '请输入正确的 URL', trigger: 'blur' },
 			{ max: 512, message: '最大 512 个字符', trigger: 'blur' },
@@ -279,6 +309,7 @@ const formRules = computed<FormRules>(() => {
 
 const resetState = () => {
 	state.ruleForm = emptyForm();
+	state.isolationMode = 'shared';
 	state.activeTab = 'basic';
 	state.connectionStringUi.visible = false;
 	state.connectionStringUi.forbidden = false;
@@ -286,7 +317,11 @@ const resetState = () => {
 	state.connectionStringUi.initialSnapshot = '';
 };
 
-const openDialog = async (type: string, row?: TenantDto) => {
+const onIsolationModeChange = () => {
+	formRef.value?.clearValidate(['defaultConnectionString']);
+};
+
+const openDialog = async (type: string, row?: TenantDialogRow) => {
 	resetState();
 	state.dialog.type = type as 'add' | 'edit';
 	if (type === 'edit' && row) {
@@ -307,18 +342,23 @@ const openDialog = async (type: string, row?: TenantDto) => {
 		const { getDefaultConnectionString } = useTenantApi();
 		try {
 			const cs = await getDefaultConnectionString(row.id!);
-			state.ruleForm.defaultConnectionString = cs ?? '';
+			state.ruleForm.defaultConnectionString = (cs ?? '').trim();
 			state.connectionStringUi.initialSnapshot = state.ruleForm.defaultConnectionString;
 			state.connectionStringUi.hasExisting = Boolean(cs);
 			state.connectionStringUi.visible = true;
 			state.connectionStringUi.forbidden = false;
+			state.isolationMode = cs ? 'dedicated' : 'shared';
 		} catch {
 			state.connectionStringUi.visible = false;
 			state.connectionStringUi.forbidden = true;
+			state.isolationMode = row._hasConnection ? 'dedicated' : 'shared';
 		}
 	} else {
 		state.dialog.title = '新增租户';
 		state.dialog.submitTxt = '新 增';
+		state.connectionStringUi.visible = true;
+		state.connectionStringUi.forbidden = false;
+		state.isolationMode = 'shared';
 	}
 	state.dialog.isShowDialog = true;
 	await nextTick();
@@ -338,25 +378,6 @@ const onClosed = () => {
 	state.dialog.type = '';
 };
 
-const onClearConnectionString = () => {
-	const id = state.ruleForm.id;
-	if (!id) return;
-	ElMessageBox.confirm('确定清除该租户的默认数据库连接串？', '提示', {
-		type: 'warning',
-		confirmButtonText: '清除',
-		cancelButtonText: '取消',
-	})
-		.then(async () => {
-			const { deleteDefaultConnectionString } = useTenantApi();
-			await deleteDefaultConnectionString(id);
-			state.ruleForm.defaultConnectionString = '';
-			state.connectionStringUi.initialSnapshot = '';
-			state.connectionStringUi.hasExisting = false;
-			ElMessage.success('已清除');
-		})
-		.catch(() => { });
-};
-
 const normalizeOptional = (value: string) => value.trim() || null;
 
 const buildProfilePayload = () => ({
@@ -374,10 +395,10 @@ const onSubmit = async () => {
 	await formRef.value.validate(async (valid) => {
 		if (!valid) return;
 		state.submitting = true;
-		const { createTenant, updateTenant, updateDefaultConnectionString } = useTenantApi();
+		const { createTenant, updateTenant, updateDefaultConnectionString, deleteDefaultConnectionString } = useTenantApi();
 		try {
 			if (state.dialog.type === 'add') {
-				await createTenant({
+				const created = await createTenant({
 					name: state.ruleForm.name.trim(),
 					code: state.ruleForm.code.trim(),
 					adminUserName: state.ruleForm.adminUserName.trim(),
@@ -386,6 +407,9 @@ const onSubmit = async () => {
 					adminPassword: state.ruleForm.adminPassword,
 					...buildProfilePayload(),
 				});
+				if (state.isolationMode === 'dedicated' && !state.connectionStringUi.forbidden) {
+					await updateDefaultConnectionString(created.id, state.ruleForm.defaultConnectionString.trim());
+				}
 				ElMessage.success('创建成功');
 			} else if (state.dialog.type === 'edit') {
 				await updateTenant(state.ruleForm.id, {
@@ -395,9 +419,14 @@ const onSubmit = async () => {
 					concurrencyStamp: state.ruleForm.concurrencyStamp,
 					...buildProfilePayload(),
 				});
-				if (state.connectionStringUi.visible) {
-					const nextCs = state.ruleForm.defaultConnectionString;
-					if (nextCs !== state.connectionStringUi.initialSnapshot) {
+				if (!state.connectionStringUi.forbidden) {
+					const nextCs = state.ruleForm.defaultConnectionString.trim();
+					const hadConnection = Boolean(state.connectionStringUi.initialSnapshot);
+					if (state.isolationMode === 'shared') {
+						if (hadConnection) {
+							await deleteDefaultConnectionString(state.ruleForm.id);
+						}
+					} else if (nextCs !== state.connectionStringUi.initialSnapshot) {
 						await updateDefaultConnectionString(state.ruleForm.id, nextCs);
 					}
 				}
@@ -416,6 +445,42 @@ defineExpose({ openDialog });
 
 <style scoped lang="scss">
 .system-tenant-dialog-container {
+	.tenant-isolation-panel {
+		display: grid;
+		gap: 14px;
+		padding: 4px 4px 0 0;
+	}
+
+	.isolation-tip-card {
+		padding: 14px 16px;
+		border-radius: 10px;
+		border: 1px solid var(--el-border-color-light);
+		background: var(--el-fill-color-extra-light);
+		display: grid;
+		gap: 6px;
+
+		strong {
+			font-size: 14px;
+			color: var(--el-text-color-primary);
+		}
+
+		p {
+			margin: 0;
+			font-size: 13px;
+			line-height: 1.7;
+			color: var(--el-text-color-regular);
+		}
+	}
+
+	.isolation-tip-card.shared {
+		background: var(--el-fill-color-extra-light);
+	}
+
+	.isolation-tip-card.dedicated {
+		background: var(--el-color-warning-light-9);
+		border-color: var(--el-color-warning-light-5);
+	}
+
 	.tenant-profile-form {
 		max-height: 460px;
 		overflow-y: auto;

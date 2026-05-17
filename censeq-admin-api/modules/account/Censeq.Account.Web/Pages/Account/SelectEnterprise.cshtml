@@ -1,0 +1,400 @@
+@page
+@using Microsoft.AspNetCore.Mvc.Localization
+@using Censeq.Account.Localization
+@model Censeq.Account.Web.Pages.Account.SelectEnterpriseModel
+@inject IHtmlLocalizer<AccountResource> L
+
+@section styles {
+    <style>
+        .enterprise-choice-stage {
+            --enterprise-ink: #182a2c;
+            --enterprise-subtle: #617477;
+            --enterprise-line: rgba(24, 42, 44, 0.12);
+            --enterprise-panel: rgba(255, 255, 255, 0.96);
+            --enterprise-accent: #0d7a67;
+            --enterprise-accent-soft: #e7f4f1;
+            --enterprise-shadow: 0 22px 52px rgba(28, 54, 55, 0.12);
+            position: relative;
+            max-width: 1040px;
+            margin: 2.5rem auto;
+            padding: 1.25rem;
+        }
+
+        .enterprise-choice-stage::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            border-radius: 34px;
+            background:
+                linear-gradient(135deg, rgba(13, 122, 103, 0.08), transparent 36%),
+                radial-gradient(circle at top right, rgba(10, 88, 74, 0.08), transparent 22%),
+                linear-gradient(180deg, rgba(247, 251, 250, 0.92), rgba(241, 247, 246, 0.92));
+            border: 1px solid rgba(21, 51, 49, 0.08);
+            box-shadow: var(--enterprise-shadow);
+            pointer-events: none;
+        }
+
+        .enterprise-choice-shell {
+            position: relative;
+            z-index: 1;
+            display: grid;
+            grid-template-columns: minmax(0, 320px) minmax(0, 1fr);
+            min-height: 620px;
+            border-radius: 28px;
+            overflow: hidden;
+        }
+
+        .enterprise-choice-sidebar {
+            position: relative;
+            padding: 2.4rem 2rem 2.2rem;
+            background:
+                linear-gradient(180deg, rgba(20, 52, 53, 0.98), rgba(13, 37, 39, 0.98)),
+                linear-gradient(145deg, rgba(13, 122, 103, 0.3), transparent 40%);
+            color: #ecf4f3;
+        }
+
+        .enterprise-choice-sidebar::after {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background:
+                linear-gradient(rgba(255,255,255,0.04) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255,255,255,0.04) 1px, transparent 1px);
+            background-size: 32px 32px;
+            opacity: .4;
+            pointer-events: none;
+        }
+
+        .enterprise-choice-kicker {
+            position: relative;
+            z-index: 1;
+            display: inline-flex;
+            align-items: center;
+            gap: .55rem;
+            padding: .5rem .85rem;
+            border-radius: 999px;
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            color: rgba(239, 248, 246, 0.92);
+            font-size: .74rem;
+            font-weight: 700;
+            letter-spacing: .12em;
+            text-transform: uppercase;
+        }
+
+        .enterprise-choice-title {
+            position: relative;
+            z-index: 1;
+            margin-top: 1.4rem;
+            font-size: 2.1rem;
+            font-weight: 700;
+            line-height: 1.15;
+            color: #f2f7f7;
+        }
+
+        .enterprise-choice-subtitle {
+            position: relative;
+            z-index: 1;
+            margin-top: 1rem;
+            color: rgba(222, 236, 233, 0.78);
+            font-size: .98rem;
+            line-height: 1.8;
+        }
+
+        .enterprise-choice-sidebar-panel {
+            position: relative;
+            z-index: 1;
+            margin-top: 2rem;
+            padding-top: 1.25rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.12);
+        }
+
+        .enterprise-choice-sidebar-label {
+            font-size: .78rem;
+            letter-spacing: .08em;
+            text-transform: uppercase;
+            color: rgba(221, 235, 232, 0.56);
+        }
+
+        .enterprise-choice-sidebar-value {
+            margin-top: .65rem;
+            font-size: 1rem;
+            font-weight: 600;
+            color: #ffffff;
+            word-break: break-all;
+        }
+
+        .enterprise-choice-main {
+            padding: 2.4rem 2.35rem 2.2rem;
+            background: var(--enterprise-panel);
+        }
+
+        .enterprise-choice-main-head {
+            display: flex;
+            justify-content: space-between;
+            gap: 1rem;
+            align-items: end;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid var(--enterprise-line);
+        }
+
+        .enterprise-choice-main-title {
+            font-size: 1.45rem;
+            font-weight: 700;
+            color: var(--enterprise-ink);
+        }
+
+        .enterprise-choice-main-note {
+            margin-top: .4rem;
+            color: var(--enterprise-subtle);
+            font-size: .94rem;
+            line-height: 1.7;
+        }
+
+        .enterprise-choice-count {
+            padding: .5rem .8rem;
+            border-radius: 999px;
+            background: var(--enterprise-accent-soft);
+            color: var(--enterprise-accent);
+            font-size: .82rem;
+            font-weight: 700;
+        }
+
+        .enterprise-choice-card {
+            position: relative;
+            display: grid;
+            grid-template-columns: auto 1fr;
+            gap: 1.1rem;
+            padding: 1.25rem 1.35rem;
+            border-radius: 20px;
+            border: 1px solid var(--enterprise-line);
+            background: #fff;
+            cursor: pointer;
+            transition: transform .18s ease, box-shadow .18s ease, border-color .18s ease, background-color .18s ease;
+            animation: enterpriseCardIn .38s ease both;
+        }
+
+        .enterprise-choice-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 16px 28px rgba(24, 42, 44, 0.1);
+            border-color: rgba(13, 122, 103, 0.34);
+        }
+
+        .enterprise-choice-card input {
+            margin-top: .4rem;
+        }
+
+        .enterprise-choice-card:has(input:checked) {
+            border-color: var(--enterprise-accent);
+            box-shadow: 0 16px 34px rgba(13, 122, 103, 0.14);
+            background: linear-gradient(180deg, #ffffff, #f6fbf9);
+        }
+
+        .enterprise-choice-card-top {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: .8rem;
+            margin-bottom: .65rem;
+        }
+
+        .enterprise-choice-name {
+            font-size: 1.08rem;
+            font-weight: 700;
+            color: var(--enterprise-ink);
+        }
+
+        .enterprise-choice-code {
+            display: inline-flex;
+            align-items: center;
+            padding: .28rem .62rem;
+            border-radius: 10px;
+            background: var(--enterprise-accent-soft);
+            color: var(--enterprise-accent);
+            font-size: .76rem;
+            font-weight: 700;
+            letter-spacing: .08em;
+            text-transform: uppercase;
+        }
+
+        .enterprise-choice-user {
+            display: grid;
+            grid-template-columns: 112px 1fr;
+            gap: .4rem .75rem;
+            align-items: start;
+            color: #355256;
+            font-size: .94rem;
+        }
+
+        .enterprise-choice-term {
+            color: #6f8184;
+            font-weight: 600;
+        }
+
+        .enterprise-choice-detail {
+            color: var(--enterprise-ink);
+            font-weight: 600;
+        }
+
+        .enterprise-choice-meta {
+            margin-top: .8rem;
+            display: flex;
+            flex-wrap: wrap;
+            gap: .6rem;
+            color: #6c8083;
+            font-size: .82rem;
+        }
+
+        .enterprise-choice-meta-chip {
+            display: inline-flex;
+            align-items: center;
+            padding: .26rem .56rem;
+            border-radius: 999px;
+            background: #f3f7f7;
+            border: 1px solid rgba(24, 42, 44, 0.08);
+        }
+
+        .enterprise-choice-actions {
+            display: flex;
+            gap: .75rem;
+            margin-top: 2rem;
+        }
+
+        .enterprise-choice-actions .btn-primary {
+            min-width: 152px;
+            border-radius: 999px;
+            background: linear-gradient(135deg, #0d7a67, #145e51);
+            border: none;
+            box-shadow: 0 14px 24px rgba(13, 122, 103, 0.2);
+        }
+
+        .enterprise-choice-actions .btn-outline-secondary {
+            border-radius: 999px;
+            border-color: rgba(24, 42, 44, 0.16);
+            color: #294144;
+        }
+
+        .enterprise-choice-grid {
+            display: grid;
+            gap: 1rem;
+            margin-top: 1.4rem;
+        }
+
+        .enterprise-choice-grid .enterprise-choice-card:nth-child(2) {
+            animation-delay: .06s;
+        }
+
+        .enterprise-choice-grid .enterprise-choice-card:nth-child(3) {
+            animation-delay: .12s;
+        }
+
+        .enterprise-choice-grid .enterprise-choice-card:nth-child(4) {
+            animation-delay: .18s;
+        }
+
+        @@keyframes enterpriseCardIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @@media (max-width: 768px) {
+            .enterprise-choice-stage {
+                margin: 1rem;
+                padding: .55rem;
+            }
+
+            .enterprise-choice-shell {
+                grid-template-columns: 1fr;
+                min-height: auto;
+            }
+
+            .enterprise-choice-sidebar,
+            .enterprise-choice-main {
+                padding: 1.4rem;
+            }
+
+            .enterprise-choice-actions {
+                flex-direction: column;
+            }
+
+            .enterprise-choice-main-head {
+                flex-direction: column;
+                align-items: start;
+            }
+
+            .enterprise-choice-user {
+                grid-template-columns: 1fr;
+                gap: .2rem;
+            }
+        }
+    </style>
+}
+
+<div class="enterprise-choice-stage">
+    <div class="enterprise-choice-shell">
+        <aside class="enterprise-choice-sidebar">
+            <div class="enterprise-choice-kicker">Organization Console</div>
+            <div class="enterprise-choice-title">确认要进入的企业工作台</div>
+            <div class="enterprise-choice-subtitle">
+                同一个邮箱绑定了多个可登录身份。请在进入系统前确认本次业务上下文，避免进入错误的企业空间。
+            </div>
+
+            <div class="enterprise-choice-sidebar-panel">
+                <div class="enterprise-choice-sidebar-label">当前登录邮箱</div>
+                <div class="enterprise-choice-sidebar-value">@Model.LoginName</div>
+            </div>
+        </aside>
+
+        <section class="enterprise-choice-main">
+            <div class="enterprise-choice-main-head">
+                <div>
+                    <div class="enterprise-choice-main-title">企业列表</div>
+                    <div class="enterprise-choice-main-note">选择后将直接进入对应企业后台；如果进入的是平台系统，则使用默认宿主上下文。</div>
+                </div>
+                <div class="enterprise-choice-count">@Model.Options.Count 个可用入口</div>
+            </div>
+
+            <form method="post">
+                <input type="hidden" asp-for="Token" />
+                <input type="hidden" asp-for="ReturnUrl" />
+                <input type="hidden" asp-for="ReturnUrlHash" />
+
+                <div class="enterprise-choice-grid">
+                    @foreach (var option in Model.Options)
+                    {
+                        <label class="enterprise-choice-card">
+                            <input class="form-check-input" type="radio" asp-for="SelectedUserId" value="@option.UserId" />
+                            <span>
+                                <span class="enterprise-choice-card-top">
+                                    <span class="enterprise-choice-name">@option.TenantName</span>
+                                    <span class="enterprise-choice-code">@option.TenantCode</span>
+                                </span>
+
+                                <span class="enterprise-choice-user">
+                                    <span class="enterprise-choice-term">当前账号姓名</span>
+                                    <span class="enterprise-choice-detail">@option.DisplayName</span>
+                                </span>
+
+                                <span class="enterprise-choice-meta">
+                                    <span class="enterprise-choice-meta-chip">登录账号：@option.UserName</span>
+                                </span>
+                            </span>
+                        </label>
+                    }
+                </div>
+
+                <div class="enterprise-choice-actions">
+                    <button type="submit" class="btn btn-primary">确认登录</button>
+                    <a class="btn btn-outline-secondary" asp-page="./Login" asp-route-returnUrl="@Model.ReturnUrl" asp-route-returnUrlHash="@Model.ReturnUrlHash">返回登录</a>
+                </div>
+            </form>
+        </section>
+    </div>
+</div>

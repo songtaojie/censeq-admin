@@ -57,8 +57,7 @@ public class OpenIddictSupportedLoginModel : LoginModel
         {
             EnterpriseTenantCode = tenant.Trim();
             IsEnterpriseTenantPresetFromLink = true;
-            AutoSelectEnterpriseTab = true;
-            LoginScope = "enterprise";
+            UseSpecifiedTenant = true;
         }
 
         return page;

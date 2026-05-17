@@ -37,33 +37,28 @@
             <span class="login-right-warp-two"></span>
             <div class="login-right-warp-main d-flex flex-column h-100">
                 <div class="login-right-warp-main-title text-center fs-2 fw-bold">@L["Login"]</div>
-                @* <partial name="_ValidationSummary" /> *@
                 <div class="px-5 flex-fill d-flex flex-column">
                     @if (Model.EnableLocalLogin)
                     {
                         <form method="post" class="row needs-validation" novalidate>
-                            <input type="hidden" asp-for="LoginScope" id="loginScopeInput" />
-                            <div class="col-12">
-                                <ul class="nav nav-tabs mb-3" id="loginTenantTabs" role="tablist">
-                                    <li class="nav-item" role="presentation">
-                                        @if (Model.IsEnterpriseTenantPresetFromLink)
-                                        {
-                                            <button type="button" class="nav-link @(Model.AutoSelectEnterpriseTab ? "" : "active") disabled" id="tab-platform" data-tab-scope="platform" disabled>平台</button>
-                                        }
-                                        else
-                                        {
-                                            <button type="button" class="nav-link @(Model.AutoSelectEnterpriseTab ? "" : "active")" id="tab-platform" data-tab-scope="platform">平台</button>
-                                        }
-                                    </li>
-                                    <li class="nav-item" role="presentation">
-                                        <button type="button" class="nav-link @(Model.AutoSelectEnterpriseTab ? "active" : "")" id="tab-enterprise" data-tab-scope="enterprise">企业</button>
-                                    </li>
-                                </ul>
+                            <div class="mb-3 col-12">
+                                <div class="form-check">
+                                    @if (Model.IsEnterpriseTenantPresetFromLink)
+                                    {
+                                        <input type="hidden" asp-for="UseSpecifiedTenant" value="true" />
+                                        <input class="form-check-input" type="checkbox" id="UseSpecifiedTenantDisplay" checked disabled>
+                                        <label class="form-check-label" for="UseSpecifiedTenantDisplay">
+                                            指定企业编码
+                                        </label>
+                                    }
+                                    else
+                                    {
+                                        <input asp-for="UseSpecifiedTenant" class="form-check-input" type="checkbox" id="useSpecifiedTenantCheckbox">
+                                        <label asp-for="UseSpecifiedTenant" class="form-check-label"></label>
+                                    }
+                                </div>
                             </div>
-                            <div class="mb-3 col-12 platform-hint text-muted small" style="display: @(Model.AutoSelectEnterpriseTab ? "none" : "block")">
-                                使用平台（宿主）管理员账号登录。
-                            </div>
-                            <div class="mb-4 col-12 enterprise-tenant-field" style="display: @(Model.AutoSelectEnterpriseTab ? "block" : "none")">
+                            <div class="mb-4 col-12 enterprise-tenant-field" style="display: @(Model.UseSpecifiedTenant ? "block" : "none")">
                                 <div class="input-group">
                                     <span class="input-group-text"><i class="fa-solid fa-building"></i></span>
                                     @if (Model.IsEnterpriseTenantPresetFromLink)
@@ -72,19 +67,9 @@
                                     }
                                     else
                                     {
-                                        <input asp-for="EnterpriseTenantCode" class="form-control" autocomplete="off" placeholder="请输入租户编码（不区分大小写）" />
+                                        <input asp-for="EnterpriseTenantCode" class="form-control" autocomplete="off" placeholder="请输入企业编码（不区分大小写）" />
                                     }
                                 </div>
-                                <span class="form-text">
-                                    @if (Model.IsEnterpriseTenantPresetFromLink)
-                                    {
-                                        <span>已由登录链接指定，不可修改。</span>
-                                    }
-                                    else
-                                    {
-                                        <span>用于企业租户登录，系统会自动忽略大小写。</span>
-                                    }
-                                </span>
                             </div>
 
                             <div class="mb-4 col-12">
@@ -234,41 +219,18 @@
 	<script>
 		(function () {
 			var lockPreset = @(Model.IsEnterpriseTenantPresetFromLink ? "true" : "false");
-			var scopeInput = document.getElementById('loginScopeInput');
+            var tenantCheckbox = document.getElementById('useSpecifiedTenantCheckbox');
 			var enterpriseRow = document.querySelector('.enterprise-tenant-field');
-			var platformHint = document.querySelector('.platform-hint');
-			var tabPlatform = document.getElementById('tab-platform');
-			var tabEnterprise = document.getElementById('tab-enterprise');
-			function setTab(scope) {
-				if (lockPreset && scope === 'platform') {
-					return;
-				}
-				if (scopeInput) {
-					scopeInput.value = scope;
-				}
-				if (scope === 'enterprise') {
-					if (enterpriseRow) enterpriseRow.style.display = 'block';
-					if (platformHint) platformHint.style.display = 'none';
-					tabEnterprise && tabEnterprise.classList.add('active');
-					tabPlatform && tabPlatform.classList.remove('active');
-				} else {
-					if (enterpriseRow) enterpriseRow.style.display = 'none';
-					if (platformHint) platformHint.style.display = 'block';
-					tabPlatform && tabPlatform.classList.add('active');
-					tabEnterprise && tabEnterprise.classList.remove('active');
-				}
+            function toggleTenantField() {
+                var shouldShow = lockPreset || (tenantCheckbox && tenantCheckbox.checked);
+                if (enterpriseRow) {
+                    enterpriseRow.style.display = shouldShow ? 'block' : 'none';
+                }
 			}
-			document.querySelectorAll('#loginTenantTabs button[data-tab-scope]').forEach(function (btn) {
-				btn.addEventListener('click', function (e) {
-					e.preventDefault();
-					setTab(btn.getAttribute('data-tab-scope'));
-				});
-			});
-			if (@(Model.AutoSelectEnterpriseTab ? "true" : "false")) {
-				setTab('enterprise');
-			} else {
-				setTab('platform');
+            if (tenantCheckbox) {
+                tenantCheckbox.addEventListener('change', toggleTenantField);
 			}
+            toggleTenantField();
 		})();
 	</script>
 }

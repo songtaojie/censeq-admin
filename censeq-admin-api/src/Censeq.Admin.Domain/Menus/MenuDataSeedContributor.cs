@@ -547,7 +547,7 @@ public class MenuDataSeedContributor : DomainService, IDataSeedContributor, ITra
                 path: "/localization",
                 component: "layout/routerView/parent",
                 redirect: "/localization/texts",
-                icon: "ele-Translate",
+                icon: "ele-Connection",
                 type: MenuType.Directory,
                 sort: 50,
                 authorizationMode: MenuAuthorizationMode.Permission,

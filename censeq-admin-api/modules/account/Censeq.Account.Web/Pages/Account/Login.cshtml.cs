@@ -1,12 +1,14 @@
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Options;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Diagnostics;
 using System.Linq;
 using System.Security.Claims;
+using Volo.Abp.Caching;
 using Censeq.Account.Settings;
 using Volo.Abp.Auditing;
 using Censeq.Identity;
@@ -19,6 +21,8 @@ using Censeq.Account.Web.Settings;
 using Censeq.Identity.AspNetCore;
 using Censeq.TenantManagement;
 using Censeq.Identity.Entities;
+using Censeq.TenantManagement.Entities;
+using Volo.Abp.Data;
 
 namespace Censeq.Account.Web.Pages.Account;
 
@@ -35,18 +39,15 @@ public class LoginModel : AccountPageModel
     [BindProperty]
     public LoginInputModel LoginInput { get; set; } = default!;
 
-    /// <summary>platform：宿主；enterprise：按租户编码登录。</summary>
     [BindProperty]
-    public string LoginScope { get; set; } = "platform";
+    [Display(Name = "指定企业编码")]
+    public bool UseSpecifiedTenant { get; set; }
 
     [BindProperty]
     public string? EnterpriseTenantCode { get; set; }
 
     /// <summary>授权链接带 __tenant 时为 true，租户编码只读并固定使用链接值。</summary>
     public bool IsEnterpriseTenantPresetFromLink { get; set; }
-
-    /// <summary>打开页面时是否默认展示「企业」Tab。</summary>
-    public bool AutoSelectEnterpriseTab { get; set; }
 
     public bool EnableLocalLogin { get; set; }
 
@@ -74,6 +75,7 @@ public class LoginModel : AccountPageModel
     protected IdentitySessionManager IdentitySessionManager { get; }
     public bool ShowCancelButton { get; set; }
     public bool ShowRequireMigrateSeedMessage { get; set; }
+    public string? LoginErrorMessage { get; set; }
 
     public LoginModel(
         IAuthenticationSchemeProvider schemeProvider,
@@ -92,6 +94,7 @@ public class LoginModel : AccountPageModel
     public virtual async Task<IActionResult> OnGetAsync()
     {
         LoginInput = new LoginInputModel();
+        await InitializeTenantSelectionAsync();
 
         ExternalProviders = await GetExternalProviders();
 
@@ -110,7 +113,7 @@ public class LoginModel : AccountPageModel
     {
         if (string.Equals(action, "Login", StringComparison.OrdinalIgnoreCase))
         {
-            if (!await TryPrepareTenantContextForPasswordLoginAsync())
+            if (!await TryPrepareTenantSelectionAsync())
             {
                 await ReloadLoginPageStateAsync();
                 return Page();
@@ -126,7 +129,18 @@ public class LoginModel : AccountPageModel
 
         EnableLocalLogin = await SettingProvider.IsTrueAsync(AccountSettingNames.EnableLocalLogin);
 
-        await ReplaceEmailToUsernameOfInputIfNeeds();
+        var resolution = await ResolveLoginUserAsync();
+        if (resolution.RedirectResult != null)
+        {
+            return resolution.RedirectResult;
+        }
+
+        var resolvedUser = resolution.User;
+        if (resolvedUser == null)
+        {
+            await ReloadLoginPageStateAsync();
+            return Page();
+        }
 
         await IdentityOptions.SetAsync();
 
@@ -151,13 +165,13 @@ public class LoginModel : AccountPageModel
 
         if (result.IsLockedOut)
         {
-            Alerts.Warning(L["UserLockedOutMessage"]);
+            SetLoginError(L["UserLockedOutMessage"]);
             return Page();
         }
 
         if (result.IsNotAllowed)
         {
-            Alerts.Warning(L["LoginIsNotAllowed"]);
+            SetLoginError(L["LoginIsNotAllowed"]);
             return Page();
         }
 
@@ -174,13 +188,12 @@ public class LoginModel : AccountPageModel
                 }
             }
 
-            Alerts.Danger(L["InvalidUserNameOrPassword"]);
+            SetLoginError(L["InvalidUserNameOrPassword"], true);
             return Page();
         }
 
         //TODO: Find a way of getting user's id from the logged in user and do not query it again like that!
-        var user = await UserManager.FindByNameAsync(LoginInput.UserNameOrEmailAddress!) ??
-                   await UserManager.FindByEmailAsync(LoginInput.UserNameOrEmailAddress!);
+        var user = resolvedUser;
 
         Debug.Assert(user != null, nameof(user) + " != null");
 
@@ -204,7 +217,7 @@ public class LoginModel : AccountPageModel
     /// <summary>
     /// 在密码校验前切换/清空当前租户，使 SignIn 与用户库 tenant_id 一致。
     /// </summary>
-    protected virtual async Task<bool> TryPrepareTenantContextForPasswordLoginAsync()
+    protected virtual async Task InitializeTenantSelectionAsync()
     {
         var fromAuthorization = await GetOidcAuthorizationTenantParameterAsync();
         if (!string.IsNullOrWhiteSpace(fromAuthorization))
@@ -212,35 +225,30 @@ public class LoginModel : AccountPageModel
             var trimmed = fromAuthorization.Trim();
             EnterpriseTenantCode = trimmed;
             IsEnterpriseTenantPresetFromLink = true;
-            AutoSelectEnterpriseTab = true;
-            LoginScope = "enterprise";
-            if (!await TryResolveAndApplyTenantAsync(trimmed))
-            {
-                Alerts.Warning("无法根据链接中的租户编码匹配有效租户，请核对 __tenant 参数或联系管理员。");
-                return false;
-            }
-
-            return true;
+            UseSpecifiedTenant = true;
         }
+    }
 
-        if (string.Equals(LoginScope, "enterprise", StringComparison.OrdinalIgnoreCase))
+    protected virtual async Task<bool> TryPrepareTenantSelectionAsync()
+    {
+        await InitializeTenantSelectionAsync();
+
+        if (UseSpecifiedTenant)
         {
             if (string.IsNullOrWhiteSpace(EnterpriseTenantCode))
             {
-                Alerts.Warning("请输入租户编码或域名。");
+                SetLoginError("请输入企业编码。");
                 return false;
             }
 
-            if (!await TryResolveAndApplyTenantAsync(EnterpriseTenantCode.Trim()))
+            var tenant = await FindTenantByCodeOrDomainAsync(EnterpriseTenantCode.Trim());
+            if (tenant == null)
             {
-                Alerts.Warning("租户编码或域名无效，请核对后重试。");
+                SetLoginError("企业编码无效，请核对后重试。");
                 return false;
             }
-
-            return true;
         }
 
-        ClearTenantContextForHostLogin();
         return true;
     }
 
@@ -250,26 +258,30 @@ public class LoginModel : AccountPageModel
         Response.Cookies.Delete(TenantResolverConsts.DefaultTenantKey);
     }
 
-    protected virtual async Task<bool> TryResolveAndApplyTenantAsync(string raw)
+    protected virtual async Task<Tenant?> FindTenantByCodeOrDomainAsync(string raw)
     {
         if (string.IsNullOrWhiteSpace(raw))
         {
-            return false;
+            return null;
         }
 
         var tenantRepository = LazyServiceProvider.LazyGetRequiredService<ITenantRepository>();
-        var tenant = await tenantRepository.FindByCodeAsync(raw.Trim())
+        return await tenantRepository.FindByCodeAsync(raw.Trim())
             ?? await tenantRepository.FindByDomainAsync(raw.Trim());
-        if (tenant == null)
+    }
+
+    protected virtual void ApplyTenantContext(Guid? tenantId)
+    {
+        if (!tenantId.HasValue)
         {
-            return false;
+            ClearTenantContextForHostLogin();
+            return;
         }
 
-        var tenantId = tenant.Id;
         CurrentTenant.Change(tenantId);
         Response.Cookies.Append(
             TenantResolverConsts.DefaultTenantKey,
-            tenantId.ToString("D"),
+            tenantId.Value.ToString("D"),
             new CookieOptions
             {
                 IsEssential = true,
@@ -278,8 +290,6 @@ public class LoginModel : AccountPageModel
                 SameSite = SameSiteMode.Lax,
                 Path = "/"
             });
-
-        return true;
     }
 
     protected virtual async Task ReloadLoginPageStateAsync()
@@ -426,26 +436,182 @@ public class LoginModel : AccountPageModel
         return await RedirectSafelyAsync(returnUrl, returnUrlHash);
     }
 
-    protected virtual async Task ReplaceEmailToUsernameOfInputIfNeeds()
+    protected virtual async Task<LoginUserResolutionResult> ResolveLoginUserAsync()
     {
-        if (!ValidationHelper.IsValidEmailAddress(LoginInput.UserNameOrEmailAddress!))
+        var loginName = LoginInput.UserNameOrEmailAddress?.Trim();
+        if (loginName.IsNullOrWhiteSpace())
         {
+            return LoginUserResolutionResult.Failed();
+        }
+
+        var specifiedTenant = await GetSpecifiedTenantAsync();
+        if (UseSpecifiedTenant && specifiedTenant == null)
+        {
+            return LoginUserResolutionResult.Failed();
+        }
+
+        List<IdentityUser> candidates;
+        var isEmailLogin = ValidationHelper.IsValidEmailAddress(loginName);
+        var userRepository = LazyServiceProvider.LazyGetRequiredService<IIdentityUserRepository>();
+
+        using (LazyServiceProvider.LazyGetRequiredService<IDataFilter>().Disable<Volo.Abp.MultiTenancy.IMultiTenant>())
+        {
+            if (isEmailLogin)
+            {
+                candidates = await userRepository.GetListAsync(
+                    emailAddress: loginName,
+                    includeDetails: false);
+            }
+            else
+            {
+                candidates = await userRepository.GetListAsync(
+                    userName: loginName,
+                    includeDetails: false);
+            }
+        }
+
+        if (specifiedTenant != null)
+        {
+            candidates = candidates.Where(x => x.TenantId == specifiedTenant.Id).ToList();
+        }
+
+        if (!isEmailLogin && !UseSpecifiedTenant && candidates.Count > 1)
+        {
+            SetLoginError("该账号存在多个企业，请勾选“指定企业编码”并输入企业编码后再登录。");
+            return LoginUserResolutionResult.Failed();
+        }
+
+        var matchedUsers = new List<IdentityUser>();
+        foreach (var candidate in candidates)
+        {
+            if (await UserManager.CheckPasswordAsync(candidate, LoginInput.Password!))
+            {
+                matchedUsers.Add(candidate);
+            }
+        }
+
+        if (matchedUsers.Count == 0)
+        {
+            SetLoginError(L["InvalidUserNameOrPassword"], true);
+            return LoginUserResolutionResult.Failed();
+        }
+
+        if (isEmailLogin && matchedUsers.Count > 1)
+        {
+            return LoginUserResolutionResult.Redirect(await CreateTenantSelectionRedirectAsync(loginName, matchedUsers));
+        }
+
+        if (!isEmailLogin && matchedUsers.Count > 1)
+        {
+            SetLoginError("该账号匹配到多个企业，请指定企业编码后重试。");
+            return LoginUserResolutionResult.Failed();
+        }
+
+        var resolvedUser = matchedUsers[0];
+        ApplyTenantContext(resolvedUser.TenantId);
+        LoginInput.UserNameOrEmailAddress = resolvedUser.UserName;
+        return LoginUserResolutionResult.Success(resolvedUser);
+    }
+
+    protected virtual async Task<IActionResult> CreateTenantSelectionRedirectAsync(string loginName, List<IdentityUser> matchedUsers)
+    {
+        var cache = LazyServiceProvider.LazyGetRequiredService<IDistributedCache<LoginTenantSelectionCacheItem>>();
+        var token = Guid.NewGuid().ToString("N");
+        var options = await BuildTenantSelectionOptionsAsync(matchedUsers);
+        var cacheItem = new LoginTenantSelectionCacheItem
+        {
+            LoginName = loginName,
+            RememberMe = LoginInput.RememberMe,
+            ReturnUrl = ReturnUrl,
+            ReturnUrlHash = ReturnUrlHash,
+            Options = options
+        };
+
+        await cache.SetAsync(
+            token,
+            cacheItem,
+            new DistributedCacheEntryOptions
+            {
+                AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(5)
+            },
+            considerUow: true);
+
+        return RedirectToPage("./SelectEnterprise", new
+        {
+            token,
+            returnUrl = ReturnUrl,
+            returnUrlHash = ReturnUrlHash
+        });
+    }
+
+    protected virtual async Task<List<LoginTenantSelectionOption>> BuildTenantSelectionOptionsAsync(List<IdentityUser> matchedUsers)
+    {
+        var options = new List<LoginTenantSelectionOption>();
+        var tenantRepository = LazyServiceProvider.LazyGetRequiredService<ITenantRepository>();
+        var tenantIds = matchedUsers
+            .Where(x => x.TenantId.HasValue)
+            .Select(x => x.TenantId!.Value)
+            .Distinct()
+            .ToList();
+        var tenantLookup = new Dictionary<Guid, Tenant>();
+
+        using (CurrentTenant.Change(null))
+        {
+            foreach (var tenantId in tenantIds)
+            {
+                var tenant = await tenantRepository.FindAsync(tenantId);
+                if (tenant != null)
+                {
+                    tenantLookup[tenantId] = tenant;
+                }
+            }
+        }
+
+        foreach (var matchedUser in matchedUsers)
+        {
+            var isHost = !matchedUser.TenantId.HasValue;
+            tenantLookup.TryGetValue(matchedUser.TenantId ?? Guid.Empty, out var tenant);
+            options.Add(new LoginTenantSelectionOption
+            {
+                UserId = matchedUser.Id,
+                ActualTenantId = matchedUser.TenantId,
+                TenantId = matchedUser.TenantId ?? Guid.Empty,
+                TenantCode = isHost ? "Default" : tenant?.Code ?? string.Empty,
+                TenantName = isHost ? "平台系统" : tenant?.Name ?? "未命名企业",
+                UserName = matchedUser.UserName ?? string.Empty,
+                DisplayName = matchedUser.Name ?? matchedUser.UserName ?? matchedUser.Email ?? string.Empty,
+                Email = matchedUser.Email ?? string.Empty
+            });
+        }
+
+        return options;
+    }
+
+    protected virtual async Task<Tenant?> GetSpecifiedTenantAsync()
+    {
+        if (!UseSpecifiedTenant)
+        {
+            return null;
+        }
+
+        if (string.IsNullOrWhiteSpace(EnterpriseTenantCode))
+        {
+            return null;
+        }
+
+        return await FindTenantByCodeOrDomainAsync(EnterpriseTenantCode.Trim());
+    }
+
+    protected virtual void SetLoginError(string message, bool isDanger = false)
+    {
+        LoginErrorMessage = message;
+        if (isDanger)
+        {
+            Alerts.Danger(message);
             return;
         }
 
-        var userByUsername = await UserManager.FindByNameAsync(LoginInput.UserNameOrEmailAddress!);
-        if (userByUsername != null)
-        {
-            return;
-        }
-
-        var userByEmail = await UserManager.FindByEmailAsync(LoginInput.UserNameOrEmailAddress!);
-        if (userByEmail == null)
-        {
-            return;
-        }
-
-        LoginInput.UserNameOrEmailAddress = userByEmail.UserName;
+        Alerts.Warning(message);
     }
 
     protected virtual async Task CheckLocalLoginAsync()
@@ -569,5 +735,49 @@ public class LoginModel : AccountPageModel
     {
         public required string DisplayName { get; set; }
         public string? AuthenticationScheme { get; set; }
+    }
+
+    public class LoginUserResolutionResult
+    {
+        public IdentityUser? User { get; init; }
+        public IActionResult? RedirectResult { get; init; }
+
+        public static LoginUserResolutionResult Success(IdentityUser user)
+        {
+            return new LoginUserResolutionResult { User = user };
+        }
+
+        public static LoginUserResolutionResult Failed()
+        {
+            return new LoginUserResolutionResult();
+        }
+
+        public static LoginUserResolutionResult Redirect(IActionResult redirectResult)
+        {
+            return new LoginUserResolutionResult { RedirectResult = redirectResult };
+        }
+    }
+
+    [Serializable]
+    public class LoginTenantSelectionCacheItem
+    {
+        public string LoginName { get; set; } = string.Empty;
+        public bool RememberMe { get; set; }
+        public string? ReturnUrl { get; set; }
+        public string? ReturnUrlHash { get; set; }
+        public List<LoginTenantSelectionOption> Options { get; set; } = new();
+    }
+
+    [Serializable]
+    public class LoginTenantSelectionOption
+    {
+        public Guid UserId { get; set; }
+        public Guid? ActualTenantId { get; set; }
+        public Guid TenantId { get; set; }
+        public string TenantCode { get; set; } = string.Empty;
+        public string TenantName { get; set; } = string.Empty;
+        public string UserName { get; set; } = string.Empty;
+        public string DisplayName { get; set; } = string.Empty;
+        public string Email { get; set; } = string.Empty;
     }
 }
