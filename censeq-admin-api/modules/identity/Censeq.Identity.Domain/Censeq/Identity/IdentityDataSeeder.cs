@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Censeq.Admin.Permissions;
 using Censeq.PermissionManagement;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Options;
@@ -19,22 +20,8 @@ public class IdentityDataSeeder : ITransientDependency, IIdentityDataSeeder
 {
     public const string AdminRoleCode = "admin";
     public const string AdminRoleName = "管理员";
-
-    private static readonly string[] DefaultAdminPermissions =
-    [
-        "CenseqAdmin.Menus",
-        "CenseqAdmin.Menus.Create",
-        "CenseqAdmin.Menus.Update",
-        "CenseqAdmin.Menus.Delete",
-        "CenseqAdmin.Menus.ManageStatus",
-        "CenseqAdmin.Menus.ManageOrder",
-        "CenseqAdmin.Menus.CopyFromHost",
-        "SettingManagement.SettingDefinitions",
-        "SettingManagement.SettingDefinitions.Create",
-        "SettingManagement.SettingDefinitions.Update",
-        "SettingManagement.SettingDefinitions.Delete",
-        "PermissionManagement.DefinitionManagement"
-    ];
+    public const string HostAdminDisplayName = "平台管理员";
+    public const string TenantAdminDisplayName = "管理员";
 
     /// <summary>
     /// IGuidGenerator
@@ -126,15 +113,12 @@ public class IdentityDataSeeder : ITransientDependency, IIdentityDataSeeder
             await IdentityOptions.SetAsync();
 
             var result = new IdentityDataSeedResult();
+            adminName = tenantId == null ? HostAdminDisplayName : TenantAdminDisplayName;
+
             //"admin" user
             if (adminUserName.IsNullOrWhiteSpace())
             {
                 adminUserName = IdentityDataSeedContributor.AdminUserNameDefaultValue;
-            }
-
-            if (adminName.IsNullOrWhiteSpace())
-            {
-                adminName = adminUserName;
             }
 
             var adminUser = await UserRepository.FindByNormalizedUserNameAsync(
@@ -155,6 +139,11 @@ public class IdentityDataSeeder : ITransientDependency, IIdentityDataSeeder
 
                 (await UserManager.CreateAsync(adminUser, adminPassword, validatePassword: false)).CheckErrors();
                 result.CreatedAdminUser = true;
+            }
+            else if (!string.Equals(adminUser.Name, adminName, StringComparison.Ordinal))
+            {
+                adminUser.Name = adminName;
+                (await UserManager.UpdateAsync(adminUser)).CheckErrors();
             }
 
             // 管理员角色
@@ -218,10 +207,14 @@ public class IdentityDataSeeder : ITransientDependency, IIdentityDataSeeder
                 }
             }
 
+            var defaultAdminPermissions = tenantId == null
+                ? AdminSeedPermissionNames.HostAdminDefaults
+                : AdminSeedPermissionNames.TenantAdminDefaults;
+
             await PermissionDataSeeder.SeedAsync(
                 RolePermissionValueProvider.ProviderName,
                 AdminRoleName,
-                DefaultAdminPermissions,
+                defaultAdminPermissions,
                 tenantId
             );
 

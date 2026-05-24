@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using Censeq.Admin.Permissions;
 using Volo.Abp.Data;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Domain.Repositories;
@@ -250,7 +251,7 @@ public class MenuDataSeedContributor : DomainService, IDataSeedContributor, ITra
                 type: MenuType.Menu,
                 sort: 5,
                 authorizationMode: MenuAuthorizationMode.Permission,
-                permissionNames: new[] { "CenseqIdentity.Users" },
+                permissionNames: AdminSeedPermissionNames.UserMenu,
                 scope: MenuScope.Platform,
                 permissionGroups: "CenseqIdentity"),
             new(
@@ -266,7 +267,7 @@ public class MenuDataSeedContributor : DomainService, IDataSeedContributor, ITra
                 type: MenuType.Menu,
                 sort: 6,
                 authorizationMode: MenuAuthorizationMode.Permission,
-                permissionNames: new[] { "CenseqIdentity.OrganizationUnits" },
+                permissionNames: AdminSeedPermissionNames.OrganizationUnitMenu,
                 scope: MenuScope.Platform,
                 permissionGroups: "CenseqIdentity"),
             new(
@@ -282,7 +283,7 @@ public class MenuDataSeedContributor : DomainService, IDataSeedContributor, ITra
                 type: MenuType.Menu,
                 sort: 7,
                 authorizationMode: MenuAuthorizationMode.Permission,
-                permissionNames: new[] { "CenseqIdentity.Roles" },
+                permissionNames: AdminSeedPermissionNames.RoleMenu,
                 scope: MenuScope.Platform,
                 permissionGroups: "CenseqIdentity"),
             new(
@@ -298,7 +299,7 @@ public class MenuDataSeedContributor : DomainService, IDataSeedContributor, ITra
                 type: MenuType.Menu,
                 sort: 10,
                 authorizationMode: MenuAuthorizationMode.Permission,
-                permissionNames: new[] { "TenantManagement.Tenants" },
+                permissionNames: AdminSeedPermissionNames.TenantMenu,
                 scope: MenuScope.Platform,
                 permissionGroups: "TenantManagement"),
             new(
@@ -314,7 +315,7 @@ public class MenuDataSeedContributor : DomainService, IDataSeedContributor, ITra
                 type: MenuType.Menu,
                 sort: 20,
                 authorizationMode: MenuAuthorizationMode.Permission,
-                permissionNames: new[] { "CenseqFeatureManagement.ManageHostFeatures" },
+                permissionNames: AdminSeedPermissionNames.HostFeatureMenu,
                 scope: MenuScope.Platform,
                 permissionGroups: "CenseqFeatureManagement"),
             new(
@@ -330,7 +331,7 @@ public class MenuDataSeedContributor : DomainService, IDataSeedContributor, ITra
                 type: MenuType.Menu,
                 sort: 30,
                 authorizationMode: MenuAuthorizationMode.Permission,
-                permissionNames: new[] { "CenseqAdmin.Menus" },
+                permissionNames: AdminSeedPermissionNames.MenuManagementMenu,
                 scope: MenuScope.Platform,
                 permissionGroups: "CenseqAdmin.Menus"),
             new(
@@ -346,7 +347,7 @@ public class MenuDataSeedContributor : DomainService, IDataSeedContributor, ITra
                 type: MenuType.Menu,
                 sort: 40,
                 authorizationMode: MenuAuthorizationMode.Permission,
-                permissionNames: new[] { "CenseqIdentity.ClaimTypes" },
+                permissionNames: AdminSeedPermissionNames.ClaimTypeMenu,
                 scope: MenuScope.Platform,
                 permissionGroups: "CenseqIdentity"),
             new(
@@ -362,7 +363,7 @@ public class MenuDataSeedContributor : DomainService, IDataSeedContributor, ITra
                 type: MenuType.Menu,
                 sort: 50,
                 authorizationMode: MenuAuthorizationMode.Permission,
-                permissionNames: new[] { "PermissionManagement.DefinitionManagement" },
+                permissionNames: AdminSeedPermissionNames.PermissionDefinitionMenu,
                 scope: MenuScope.Platform,
                 permissionGroups: "PermissionManagement"),
             new(
@@ -392,7 +393,7 @@ public class MenuDataSeedContributor : DomainService, IDataSeedContributor, ITra
                 type: MenuType.Menu,
                 sort: 0,
                 authorizationMode: MenuAuthorizationMode.Permission,
-                permissionNames: new[] { "AuditLogging.AuditLogs" },
+                permissionNames: AdminSeedPermissionNames.AuditLogMenu,
                 scope: MenuScope.Platform,
                 permissionGroups: "AuditLogging"),
             new(
@@ -408,7 +409,7 @@ public class MenuDataSeedContributor : DomainService, IDataSeedContributor, ITra
                 type: MenuType.Menu,
                 sort: 10,
                 authorizationMode: MenuAuthorizationMode.Permission,
-                permissionNames: new[] { "CenseqIdentity.SecurityLogs" },
+                permissionNames: AdminSeedPermissionNames.SecurityLogMenu,
                 scope: MenuScope.Platform,
                 permissionGroups: "CenseqIdentity"),
 
@@ -456,7 +457,7 @@ public class MenuDataSeedContributor : DomainService, IDataSeedContributor, ITra
                 type: MenuType.Menu,
                 sort: 10,
                 authorizationMode: MenuAuthorizationMode.Permission,
-                permissionNames: new[] { "CenseqIdentity.Roles" },
+                permissionNames: AdminSeedPermissionNames.RoleMenu,
                 scope: MenuScope.Tenant,
                 permissionGroups: "CenseqIdentity"),
             new(
@@ -472,7 +473,7 @@ public class MenuDataSeedContributor : DomainService, IDataSeedContributor, ITra
                 type: MenuType.Menu,
                 sort: 20,
                 authorizationMode: MenuAuthorizationMode.Permission,
-                permissionNames: new[] { "CenseqIdentity.Users" },
+                permissionNames: AdminSeedPermissionNames.UserMenu,
                 scope: MenuScope.Tenant,
                 permissionGroups: "CenseqIdentity"),
             new(
@@ -488,7 +489,7 @@ public class MenuDataSeedContributor : DomainService, IDataSeedContributor, ITra
                 type: MenuType.Menu,
                 sort: 30,
                 authorizationMode: MenuAuthorizationMode.Permission,
-                permissionNames: new[] { "CenseqIdentity.OrganizationUnits" },
+                permissionNames: AdminSeedPermissionNames.OrganizationUnitMenu,
                 scope: MenuScope.Tenant,
                 permissionGroups: "CenseqIdentity"),
             new(
@@ -520,7 +521,7 @@ public class MenuDataSeedContributor : DomainService, IDataSeedContributor, ITra
                 type: MenuType.Menu,
                 sort: 80,
                 authorizationMode: MenuAuthorizationMode.Permission,
-                permissionNames: new[] { "SettingManagement.Emailing", "SettingManagement.TimeZone" },
+                permissionNames: AdminSeedPermissionNames.SettingMenu,
                 scope: MenuScope.Platform,
                 permissionGroups: "SettingManagement"),
             new(
@@ -536,7 +537,7 @@ public class MenuDataSeedContributor : DomainService, IDataSeedContributor, ITra
                 type: MenuType.Menu,
                 sort: 60,
                 authorizationMode: MenuAuthorizationMode.Permission,
-                permissionNames: new[] { "CenseqAdmin.Menus.CopyFromHost" },
+                permissionNames: AdminSeedPermissionNames.MenuCopyFromHost,
                 scope: MenuScope.Tenant,
                 permissionGroups: "CenseqAdmin.Menus"),
             new(
@@ -551,7 +552,7 @@ public class MenuDataSeedContributor : DomainService, IDataSeedContributor, ITra
                 type: MenuType.Directory,
                 sort: 50,
                 authorizationMode: MenuAuthorizationMode.Permission,
-                permissionNames: new[] { "CenseqLocalizationManagement.Texts" },
+                permissionNames: AdminSeedPermissionNames.LocalizationTexts,
                 scope: MenuScope.Platform,
                 permissionGroups: "CenseqLocalizationManagement"),
             new(
@@ -567,7 +568,7 @@ public class MenuDataSeedContributor : DomainService, IDataSeedContributor, ITra
                 type: MenuType.Menu,
                 sort: 10,
                 authorizationMode: MenuAuthorizationMode.Permission,
-                permissionNames: new[] { "CenseqLocalizationManagement.Texts" },
+                permissionNames: AdminSeedPermissionNames.LocalizationTexts,
                 scope: MenuScope.Platform,
                 permissionGroups: "CenseqLocalizationManagement"),
             new(
@@ -583,7 +584,7 @@ public class MenuDataSeedContributor : DomainService, IDataSeedContributor, ITra
                 type: MenuType.Menu,
                 sort: 20,
                 authorizationMode: MenuAuthorizationMode.Permission,
-                permissionNames: new[] { "CenseqLocalizationManagement.Resources" },
+                permissionNames: AdminSeedPermissionNames.LocalizationResources,
                 scope: MenuScope.Platform,
                 permissionGroups: "CenseqLocalizationManagement"),
             new(
@@ -599,7 +600,7 @@ public class MenuDataSeedContributor : DomainService, IDataSeedContributor, ITra
                 type: MenuType.Menu,
                 sort: 30,
                 authorizationMode: MenuAuthorizationMode.Permission,
-                permissionNames: new[] { "CenseqLocalizationManagement.Cultures" },
+                permissionNames: AdminSeedPermissionNames.LocalizationCultures,
                 scope: MenuScope.Platform,
                 permissionGroups: "CenseqLocalizationManagement"),
 
@@ -631,7 +632,7 @@ public class MenuDataSeedContributor : DomainService, IDataSeedContributor, ITra
                 type: MenuType.Menu,
                 sort: 10,
                 authorizationMode: MenuAuthorizationMode.Permission,
-                permissionNames: new[] { "OpenIddict.Applications" },
+                permissionNames: AdminSeedPermissionNames.OpenIddictApplicationMenu,
                 scope: MenuScope.Platform,
                 permissionGroups: "OpenIddict"),
             new(
@@ -647,7 +648,7 @@ public class MenuDataSeedContributor : DomainService, IDataSeedContributor, ITra
                 type: MenuType.Menu,
                 sort: 20,
                 authorizationMode: MenuAuthorizationMode.Permission,
-                permissionNames: new[] { "OpenIddict.Scopes" },
+                permissionNames: AdminSeedPermissionNames.OpenIddictScopeMenu,
                 scope: MenuScope.Platform,
                 permissionGroups: "OpenIddict"),
 
@@ -665,7 +666,7 @@ public class MenuDataSeedContributor : DomainService, IDataSeedContributor, ITra
                 type: MenuType.Button,
                 sort: 1,
                 authorizationMode: MenuAuthorizationMode.Permission,
-                permissionNames: new[] { "CenseqIdentity.Users.Create" },
+                permissionNames: AdminSeedPermissionNames.UserCreate,
                 scope: MenuScope.Platform,
                 buttonCode: "CenseqIdentity.Users.Create"),
             new(
@@ -681,7 +682,7 @@ public class MenuDataSeedContributor : DomainService, IDataSeedContributor, ITra
                 type: MenuType.Button,
                 sort: 2,
                 authorizationMode: MenuAuthorizationMode.Permission,
-                permissionNames: new[] { "CenseqIdentity.Users.Update" },
+                permissionNames: AdminSeedPermissionNames.UserUpdate,
                 scope: MenuScope.Platform,
                 buttonCode: "CenseqIdentity.Users.Update"),
             new(
@@ -697,7 +698,7 @@ public class MenuDataSeedContributor : DomainService, IDataSeedContributor, ITra
                 type: MenuType.Button,
                 sort: 3,
                 authorizationMode: MenuAuthorizationMode.Permission,
-                permissionNames: new[] { "CenseqIdentity.Users.Delete" },
+                permissionNames: AdminSeedPermissionNames.UserDelete,
                 scope: MenuScope.Platform,
                 buttonCode: "CenseqIdentity.Users.Delete"),
             new(
@@ -713,7 +714,7 @@ public class MenuDataSeedContributor : DomainService, IDataSeedContributor, ITra
                 type: MenuType.Button,
                 sort: 4,
                 authorizationMode: MenuAuthorizationMode.Permission,
-                permissionNames: new[] { "CenseqIdentity.Users.Update.ManageRoles" },
+                permissionNames: AdminSeedPermissionNames.UserManageRoles,
                 scope: MenuScope.Platform,
                 buttonCode: "CenseqIdentity.Users.Update.ManageRoles"),
 
@@ -731,7 +732,7 @@ public class MenuDataSeedContributor : DomainService, IDataSeedContributor, ITra
                 type: MenuType.Button,
                 sort: 1,
                 authorizationMode: MenuAuthorizationMode.Permission,
-                permissionNames: new[] { "CenseqIdentity.OrganizationUnits.Create" },
+                permissionNames: AdminSeedPermissionNames.OrganizationUnitCreate,
                 scope: MenuScope.Platform,
                 buttonCode: "CenseqIdentity.OrganizationUnits.Create"),
             new(
@@ -747,7 +748,7 @@ public class MenuDataSeedContributor : DomainService, IDataSeedContributor, ITra
                 type: MenuType.Button,
                 sort: 2,
                 authorizationMode: MenuAuthorizationMode.Permission,
-                permissionNames: new[] { "CenseqIdentity.OrganizationUnits.Update" },
+                permissionNames: AdminSeedPermissionNames.OrganizationUnitUpdate,
                 scope: MenuScope.Platform,
                 buttonCode: "CenseqIdentity.OrganizationUnits.Update"),
             new(
@@ -763,7 +764,7 @@ public class MenuDataSeedContributor : DomainService, IDataSeedContributor, ITra
                 type: MenuType.Button,
                 sort: 3,
                 authorizationMode: MenuAuthorizationMode.Permission,
-                permissionNames: new[] { "CenseqIdentity.OrganizationUnits.Delete" },
+                permissionNames: AdminSeedPermissionNames.OrganizationUnitDelete,
                 scope: MenuScope.Platform,
                 buttonCode: "CenseqIdentity.OrganizationUnits.Delete"),
 
@@ -781,7 +782,7 @@ public class MenuDataSeedContributor : DomainService, IDataSeedContributor, ITra
                 type: MenuType.Button,
                 sort: 1,
                 authorizationMode: MenuAuthorizationMode.Permission,
-                permissionNames: new[] { "CenseqIdentity.Roles.Create" },
+                permissionNames: AdminSeedPermissionNames.RoleCreate,
                 scope: MenuScope.Platform,
                 buttonCode: "CenseqIdentity.Roles.Create"),
             new(
@@ -797,7 +798,7 @@ public class MenuDataSeedContributor : DomainService, IDataSeedContributor, ITra
                 type: MenuType.Button,
                 sort: 2,
                 authorizationMode: MenuAuthorizationMode.Permission,
-                permissionNames: new[] { "CenseqIdentity.Roles.Update" },
+                permissionNames: AdminSeedPermissionNames.RoleUpdate,
                 scope: MenuScope.Platform,
                 buttonCode: "CenseqIdentity.Roles.Update"),
             new(
@@ -813,7 +814,7 @@ public class MenuDataSeedContributor : DomainService, IDataSeedContributor, ITra
                 type: MenuType.Button,
                 sort: 3,
                 authorizationMode: MenuAuthorizationMode.Permission,
-                permissionNames: new[] { "CenseqIdentity.Roles.Delete" },
+                permissionNames: AdminSeedPermissionNames.RoleDelete,
                 scope: MenuScope.Platform,
                 buttonCode: "CenseqIdentity.Roles.Delete"),
             new(
@@ -829,7 +830,7 @@ public class MenuDataSeedContributor : DomainService, IDataSeedContributor, ITra
                 type: MenuType.Button,
                 sort: 4,
                 authorizationMode: MenuAuthorizationMode.Permission,
-                permissionNames: new[] { "CenseqIdentity.Roles.ManagePermissions" },
+                permissionNames: AdminSeedPermissionNames.RoleManagePermissions,
                 scope: MenuScope.Platform,
                 buttonCode: "CenseqIdentity.Roles.ManagePermissions"),
 
@@ -847,7 +848,7 @@ public class MenuDataSeedContributor : DomainService, IDataSeedContributor, ITra
                 type: MenuType.Button,
                 sort: 1,
                 authorizationMode: MenuAuthorizationMode.Permission,
-                permissionNames: new[] { "TenantManagement.Tenants.Create" },
+                permissionNames: AdminSeedPermissionNames.TenantCreate,
                 scope: MenuScope.Platform,
                 buttonCode: "TenantManagement.Tenants.Create"),
             new(
@@ -863,7 +864,7 @@ public class MenuDataSeedContributor : DomainService, IDataSeedContributor, ITra
                 type: MenuType.Button,
                 sort: 2,
                 authorizationMode: MenuAuthorizationMode.Permission,
-                permissionNames: new[] { "TenantManagement.Tenants.Update" },
+                permissionNames: AdminSeedPermissionNames.TenantUpdate,
                 scope: MenuScope.Platform,
                 buttonCode: "TenantManagement.Tenants.Update"),
             new(
@@ -879,7 +880,7 @@ public class MenuDataSeedContributor : DomainService, IDataSeedContributor, ITra
                 type: MenuType.Button,
                 sort: 3,
                 authorizationMode: MenuAuthorizationMode.Permission,
-                permissionNames: new[] { "TenantManagement.Tenants.Delete" },
+                permissionNames: AdminSeedPermissionNames.TenantDelete,
                 scope: MenuScope.Platform,
                 buttonCode: "TenantManagement.Tenants.Delete"),
             new(
@@ -895,7 +896,7 @@ public class MenuDataSeedContributor : DomainService, IDataSeedContributor, ITra
                 type: MenuType.Button,
                 sort: 4,
                 authorizationMode: MenuAuthorizationMode.Permission,
-                permissionNames: new[] { "TenantManagement.Tenants.ManageFeatures" },
+                permissionNames: AdminSeedPermissionNames.TenantManageFeatures,
                 scope: MenuScope.Platform,
                 buttonCode: "TenantManagement.Tenants.ManageFeatures"),
 
@@ -913,7 +914,7 @@ public class MenuDataSeedContributor : DomainService, IDataSeedContributor, ITra
                 type: MenuType.Button,
                 sort: 1,
                 authorizationMode: MenuAuthorizationMode.Permission,
-                permissionNames: new[] { "OpenIddict.Applications.Create" },
+                permissionNames: AdminSeedPermissionNames.OpenIddictApplicationCreate,
                 scope: MenuScope.Platform,
                 buttonCode: "OpenIddict.Applications.Create"),
             new(
@@ -929,7 +930,7 @@ public class MenuDataSeedContributor : DomainService, IDataSeedContributor, ITra
                 type: MenuType.Button,
                 sort: 2,
                 authorizationMode: MenuAuthorizationMode.Permission,
-                permissionNames: new[] { "OpenIddict.Applications.Update" },
+                permissionNames: AdminSeedPermissionNames.OpenIddictApplicationUpdate,
                 scope: MenuScope.Platform,
                 buttonCode: "OpenIddict.Applications.Update"),
             new(
@@ -945,7 +946,7 @@ public class MenuDataSeedContributor : DomainService, IDataSeedContributor, ITra
                 type: MenuType.Button,
                 sort: 3,
                 authorizationMode: MenuAuthorizationMode.Permission,
-                permissionNames: new[] { "OpenIddict.Applications.Delete" },
+                permissionNames: AdminSeedPermissionNames.OpenIddictApplicationDelete,
                 scope: MenuScope.Platform,
                 buttonCode: "OpenIddict.Applications.Delete"),
 
@@ -963,7 +964,7 @@ public class MenuDataSeedContributor : DomainService, IDataSeedContributor, ITra
                 type: MenuType.Button,
                 sort: 1,
                 authorizationMode: MenuAuthorizationMode.Permission,
-                permissionNames: new[] { "OpenIddict.Scopes.Create" },
+                permissionNames: AdminSeedPermissionNames.OpenIddictScopeCreate,
                 scope: MenuScope.Platform,
                 buttonCode: "OpenIddict.Scopes.Create"),
             new(
@@ -979,7 +980,7 @@ public class MenuDataSeedContributor : DomainService, IDataSeedContributor, ITra
                 type: MenuType.Button,
                 sort: 2,
                 authorizationMode: MenuAuthorizationMode.Permission,
-                permissionNames: new[] { "OpenIddict.Scopes.Update" },
+                permissionNames: AdminSeedPermissionNames.OpenIddictScopeUpdate,
                 scope: MenuScope.Platform,
                 buttonCode: "OpenIddict.Scopes.Update"),
             new(
@@ -995,7 +996,7 @@ public class MenuDataSeedContributor : DomainService, IDataSeedContributor, ITra
                 type: MenuType.Button,
                 sort: 3,
                 authorizationMode: MenuAuthorizationMode.Permission,
-                permissionNames: new[] { "OpenIddict.Scopes.Delete" },
+                permissionNames: AdminSeedPermissionNames.OpenIddictScopeDelete,
                 scope: MenuScope.Platform,
                 buttonCode: "OpenIddict.Scopes.Delete"),
 
@@ -1013,7 +1014,7 @@ public class MenuDataSeedContributor : DomainService, IDataSeedContributor, ITra
                 type: MenuType.Button,
                 sort: 1,
                 authorizationMode: MenuAuthorizationMode.Permission,
-                permissionNames: new[] { "CenseqIdentity.Roles.Create" },
+                permissionNames: AdminSeedPermissionNames.RoleCreate,
                 scope: MenuScope.Tenant,
                 buttonCode: "CenseqIdentity.Roles.Create"),
             new(
@@ -1029,7 +1030,7 @@ public class MenuDataSeedContributor : DomainService, IDataSeedContributor, ITra
                 type: MenuType.Button,
                 sort: 2,
                 authorizationMode: MenuAuthorizationMode.Permission,
-                permissionNames: new[] { "CenseqIdentity.Roles.Update" },
+                permissionNames: AdminSeedPermissionNames.RoleUpdate,
                 scope: MenuScope.Tenant,
                 buttonCode: "CenseqIdentity.Roles.Update"),
             new(
@@ -1045,7 +1046,7 @@ public class MenuDataSeedContributor : DomainService, IDataSeedContributor, ITra
                 type: MenuType.Button,
                 sort: 3,
                 authorizationMode: MenuAuthorizationMode.Permission,
-                permissionNames: new[] { "CenseqIdentity.Roles.Delete" },
+                permissionNames: AdminSeedPermissionNames.RoleDelete,
                 scope: MenuScope.Tenant,
                 buttonCode: "CenseqIdentity.Roles.Delete"),
             new(
@@ -1061,7 +1062,7 @@ public class MenuDataSeedContributor : DomainService, IDataSeedContributor, ITra
                 type: MenuType.Button,
                 sort: 4,
                 authorizationMode: MenuAuthorizationMode.Permission,
-                permissionNames: new[] { "CenseqIdentity.Roles.ManagePermissions" },
+                permissionNames: AdminSeedPermissionNames.RoleManagePermissions,
                 scope: MenuScope.Tenant,
                 buttonCode: "CenseqIdentity.Roles.ManagePermissions"),
 
@@ -1079,7 +1080,7 @@ public class MenuDataSeedContributor : DomainService, IDataSeedContributor, ITra
                 type: MenuType.Button,
                 sort: 1,
                 authorizationMode: MenuAuthorizationMode.Permission,
-                permissionNames: new[] { "CenseqIdentity.Users.Create" },
+                permissionNames: AdminSeedPermissionNames.UserCreate,
                 scope: MenuScope.Tenant,
                 buttonCode: "CenseqIdentity.Users.Create"),
             new(
@@ -1095,7 +1096,7 @@ public class MenuDataSeedContributor : DomainService, IDataSeedContributor, ITra
                 type: MenuType.Button,
                 sort: 2,
                 authorizationMode: MenuAuthorizationMode.Permission,
-                permissionNames: new[] { "CenseqIdentity.Users.Update" },
+                permissionNames: AdminSeedPermissionNames.UserUpdate,
                 scope: MenuScope.Tenant,
                 buttonCode: "CenseqIdentity.Users.Update"),
             new(
@@ -1111,7 +1112,7 @@ public class MenuDataSeedContributor : DomainService, IDataSeedContributor, ITra
                 type: MenuType.Button,
                 sort: 3,
                 authorizationMode: MenuAuthorizationMode.Permission,
-                permissionNames: new[] { "CenseqIdentity.Users.Delete" },
+                permissionNames: AdminSeedPermissionNames.UserDelete,
                 scope: MenuScope.Tenant,
                 buttonCode: "CenseqIdentity.Users.Delete"),
             new(
@@ -1127,7 +1128,7 @@ public class MenuDataSeedContributor : DomainService, IDataSeedContributor, ITra
                 type: MenuType.Button,
                 sort: 4,
                 authorizationMode: MenuAuthorizationMode.Permission,
-                permissionNames: new[] { "CenseqIdentity.Users.Update.ManageRoles" },
+                permissionNames: AdminSeedPermissionNames.UserManageRoles,
                 scope: MenuScope.Tenant,
                 buttonCode: "CenseqIdentity.Users.Update.ManageRoles"),
 
@@ -1145,7 +1146,7 @@ public class MenuDataSeedContributor : DomainService, IDataSeedContributor, ITra
                 type: MenuType.Button,
                 sort: 1,
                 authorizationMode: MenuAuthorizationMode.Permission,
-                permissionNames: new[] { "CenseqIdentity.OrganizationUnits.Create" },
+                permissionNames: AdminSeedPermissionNames.OrganizationUnitCreate,
                 scope: MenuScope.Tenant,
                 buttonCode: "CenseqIdentity.OrganizationUnits.Create"),
             new(
@@ -1161,7 +1162,7 @@ public class MenuDataSeedContributor : DomainService, IDataSeedContributor, ITra
                 type: MenuType.Button,
                 sort: 2,
                 authorizationMode: MenuAuthorizationMode.Permission,
-                permissionNames: new[] { "CenseqIdentity.OrganizationUnits.Update" },
+                permissionNames: AdminSeedPermissionNames.OrganizationUnitUpdate,
                 scope: MenuScope.Tenant,
                 buttonCode: "CenseqIdentity.OrganizationUnits.Update"),
             new(
@@ -1177,7 +1178,7 @@ public class MenuDataSeedContributor : DomainService, IDataSeedContributor, ITra
                 type: MenuType.Button,
                 sort: 3,
                 authorizationMode: MenuAuthorizationMode.Permission,
-                permissionNames: new[] { "CenseqIdentity.OrganizationUnits.Delete" },
+                permissionNames: AdminSeedPermissionNames.OrganizationUnitDelete,
                 scope: MenuScope.Tenant,
                 buttonCode: "CenseqIdentity.OrganizationUnits.Delete")
         };

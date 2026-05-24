@@ -14,7 +14,7 @@ public class IdentityDataSeedContributor : IDataSeedContributor, ITransientDepen
     public const string AdminUserNamePropertyName = "AdminUserName";
     public const string AdminUserNameDefaultValue = "admin";
     public const string AdminNamePropertyName = "AdminName";
-    public const string AdminNameDefaultValue = "admin";
+    public const string AdminNameDefaultValue = "管理员";
     public const string AdminPasswordPropertyName = "AdminPassword";
     public const string AdminPasswordDefaultValue = "1q2w3E*";
 
