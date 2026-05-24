@@ -17,6 +17,9 @@ namespace Censeq.Identity;
 /// </summary>
 public class IdentityDataSeeder : ITransientDependency, IIdentityDataSeeder
 {
+    public const string AdminRoleCode = "admin";
+    public const string AdminRoleName = "管理员";
+
     private static readonly string[] DefaultAdminPermissions =
     [
         "CenseqAdmin.Menus",
@@ -154,15 +157,14 @@ public class IdentityDataSeeder : ITransientDependency, IIdentityDataSeeder
                 result.CreatedAdminUser = true;
             }
 
-            //"admin" role
-            const string adminRoleName = "admin";
-            var adminRole =
-                await RoleRepository.FindByNormalizedNameAsync(LookupNormalizer.NormalizeName(adminRoleName));
+            // 管理员角色
+            var adminRole = await RoleRepository.FindByCodeAsync(AdminRoleCode,false);
+
             if (adminRole == null)
             {
                 adminRole = new IdentityRole(
                     GuidGenerator.Create(),
-                    adminRoleName,
+                    AdminRoleName,
                     tenantId
                 )
                 {
@@ -170,20 +172,62 @@ public class IdentityDataSeeder : ITransientDependency, IIdentityDataSeeder
                     IsPublic = true
                 };
 
+                adminRole.Code = AdminRoleCode;
+
                 (await RoleManager.CreateAsync(adminRole)).CheckErrors();
                 result.CreatedAdminRole = true;
+            }
+            else
+            {
+                var roleChanged = false;
+
+                if (!string.Equals(adminRole.Name, AdminRoleName, StringComparison.Ordinal))
+                {
+                    adminRole.Name = AdminRoleName;
+                    adminRole.NormalizedName = LookupNormalizer.NormalizeName(AdminRoleName);
+                    roleChanged = true;
+                }
+
+                if (!string.Equals(adminRole.Code, AdminRoleCode, StringComparison.Ordinal))
+                {
+                    adminRole.Code = AdminRoleCode;
+                    roleChanged = true;
+                }
+
+                if (!adminRole.IsStatic)
+                {
+                    adminRole.IsStatic = true;
+                    roleChanged = true;
+                }
+
+                if (!adminRole.IsPublic)
+                {
+                    adminRole.IsPublic = true;
+                    roleChanged = true;
+                }
+
+                if (adminRole.CreationTime == default)
+                {
+                    adminRole.CreationTime = DateTime.Now;
+                    roleChanged = true;
+                }
+
+                if (roleChanged)
+                {
+                    (await RoleManager.UpdateAsync(adminRole)).CheckErrors();
+                }
             }
 
             await PermissionDataSeeder.SeedAsync(
                 RolePermissionValueProvider.ProviderName,
-                adminRoleName,
+                AdminRoleName,
                 DefaultAdminPermissions,
                 tenantId
             );
 
-            if (!await UserManager.IsInRoleAsync(adminUser, adminRoleName))
+            if (!await UserManager.IsInRoleAsync(adminUser, AdminRoleName))
             {
-                (await UserManager.AddToRoleAsync(adminUser, adminRoleName)).CheckErrors();
+                (await UserManager.AddToRoleAsync(adminUser, AdminRoleName)).CheckErrors();
             }
 
             if (tenantId == null)

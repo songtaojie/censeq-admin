@@ -93,7 +93,9 @@ public class IdentityRoleAppService : IdentityAppServiceBase, IIdentityRoleAppSe
         )
         {
             IsDefault = input.IsDefault,
-            IsPublic = input.IsPublic
+            IsPublic = input.IsPublic,
+            Status = input.Status,
+            Remark = input.Remark
         };
 
         role.SetCode(normalizedCode);
@@ -129,6 +131,8 @@ public class IdentityRoleAppService : IdentityAppServiceBase, IIdentityRoleAppSe
 
         role.IsDefault = input.IsDefault;
         role.IsPublic = input.IsPublic;
+        role.Status = input.Status;
+        role.Remark = input.Remark;
 
         var normalizedCode = NormalizeRoleCode(input.Code);
         if (!string.Equals(role.Code, normalizedCode, StringComparison.Ordinal))
@@ -167,9 +171,7 @@ public class IdentityRoleAppService : IdentityAppServiceBase, IIdentityRoleAppSe
     /// </summary>
     public virtual async Task<IdentityRoleClaimListDto> GetClaimsAsync(Guid roleId)
     {
-        var role = await RoleRepository.FindByNormalizedNameAsync(
-            (await RoleManager.GetByIdAsync(roleId)).NormalizedName,
-            includeDetails: true);
+        var role = await RoleRepository.FindByIdAsync(roleId, includeDetails: true);
         if (role == null)
         {
             throw new Volo.Abp.Domain.Entities.EntityNotFoundException(typeof(IdentityRole), roleId);
@@ -193,9 +195,7 @@ public class IdentityRoleAppService : IdentityAppServiceBase, IIdentityRoleAppSe
             throw new UserFriendlyException($"声明类型 '{input.ClaimType}' 不存在，请先在声明类型管理中维护。");
         }
 
-        var role = await RoleRepository.FindByNormalizedNameAsync(
-            (await RoleManager.GetByIdAsync(roleId)).NormalizedName,
-            includeDetails: true);
+        var role = await RoleRepository.FindByIdAsync(roleId, includeDetails: true);
         if (role == null)
         {
             throw new Volo.Abp.Domain.Entities.EntityNotFoundException(typeof(IdentityRole), roleId);
@@ -210,9 +210,7 @@ public class IdentityRoleAppService : IdentityAppServiceBase, IIdentityRoleAppSe
     [Authorize(IdentityPermissions.Roles.Update)]
     public virtual async Task RemoveClaimAsync(Guid roleId, Guid claimId)
     {
-        var role = await RoleRepository.FindByNormalizedNameAsync(
-            (await RoleManager.GetByIdAsync(roleId)).NormalizedName,
-            includeDetails: true);
+        var role = await RoleRepository.FindByIdAsync(roleId, includeDetails: true);
         if (role == null)
         {
             throw new Volo.Abp.Domain.Entities.EntityNotFoundException(typeof(IdentityRole), roleId);
@@ -226,25 +224,20 @@ public class IdentityRoleAppService : IdentityAppServiceBase, IIdentityRoleAppSe
         }
     }
 
-    protected virtual async Task EnsureRoleCodeUniqueAsync(string? code, Guid? excludedRoleId = null)
+    protected virtual async Task EnsureRoleCodeUniqueAsync(string code, Guid? excludedRoleId = null)
     {
-        if (code.IsNullOrWhiteSpace())
-        {
-            return;
-        }
-
-        var existingRole = await RoleRepository.FindByCodeAsync(code!);
+        var existingRole = await RoleRepository.FindByCodeAsync(code,false);
         if (existingRole != null && existingRole.Id != excludedRoleId)
         {
             throw new UserFriendlyException($"角色编码“{code}”已存在，请使用其他编码。");
         }
     }
 
-    protected virtual string? NormalizeRoleCode(string? code)
+    protected virtual string NormalizeRoleCode(string? code)
     {
         if (code.IsNullOrWhiteSpace())
         {
-            return null;
+            throw new UserFriendlyException("角色编码不能为空。");
         }
 
         return code.Trim().ToUpperInvariant();

@@ -1,15 +1,23 @@
 <template>
 	<div class="role-edit-dialog-container">
-		<el-dialog v-model="state.dialog.isShowDialog" width="520px" destroy-on-close draggable :close-on-click-modal="false">
+		<el-dialog v-model="state.dialog.isShowDialog" width="560px" destroy-on-close draggable :close-on-click-modal="false">
 			<template #header>
 				<div style="color: #fff">
 					<el-icon size="16" style="margin-right: 3px; display: inline; vertical-align: middle"><ele-Edit /></el-icon>
 					<span>{{ state.dialog.title }}</span>
 				</div>
 			</template>
-			<div class="dialog-intro">维护角色名称及其基础属性。默认角色会自动分配给新用户，公共角色可供其他用户查看和选择。</div>
+			<div class="dialog-intro">维护角色名称、状态及其基础属性。默认角色会自动分配给新用户，公共角色可供其他用户查看和选择。</div>
 			<el-form ref="formRef" :model="state.ruleForm" :rules="rules" size="default" label-width="96px" class="role-form">
-				<el-form-item label="角色编码" prop="code">
+				<el-form-item prop="code">
+					<template #label>
+						<span class="form-label-with-help">
+							角色编码
+							<el-tooltip content="角色编码唯一；编码一旦设置，后续不允许修改。" placement="top">
+								<el-icon class="label-help-icon"><ele-QuestionFilled /></el-icon>
+							</el-tooltip>
+						</span>
+					</template>
 					<el-input
 						v-model="state.ruleForm.code"
 						placeholder="请输入角色编码"
@@ -18,9 +26,16 @@
 						show-word-limit
 						:disabled="state.dialog.type === 'edit' && !!state.originalCode"
 					/>
-					<div class="form-tip">角色编码唯一；编码一旦设置，后续不允许修改。</div>
 				</el-form-item>
-				<el-form-item label="角色名称" prop="name">
+				<el-form-item prop="name">
+					<template #label>
+						<span class="form-label-with-help">
+							角色名称
+							<el-tooltip v-if="state.dialog.type === 'edit' && state.ruleForm.isStatic" content="静态角色名称不允许修改。" placement="top">
+								<el-icon class="label-help-icon"><ele-QuestionFilled /></el-icon>
+							</el-tooltip>
+						</span>
+					</template>
 					<el-input
 						v-model="state.ruleForm.name"
 						placeholder="请输入角色名称"
@@ -29,22 +44,51 @@
 						show-word-limit
 						:disabled="state.dialog.type === 'edit' && state.ruleForm.isStatic"
 					/>
-					<div v-if="state.dialog.type === 'edit' && state.ruleForm.isStatic" class="form-tip">静态角色名称不允许修改。</div>
 				</el-form-item>
 				<el-row :gutter="12">
 					<el-col :span="12">
-						<el-form-item label="默认角色">
+						<el-form-item>
+							<template #label>
+								<span class="form-label-with-help">
+									默认角色
+									<el-tooltip content="默认角色会自动分配给新用户" placement="top">
+										<el-icon class="label-help-icon"><ele-QuestionFilled /></el-icon>
+									</el-tooltip>
+								</span>
+							</template>
 							<el-switch v-model="state.ruleForm.isDefault" inline-prompt active-text="是" inactive-text="否" />
-							<div class="form-tip">默认角色会自动分配给新用户</div>
 						</el-form-item>
 					</el-col>
 					<el-col :span="12">
-						<el-form-item label="公共角色">
+						<el-form-item>
+							<template #label>
+								<span class="form-label-with-help">
+									公共角色
+									<el-tooltip content="公共角色可以被其他用户查看" placement="top">
+										<el-icon class="label-help-icon"><ele-QuestionFilled /></el-icon>
+									</el-tooltip>
+								</span>
+							</template>
 							<el-switch v-model="state.ruleForm.isPublic" inline-prompt active-text="是" inactive-text="否" />
-							<div class="form-tip">公共角色可以被其他用户查看</div>
 						</el-form-item>
 					</el-col>
 				</el-row>
+				<el-form-item label="状态">
+					<el-radio-group v-model="state.ruleForm.status">
+						<el-radio :value="CommonStatus.Enabled">启用</el-radio>
+						<el-radio :value="CommonStatus.Disabled">禁用</el-radio>
+					</el-radio-group>
+				</el-form-item>
+				<el-form-item label="备注">
+					<el-input
+						v-model="state.ruleForm.remark"
+						type="textarea"
+						:rows="3"
+						maxlength="512"
+						show-word-limit
+						placeholder="请输入备注内容"
+					/>
+				</el-form-item>
 			</el-form>
 			<template #footer>
 				<span class="dialog-footer">
@@ -61,10 +105,9 @@
 <script setup lang="ts" name="roleEditDialog">
 import { reactive, ref } from 'vue';
 import { ElMessage, FormRules } from 'element-plus';
-import { IdentityRoleDto } from '/@/api/models/identity';
+import { CommonStatus, IdentityRoleDto } from '/@/api/models/identity';
 import { useIdentityApi } from '/@/api/apis';
 
-// 定义子组件向父组件传值/事件
 const emit = defineEmits(['refresh']);
 
 const formRef = ref();
@@ -73,7 +116,9 @@ const state = reactive({
 	ruleForm: {
 		code: '',
 		isDefault: false,
+		status: CommonStatus.Enabled,
 		isPublic: false,
+		remark: '',
 	} as IdentityRoleDto,
 	originalCode: '',
 	dialog: {
@@ -86,14 +131,16 @@ const state = reactive({
 });
 
 const rules: FormRules = {
-	code: [{ max: 64, message: '长度不能超过 64 个字符', trigger: 'blur' }],
+	code: [
+		{ required: true, message: '请输入角色编码', trigger: 'blur' },
+		{ max: 64, message: '长度不能超过 64 个字符', trigger: 'blur' },
+	],
 	name: [
 		{ required: true, message: '请输入角色名称', trigger: 'blur' },
 		{ min: 2, max: 50, message: '长度在 2 到 50 个字符', trigger: 'blur' },
 	],
 };
 
-// 打开弹窗
 const openDialog = (row?: IdentityRoleDto) => {
 	state.dialog.type = row ? 'edit' : 'add';
 	if (row) {
@@ -102,7 +149,7 @@ const openDialog = (row?: IdentityRoleDto) => {
 		state.dialog.title = '修改角色';
 		state.dialog.submitTxt = '修 改';
 	} else {
-		state.ruleForm = { isDefault: false, isPublic: false, name: '', code: '' } as IdentityRoleDto;
+		state.ruleForm = { isDefault: false, status: CommonStatus.Enabled, isPublic: false, name: '', code: '', remark: '' } as IdentityRoleDto;
 		state.originalCode = '';
 		state.dialog.title = '新增角色';
 		state.dialog.submitTxt = '新 增';
@@ -110,19 +157,16 @@ const openDialog = (row?: IdentityRoleDto) => {
 	state.dialog.isShowDialog = true;
 };
 
-// 关闭弹窗
 const closeDialog = () => {
 	state.dialog.isShowDialog = false;
 	state.originalCode = '';
 	formRef.value?.resetFields();
 };
 
-// 取消
 const onCancel = () => {
 	closeDialog();
 };
 
-// 提交
 const onSubmit = () => {
 	formRef.value.validate(async (valid: boolean) => {
 		if (!valid) return;
@@ -131,19 +175,23 @@ const onSubmit = () => {
 			const { createRole, updateRole } = useIdentityApi();
 			if (state.dialog.type === 'edit' && state.ruleForm.id) {
 				await updateRole(state.ruleForm.id, {
-					code: state.ruleForm.code || undefined,
+					code: state.ruleForm.code.trim(),
 					name: state.ruleForm.name,
 					isDefault: state.ruleForm.isDefault,
+					status: state.ruleForm.status,
 					isPublic: state.ruleForm.isPublic,
+					remark: state.ruleForm.remark || undefined,
 					concurrencyStamp: state.ruleForm.concurrencyStamp,
 				});
 				ElMessage.success('修改成功');
 			} else {
 				await createRole({
-					code: state.ruleForm.code || undefined,
+					code: state.ruleForm.code.trim(),
 					name: state.ruleForm.name,
 					isDefault: state.ruleForm.isDefault,
+					status: state.ruleForm.status,
 					isPublic: state.ruleForm.isPublic,
+					remark: state.ruleForm.remark || undefined,
 				});
 				ElMessage.success('新增成功');
 			}
@@ -155,7 +203,6 @@ const onSubmit = () => {
 	});
 };
 
-// 暴露变量
 defineExpose({
 	openDialog,
 });
@@ -178,11 +225,18 @@ defineExpose({
 		}
 	}
 
-	.form-tip {
-		font-size: 12px;
-		color: #909399;
-		margin-top: 6px;
-		line-height: 1.5;
+	.form-label-with-help {
+		display: inline-flex;
+		align-items: center;
+		justify-content: flex-end;
+		gap: 6px;
+		white-space: nowrap;
+	}
+
+	.label-help-icon {
+		font-size: 14px;
+		color: var(--el-color-info);
+		cursor: help;
 	}
 }
 </style>

@@ -2,6 +2,11 @@ import type { ExtensibleEntityDto, ExtensibleFullAuditedEntityDto, ExtensibleObj
 
 export type IdentityClaimValueType = 'String' | 'Int' | 'Boolean' | 'DateTime';
 
+export enum CommonStatus {
+	Disabled = 0,
+	Enabled = 1,
+}
+
 export interface GetIdentityRolesRequest extends PagedAndSortedRequestDto {
 	filter?: string;
 }
@@ -45,6 +50,8 @@ export interface IdentityRoleCreateOrUpdateDtoBase extends ExtensibleObject {
 	code?: string;
 	isDefault: boolean;
 	isPublic: boolean;
+	status: number;
+	remark?: string;
 }
 
 export interface IdentityRoleDto extends ExtensibleEntityDto<string> {
@@ -53,6 +60,8 @@ export interface IdentityRoleDto extends ExtensibleEntityDto<string> {
 	isDefault: boolean;
 	isStatic: boolean;
 	isPublic: boolean;
+	status: number;
+	remark?: string;
 	concurrencyStamp?: string;
 }
 

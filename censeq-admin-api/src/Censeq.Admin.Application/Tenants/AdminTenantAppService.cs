@@ -158,7 +158,7 @@ public class AdminTenantAppService : AdminAppService
 
     private async Task<IdentityUser?> FindTenantAdminUserAsync()
     {
-        var adminUsers = await _userManager.GetUsersInRoleAsync("admin");
+        var adminUsers = await _userManager.GetUsersInRoleAsync(IdentityDataSeeder.AdminRoleName);
         return adminUsers.FirstOrDefault();
     }
 }

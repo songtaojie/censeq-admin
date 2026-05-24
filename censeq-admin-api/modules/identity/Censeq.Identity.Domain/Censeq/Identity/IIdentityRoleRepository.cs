@@ -11,6 +11,12 @@ namespace Censeq.Identity;
 /// </summary>
 public interface IIdentityRoleRepository : IBasicRepository<IdentityRole, Guid>
 {
+    Task<IdentityRole?> FindByIdAsync(
+        Guid id,
+        bool includeDetails = true,
+        CancellationToken cancellationToken = default
+    );
+
     Task<IdentityRole> FindByNormalizedNameAsync(
         string normalizedRoleName,
         bool includeDetails = true,
@@ -19,6 +25,7 @@ public interface IIdentityRoleRepository : IBasicRepository<IdentityRole, Guid>
 
     Task<IdentityRole?> FindByCodeAsync(
         string code,
+        bool includeDetails = true,
         CancellationToken cancellationToken = default
     );
 

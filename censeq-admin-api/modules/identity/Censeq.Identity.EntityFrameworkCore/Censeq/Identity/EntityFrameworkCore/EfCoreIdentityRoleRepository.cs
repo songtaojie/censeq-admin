@@ -21,6 +21,20 @@ public class EfCoreIdentityRoleRepository : EfCoreRepository<ICenseqIdentityDbCo
     }
 
     /// <summary>
+    /// Task<IdentityRole?>
+    /// </summary>
+    public virtual async Task<IdentityRole?> FindByIdAsync(
+        Guid id,
+        bool includeDetails = true,
+        CancellationToken cancellationToken = default)
+    {
+        return await (await GetDbSetAsync())
+            .IncludeDetails(includeDetails)
+            .OrderBy(x => x.Id)
+            .FirstOrDefaultAsync(r => r.Id == id, GetCancellationToken(cancellationToken));
+    }
+
+    /// <summary>
     /// Task<IdentityRole>
     /// </summary>
     public virtual async Task<IdentityRole> FindByNormalizedNameAsync(
@@ -39,9 +53,11 @@ public class EfCoreIdentityRoleRepository : EfCoreRepository<ICenseqIdentityDbCo
     /// </summary>
     public virtual async Task<IdentityRole?> FindByCodeAsync(
         string code,
+        bool includeDetails = true,
         CancellationToken cancellationToken = default)
     {
         return await (await GetDbSetAsync())
+            .IncludeDetails(includeDetails)
             .OrderBy(x => x.Id)
             .FirstOrDefaultAsync(r => r.Code == code, GetCancellationToken(cancellationToken));
     }

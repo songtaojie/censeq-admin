@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using Censeq.Framework.Core;
 using Censeq.Framework.EntityFrameworkCore;
 using Volo.Abp;
 using Censeq.Identity.Entities;
@@ -104,6 +105,8 @@ namespace Censeq.Identity.EntityFrameworkCore.Modeling
                 b.Property(r => r.IsDefault);
                 b.Property(r => r.IsStatic);
                 b.Property(r => r.IsPublic);
+                b.Property(r => r.Status).HasDefaultValue(CommonStatus.Enabled);
+                b.Property(r => r.Remark).IsRequired(false).HasMaxLength(IdentityRoleConsts.MaxRemarkLength);
                 b.Property(r => r.TenantId);
 
                 b.HasIndex(r => r.Code).IsUnique();

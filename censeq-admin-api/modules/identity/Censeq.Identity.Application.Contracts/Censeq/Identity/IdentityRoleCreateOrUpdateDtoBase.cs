@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using Censeq.Framework.Core;
 using Volo.Abp.ObjectExtending;
 using Volo.Abp.Validation;
 
@@ -14,13 +15,19 @@ public class IdentityRoleCreateOrUpdateDtoBase : ExtensibleObject
     [Display(Name = "RoleName")]
     public string Name { get; set; }
 
+    [Required]
     [DynamicStringLength(typeof(IdentityRoleConsts), nameof(IdentityRoleConsts.MaxCodeLength))]
     [Display(Name = "RoleCode")]
-    public string? Code { get; set; }
+    public string Code { get; set; }
 
     public bool IsDefault { get; set; }
 
     public bool IsPublic { get; set; }
+
+    public CommonStatus Status { get; set; } = CommonStatus.Enabled;
+
+    [StringLength(512)]
+    public string? Remark { get; set; }
 
     protected IdentityRoleCreateOrUpdateDtoBase() : base(false)
     {

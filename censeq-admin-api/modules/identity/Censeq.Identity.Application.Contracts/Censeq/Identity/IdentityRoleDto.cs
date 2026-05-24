@@ -1,4 +1,5 @@
 ﻿using System;
+using Censeq.Framework.Core;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Domain.Entities;
 
@@ -18,6 +19,10 @@ public class IdentityRoleDto : ExtensibleEntityDto<Guid>, IHasConcurrencyStamp
     public bool IsStatic { get; set; }
 
     public bool IsPublic { get; set; }
+
+    public CommonStatus Status { get; set; }
+
+    public string? Remark { get; set; }
 
     public string ConcurrencyStamp { get; set; }
 }

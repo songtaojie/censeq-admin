@@ -1,12 +1,9 @@
-using System;
-using Censeq.Identity;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Linq;
-using System.Security.Claims;
+using Censeq.Framework.Core;
 using JetBrains.Annotations;
+using System.Collections.ObjectModel;
+using System.Security.Claims;
 using Volo.Abp.Auditing;
-using Volo.Abp.Domain.Entities;
+using Volo.Abp.Domain.Entities.Auditing;
 using Volo.Abp.Guids;
 using Volo.Abp.MultiTenancy;
 
@@ -15,7 +12,7 @@ namespace Censeq.Identity.Entities;
 /// <summary>
 /// 身份系统中的角色
 /// </summary>
-public class IdentityRole : AggregateRoot<Guid>, IMultiTenant, IHasEntityVersion
+public class IdentityRole : FullAuditedAggregateRoot<Guid>, IMultiTenant, IHasEntityVersion
 {
     public virtual Guid? TenantId { get; protected set; }
 
@@ -33,7 +30,7 @@ public class IdentityRole : AggregateRoot<Guid>, IMultiTenant, IHasEntityVersion
     /// <summary>
     /// 角色业务代码
     /// </summary>
-    public virtual string? Code { get; protected internal set; }
+    public virtual string Code { get; protected internal set; }
 
     /// <summary>
     /// 角色声明导航属性
@@ -56,6 +53,16 @@ public class IdentityRole : AggregateRoot<Guid>, IMultiTenant, IHasEntityVersion
     public virtual bool IsPublic { get; set; }
 
     /// <summary>
+    /// 状态：0=禁用 1=启用
+    /// </summary>
+    public virtual CommonStatus Status { get; set; } = CommonStatus.Enabled;
+
+    /// <summary>
+    /// 备注/描述
+    /// </summary>
+    public virtual string? Remark { get; set; }
+
+    /// <summary>
     /// 实体变更时递增的版本值
     /// </summary>
     public virtual int EntityVersion { get; protected set; }
@@ -70,6 +77,7 @@ public class IdentityRole : AggregateRoot<Guid>, IMultiTenant, IHasEntityVersion
         Check.NotNull(name, nameof(name));
 
         Id = id;
+        CreationTime = DateTime.Now;
         Name = name;
         TenantId = tenantId;
         NormalizedName = name.ToUpperInvariant();
@@ -142,19 +150,17 @@ public class IdentityRole : AggregateRoot<Guid>, IMultiTenant, IHasEntityVersion
         );
     }
 
-    public virtual void SetCode(string? code)
+    public virtual void SetCode(string code)
     {
-        if (string.IsNullOrWhiteSpace(code))
-        {
-            Code = null;
-            return;
-        }
+        Check.NotNullOrWhiteSpace(code, nameof(code));
 
-        Code = Check.Length(code.Trim().ToUpperInvariant(), nameof(code), IdentityRoleConsts.MaxCodeLength);
+        var normalizedCode = code.Trim().ToUpperInvariant();
+        Check.Length(normalizedCode, nameof(code), IdentityRoleConsts.MaxCodeLength);
+        Code = normalizedCode;
     }
 
     public override string ToString()
     {
-        return $"{base.ToString()}, Name = {Name}";
+        return $"{base.ToString()},Code = {Code} Name = {Name}";
     }
 }

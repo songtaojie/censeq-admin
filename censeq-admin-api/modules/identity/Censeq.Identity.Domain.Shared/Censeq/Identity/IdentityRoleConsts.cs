@@ -19,4 +19,9 @@ public static class IdentityRoleConsts
     /// 最大标准化名称长度，默认值：256
     /// </summary>
     public static int MaxNormalizedNameLength { get; set; } = 256;
+
+    /// <summary>
+    /// 最大备注长度，默认值：512
+    /// </summary>
+    public static int MaxRemarkLength { get; set; } = 512;
 }

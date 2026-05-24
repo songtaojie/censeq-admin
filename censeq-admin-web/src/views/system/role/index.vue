@@ -64,6 +64,19 @@
 						</template>
 					</el-table-column>
 
+					<el-table-column label="状态" width="90" align="center">
+						<template #default="scope">
+							<el-tag v-if="scope.row.status === CommonStatus.Enabled" size="small" type="success" effect="light">启 用</el-tag>
+							<el-tag v-else size="small" type="info" effect="light">禁 用</el-tag>
+						</template>
+					</el-table-column>
+
+					<el-table-column prop="remark" label="备注" min-width="180" show-overflow-tooltip>
+						<template #default="scope">
+							<el-text type="info" size="small">{{ scope.row.remark || '—' }}</el-text>
+						</template>
+					</el-table-column>
+
 					<el-table-column label="操作" width="290" align="center" fixed="right">
 						<template #default="scope">
 							<el-button size="small" text type="primary" @click="onOpenEditRole(scope.row)">
@@ -120,7 +133,7 @@
 import { defineAsyncComponent, reactive, onMounted, ref } from 'vue';
 import { ElMessage, ElMessageBox } from 'element-plus';
 import { useIdentityApi } from '/@/api/apis';
-import { IdentityRoleDto } from '/@/api/models/identity';
+import { CommonStatus, IdentityRoleDto } from '/@/api/models/identity';
 
 const RoleEditDialog = defineAsyncComponent(() => import('./edit.vue'));
 const RolePermissionDialog = defineAsyncComponent(() => import('./permission.vue'));
