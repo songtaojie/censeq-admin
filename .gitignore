@@ -6,6 +6,7 @@
 *.user
 *.userosscache
 *.sln.docstates
+*.lscache
 
 # C# Dev Kit language service cache
 *.lscache
