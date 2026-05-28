@@ -23,4 +23,5 @@
   <ItemGroup>
     <ProjectReference Include="..\..\modules\account\Censeq.Account.Application\Censeq.Account.Application.csproj" />
   </ItemGroup>
+
 </Project>

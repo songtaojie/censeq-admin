@@ -23,6 +23,7 @@
   </PropertyGroup>
   <ItemGroup>
     <!-- ABP Framework -->
+    <PackageVersion Include="OnceMi.AspNetCore.OSS" Version="1.2.0" />
     <PackageVersion Include="Volo.Abp" Version="$(AbpVersion)" />
     <PackageVersion Include="Volo.Abp.Account.Application" Version="$(AbpVersion)" />
     <PackageVersion Include="Volo.Abp.Account.Application.Contracts" Version="$(AbpVersion)" />

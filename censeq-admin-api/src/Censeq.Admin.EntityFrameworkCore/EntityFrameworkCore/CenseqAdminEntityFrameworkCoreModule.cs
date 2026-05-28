@@ -1,5 +1,6 @@
 using Censeq.AuditLogging.EntityFrameworkCore;
 using Censeq.FeatureManagement.EntityFrameworkCore;
+using Censeq.FileManagement.EntityFrameworkCore;
 using Censeq.Identity.EntityFrameworkCore;
 using Censeq.LocalizationManagement.EntityFrameworkCore;
 using Censeq.OpenIddict.EntityFrameworkCore;
@@ -26,6 +27,7 @@ namespace Censeq.Admin.EntityFrameworkCore;
     typeof(AbpEntityFrameworkCoreSqliteModule),
     typeof(CenseqSettingManagementEntityFrameworkCoreModule),
     typeof(CenseqTenantManagementEntityFrameworkCoreModule),
+    typeof(CenseqFileManagementEntityFrameworkCoreModule),
     typeof(CenseqFeatureManagementEntityFrameworkCoreModule),
     typeof(CenseqLocalizationManagementEntityFrameworkCoreModule)
     )]
@@ -43,6 +45,7 @@ public class CenseqAdminEntityFrameworkCoreModule : AbpModule
             options.ReplaceDbContext<IPermissionManagementDbContext>(MultiTenancySides.Both);
             options.ReplaceDbContext<ISettingManagementDbContext>(MultiTenancySides.Both);
             options.ReplaceDbContext<ITenantManagementDbContext>(MultiTenancySides.Both);
+            options.ReplaceDbContext<IFileManagementDbContext>(MultiTenancySides.Both);
             options.ReplaceDbContext<ILocalizationManagementDbContext>(MultiTenancySides.Both);
         });
 
