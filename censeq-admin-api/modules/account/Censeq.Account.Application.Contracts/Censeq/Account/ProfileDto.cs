@@ -15,6 +15,8 @@ public class ProfileDto : ExtensibleObject, IHasConcurrencyStamp
 
     public string PhoneNumber { get; set; } = string.Empty;
 
+    public string? AvatarUrl { get; set; }
+
     public bool IsExternal { get; set; }
 
     public bool HasPassword { get; set; }

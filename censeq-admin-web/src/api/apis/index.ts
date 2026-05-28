@@ -1,5 +1,7 @@
 export * from './audit-logging/audit-log.service';
+export * from './account/profile.service';
 export * from './feature-management/features.service';
+export * from './file/file.service';
 export * from './identity/identity-claim-type.service';
 export * from './identity/identity-role.service';
 export * from './identity/identity-user.service';

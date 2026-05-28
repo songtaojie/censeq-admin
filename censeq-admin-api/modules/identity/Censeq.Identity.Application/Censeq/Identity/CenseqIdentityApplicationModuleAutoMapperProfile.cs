@@ -1,5 +1,6 @@
 using AutoMapper;
 using Censeq.Identity.Entities;
+using Volo.Abp.Data;
 
 namespace Censeq.Identity;
 
@@ -11,6 +12,8 @@ public class CenseqIdentityApplicationModuleAutoMapperProfile : Profile
     public CenseqIdentityApplicationModuleAutoMapperProfile()
     {
         CreateMap<IdentityUser, IdentityUserDto>()
+            .ForMember(dest => dest.AvatarUrl,
+                opt => opt.MapFrom(src => src.GetProperty<string>("AvatarUrl", null)))
             .MapExtraProperties();
 
         CreateMap<IdentityRole, IdentityRoleDto>()

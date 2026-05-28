@@ -1,182 +1,148 @@
 <template>
-	<div class="personal layout-pd">
-		<el-row>
-			<!-- 个人信息 -->
-			<el-col :xs="24" :sm="16">
-				<el-card shadow="hover" header="个人信息">
-					<div class="personal-user">
-						<div class="personal-user-left">
-							<el-upload class="h100 personal-user-left-upload" action="https://jsonplaceholder.typicode.com/posts/" multiple :limit="1">
-								<img src="https://img2.baidu.com/it/u=1978192862,2048448374&fm=253&fmt=auto&app=138&f=JPEG?w=504&h=500" />
-							</el-upload>
+	<div class="personal-page layout-pd">
+		<el-row :gutter="10" class="personal-grid">
+			<el-col :xs="24" :sm="24" :md="8" :lg="7" :xl="6">
+				<el-card shadow="hover" class="profile-card">
+					<div class="account-center-avatarHolder">
+						<el-upload class="avatar-upload" :show-file-list="false" :before-upload="beforeAvatarUpload" :http-request="uploadAvatar">
+							<UserAvatar :src="avatarUrl" :name="displayName" :user-name="profile.userName" :size="104" :font-size="36" />
+							<div class="avatar-upload__mask">
+								<el-icon><ele-Camera /></el-icon>
+								<span>更换头像</span>
+							</div>
+						</el-upload>
+						<div class="username">{{ displayName }}</div>
+						<div class="account">{{ profile.userName || '-' }}</div>
+						<div class="profile-tags">
+							<el-tag v-for="role in roleList" :key="role" size="small" effect="plain">{{ role }}</el-tag>
+							<el-tag v-if="roleList.length === 0" size="small" effect="plain" type="info">暂无角色</el-tag>
 						</div>
-						<div class="personal-user-right">
-							<el-row>
-								<el-col :span="24" class="personal-title mb18">{{ currentTime }}，admin，生活变的再糟糕，也不妨碍我变得更好！ </el-col>
-								<el-col :span="24">
-									<el-row>
-										<el-col :xs="24" :sm="8" class="personal-item mb6">
-											<div class="personal-item-label">昵称：</div>
-											<div class="personal-item-value">小柒</div>
-										</el-col>
-										<el-col :xs="24" :sm="16" class="personal-item mb6">
-											<div class="personal-item-label">身份：</div>
-											<div class="personal-item-value">超级管理</div>
-										</el-col>
-									</el-row>
-								</el-col>
-								<el-col :span="24">
-									<el-row>
-										<el-col :xs="24" :sm="8" class="personal-item mb6">
-											<div class="personal-item-label">登录IP：</div>
-											<div class="personal-item-value">192.168.1.1</div>
-										</el-col>
-										<el-col :xs="24" :sm="16" class="personal-item mb6">
-											<div class="personal-item-label">登录时间：</div>
-											<div class="personal-item-value">2021-02-05 18:47:26</div>
-										</el-col>
-									</el-row>
-								</el-col>
-							</el-row>
+					</div>
+
+					<div class="account-center-org">
+						<p>
+							<el-icon><ele-Message /></el-icon>
+							<span>{{ profile.email || '-' }}</span>
+						</p>
+						<p>
+							<el-icon><ele-Iphone /></el-icon>
+							<span>{{ profile.phoneNumber || '-' }}</span>
+						</p>
+						<p>
+							<el-icon><ele-OfficeBuilding /></el-icon>
+							<span>{{ tenantDisplay }}</span>
+						</p>
+					</div>
+
+					<div class="signature-box">
+						<div v-if="signatureUrl" class="signature-image">
+							<el-image :src="signatureUrl" fit="contain" alt="电子签名" />
 						</div>
+						<el-empty v-else description="暂无电子签名" :image-size="64" />
+					</div>
+					<div class="signature-actions">
+						<el-button type="primary" icon="ele-Edit" disabled>电子签名</el-button>
+						<el-button icon="ele-UploadFilled" disabled>上传手写签名</el-button>
 					</div>
 				</el-card>
 			</el-col>
 
-			<!-- 消息通知 -->
-			<el-col :xs="24" :sm="8" class="pl15 personal-info">
-				<el-card shadow="hover">
-					<template #header>
-						<span>消息通知</span>
-						<span class="personal-info-more">更多</span>
-					</template>
-					<div class="personal-info-box">
-						<ul class="personal-info-ul">
-							<li v-for="(v, k) in state.newsInfoList" :key="k" class="personal-info-li">
-								<a :href="v.link" target="_block" class="personal-info-li-title">{{ v.title }}</a>
-							</li>
-						</ul>
-					</div>
-				</el-card>
-			</el-col>
+			<el-col :xs="24" :sm="24" :md="16" :lg="17" :xl="18">
+				<el-card shadow="hover" class="detail-card">
+					<el-tabs v-model="activeTab" class="profile-tabs">
+						<el-tab-pane label="基础信息" name="basic" v-loading="loading">
+							<el-form label-width="92px" class="personal-form">
+								<el-row :gutter="35">
+									<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12" class="mb20">
+										<el-form-item label="登录账号">
+											<el-input v-model="profile.userName" disabled />
+										</el-form-item>
+									</el-col>
+									<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12" class="mb20">
+										<el-form-item label="昵称">
+											<el-input v-model="profile.name" placeholder="昵称" clearable />
+										</el-form-item>
+									</el-col>
+									<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12" class="mb20">
+										<el-form-item label="真实姓名">
+											<el-input v-model="profile.surname" placeholder="真实姓名" clearable />
+										</el-form-item>
+									</el-col>
+									<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12" class="mb20">
+										<el-form-item label="邮箱">
+											<el-input v-model="profile.email" placeholder="邮箱" clearable />
+										</el-form-item>
+									</el-col>
+									<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12" class="mb20">
+										<el-form-item label="手机号码">
+											<el-input v-model="profile.phoneNumber" placeholder="手机号码" clearable />
+										</el-form-item>
+									</el-col>
+									<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12" class="mb20">
+										<el-form-item label="所属租户">
+											<el-input :model-value="tenantDisplay" disabled />
+										</el-form-item>
+									</el-col>
+									<el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24" class="form-actions">
+										<el-form-item>
+											<el-button type="primary" icon="ele-SuccessFilled" :loading="saving" @click="saveProfile">保存基本信息</el-button>
+										</el-form-item>
+									</el-col>
+								</el-row>
+							</el-form>
+						</el-tab-pane>
 
-			<!-- 营销推荐 -->
-			<el-col :span="24">
-				<el-card shadow="hover" class="mt15" header="营销推荐">
-					<el-row :gutter="15" class="personal-recommend-row">
-						<el-col :sm="6" v-for="(v, k) in state.recommendList" :key="k" class="personal-recommend-col">
-							<div class="personal-recommend" :style="{ 'background-color': v.bg }">
-								<SvgIcon :name="v.icon" :size="70" :style="{ color: v.iconColor }" />
-								<div class="personal-recommend-auto">
-									<div>{{ v.title }}</div>
-									<div class="personal-recommend-msg">{{ v.msg }}</div>
+						<el-tab-pane label="组织机构" name="org">
+							<el-descriptions :column="1" border class="info-descriptions">
+								<el-descriptions-item label="租户">{{ tenantDisplay }}</el-descriptions-item>
+								<el-descriptions-item label="租户 ID">
+									<el-tag v-if="isHostTenant" type="info" effect="plain">Host / 未进入租户上下文</el-tag>
+									<span v-else>{{ tenantId }}</span>
+								</el-descriptions-item>
+								<el-descriptions-item label="角色">
+									<span v-if="roleList.length === 0">-</span>
+									<el-tag v-for="role in roleList" :key="role" class="mr5" size="small" effect="plain">{{ role }}</el-tag>
+								</el-descriptions-item>
+								<el-descriptions-item label="权限数量">{{ userInfos.authBtnList?.length || 0 }}</el-descriptions-item>
+							</el-descriptions>
+						</el-tab-pane>
+
+						<el-tab-pane label="账号安全" name="security">
+							<div class="security-list">
+								<div class="security-list__item">
+									<div>
+										<div class="security-list__title">登录状态</div>
+										<div class="security-list__desc">当前账号已完成身份认证</div>
+									</div>
+									<el-tag size="small" type="success">已登录</el-tag>
+								</div>
+								<div class="security-list__item">
+									<div>
+										<div class="security-list__title">用户 ID</div>
+										<div class="security-list__desc code-text">{{ userId }}</div>
+									</div>
+								</div>
+								<div class="security-list__item">
+									<div>
+										<div class="security-list__title">认证方式</div>
+										<div class="security-list__desc">{{ claimValue('amr') }}</div>
+									</div>
+								</div>
+								<div class="security-list__item">
+									<div>
+										<div class="security-list__title">令牌过期时间</div>
+										<div class="security-list__desc">{{ expiresAt }}</div>
+									</div>
+								</div>
+								<div class="security-list__item">
+									<div>
+										<div class="security-list__title">会话标识</div>
+										<div class="security-list__desc code-text">{{ claimValue('sid') }}</div>
+									</div>
 								</div>
 							</div>
-						</el-col>
-					</el-row>
-				</el-card>
-			</el-col>
-
-			<!-- 更新信息 -->
-			<el-col :span="24">
-				<el-card shadow="hover" class="mt15 personal-edit" header="更新信息">
-					<div class="personal-edit-title">基本信息</div>
-					<el-form :model="state.personalForm" size="default" label-width="40px" class="mt35 mb35">
-						<el-row :gutter="35">
-							<el-col :xs="24" :sm="12" :md="8" :lg="6" :xl="4" class="mb20">
-								<el-form-item label="昵称">
-									<el-input v-model="state.personalForm.name" placeholder="请输入昵称" clearable></el-input>
-								</el-form-item>
-							</el-col>
-							<el-col :xs="24" :sm="12" :md="8" :lg="6" :xl="4" class="mb20">
-								<el-form-item label="邮箱">
-									<el-input v-model="state.personalForm.email" placeholder="请输入邮箱" clearable></el-input>
-								</el-form-item>
-							</el-col>
-							<el-col :xs="24" :sm="12" :md="8" :lg="6" :xl="4" class="mb20">
-								<el-form-item label="签名">
-									<el-input v-model="state.personalForm.autograph" placeholder="请输入签名" clearable></el-input>
-								</el-form-item>
-							</el-col>
-							<el-col :xs="24" :sm="12" :md="8" :lg="6" :xl="4" class="mb20">
-								<el-form-item label="职业">
-									<el-select v-model="state.personalForm.occupation" placeholder="请选择职业" clearable class="w100">
-										<el-option label="计算机 / 互联网 / 通信" value="1"></el-option>
-										<el-option label="生产 / 工艺 / 制造" value="2"></el-option>
-										<el-option label="医疗 / 护理 / 制药" value="3"></el-option>
-									</el-select>
-								</el-form-item>
-							</el-col>
-							<el-col :xs="24" :sm="12" :md="8" :lg="6" :xl="4" class="mb20">
-								<el-form-item label="手机">
-									<el-input v-model="state.personalForm.phone" placeholder="请输入手机" clearable></el-input>
-								</el-form-item>
-							</el-col>
-							<el-col :xs="24" :sm="12" :md="8" :lg="6" :xl="4" class="mb20">
-								<el-form-item label="性别">
-									<el-select v-model="state.personalForm.sex" placeholder="请选择性别" clearable class="w100">
-										<el-option label="男" value="1"></el-option>
-										<el-option label="女" value="2"></el-option>
-									</el-select>
-								</el-form-item>
-							</el-col>
-							<el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
-								<el-form-item>
-									<el-button type="primary">
-										<el-icon>
-											<ele-Position />
-										</el-icon>
-										更新个人信息
-									</el-button>
-								</el-form-item>
-							</el-col>
-						</el-row>
-					</el-form>
-					<div class="personal-edit-title mb15">账号安全</div>
-					<div class="personal-edit-safe-box">
-						<div class="personal-edit-safe-item">
-							<div class="personal-edit-safe-item-left">
-								<div class="personal-edit-safe-item-left-label">账户密码</div>
-								<div class="personal-edit-safe-item-left-value">当前密码强度：强</div>
-							</div>
-							<div class="personal-edit-safe-item-right">
-								<el-button text type="primary">立即修改</el-button>
-							</div>
-						</div>
-					</div>
-					<div class="personal-edit-safe-box">
-						<div class="personal-edit-safe-item">
-							<div class="personal-edit-safe-item-left">
-								<div class="personal-edit-safe-item-left-label">密保手机</div>
-								<div class="personal-edit-safe-item-left-value">已绑定手机：132****4108</div>
-							</div>
-							<div class="personal-edit-safe-item-right">
-								<el-button text type="primary">立即修改</el-button>
-							</div>
-						</div>
-					</div>
-					<div class="personal-edit-safe-box">
-						<div class="personal-edit-safe-item">
-							<div class="personal-edit-safe-item-left">
-								<div class="personal-edit-safe-item-left-label">密保问题</div>
-								<div class="personal-edit-safe-item-left-value">已设置密保问题，账号安全大幅度提升</div>
-							</div>
-							<div class="personal-edit-safe-item-right">
-								<el-button text type="primary">立即设置</el-button>
-							</div>
-						</div>
-					</div>
-					<div class="personal-edit-safe-box">
-						<div class="personal-edit-safe-item">
-							<div class="personal-edit-safe-item-left">
-								<div class="personal-edit-safe-item-left-label">绑定QQ</div>
-								<div class="personal-edit-safe-item-left-value">已绑定QQ：110****566</div>
-							</div>
-							<div class="personal-edit-safe-item-right">
-								<el-button text type="primary">立即设置</el-button>
-							</div>
-						</div>
-					</div>
+						</el-tab-pane>
+					</el-tabs>
 				</el-card>
 			</el-col>
 		</el-row>
@@ -184,188 +150,347 @@
 </template>
 
 <script setup lang="ts" name="personal">
-import { reactive, computed } from 'vue';
-import { formatAxis } from '/@/utils/formatTime';
-import { newsInfoList, recommendList } from './mock';
+import { computed, onMounted, reactive, ref } from 'vue';
+import type { UploadRequestOptions } from 'element-plus';
+import { ElMessage } from 'element-plus';
+import { useUserInfo } from '/@/composables/useUserInfo';
+import { useOidc } from '/@/composables/useOidc';
+import { resolveFileUrl, useFileApi, useProfileApi } from '/@/api/apis';
+import type { ProfileDto } from '/@/api/models/account';
+import UserAvatar from '/@/components/UserAvatar/index.vue';
 
-// 定义变量内容
-const state = reactive<PersonalState>({
-	newsInfoList,
-	recommendList,
-	personalForm: {
-		name: '',
+const emptyGuid = '00000000-0000-0000-0000-000000000000';
+
+const { userInfos, setUserInfos } = useUserInfo();
+const { getCurrentUser } = useOidc();
+const fileApi = useFileApi();
+const profileApi = useProfileApi();
+
+const activeTab = ref('basic');
+const loading = ref(false);
+const saving = ref(false);
+const uploading = ref(false);
+
+const state = reactive({
+	claims: {} as Record<string, any>,
+	expiresAt: '-',
+	profile: {
+		userName: '',
 		email: '',
-		autograph: '',
-		occupation: '',
-		phone: '',
-		sex: '',
-	},
+		name: '',
+		surname: '',
+		phoneNumber: '',
+		avatarUrl: '',
+		concurrencyStamp: '',
+		extraProperties: {},
+	} as ProfileDto,
 });
 
-// 当前时间提示语
-const currentTime = computed(() => {
-	return formatAxis(new Date());
+const profile = computed(() => state.profile);
+const displayName = computed(() => [state.profile.surname, state.profile.name].filter(Boolean).join(' ') || userInfos.value.displayName || state.profile.userName || '用户');
+const avatarUrl = computed(() => resolveFileUrl(state.profile.avatarUrl || userInfos.value.photo));
+const roleList = computed(() => (userInfos.value.roles || []).filter(Boolean));
+const tenantId = computed(() => state.claims.tid || state.claims.tenantid || state.claims.tenantId || '');
+const isHostTenant = computed(() => !tenantId.value || tenantId.value === emptyGuid);
+const tenantDisplay = computed(() => state.claims.tenant_name || state.claims.tenantName || (isHostTenant.value ? 'Host（未进入租户）' : tenantId.value));
+const userId = computed(() => claimValue('sub'));
+const expiresAt = computed(() => state.expiresAt);
+const signatureUrl = computed(() => {
+	const value = (state.profile.extraProperties?.signature as string | undefined) || ((userInfos.value as any).signature as string | undefined);
+	return resolveFileUrl(value);
 });
+
+const claimValue = (key: string) => {
+	const value = state.claims[key] ?? (userInfos.value as any)[key];
+	if (Array.isArray(value)) return value.length > 0 ? value.join(', ') : '-';
+	return value || '-';
+};
+
+const loadProfile = async () => {
+	loading.value = true;
+	try {
+		const [currentUser, profileData] = await Promise.all([getCurrentUser(), profileApi.getProfile()]);
+		state.claims = ((currentUser?.profile ?? {}) as Record<string, any>) || {};
+		state.expiresAt = currentUser?.expires_at ? new Date(currentUser.expires_at * 1000).toLocaleString() : '-';
+		state.profile = {
+			...profileData,
+			name: profileData.name || '',
+			surname: profileData.surname || '',
+			phoneNumber: profileData.phoneNumber || '',
+			avatarUrl: profileData.avatarUrl || '',
+			extraProperties: profileData.extraProperties || {},
+		};
+	} finally {
+		loading.value = false;
+	}
+};
+
+const beforeAvatarUpload = (file: File) => {
+	const isImage = ['image/jpeg', 'image/png', 'image/gif', 'image/bmp', 'image/webp'].includes(file.type);
+	const isLt2M = file.size / 1024 / 1024 < 2;
+	if (!isImage) ElMessage.error('头像仅支持常见图片格式');
+	if (!isLt2M) ElMessage.error('头像大小不能超过 2MB');
+	return isImage && isLt2M;
+};
+
+const uploadAvatar = async (options: UploadRequestOptions) => {
+	if (uploading.value) return;
+	uploading.value = true;
+	try {
+		const file = options.file as File;
+		const result = await fileApi.uploadAvatar(file);
+		state.profile.avatarUrl = result.url;
+		await setUserInfos();
+		ElMessage.success('头像已更新');
+		options.onSuccess?.(result);
+	} catch (error) {
+		options.onError?.(error as Error);
+	} finally {
+		uploading.value = false;
+	}
+};
+
+const saveProfile = async () => {
+	saving.value = true;
+	try {
+		const saved = await profileApi.updateProfile({
+			userName: state.profile.userName,
+			email: state.profile.email,
+			name: state.profile.name,
+			surname: state.profile.surname,
+			phoneNumber: state.profile.phoneNumber,
+			avatarUrl: state.profile.avatarUrl,
+			concurrencyStamp: state.profile.concurrencyStamp,
+			extraProperties: state.profile.extraProperties,
+		});
+		state.profile = { ...state.profile, ...saved };
+		await setUserInfos();
+		ElMessage.success('资料已保存');
+	} finally {
+		saving.value = false;
+	}
+};
+
+onMounted(loadProfile);
 </script>
 
 <style scoped lang="scss">
-@import '../../theme/mixins/index.scss';
-.personal {
-	.personal-user {
-		height: 130px;
+.personal-page {
+	.personal-grid {
+		width: 100%;
+		align-items: stretch;
+	}
+
+	.profile-card,
+	.detail-card {
+		height: 100%;
+		border: 1px solid var(--el-border-color-light);
+		border-radius: 4px;
+	}
+
+	.profile-card {
+		:deep(.el-card__body) {
+			padding: 16px;
+		}
+	}
+
+	.detail-card {
+		:deep(.el-card__body) {
+			min-height: 370px;
+			padding: 16px 18px 18px;
+		}
+	}
+
+	.account-center-avatarHolder {
+		margin-bottom: 24px;
+		text-align: center;
+	}
+
+	.avatar-upload {
+		position: relative;
+		display: inline-block;
+		cursor: pointer;
+
+		:deep(.el-upload) {
+			position: relative;
+			border-radius: 50%;
+		}
+	}
+
+	.avatar-upload__mask {
+		position: absolute;
+		inset: 0;
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		justify-content: center;
+		gap: 4px;
+		border-radius: 50%;
+		color: #fff;
+		font-size: 12px;
+		background: rgba(15, 23, 42, 0.58);
+		opacity: 0;
+		transition: opacity 0.18s ease;
+	}
+
+	.avatar-upload:hover .avatar-upload__mask {
+		opacity: 1;
+	}
+
+	.username {
+		margin-top: 14px;
+		font-size: 21px;
+		line-height: 30px;
+		font-weight: 500;
+		color: var(--el-text-color-primary);
+	}
+
+	.account {
+		font-size: 13px;
+		color: var(--el-text-color-secondary);
+	}
+
+	.profile-tags {
+		display: flex;
+		justify-content: center;
+		flex-wrap: wrap;
+		gap: 8px;
+		margin-top: 12px;
+	}
+
+	.account-center-org {
+		margin-bottom: 16px;
+		padding-top: 10px;
+		border-top: 1px solid var(--el-border-color-lighter);
+
+		p {
+			display: grid;
+			grid-template-columns: 22px minmax(0, 1fr);
+			align-items: center;
+			min-height: 30px;
+			margin: 7px 0;
+			color: var(--el-text-color-regular);
+		}
+
+		.el-icon {
+			color: var(--el-color-primary);
+		}
+
+		span {
+			overflow-wrap: anywhere;
+		}
+	}
+
+	.signature-box {
 		display: flex;
 		align-items: center;
-		.personal-user-left {
-			width: 100px;
-			height: 130px;
-			border-radius: 3px;
-			:deep(.el-upload) {
-				height: 100%;
-			}
-			.personal-user-left-upload {
-				img {
-					width: 100%;
-					height: 100%;
-					border-radius: 3px;
-				}
-				&:hover {
-					img {
-						animation: logoAnimation 0.3s ease-in-out;
-					}
-				}
-			}
-		}
-		.personal-user-right {
-			flex: 1;
-			padding: 0 15px;
-			.personal-title {
-				font-size: 18px;
-				@include text-ellipsis(1);
-			}
-			.personal-item {
-				display: flex;
-				align-items: center;
-				font-size: 13px;
-				.personal-item-label {
-					color: var(--el-text-color-secondary);
-					@include text-ellipsis(1);
-				}
-				.personal-item-value {
-					@include text-ellipsis(1);
-				}
-			}
+		justify-content: center;
+		width: 100%;
+		height: 150px;
+		margin-top: 14px;
+		margin-bottom: 10px;
+		background-color: var(--el-fill-color-blank);
+		border: 1px solid var(--el-border-color);
+	}
+
+	.signature-image,
+	.signature-image :deep(.el-image) {
+		width: 100%;
+		height: 100%;
+	}
+
+	.signature-actions {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 10px;
+
+		.el-button + .el-button {
+			margin-left: 0;
 		}
 	}
-	.personal-info {
-		.personal-info-more {
-			float: right;
-			color: var(--el-text-color-secondary);
-			font-size: 13px;
-			&:hover {
-				color: var(--el-color-primary);
-				cursor: pointer;
-			}
-		}
-		.personal-info-box {
-			height: 130px;
-			overflow: hidden;
-			.personal-info-ul {
-				list-style: none;
-				.personal-info-li {
-					font-size: 13px;
-					padding-bottom: 10px;
-					.personal-info-li-title {
-						display: inline-block;
-						@include text-ellipsis(1);
-						color: var(--el-text-color-secondary);
-						text-decoration: none;
-					}
-					& a:hover {
-						color: var(--el-color-primary);
-						cursor: pointer;
-					}
-				}
-			}
+
+	.profile-tabs {
+		:deep(.el-tabs__header) {
+			margin-bottom: 20px;
 		}
 	}
-	.personal-recommend-row {
-		.personal-recommend-col {
-			.personal-recommend {
-				position: relative;
-				height: 100px;
-				border-radius: 3px;
-				overflow: hidden;
-				cursor: pointer;
-				&:hover {
-					i {
-						right: 0px !important;
-						bottom: 0px !important;
-						transition: all ease 0.3s;
-					}
-				}
-				i {
-					position: absolute;
-					right: -10px;
-					bottom: -10px;
-					font-size: 70px;
-					transform: rotate(-30deg);
-					transition: all ease 0.3s;
-				}
-				.personal-recommend-auto {
-					padding: 15px;
-					position: absolute;
-					left: 0;
-					top: 5%;
-					color: var(--next-color-white);
-					.personal-recommend-msg {
-						font-size: 12px;
-						margin-top: 10px;
-					}
-				}
-			}
+
+	.personal-form {
+		max-width: 940px;
+
+		:deep(.el-form-item) {
+			margin-bottom: 0;
+		}
+
+		:deep(.el-input),
+		:deep(.el-select),
+		:deep(.el-date-editor) {
+			width: 100%;
 		}
 	}
-	.personal-edit {
-		.personal-edit-title {
-			position: relative;
-			padding-left: 10px;
-			color: var(--el-text-color-regular);
-			&::after {
-				content: '';
-				width: 2px;
-				height: 10px;
-				position: absolute;
-				left: 0;
-				top: 50%;
-				transform: translateY(-50%);
-				background: var(--el-color-primary);
+
+	.form-actions {
+		margin-top: 2px;
+	}
+
+	.info-descriptions {
+		max-width: 940px;
+
+		:deep(.el-descriptions__label) {
+			width: 120px;
+		}
+	}
+
+	.security-list {
+		max-width: 940px;
+	}
+
+	.security-list__item {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		gap: 16px;
+		padding: 15px 0;
+		border-bottom: 1px solid var(--el-border-color-lighter);
+
+		&:last-child {
+			border-bottom: 0;
+		}
+	}
+
+	.security-list__title {
+		font-size: 14px;
+		font-weight: 600;
+		color: var(--el-text-color-primary);
+	}
+
+	.security-list__desc {
+		margin-top: 6px;
+		font-size: 13px;
+		color: var(--el-text-color-secondary);
+		overflow-wrap: anywhere;
+	}
+
+	.code-text {
+		font-family: Consolas, 'Liberation Mono', monospace;
+	}
+}
+
+@media (max-width: 768px) {
+	.personal-page {
+		.personal-grid {
+			row-gap: 10px;
+		}
+
+		.detail-card {
+			:deep(.el-card__body) {
+				padding: 14px;
 			}
 		}
-		.personal-edit-safe-box {
-			border-bottom: 1px solid var(--el-border-color-light, #ebeef5);
-			padding: 15px 0;
-			.personal-edit-safe-item {
-				width: 100%;
-				display: flex;
-				align-items: center;
-				justify-content: space-between;
-				.personal-edit-safe-item-left {
-					flex: 1;
-					overflow: hidden;
-					.personal-edit-safe-item-left-label {
-						color: var(--el-text-color-regular);
-						margin-bottom: 5px;
-					}
-					.personal-edit-safe-item-left-value {
-						color: var(--el-text-color-secondary);
-						@include text-ellipsis(1);
-						margin-right: 15px;
-					}
-				}
-			}
-			&:last-of-type {
-				padding-bottom: 0;
-				border-bottom: none;
+
+		.personal-form {
+			:deep(.el-form-item__label) {
+				width: 82px !important;
 			}
 		}
 	}

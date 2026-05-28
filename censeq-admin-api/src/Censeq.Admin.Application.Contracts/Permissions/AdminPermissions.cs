@@ -16,6 +16,11 @@ public static class AdminPermissions
         public const string CopyFromHost = Default + ".CopyFromHost";
     }
 
+    public static class Files
+    {
+        public const string Default = GroupName + ".Files";
+    }
+
     /// <summary>
     /// 平台侧对租户的授权范围管理。
     /// </summary>

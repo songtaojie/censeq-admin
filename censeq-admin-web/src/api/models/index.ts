@@ -1,5 +1,7 @@
 export * from './audit-logging';
+export * from './account';
 export * from './core';
+export * from './file';
 export * from './feature-management';
 export * from './identity';
 export * from './localization-management';

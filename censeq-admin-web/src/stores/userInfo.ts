@@ -2,6 +2,7 @@ import { defineStore } from 'pinia';
 import Cookies from 'js-cookie';
 import { Session } from '/@/utils/storage';
 import { useOidc } from '/@/composables/useOidc';
+import { useProfileApi } from '/@/api/apis';
 
 /**
  * 用户信息
@@ -15,6 +16,7 @@ export const useUserInfoStore = defineStore('userInfo', {
 			time: 0,
 			roles: [],
 			authBtnList: [],
+			displayName: '',
 		},
 	}),
 	actions: {
@@ -37,10 +39,24 @@ export const useUserInfoStore = defineStore('userInfo', {
 			const cached = (Session.get('userInfo') as Partial<UserInfos> | undefined) ?? {};
 			const { getCurrentUser } = useOidc();
 			const user = await getCurrentUser();
+			let apiProfile: any = {};
+			try {
+				apiProfile = await useProfileApi().getProfile();
+			} catch {
+				apiProfile = {};
+			}
 			const userName = user?.profile?.preferred_username ?? cached.userName ?? Cookies.get('userName') ?? '';
+			const profile = (user?.profile ?? {}) as any;
+			const displayName =
+				[apiProfile.surname, apiProfile.name].filter(Boolean).join(' ') ||
+				profile.name ||
+				[profile.family_name, profile.given_name].filter(Boolean).join(' ') ||
+				cached.displayName ||
+				userName;
 			return {
 				userName,
-				photo: user?.profile?.picture ?? cached.photo ?? '/upload/logo.png',
+				displayName,
+				photo: apiProfile.avatarUrl ?? user?.profile?.picture ?? cached.photo ?? '',
 				time: new Date().getTime(),
 				roles: accessContext?.roles ?? cached.roles ?? [],
 				authBtnList: accessContext?.authBtnList ?? cached.authBtnList ?? [],

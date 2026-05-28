@@ -45,7 +45,7 @@ export async function initBackEndControlRoutes() {
 	// https://gitee.com/lyt-top/vue-next-admin/issues/I64HVO
 	if ((runtimeMenu.routes?.length ?? 0) <= 0) {
 		// 路由为空：清空 children 避免静态 demo 路由被注册到菜单，再完成路由注册结束 loading
-		dynamicRoutes[0].children = [];
+		dynamicRoutes[0].children = getLocalRuntimeRoutes();
 		dynamicRoutes[0].redirect = undefined;
 		await setAddRoute();
 		setFilterMenuAndCacheTagsViewRoutes();
@@ -118,7 +118,7 @@ export async function setBackEndControlRefreshRoutes() {
 	const { setAccessContext } = useUserInfo();
 	setAccessContext(runtimeMenu.roles ?? [], runtimeMenu.authBtnList ?? []);
 	if ((runtimeMenu.routes?.length ?? 0) <= 0) {
-		dynamicRoutes[0].children = [];
+		dynamicRoutes[0].children = getLocalRuntimeRoutes();
 		useRequestOldRoutes().setRequestOldRoutes([] as never[]);
 		setFilterMenuAndCacheTagsViewRoutes();
 		return;
@@ -143,7 +143,7 @@ export function backEndComponent(routes: MenuRouteDto[]) {
 async function applyRuntimeRoutes(runtimeMenu: CurrentUserMenuResultDto) {
 	const routes = JSON.parse(JSON.stringify(runtimeMenu.routes ?? [])) as MenuRouteDto[];
 	useRequestOldRoutes().setRequestOldRoutes(JSON.parse(JSON.stringify(routes)));
-	dynamicRoutes[0].children = (await backEndComponent(routes)) as RouteRecordRaw[];
+	dynamicRoutes[0].children = appendLocalRuntimeRoutes((await backEndComponent(routes)) as RouteRecordRaw[]);
 
 	// 根据后端返回的第一个 affix（固定 tab）路由或第一个叶子路由，修正 / 的 redirect
 	// 避免租户用户没有 /home 路由时跳转到 404
@@ -157,6 +157,30 @@ async function applyRuntimeRoutes(runtimeMenu: CurrentUserMenuResultDto) {
 }
 
 /** 递归找第一个 affix 路由，否则返回第一个叶子路由的 path */
+function getLocalRuntimeRoutes(): RouteRecordRaw[] {
+	return [
+		{
+			path: '/personal',
+			name: 'personal',
+			component: () => import('/@/views/personal/index.vue'),
+			meta: {
+				title: 'message.router.personal',
+				isLink: '',
+				isHide: true,
+				isKeepAlive: true,
+				isAffix: false,
+				isIframe: false,
+				icon: 'iconfont icon-gerenzhongxin',
+			},
+		},
+	];
+}
+
+function appendLocalRuntimeRoutes(routes: RouteRecordRaw[]): RouteRecordRaw[] {
+	const localRoutes = getLocalRuntimeRoutes().filter((localRoute) => !routes.some((route) => route.path === localRoute.path));
+	return [...routes, ...localRoutes];
+}
+
 function findFirstLeafPath(routes: MenuRouteDto[]): string | null {
 	// 优先找 affix: true 的路由
 	for (const route of routes) {

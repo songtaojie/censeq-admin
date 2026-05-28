@@ -28,9 +28,7 @@
 				<el-table-column type="index" label="序号" width="60" align="center" fixed />
 				<el-table-column label="头像" width="70" align="center">
 					<template #default="{ row }">
-						<el-avatar :size="32" :style="{ backgroundColor: avatarColor(row.userName), fontSize: '14px', fontWeight: 600 }">
-							{{ avatarText(row) }}
-						</el-avatar>
+						<UserAvatar :src="getAvatarSrc(row)" :name="getDisplayName(row)" :user-name="row.userName" :size="32" :font-size="14" />
 					</template>
 				</el-table-column>
 				<el-table-column prop="userName" label="账号" min-width="120" show-overflow-tooltip>
@@ -106,6 +104,7 @@ import { ElMessageBox, ElMessage } from 'element-plus';
 import type { FormInstance } from 'element-plus';
 import { useIdentityApi } from '/@/api/apis';
 import type { IdentityUserDto } from '/@/api/models/identity';
+import UserAvatar from '/@/components/UserAvatar/index.vue';
 
 const UserDialog = defineAsyncComponent(() => import('/@/views/system/user/dialog.vue'));
 
@@ -129,16 +128,23 @@ const state = reactive({
 	},
 });
 
-const avatarColors = ['#409eff', '#67c23a', '#e6a23c', '#f56c6c', '#909399', '#8b5cf6', '#06b6d4'];
-const avatarColor = (userName?: string) => {
-	if (!userName) return avatarColors[0];
-	let hash = 0;
-	for (let i = 0; i < userName.length; i++) hash = userName.charCodeAt(i) + ((hash << 5) - hash);
-	return avatarColors[Math.abs(hash) % avatarColors.length];
-};
-const avatarText = (row: IdentityUserDto) => {
-	const s = row.name || row.surname || row.userName || '?';
-	return s.charAt(0).toUpperCase();
+const getDisplayName = (row: IdentityUserDto) => [row.surname, row.name].filter(Boolean).join(' ') || row.userName || '?';
+const getAvatarSrc = (row: IdentityUserDto) => {
+	const extra = row.extraProperties ?? {};
+	return (
+		row.avatarUrl ??
+		extra.avatarUrl ??
+		extra.AvatarUrl ??
+		extra.avatar ??
+		extra.Avatar ??
+		extra.photo ??
+		extra.Photo ??
+		extra.picture ??
+		extra.Picture ??
+		extra.profilePicture ??
+		extra.ProfilePicture ??
+		''
+	);
 };
 
 const formatDate = (val?: string) => {
@@ -205,6 +211,7 @@ const onStatusChange = async (row: IdentityUserDto, val: boolean) => {
 			surname: user.surname,
 			email: user.email!,
 			phoneNumber: user.phoneNumber,
+			avatarUrl: user.avatarUrl,
 			isActive: val,
 			lockoutEnabled: user.lockoutEnabled,
 			roleNames: [],

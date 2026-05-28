@@ -279,3 +279,6 @@ node_modules/
 
 # Log directories
 **/[Ll]ogs/
+
+# Uploaded files
+censeq-admin-api/src/Censeq.Admin.HttpApi.Host/wwwroot/uploads/

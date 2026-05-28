@@ -40,6 +40,8 @@ public static class AdminSeedPermissionNames
     public static IReadOnlyList<string> MenuManagementManageOrder { get; } = ["CenseqAdmin.Menus.ManageOrder"];
     public static IReadOnlyList<string> MenuCopyFromHost { get; } = ["CenseqAdmin.Menus.CopyFromHost"];
 
+    public static IReadOnlyList<string> FileManagementMenu { get; } = ["CenseqAdmin.Files"];
+
     public static IReadOnlyList<string> TenantMenu { get; } = ["TenantManagement.Tenants"];
     public static IReadOnlyList<string> TenantCreate { get; } = ["TenantManagement.Tenants.Create"];
     public static IReadOnlyList<string> TenantUpdate { get; } = ["TenantManagement.Tenants.Update"];
@@ -106,6 +108,7 @@ public static class AdminSeedPermissionNames
         MenuManagementDelete,
         MenuManagementManageStatus,
         MenuManagementManageOrder,
+        FileManagementMenu,
         SettingMenu,
         SettingDefinitions,
         PermissionDefinitionMenu,

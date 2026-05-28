@@ -10,11 +10,11 @@ namespace Censeq.Identity;
 public class IdentityDataSeedContributor : IDataSeedContributor, ITransientDependency
 {
     public const string AdminEmailPropertyName = "AdminEmail";
-    public const string AdminEmailDefaultValue = "admin@abp.io";
+    public const string AdminEmailDefaultValue = "stjworkemail@163.com";
     public const string AdminUserNamePropertyName = "AdminUserName";
-    public const string AdminUserNameDefaultValue = "admin";
+    public const string AdminUserNameDefaultValue = "superadmin";
     public const string AdminNamePropertyName = "AdminName";
-    public const string AdminNameDefaultValue = "管理员";
+    public const string AdminNameDefaultValue = "超级管理员";
     public const string AdminPasswordPropertyName = "AdminPassword";
     public const string AdminPasswordDefaultValue = "1q2w3E*";
 

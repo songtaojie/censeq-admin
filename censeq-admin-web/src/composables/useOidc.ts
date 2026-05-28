@@ -28,11 +28,15 @@ export function useOidc() {
 	const setUser = async (user: User | null) => {
 		if (user != null && user.profile != null) {
 			const cached = (Session.get('userInfo') as Partial<UserInfos> | undefined) ?? {};
+			const profile = user.profile as any;
+			const displayName =
+				profile.name || [profile.family_name, profile.given_name].filter(Boolean).join(' ') || user.profile.preferred_username || cached.displayName || '';
 			var userInfos = {
 				authBtnList: cached.authBtnList ?? [],
 				userName: user.profile.preferred_username ?? cached.userName ?? '',
+				displayName,
 				time: new Date().getTime(),
-				photo: user.profile.picture ?? cached.photo ?? '/upload/logo.png',
+				photo: user.profile.picture ?? cached.photo ?? '',
 				roles: cached.roles ?? [],
 			};
 			Session.set('userInfo', userInfos);

@@ -318,6 +318,7 @@ public class IdentityUserAppService : IdentityAppServiceBase, IIdentityUserAppSe
 
         user.Name = input.Name;
         user.Surname = input.Surname;
+        user.SetProperty("AvatarUrl", input.AvatarUrl?.Trim());
         (await UserManager.UpdateAsync(user)).CheckErrors();
         user.SetIsActive(input.IsActive);
         if (input.RoleNames != null && await PermissionChecker.IsGrantedAsync(IdentityPermissions.Users.ManageRoles))

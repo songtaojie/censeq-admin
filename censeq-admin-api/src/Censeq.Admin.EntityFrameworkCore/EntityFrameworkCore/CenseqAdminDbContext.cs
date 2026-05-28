@@ -2,6 +2,7 @@ using Censeq.AuditLogging.Entities;
 using Censeq.AuditLogging.EntityFrameworkCore;
 using Censeq.FeatureManagement.Entities;
 using Censeq.FeatureManagement.EntityFrameworkCore;
+using Censeq.Admin.Files;
 using Censeq.Identity;
 using Censeq.Identity.Entities;
 using Censeq.Identity.EntityFrameworkCore;
@@ -65,6 +66,7 @@ public class CenseqAdminDbContext(DbContextOptions<CenseqAdminDbContext> options
 
     public DbSet<Menu> Menus { get; set; }
     public DbSet<MenuPermission> MenuPermissions { get; set; }
+    public DbSet<FileRecord> FileRecords { get; set; }
 
     public DbSet<TenantPermissionGrant> TenantPermissionGrants { get; set; }
 
@@ -91,6 +93,7 @@ public class CenseqAdminDbContext(DbContextOptions<CenseqAdminDbContext> options
         builder.ConfigureFeatureManagement();
         builder.ConfigureIdentity();
         builder.ConfigureAdminMenus();
+        builder.ConfigureAdminFiles();
         builder.ConfigureOpenIddict();
         builder.ConfigurePermissionManagement();
         builder.ConfigureSettingManagement();

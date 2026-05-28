@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Options;
 using Volo.Abp;
+using Volo.Abp.Data;
 using Volo.Abp.ObjectExtending;
 using Volo.Abp.Settings;
 using Volo.Abp.Users;
@@ -73,6 +74,7 @@ public class ProfileAppService : IdentityAppServiceBase, IProfileAppService
 
         user.Name = input.Name?.Trim();
         user.Surname = input.Surname?.Trim();
+        user.SetProperty("AvatarUrl", input.AvatarUrl?.Trim());
 
         input.MapExtraPropertiesTo(user);
 

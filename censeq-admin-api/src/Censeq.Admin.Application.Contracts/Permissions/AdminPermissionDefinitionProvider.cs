@@ -19,6 +19,8 @@ public class AdminPermissionDefinitionProvider : PermissionDefinitionProvider
 
         var myGroup = context.AddGroup(AdminPermissions.GroupName, L("Permission:CenseqAdmin"));
 
+        myGroup.AddPermission(AdminPermissions.Files.Default, L("Permission:Files"));
+
         var tenantAdminPermission = myGroup.AddPermission(AdminPermissions.TenantAdmin.Default, L("Permission:TenantAdmin"));
         var tenantPermsPermission = tenantAdminPermission.AddChild(AdminPermissions.TenantAdmin.TenantPermissions.Default, L("Permission:TenantPermissions"));
         tenantPermsPermission.AddChild(AdminPermissions.TenantAdmin.TenantPermissions.Update, L("Permission:Edit"));

@@ -21,5 +21,7 @@ public class UpdateProfileDto : ExtensibleObject
     [DynamicStringLength(typeof(IdentityUserConsts), nameof(IdentityUserConsts.MaxPhoneNumberLength))]
     public string? PhoneNumber { get; set; }
 
+    public string? AvatarUrl { get; set; }
+
     public string? ConcurrencyStamp { get; set; }
 }

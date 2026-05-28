@@ -39,6 +39,11 @@ public abstract class IdentityUserCreateOrUpdateDtoBase : ExtensibleObject
     public string? PhoneNumber { get; set; }
 
     /// <summary>
+    /// 头像地址
+    /// </summary>
+    public string? AvatarUrl { get; set; }
+
+    /// <summary>
     /// 是否激活
     /// </summary>
     public bool IsActive { get; set; }

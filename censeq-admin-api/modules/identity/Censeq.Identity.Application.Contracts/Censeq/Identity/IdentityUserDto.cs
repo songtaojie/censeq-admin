@@ -47,6 +47,11 @@ public class IdentityUserDto : ExtensibleFullAuditedEntityDto<Guid>, IMultiTenan
     public string PhoneNumber { get; set; }
 
     /// <summary>
+    /// 头像地址
+    /// </summary>
+    public string? AvatarUrl { get; set; }
+
+    /// <summary>
     /// 电话号码是否已确认
     /// </summary>
     public bool PhoneNumberConfirmed { get; set; }
