@@ -2,24 +2,27 @@
 	<div class="permission-table-container">
 		<div class="table-header">
 			<span class="table-title">
-				权限项列表
+				权限树
 				<el-tag v-if="props.groupName" type="info" size="small" style="margin-left: 8px">{{ props.groupName }}</el-tag>
 			</span>
+			<div v-if="props.groupName" class="table-summary">
+				<el-tag size="small" effect="plain">共 {{ permissionTotal }} 项</el-tag>
+				<el-tag size="small" type="success" effect="plain">启用 {{ enabledTotal }} 项</el-tag>
+				<el-tag v-if="disabledTotal > 0" size="small" type="danger" effect="plain">禁用 {{ disabledTotal }} 项</el-tag>
+			</div>
 		</div>
 		<el-table
-			:data="state.permissions"
+			:data="permissionTree"
 			v-loading="state.loading"
+			row-key="name"
 			border
+			default-expand-all
+			:tree-props="{ children: 'children' }"
 			style="width: 100%"
 			empty-text="请先选择左侧权限组"
 		>
 			<el-table-column prop="name" label="名称" min-width="200" show-overflow-tooltip />
 			<el-table-column prop="displayName" label="显示名称" min-width="160" show-overflow-tooltip />
-			<el-table-column prop="parentName" label="父权限" min-width="160" show-overflow-tooltip>
-				<template #default="{ row }">
-					<span>{{ row.parentName || '-' }}</span>
-				</template>
-			</el-table-column>
 			<el-table-column prop="isEnabled" label="是否启用" width="90" align="center">
 				<template #default="{ row }">
 					<el-tag :type="row.isEnabled ? 'success' : 'danger'" size="small">
@@ -45,11 +48,15 @@
 </template>
 
 <script setup lang="ts" name="PermissionTable">
-import { reactive, watch } from 'vue';
+import { computed, reactive, watch } from 'vue';
 import { ElMessage } from 'element-plus';
 import type { PermissionDefinitionDto } from '/@/api/models/permission/definition';
 import { usePermissionDefinitionApi } from '/@/api/apis';
 import EditDisplayNameDialog from './EditDisplayNameDialog.vue';
+
+type PermissionTreeNode = PermissionDefinitionDto & {
+	children?: PermissionTreeNode[];
+};
 
 const props = defineProps<{
 	groupName: string;
@@ -64,6 +71,12 @@ const state = reactive({
 		currentDisplayName: '',
 	},
 });
+
+const permissionTotal = computed(() => state.permissions.length);
+const enabledTotal = computed(() => state.permissions.filter((permission) => permission.isEnabled).length);
+const disabledTotal = computed(() => permissionTotal.value - enabledTotal.value);
+
+const permissionTree = computed<PermissionTreeNode[]>(() => buildPermissionTree(state.permissions));
 
 const loadPermissions = async () => {
 	if (!props.groupName) {
@@ -82,6 +95,29 @@ const loadPermissions = async () => {
 };
 
 watch(() => props.groupName, loadPermissions, { immediate: true });
+
+const buildPermissionTree = (permissions: PermissionDefinitionDto[]): PermissionTreeNode[] => {
+	const nodeMap = new Map<string, PermissionTreeNode>();
+	const roots: PermissionTreeNode[] = [];
+
+	for (const permission of permissions) {
+		nodeMap.set(permission.name, {
+			...permission,
+			children: [],
+		});
+	}
+
+	for (const permission of permissions) {
+		const node = nodeMap.get(permission.name)!;
+		if (permission.parentName && nodeMap.has(permission.parentName)) {
+			nodeMap.get(permission.parentName)!.children!.push(node);
+		} else {
+			roots.push(node);
+		}
+	}
+
+	return roots;
+};
 
 const onEdit = (row: PermissionDefinitionDto) => {
 	state.dialog.permissionName = row.name;
@@ -111,6 +147,8 @@ const onDialogCancel = () => {
 	.table-header {
 		display: flex;
 		align-items: center;
+		justify-content: space-between;
+		gap: 12px;
 		margin-bottom: 12px;
 
 		.table-title {
@@ -119,6 +157,14 @@ const onDialogCancel = () => {
 			color: var(--el-text-color-primary);
 			display: flex;
 			align-items: center;
+		}
+
+		.table-summary {
+			display: flex;
+			align-items: center;
+			gap: 6px;
+			flex-wrap: wrap;
+			justify-content: flex-end;
 		}
 	}
 }
