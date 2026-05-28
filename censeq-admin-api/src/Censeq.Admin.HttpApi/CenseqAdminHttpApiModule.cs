@@ -2,6 +2,7 @@ using Censeq.Account;
 using Censeq.Admin.Localization;
 using Censeq.AuditLogging;
 using Censeq.FeatureManagement;
+using Censeq.FileManagement;
 using Censeq.FeatureManagement.JsonConverters;
 using Censeq.FeatureManagement.Localization;
 using Censeq.Identity;
@@ -26,6 +27,7 @@ namespace Censeq.Admin;
     typeof(CenseqSettingManagementHttpApiModule),
     typeof(CenseqTenantManagementHttpApiModule),
     typeof(CenseqFeatureManagementHttpApiModule),
+    typeof(CenseqFileManagementHttpApiModule),
     typeof(CenseqAuditLoggingHttpApiModule),
     typeof(CenseqLocalizationManagementHttpApiModule)
     )]

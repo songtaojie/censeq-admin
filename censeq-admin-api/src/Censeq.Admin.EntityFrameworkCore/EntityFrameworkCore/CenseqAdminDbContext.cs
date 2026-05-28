@@ -2,7 +2,8 @@ using Censeq.AuditLogging.Entities;
 using Censeq.AuditLogging.EntityFrameworkCore;
 using Censeq.FeatureManagement.Entities;
 using Censeq.FeatureManagement.EntityFrameworkCore;
-using Censeq.Admin.Files;
+using Censeq.FileManagement.EntityFrameworkCore;
+using Censeq.FileManagement.Files;
 using Censeq.Identity;
 using Censeq.Identity.Entities;
 using Censeq.Identity.EntityFrameworkCore;
@@ -43,6 +44,7 @@ public class CenseqAdminDbContext(DbContextOptions<CenseqAdminDbContext> options
         IPermissionManagementDbContext,
         ISettingManagementDbContext,
         ITenantManagementDbContext,
+        IFileManagementDbContext,
         ILocalizationManagementDbContext
 {
     public DbSet<AuditLog> AuditLogs { get; set; }
@@ -67,6 +69,7 @@ public class CenseqAdminDbContext(DbContextOptions<CenseqAdminDbContext> options
     public DbSet<Menu> Menus { get; set; }
     public DbSet<MenuPermission> MenuPermissions { get; set; }
     public DbSet<FileRecord> FileRecords { get; set; }
+    public DbSet<FileProvider> FileProviders { get; set; }
 
     public DbSet<TenantPermissionGrant> TenantPermissionGrants { get; set; }
 
@@ -93,7 +96,7 @@ public class CenseqAdminDbContext(DbContextOptions<CenseqAdminDbContext> options
         builder.ConfigureFeatureManagement();
         builder.ConfigureIdentity();
         builder.ConfigureAdminMenus();
-        builder.ConfigureAdminFiles();
+        builder.ConfigureFileManagement();
         builder.ConfigureOpenIddict();
         builder.ConfigurePermissionManagement();
         builder.ConfigureSettingManagement();
