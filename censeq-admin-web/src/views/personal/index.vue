@@ -41,8 +41,16 @@
 						<el-empty v-else description="暂无电子签名" :image-size="64" />
 					</div>
 					<div class="signature-actions">
-						<el-button type="primary" icon="ele-Edit" disabled>电子签名</el-button>
-						<el-button icon="ele-UploadFilled" disabled>上传手写签名</el-button>
+						<el-button type="primary" icon="ele-Edit" @click="openSignatureDialog">电子签名</el-button>
+						<el-upload
+							:show-file-list="false"
+							:before-upload="beforeSignatureUpload"
+							:http-request="uploadSignatureFile"
+							accept=".jpg,.jpeg,.png,.webp"
+						>
+							<el-button icon="ele-UploadFilled" :loading="signatureUploading">上传手写签名</el-button>
+						</el-upload>
+						<el-button v-if="signatureUrl" icon="ele-Delete" @click="removeSignature">移除签名</el-button>
 					</div>
 				</el-card>
 			</el-col>
@@ -146,11 +154,40 @@
 				</el-card>
 			</el-col>
 		</el-row>
+
+		<el-dialog v-model="signatureDialogVisible" title="电子签名" width="640px" draggable @opened="resizeSignatureCanvas">
+			<div class="signature-editor">
+				<canvas
+					ref="signatureCanvasRef"
+					class="signature-canvas"
+					@pointerdown="startDraw"
+					@pointermove="draw"
+					@pointerup="endDraw"
+					@pointerleave="endDraw"
+					@pointercancel="endDraw"
+				></canvas>
+			</div>
+			<div class="signature-tools">
+				<div class="signature-tool">
+					<span>画笔粗细</span>
+					<el-input-number v-model="signaturePenWidth" :min="1" :max="8" :step="1" size="small" />
+				</div>
+				<div class="signature-tool">
+					<span>画笔颜色</span>
+					<el-color-picker v-model="signaturePenColor" color-format="hex" />
+				</div>
+			</div>
+			<template #footer>
+				<el-button @click="clearSignatureCanvas">清屏</el-button>
+				<el-button @click="signatureDialogVisible = false">取消</el-button>
+				<el-button type="primary" :loading="signatureUploading" @click="saveCanvasSignature">保存</el-button>
+			</template>
+		</el-dialog>
 	</div>
 </template>
 
 <script setup lang="ts" name="personal">
-import { computed, onMounted, reactive, ref } from 'vue';
+import { computed, nextTick, onBeforeUnmount, onMounted, reactive, ref } from 'vue';
 import type { UploadRequestOptions } from 'element-plus';
 import { ElMessage } from 'element-plus';
 import { useUserInfo } from '/@/composables/useUserInfo';
@@ -170,6 +207,14 @@ const activeTab = ref('basic');
 const loading = ref(false);
 const saving = ref(false);
 const uploading = ref(false);
+const signatureUploading = ref(false);
+const signatureDialogVisible = ref(false);
+const signatureCanvasRef = ref<HTMLCanvasElement>();
+const signaturePenColor = ref('#000000');
+const signaturePenWidth = ref(2);
+const signatureHasContent = ref(false);
+let signatureDrawing = false;
+let signatureResizeObserver: ResizeObserver | undefined;
 
 const state = reactive({
 	claims: {} as Record<string, any>,
@@ -250,6 +295,174 @@ const uploadAvatar = async (options: UploadRequestOptions) => {
 	}
 };
 
+const beforeSignatureUpload = (file: File) => {
+	const isImage = ['image/jpeg', 'image/png', 'image/webp'].includes(file.type);
+	const isLt2M = file.size / 1024 / 1024 < 2;
+	if (!isImage) ElMessage.error('签名仅支持 jpg、png、webp 图片');
+	if (!isLt2M) ElMessage.error('签名图片大小不能超过 2MB');
+	return isImage && isLt2M;
+};
+
+const persistSignature = async (signature: string | null) => {
+	const extraProperties = { ...(state.profile.extraProperties || {}), signature };
+	const saved = await profileApi.updateProfile({
+		userName: state.profile.userName,
+		email: state.profile.email,
+		name: state.profile.name,
+		surname: state.profile.surname,
+		phoneNumber: state.profile.phoneNumber,
+		avatarUrl: state.profile.avatarUrl,
+		concurrencyStamp: state.profile.concurrencyStamp,
+		extraProperties,
+	});
+	state.profile = {
+		...state.profile,
+		...saved,
+		extraProperties: saved.extraProperties || extraProperties,
+	};
+	(userInfos.value as any).signature = signature || '';
+};
+
+const uploadSignatureFile = async (options: UploadRequestOptions) => {
+	if (signatureUploading.value) return;
+	signatureUploading.value = true;
+	try {
+		const result = await fileApi.uploadFile(options.file as File, { category: 'signature', isPublic: true, allowImageOnly: true });
+		await persistSignature(result.url);
+		ElMessage.success('电子签名已更新');
+		options.onSuccess?.(result);
+	} catch (error) {
+		options.onError?.(error as Error);
+	} finally {
+		signatureUploading.value = false;
+	}
+};
+
+const getCanvasPoint = (event: PointerEvent) => {
+	const canvas = signatureCanvasRef.value!;
+	const rect = canvas.getBoundingClientRect();
+	return {
+		x: event.clientX - rect.left,
+		y: event.clientY - rect.top,
+	};
+};
+
+const getSignatureContext = () => {
+	const canvas = signatureCanvasRef.value;
+	if (!canvas) return undefined;
+	const context = canvas.getContext('2d');
+	if (!context) return undefined;
+	context.lineCap = 'round';
+	context.lineJoin = 'round';
+	context.strokeStyle = signaturePenColor.value;
+	context.lineWidth = signaturePenWidth.value;
+	return context;
+};
+
+const resizeSignatureCanvas = async () => {
+	await nextTick();
+	const canvas = signatureCanvasRef.value;
+	if (!canvas) return;
+	const rect = canvas.getBoundingClientRect();
+	const ratio = window.devicePixelRatio || 1;
+	canvas.width = Math.max(1, Math.floor(rect.width * ratio));
+	canvas.height = Math.max(1, Math.floor(rect.height * ratio));
+	const context = canvas.getContext('2d');
+	if (!context) return;
+	context.setTransform(ratio, 0, 0, ratio, 0, 0);
+	context.fillStyle = '#ffffff';
+	context.fillRect(0, 0, rect.width, rect.height);
+	signatureHasContent.value = false;
+};
+
+const openSignatureDialog = async () => {
+	signatureDialogVisible.value = true;
+	await nextTick();
+	if (!signatureResizeObserver && signatureCanvasRef.value) {
+		signatureResizeObserver = new ResizeObserver(() => resizeSignatureCanvas());
+		signatureResizeObserver.observe(signatureCanvasRef.value);
+	}
+};
+
+const startDraw = (event: PointerEvent) => {
+	const context = getSignatureContext();
+	if (!context || !signatureCanvasRef.value) return;
+	signatureCanvasRef.value.setPointerCapture(event.pointerId);
+	const point = getCanvasPoint(event);
+	signatureDrawing = true;
+	signatureHasContent.value = true;
+	context.beginPath();
+	context.moveTo(point.x, point.y);
+};
+
+const draw = (event: PointerEvent) => {
+	if (!signatureDrawing) return;
+	const context = getSignatureContext();
+	if (!context) return;
+	const point = getCanvasPoint(event);
+	context.lineTo(point.x, point.y);
+	context.stroke();
+};
+
+const endDraw = (event: PointerEvent) => {
+	if (!signatureDrawing) return;
+	signatureDrawing = false;
+	signatureCanvasRef.value?.releasePointerCapture(event.pointerId);
+};
+
+const clearSignatureCanvas = () => {
+	const canvas = signatureCanvasRef.value;
+	if (!canvas) return;
+	const rect = canvas.getBoundingClientRect();
+	const context = canvas.getContext('2d');
+	if (!context) return;
+	context.fillStyle = '#ffffff';
+	context.fillRect(0, 0, rect.width, rect.height);
+	signatureHasContent.value = false;
+};
+
+const canvasToFile = async () => {
+	const canvas = signatureCanvasRef.value;
+	if (!canvas) return undefined;
+	return await new Promise<File | undefined>((resolve) => {
+		canvas.toBlob((blob) => {
+			if (!blob) return resolve(undefined);
+			resolve(new File([blob], `${state.profile.userName || 'signature'}-signature.png`, { type: 'image/png' }));
+		}, 'image/png');
+	});
+};
+
+const saveCanvasSignature = async () => {
+	if (!signatureHasContent.value) {
+		ElMessage.warning('请先在画板中签名');
+		return;
+	}
+	const file = await canvasToFile();
+	if (!file) {
+		ElMessage.error('生成签名图片失败');
+		return;
+	}
+	signatureUploading.value = true;
+	try {
+		const result = await fileApi.uploadFile(file, { category: 'signature', isPublic: true, allowImageOnly: true });
+		await persistSignature(result.url);
+		signatureDialogVisible.value = false;
+		ElMessage.success('电子签名已保存');
+	} finally {
+		signatureUploading.value = false;
+	}
+};
+
+const removeSignature = async () => {
+	signatureUploading.value = true;
+	try {
+		await persistSignature(null);
+		ElMessage.success('电子签名已移除');
+	} finally {
+		signatureUploading.value = false;
+	}
+};
+
 const saveProfile = async () => {
 	saving.value = true;
 	try {
@@ -272,6 +485,10 @@ const saveProfile = async () => {
 };
 
 onMounted(loadProfile);
+
+onBeforeUnmount(() => {
+	signatureResizeObserver?.disconnect();
+});
 </script>
 
 <style scoped lang="scss">
@@ -407,6 +624,37 @@ onMounted(loadProfile);
 		.el-button + .el-button {
 			margin-left: 0;
 		}
+	}
+
+	.signature-editor {
+		width: 100%;
+		height: 260px;
+		overflow: hidden;
+		background-color: #fff;
+		border: 1px dashed var(--el-border-color);
+	}
+
+	.signature-canvas {
+		display: block;
+		width: 100%;
+		height: 100%;
+		touch-action: none;
+		cursor: crosshair;
+	}
+
+	.signature-tools {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 20px;
+		margin-top: 12px;
+	}
+
+	.signature-tool {
+		display: flex;
+		align-items: center;
+		gap: 8px;
+		color: var(--el-text-color-regular);
+		font-size: 13px;
 	}
 
 	.profile-tabs {
