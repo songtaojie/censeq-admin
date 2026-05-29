@@ -8,6 +8,7 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.NET.Test.Sdk" />
     <PackageReference Include="Shouldly" />
+    <PackageReference Include="Volo.Abp.AspNetCore.Mvc" />
     <PackageReference Include="xunit" />
     <PackageReference Include="xunit.runner.visualstudio">
       <PrivateAssets>all</PrivateAssets>
@@ -16,5 +17,6 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Censeq.FileManagement.Application\Censeq.FileManagement.Application.csproj" />
+    <ProjectReference Include="..\Censeq.FileManagement.HttpApi\Censeq.FileManagement.HttpApi.csproj" />
   </ItemGroup>
 </Project>

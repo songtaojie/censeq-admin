@@ -70,71 +70,81 @@
 			/>
 		</el-card>
 
-		<el-dialog v-model="state.dialog.visible" :title="state.dialog.form.id ? '编辑存储服务商' : '新增存储服务商'" width="680px" destroy-on-close>
-			<el-form ref="formRef" :model="state.dialog.form" :rules="rules" label-width="110px">
-				<el-row :gutter="16">
-					<el-col :span="12">
+		<el-dialog
+			v-model="state.dialog.visible"
+			:title="state.dialog.form.id ? '编辑存储服务商' : '新增存储服务商'"
+			width="820px"
+			class="file-provider-dialog"
+			destroy-on-close
+		>
+			<el-form ref="formRef" class="provider-dialog-form" :model="state.dialog.form" :rules="rules" label-width="88px">
+				<el-row class="provider-form-row" :gutter="36">
+					<el-col :xs="24" :sm="12">
 						<el-form-item label="服务商" prop="provider">
 							<el-select v-model="state.dialog.form.provider" placeholder="请选择服务商" style="width: 100%">
 								<el-option v-for="item in providerOptions" :key="item.value" :label="item.label" :value="item.value" />
 							</el-select>
 						</el-form-item>
 					</el-col>
-					<el-col :span="12">
+					<el-col :xs="24" :sm="12">
 						<el-form-item label="Bucket" prop="bucketName">
 							<el-input v-model="state.dialog.form.bucketName" placeholder="请输入 Bucket 名称" />
 						</el-form-item>
 					</el-col>
 				</el-row>
-				<el-row :gutter="16">
-					<el-col :span="12">
+				<el-row class="provider-form-row" :gutter="36">
+					<el-col :xs="24" :sm="12">
 						<el-form-item label="AccessKey">
 							<el-input v-model="state.dialog.form.accessKey" placeholder="请输入 AccessKey" />
 						</el-form-item>
 					</el-col>
-					<el-col :span="12">
+					<el-col :xs="24" :sm="12">
 						<el-form-item label="SecretKey">
 							<el-input v-model="state.dialog.form.secretKey" type="password" show-password placeholder="留空则保留原值" />
 						</el-form-item>
 					</el-col>
 				</el-row>
-				<el-row :gutter="16">
-					<el-col :span="12">
+				<el-row class="provider-form-row" :gutter="36">
+					<el-col :xs="24" :sm="12">
 						<el-form-item label="Region">
 							<el-input v-model="state.dialog.form.region" placeholder="请输入区域" />
 						</el-form-item>
 					</el-col>
-					<el-col :span="12">
+					<el-col :xs="24" :sm="12">
 						<el-form-item label="Endpoint">
 							<el-input v-model="state.dialog.form.endpoint" placeholder="请输入访问端点" />
 						</el-form-item>
 					</el-col>
 				</el-row>
-				<el-form-item label="自定义域名">
+				<el-form-item class="provider-form-item--wide" label="自定义域名">
 					<el-input v-model="state.dialog.form.customDomain" placeholder="例如 https://static.example.com" />
 				</el-form-item>
-				<el-row :gutter="16">
-					<el-col :span="12">
+				<el-row class="provider-form-row provider-form-row--settings" :gutter="36">
+					<el-col :xs="24" :sm="12">
 						<el-form-item label="排序">
 							<el-input-number v-model="state.dialog.form.orderNo" :min="0" :max="9999" controls-position="right" style="width: 100%" />
 						</el-form-item>
 					</el-col>
-					<el-col :span="12">
-						<el-form-item label="开关">
-							<el-checkbox v-model="state.dialog.form.isEnable">启用</el-checkbox>
-							<el-checkbox v-model="state.dialog.form.isDefault">默认</el-checkbox>
-							<el-checkbox v-model="state.dialog.form.isEnableHttps">HTTPS</el-checkbox>
-							<el-checkbox v-model="state.dialog.form.isEnableCache">缓存</el-checkbox>
+					<el-col :xs="24" :sm="12">
+						<el-form-item class="provider-switches" label="开关">
+							<div class="provider-switches__group">
+								<el-checkbox v-model="state.dialog.form.isEnable">启用</el-checkbox>
+								<el-checkbox v-model="state.dialog.form.isDefault">默认</el-checkbox>
+								<el-checkbox v-model="state.dialog.form.isEnableHttps">HTTPS</el-checkbox>
+								<el-checkbox v-model="state.dialog.form.isEnableCache">缓存</el-checkbox>
+							</div>
 						</el-form-item>
 					</el-col>
 				</el-row>
-				<el-form-item label="备注">
+				<el-form-item class="provider-form-item--wide provider-form-item--remark" label="备注">
 					<el-input v-model="state.dialog.form.remark" type="textarea" :rows="3" placeholder="请输入备注" />
 				</el-form-item>
 			</el-form>
 			<template #footer>
-				<el-button @click="state.dialog.visible = false">取消</el-button>
-				<el-button type="primary" :loading="state.dialog.saving" @click="submit">保存</el-button>
+				<div class="provider-dialog-footer">
+					<el-button @click="state.dialog.visible = false">取消</el-button>
+					<el-button type="primary" :loading="state.dialog.saving" @click="submit">保存</el-button>
+				</div>
 			</template>
 		</el-dialog>
 	</div>
@@ -153,9 +163,13 @@ const fileProviderApi = useFileProviderApi();
 const formRef = ref<FormInstance>();
 
 const providerOptions = [
-	{ label: 'MinIO', value: 'Minio' },
+	{ label: 'Minio', value: 'Minio' },
 	{ label: '阿里云 OSS', value: 'Aliyun' },
 	{ label: '腾讯云 COS', value: 'QCloud' },
+	{ label: '七牛云 Kodo', value: 'Qiniu' },
+	{ label: '华为云 OBS', value: 'HuaweiCloud' },
+	{ label: '百度云 BOS', value: 'BaiduCloud' },
+	{ label: '天翼云 OOS', value: 'Ctyun' },
 ];
 
 const createDefaultForm = (): ProviderForm => ({
@@ -321,5 +335,96 @@ onMounted(getTableData);
 .platform-file-provider-container {
 	display: flex;
 	flex-direction: column;
+}
+
+:global(.file-provider-dialog) {
+	width: min(820px, calc(100vw - 32px)) !important;
+}
+
+:global(.file-provider-dialog .el-dialog__body) {
+	padding: 28px 36px 24px !important;
+}
+
+:global(.file-provider-dialog .el-dialog__footer) {
+	padding: 0 36px 24px;
+}
+
+:global(.file-provider-dialog .provider-dialog-form) {
+	padding: 0;
+}
+
+:global(.file-provider-dialog .provider-form-row) {
+	margin-bottom: 12px;
+}
+
+:global(.file-provider-dialog .provider-form-row--settings) {
+	margin-top: 6px;
+	margin-bottom: 18px;
+}
+
+:global(.file-provider-dialog .el-form-item) {
+	margin-bottom: 0;
+}
+
+:global(.file-provider-dialog .el-form-item__label) {
+	padding-right: 16px;
+}
+
+:global(.file-provider-dialog .provider-form-item--wide) {
+	margin-bottom: 20px;
+}
+
+:global(.file-provider-dialog .provider-form-item--remark) {
+	margin-top: 4px;
+}
+
+:global(.file-provider-dialog .provider-form-item--remark .el-textarea__inner) {
+	min-height: 82px !important;
+}
+
+:global(.file-provider-dialog .provider-switches .el-form-item__content) {
+	align-items: flex-start;
+}
+
+.provider-switches__group {
+	display: grid;
+	grid-template-columns: repeat(2, minmax(82px, 1fr));
+	column-gap: 18px;
+	row-gap: 10px;
+	width: 100%;
+	padding-top: 2px;
+
+	:deep(.el-checkbox) {
+		height: 24px;
+		margin-right: 0;
+	}
+}
+
+.provider-dialog-footer {
+	display: flex;
+	justify-content: flex-end;
+	gap: 10px;
+}
+
+@media (max-width: 768px) {
+	:global(.file-provider-dialog .el-dialog__body) {
+		padding: 22px 20px 20px !important;
+	}
+
+	:global(.file-provider-dialog .el-dialog__footer) {
+		padding: 0 20px 20px;
+	}
+
+	:global(.file-provider-dialog .provider-form-row) {
+		margin-bottom: 0;
+	}
+
+	:global(.file-provider-dialog .el-form-item) {
+		margin-bottom: 18px;
+	}
+
+	.provider-switches__group {
+		grid-template-columns: repeat(2, minmax(68px, 1fr));
+	}
 }
 </style>

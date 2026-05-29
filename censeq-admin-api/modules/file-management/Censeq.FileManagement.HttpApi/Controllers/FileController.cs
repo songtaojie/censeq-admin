@@ -46,9 +46,9 @@ public class FileController : AbpControllerBase
     /// </summary>
     [HttpPost("avatar")]
     [Consumes("multipart/form-data")]
-    public virtual async Task<FileRecordDto> UploadAvatarAsync([FromForm] IFormFile file)
+    public virtual async Task<FileRecordDto> UploadAvatarAsync([FromForm] UploadAvatarRequest input)
     {
-        return await _fileUploadService.UploadAvatarAsync(file);
+        return await _fileUploadService.UploadAvatarAsync(input.File);
     }
 
     /// <summary>
@@ -94,4 +94,15 @@ public class UploadFileRequest
     /// 是否限制为图片类型。
     /// </summary>
     public bool AllowImageOnly { get; set; }
+}
+
+/// <summary>
+/// 头像上传请求。
+/// </summary>
+public class UploadAvatarRequest
+{
+    /// <summary>
+    /// 头像文件。
+    /// </summary>
+    public IFormFile? File { get; set; }
 }
