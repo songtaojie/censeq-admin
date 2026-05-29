@@ -8,6 +8,9 @@ using Volo.Abp.ObjectMapping;
 
 namespace Censeq.FileManagement.Files;
 
+/// <summary>
+/// 文件存储提供器配置应用服务。
+/// </summary>
 public class FileProviderAppService : IFileProviderAppService, ITransientDependency
 {
     private readonly IRepository<FileProvider, Guid> _repository;
@@ -27,6 +30,9 @@ public class FileProviderAppService : IFileProviderAppService, ITransientDepende
         _objectMapper = objectMapper;
     }
 
+    /// <summary>
+    /// 分页查询文件存储提供器配置。
+    /// </summary>
     public async Task<PagedResultDto<FileProviderDto>> GetListAsync(GetFileProvidersInput input)
     {
         var queryable = await _repository.GetQueryableAsync();
@@ -49,11 +55,17 @@ public class FileProviderAppService : IFileProviderAppService, ITransientDepende
         return new PagedResultDto<FileProviderDto>(totalCount, items.Select(MapToDto).ToList());
     }
 
+    /// <summary>
+    /// 获取指定文件存储提供器配置。
+    /// </summary>
     public async Task<FileProviderDto> GetAsync(Guid id)
     {
         return MapToDto(await _repository.GetAsync(id));
     }
 
+    /// <summary>
+    /// 创建文件存储提供器配置。
+    /// </summary>
     public async Task<FileProviderDto> CreateAsync(CreateUpdateFileProviderDto input)
     {
         Validate(input);
@@ -70,6 +82,9 @@ public class FileProviderAppService : IFileProviderAppService, ITransientDepende
         return MapToDto(entity);
     }
 
+    /// <summary>
+    /// 更新文件存储提供器配置。
+    /// </summary>
     public async Task<FileProviderDto> UpdateAsync(Guid id, CreateUpdateFileProviderDto input)
     {
         Validate(input);
@@ -86,11 +101,17 @@ public class FileProviderAppService : IFileProviderAppService, ITransientDepende
         return MapToDto(entity);
     }
 
+    /// <summary>
+    /// 删除文件存储提供器配置。
+    /// </summary>
     public async Task DeleteAsync(Guid id)
     {
         await _repository.DeleteAsync(id);
     }
 
+    /// <summary>
+    /// 将指定文件存储提供器设置为默认配置。
+    /// </summary>
     public async Task SetDefaultAsync(Guid id)
     {
         var entity = await _repository.GetAsync(id);

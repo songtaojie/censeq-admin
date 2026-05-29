@@ -5,6 +5,9 @@ using Volo.Abp.Domain.Repositories;
 
 namespace Censeq.FileManagement.Files;
 
+/// <summary>
+/// 文件存储提供器选择器，优先使用数据库配置，缺省时回退到配置文件中的 OSS 配置。
+/// </summary>
 public class FileProviderSelector : IFileProviderSelector, ITransientDependency
 {
     private readonly IRepository<FileProvider, Guid> _repository;
@@ -18,6 +21,9 @@ public class FileProviderSelector : IFileProviderSelector, ITransientDependency
         _options = options.Value;
     }
 
+    /// <summary>
+    /// 获取当前可用的默认 OSS 提供器配置。
+    /// </summary>
     public async Task<FileProvider?> GetDefaultAsync()
     {
         var queryable = await _repository.GetQueryableAsync();
@@ -30,6 +36,9 @@ public class FileProviderSelector : IFileProviderSelector, ITransientDependency
         return provider ?? CreateFromOptions();
     }
 
+    /// <summary>
+    /// 根据提供商和 Bucket 查找可用的 OSS 提供器配置。
+    /// </summary>
     public async Task<FileProvider?> FindAsync(string? provider, string? bucketName)
     {
         if (provider.IsNullOrWhiteSpace() || bucketName.IsNullOrWhiteSpace())

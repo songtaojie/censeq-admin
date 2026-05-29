@@ -5,8 +5,14 @@ using Volo.Abp;
 
 namespace Censeq.FileManagement.EntityFrameworkCore;
 
+/// <summary>
+/// 文件管理模块 EF Core 模型配置扩展。
+/// </summary>
 public static class CenseqFileManagementDbContextModelCreatingExtensions
 {
+    /// <summary>
+    /// 配置文件记录和文件存储提供器实体的表结构、字段长度与索引。
+    /// </summary>
     public static void ConfigureFileManagement(this ModelBuilder builder)
     {
         Check.NotNull(builder, nameof(builder));

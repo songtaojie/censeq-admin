@@ -1,5 +1,8 @@
 ﻿namespace Censeq.FileManagement.Files;
 
+/// <summary>
+/// 文件记录实体字段长度限制。
+/// </summary>
 public static class FileRecordConsts
 {
     public const int MaxNameLength = 256;

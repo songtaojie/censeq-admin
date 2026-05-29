@@ -4,6 +4,9 @@ using Volo.Abp.DependencyInjection;
 
 namespace Censeq.FileManagement.Files;
 
+/// <summary>
+/// OSS 文件存储提供器，负责对象存储上传、预签名下载和对象删除。
+/// </summary>
 public class OssFileStorageProvider : IFileStorageProvider, ITransientDependency
 {
     private readonly IFileProviderSelector _providerSelector;
@@ -20,8 +23,14 @@ public class OssFileStorageProvider : IFileStorageProvider, ITransientDependency
         _httpClient = httpClient;
     }
 
+    /// <summary>
+    /// 存储提供器名称。
+    /// </summary>
     public string Name => FileStorageProviderNames.Oss;
 
+    /// <summary>
+    /// 保存文件到默认 OSS 提供器并返回访问地址。
+    /// </summary>
     public async Task<StoredFileInfo> SaveAsync(SaveFileStorageInput input)
     {
         var provider = await GetDefaultProviderAsync();
@@ -39,6 +48,9 @@ public class OssFileStorageProvider : IFileStorageProvider, ITransientDependency
         };
     }
 
+    /// <summary>
+    /// 使用文件记录对应的 OSS 提供器创建下载结果。
+    /// </summary>
     public async Task<FileDownloadInfo> GetDownloadAsync(FileRecord file)
     {
         var provider = await GetFileProviderAsync(file);
@@ -57,6 +69,9 @@ public class OssFileStorageProvider : IFileStorageProvider, ITransientDependency
         };
     }
 
+    /// <summary>
+    /// 删除文件记录对应的 OSS 对象。
+    /// </summary>
     public async Task DeleteAsync(FileRecord file)
     {
         var provider = await GetFileProviderAsync(file);

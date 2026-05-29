@@ -6,11 +6,17 @@ using Volo.Abp.DependencyInjection;
 
 namespace Censeq.FileManagement.Files;
 
+/// <summary>
+/// OSS 服务实例管理器，按文件存储提供器配置创建并缓存 OSS 客户端。
+/// </summary>
 public class FileOssServiceManager : IFileOssServiceManager, ISingletonDependency
 {
     private readonly Dictionary<string, IOSSService> _cache = new(StringComparer.OrdinalIgnoreCase);
     private readonly object _lockObject = new();
 
+    /// <summary>
+    /// 获取指定文件存储提供器对应的 OSS 服务实例。
+    /// </summary>
     public Task<IOSSService> GetAsync(FileProvider provider)
     {
         if (provider.Provider.IsNullOrWhiteSpace() ||

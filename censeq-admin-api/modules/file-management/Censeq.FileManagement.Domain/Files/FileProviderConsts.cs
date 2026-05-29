@@ -1,5 +1,8 @@
 namespace Censeq.FileManagement.Files;
 
+/// <summary>
+/// 文件存储提供器实体字段长度限制。
+/// </summary>
 public static class FileProviderConsts
 {
     public const int MaxProviderLength = 16;
