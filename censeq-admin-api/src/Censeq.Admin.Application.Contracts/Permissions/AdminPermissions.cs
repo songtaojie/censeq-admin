@@ -21,6 +21,15 @@ public static class AdminPermissions
         public const string Default = GroupName + ".Files";
     }
 
+    public static class FileProviders
+    {
+        public const string Default = GroupName + ".FileProviders";
+        public const string Create = Default + ".Create";
+        public const string Update = Default + ".Update";
+        public const string Delete = Default + ".Delete";
+        public const string SetDefault = Default + ".SetDefault";
+    }
+
     /// <summary>
     /// 平台侧对租户的授权范围管理。
     /// </summary>

@@ -28,6 +28,12 @@ export interface FileRecordDto {
 	category?: string | null;
 	/** 是否公开访问。 */
 	isPublic: boolean;
+	/** 实际存储提供器或 OSS 厂商。 */
+	provider: string;
+	/** 物理存储实现，例如 Local 或 Oss。 */
+	storageProvider?: string | null;
+	/** OSS Bucket 名称。 */
+	bucketName?: string | null;
 	/** 创建时间。 */
 	creationTime?: string;
 }
@@ -38,4 +44,48 @@ export interface GetFileRecordsRequest extends PagedAndSortedRequestDto {
 	filter?: string;
 	/** 文件业务分类。 */
 	category?: string;
+}
+
+/** 文件存储服务商配置。 */
+export interface FileProviderDto {
+	id: string;
+	tenantId?: string | null;
+	provider: string;
+	bucketName: string;
+	accessKey?: string | null;
+	region?: string | null;
+	endpoint?: string | null;
+	isEnableHttps: boolean;
+	isEnableCache: boolean;
+	isEnable: boolean;
+	isDefault: boolean;
+	customDomain?: string | null;
+	orderNo: number;
+	remark?: string | null;
+	displayName: string;
+	creationTime?: string;
+}
+
+/** 文件存储服务商分页查询条件。 */
+export interface GetFileProvidersRequest extends PagedAndSortedRequestDto {
+	filter?: string;
+	provider?: string;
+	isEnable?: boolean;
+}
+
+/** 创建或更新文件存储服务商配置。 */
+export interface CreateUpdateFileProviderDto {
+	provider: string;
+	bucketName: string;
+	accessKey?: string | null;
+	secretKey?: string | null;
+	region?: string | null;
+	endpoint?: string | null;
+	isEnableHttps: boolean;
+	isEnableCache: boolean;
+	isEnable: boolean;
+	isDefault: boolean;
+	customDomain?: string | null;
+	orderNo: number;
+	remark?: string | null;
 }

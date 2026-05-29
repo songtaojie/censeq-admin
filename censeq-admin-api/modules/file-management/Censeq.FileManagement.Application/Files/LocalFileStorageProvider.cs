@@ -41,7 +41,8 @@ public class LocalFileStorageProvider : IFileStorageProvider, ITransientDependen
         {
             RelativePath = relativePath,
             Url = "/" + relativePath,
-            Provider = Name
+            Provider = Name,
+            StorageProvider = Name
         };
     }
 

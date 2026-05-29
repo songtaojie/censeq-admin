@@ -72,7 +72,7 @@
 	</div>
 </template>
 
-<script setup lang="ts" name="platformFile">
+<script setup lang="ts" name="platformFileList">
 import { onMounted, reactive } from 'vue';
 import type { UploadRequestOptions } from 'element-plus';
 import { ElMessage, ElMessageBox } from 'element-plus';

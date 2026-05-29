@@ -70,6 +70,11 @@ public class StoredFileInfo
     public required string Provider { get; init; }
 
     /// <summary>
+    /// 物理存储实现名称，例如 Local 或 Oss。
+    /// </summary>
+    public required string StorageProvider { get; init; }
+
+    /// <summary>
     /// OSS Bucket 名称。
     /// </summary>
     public string? BucketName { get; init; }

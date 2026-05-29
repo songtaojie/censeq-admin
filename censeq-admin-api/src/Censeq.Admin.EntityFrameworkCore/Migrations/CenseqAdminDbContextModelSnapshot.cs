@@ -949,6 +949,11 @@ namespace Censeq.Admin.Migrations
                         .HasColumnType("bigint")
                         .HasColumnName("size");
 
+                    b.Property<string>("StorageProvider")
+                        .HasMaxLength(32)
+                        .HasColumnType("character varying(32)")
+                        .HasColumnName("storage_provider");
+
                     b.Property<Guid?>("TenantId")
                         .HasColumnType("uuid")
                         .HasColumnName("tenant_id");

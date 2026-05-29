@@ -21,6 +21,12 @@ public class AdminPermissionDefinitionProvider : PermissionDefinitionProvider
 
         myGroup.AddPermission(AdminPermissions.Files.Default, L("Permission:Files"));
 
+        var fileProvidersPermission = myGroup.AddPermission(AdminPermissions.FileProviders.Default, L("Permission:FileProviders"));
+        fileProvidersPermission.AddChild(AdminPermissions.FileProviders.Create, L("Permission:Create"));
+        fileProvidersPermission.AddChild(AdminPermissions.FileProviders.Update, L("Permission:Edit"));
+        fileProvidersPermission.AddChild(AdminPermissions.FileProviders.Delete, L("Permission:Delete"));
+        fileProvidersPermission.AddChild(AdminPermissions.FileProviders.SetDefault, L("Permission:SetDefault"));
+
         var tenantAdminPermission = myGroup.AddPermission(AdminPermissions.TenantAdmin.Default, L("Permission:TenantAdmin"));
         var tenantPermsPermission = tenantAdminPermission.AddChild(AdminPermissions.TenantAdmin.TenantPermissions.Default, L("Permission:TenantPermissions"));
         tenantPermsPermission.AddChild(AdminPermissions.TenantAdmin.TenantPermissions.Update, L("Permission:Edit"));

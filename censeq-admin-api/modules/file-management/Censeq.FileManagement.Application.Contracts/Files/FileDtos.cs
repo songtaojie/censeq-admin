@@ -73,6 +73,11 @@ public class FileRecordDto : FullAuditedEntityDto<Guid>
     public string Provider { get; set; } = string.Empty;
 
     /// <summary>
+    /// 物理存储实现名称，例如 Local 或 Oss。
+    /// </summary>
+    public string? StorageProvider { get; set; }
+
+    /// <summary>
     /// OSS Bucket 名称。
     /// </summary>
     public string? BucketName { get; set; }

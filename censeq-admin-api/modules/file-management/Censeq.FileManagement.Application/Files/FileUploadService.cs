@@ -125,7 +125,7 @@ public class FileUploadService : IFileUploadService, ITransientDependency
         var extension = Path.GetExtension(file!.FileName).ToLowerInvariant();
         var storedName = $"{id:N}{extension}";
         var relativePath = Path.Combine(relativeDirectory, storedName);
-        var provider = _storageProviderResolver.Resolve();
+        var provider = await _storageProviderResolver.ResolveForUploadAsync();
         var contentType = GetContentType(file);
 
         var hash = await ComputeHashAsync(file);
@@ -156,6 +156,7 @@ public class FileUploadService : IFileUploadService, ITransientDependency
             Category = safeCategory,
             IsPublic = isPublic,
             Provider = stored.Provider,
+            StorageProvider = stored.StorageProvider,
             BucketName = stored.BucketName
         };
 
@@ -243,7 +244,25 @@ public class FileUploadService : IFileUploadService, ITransientDependency
         dto.Provider = record.Provider.IsNullOrWhiteSpace()
             ? FileStorageProviderNames.Local
             : record.Provider;
+        dto.StorageProvider = ResolveStorageProviderName(record);
         dto.BucketName = record.BucketName;
         return dto;
+    }
+
+    private static string ResolveStorageProviderName(FileRecord record)
+    {
+        if (!record.StorageProvider.IsNullOrWhiteSpace())
+        {
+            return record.StorageProvider!;
+        }
+
+        if (record.Provider.Equals(FileStorageProviderNames.Local, StringComparison.OrdinalIgnoreCase))
+        {
+            return FileStorageProviderNames.Local;
+        }
+
+        return record.BucketName.IsNullOrWhiteSpace()
+            ? FileStorageProviderNames.Local
+            : FileStorageProviderNames.Oss;
     }
 }

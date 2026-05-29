@@ -44,6 +44,7 @@ public class OssFileStorageProvider : IFileStorageProvider, ITransientDependency
             RelativePath = objectName,
             Url = GenerateUrl(provider, objectName),
             Provider = provider.Provider,
+            StorageProvider = Name,
             BucketName = provider.BucketName
         };
     }

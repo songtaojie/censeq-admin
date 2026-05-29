@@ -77,10 +77,13 @@
         "LongWelcomeMessage": "欢迎使用本应用程序。这是一个基于 ABP 框架的启动项目。更多信息，请访问 abp.io。",
         "Permission:CenseqAdmin": "管理平台",
         "Permission:Menus": "菜单管理",
+        "Permission:Files": "文件列表",
+        "Permission:FileProviders": "存储服务商",
         "Permission:SystemConfigs": "应用配置",
         "Permission:Create": "创建",
         "Permission:Edit": "编辑",
         "Permission:Delete": "删除",
+        "Permission:SetDefault": "设为默认",
         "Permission:ChangeStatus": "启停用",
         "Permission:ManageOrder": "排序",
         "Permission:CopyFromHost": "从宿主复制菜单"

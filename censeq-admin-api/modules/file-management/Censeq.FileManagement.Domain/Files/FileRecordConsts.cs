@@ -11,5 +11,6 @@ public static class FileRecordConsts
     public const int MaxHashLength = 128;
     public const int MaxCategoryLength = 64;
     public const int MaxProviderLength = 64;
+    public const int MaxStorageProviderLength = 32;
     public const int MaxBucketNameLength = 128;
 }

@@ -29,6 +29,7 @@ public static class CenseqFileManagementDbContextModelCreatingExtensions
             b.Property(x => x.Hash).HasMaxLength(FileRecordConsts.MaxHashLength);
             b.Property(x => x.Category).HasMaxLength(FileRecordConsts.MaxCategoryLength);
             b.Property(x => x.Provider).IsRequired().HasMaxLength(FileRecordConsts.MaxProviderLength);
+            b.Property(x => x.StorageProvider).HasMaxLength(FileRecordConsts.MaxStorageProviderLength);
             b.Property(x => x.BucketName).HasMaxLength(FileRecordConsts.MaxBucketNameLength);
             b.HasIndex(x => new { x.TenantId, x.Category, x.CreationTime });
             b.HasIndex(x => x.Url);
