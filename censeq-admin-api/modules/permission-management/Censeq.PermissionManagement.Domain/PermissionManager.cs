@@ -12,7 +12,8 @@ using Volo.Abp.SimpleStateChecking;
 namespace Censeq.PermissionManagement;
 
 /// <summary>
-/// 权限管理
+/// 权限管理器。
+/// 统一校验权限定义、租户侧和提供者范围，再调用对应的权限管理提供者读写授权。
 /// </summary>
 public class PermissionManager : IPermissionManager, ISingletonDependency
 {
@@ -42,7 +43,8 @@ public class PermissionManager : IPermissionManager, ISingletonDependency
     protected ICurrentTenant CurrentTenant { get; }
 
     /// <summary>
-    /// 
+    /// 已注册的权限管理提供者。
+    /// 通过配置延迟解析，避免在管理器初始化时提前创建所有提供者实例。
     /// </summary>
     protected IReadOnlyList<IPermissionManagementProvider> ManagementProviders => _lazyProviders.Value;
 
@@ -59,16 +61,16 @@ public class PermissionManager : IPermissionManager, ISingletonDependency
     private readonly Lazy<List<IPermissionManagementProvider>> _lazyProviders;
 
     /// <summary>
-    /// 
+    /// 初始化权限管理器。
     /// </summary>
-    /// <param name="permissionDefinitionManager"></param>
-    /// <param name="simpleStateCheckerManager"></param>
-    /// <param name="permissionGrantRepository"></param>
-    /// <param name="serviceProvider"></param>
-    /// <param name="guidGenerator"></param>
-    /// <param name="options"></param>
-    /// <param name="currentTenant"></param>
-    /// <param name="cache"></param>
+    /// <param name="permissionDefinitionManager">权限定义管理器。</param>
+    /// <param name="simpleStateCheckerManager">权限状态检查器。</param>
+    /// <param name="permissionGrantRepository">权限授予仓储。</param>
+    /// <param name="serviceProvider">服务提供器，用于延迟解析权限提供者。</param>
+    /// <param name="guidGenerator">Guid 生成器。</param>
+    /// <param name="options">权限管理配置。</param>
+    /// <param name="currentTenant">当前租户上下文。</param>
+    /// <param name="cache">权限授予缓存。</param>
     public PermissionManager(
         IPermissionDefinitionManager permissionDefinitionManager,
         ISimpleStateCheckerManager<PermissionDefinition> simpleStateCheckerManager,
@@ -97,12 +99,12 @@ public class PermissionManager : IPermissionManager, ISingletonDependency
     }
 
     /// <summary>
-    /// 
+    /// 获取单个权限在指定提供者上的授予情况。
     /// </summary>
-    /// <param name="permissionName"></param>
-    /// <param name="providerName"></param>
-    /// <param name="providerKey"></param>
-    /// <returns></returns>
+    /// <param name="permissionName">权限名称。</param>
+    /// <param name="providerName">权限提供者名称。</param>
+    /// <param name="providerKey">权限提供者标识。</param>
+    /// <returns>权限是否已授予，以及实际授予来源。</returns>
     public virtual async Task<PermissionWithGrantedProviders> GetAsync(string permissionName, string providerName, string providerKey)
     {
         var permission = await PermissionDefinitionManager.GetOrNullAsync(permissionName);
@@ -119,12 +121,12 @@ public class PermissionManager : IPermissionManager, ISingletonDependency
     }
 
     /// <summary>
-    /// 
+    /// 批量获取权限在指定提供者上的授予情况。
     /// </summary>
-    /// <param name="permissionNames"></param>
-    /// <param name="providerName"></param>
-    /// <param name="providerKey"></param>
-    /// <returns></returns>
+    /// <param name="permissionNames">权限名称集合。</param>
+    /// <param name="providerName">权限提供者名称。</param>
+    /// <param name="providerKey">权限提供者标识。</param>
+    /// <returns>多个权限的授予状态。</returns>
     public virtual async Task<MultiplePermissionWithGrantedProviders> GetAsync(string[] permissionNames, string providerName, string providerKey)
     {
         var permissions = new List<PermissionDefinition>();
@@ -163,11 +165,11 @@ public class PermissionManager : IPermissionManager, ISingletonDependency
     }
 
     /// <summary>
-    /// 
+    /// 获取指定提供者上的全部权限授予情况。
     /// </summary>
-    /// <param name="providerName"></param>
-    /// <param name="providerKey"></param>
-    /// <returns></returns>
+    /// <param name="providerName">权限提供者名称。</param>
+    /// <param name="providerKey">权限提供者标识。</param>
+    /// <returns>全部权限的授予状态列表。</returns>
     public virtual async Task<List<PermissionWithGrantedProviders>> GetAllAsync(string providerName, string providerKey)
     {
         var permissionDefinitions = (await PermissionDefinitionManager.GetPermissionsAsync()).ToArray();
@@ -179,15 +181,15 @@ public class PermissionManager : IPermissionManager, ISingletonDependency
     }
 
     /// <summary>
-    /// 
+    /// 设置单个权限的授予状态。
+    /// 设置前会验证权限是否存在、是否启用、是否支持当前提供者和当前租户侧。
     /// </summary>
-    /// <param name="permissionName"></param>
-    /// <param name="providerName"></param>
-    /// <param name="providerKey"></param>
-    /// <param name="isGranted"></param>
-    /// <returns></returns>
-    /// <exception cref="ApplicationException"></exception>
-    /// <exception cref="AbpException"></exception>
+    /// <param name="permissionName">权限名称。</param>
+    /// <param name="providerName">权限提供者名称。</param>
+    /// <param name="providerKey">权限提供者标识。</param>
+    /// <param name="isGranted">是否授予。</param>
+    /// <returns>异步任务。</returns>
+    /// <exception cref="BusinessException">权限不可管理或提供者不匹配时抛出。</exception>
     public virtual async Task SetAsync(string permissionName, string providerName, string providerKey, bool isGranted)
     {
         var permission = await PermissionDefinitionManager.GetOrNullAsync(permissionName);
@@ -223,11 +225,12 @@ public class PermissionManager : IPermissionManager, ISingletonDependency
     }
 
     /// <summary>
-    /// 
+    /// 更新权限授予记录的提供者标识。
+    /// 用于角色、用户等业务主键变更时同步授权数据。
     /// </summary>
-    /// <param name="permissionGrant"></param>
-    /// <param name="providerKey"></param>
-    /// <returns></returns>
+    /// <param name="permissionGrant">待更新的权限授予记录。</param>
+    /// <param name="providerKey">新的提供者标识。</param>
+    /// <returns>更新后的权限授予记录。</returns>
     public virtual async Task<PermissionGrant> UpdateProviderKeyAsync(PermissionGrant permissionGrant, string providerKey)
     {
         using (CurrentTenant.Change(permissionGrant.TenantId))
@@ -247,11 +250,11 @@ public class PermissionManager : IPermissionManager, ISingletonDependency
     }
 
     /// <summary>
-    /// 
+    /// 删除指定提供者标识下的全部权限授予记录。
     /// </summary>
-    /// <param name="providerName"></param>
-    /// <param name="providerKey"></param>
-    /// <returns></returns>
+    /// <param name="providerName">权限提供者名称。</param>
+    /// <param name="providerKey">权限提供者标识。</param>
+    /// <returns>异步任务。</returns>
     public virtual async Task DeleteAsync(string providerName, string providerKey)
     {
         var permissionGrants = await PermissionGrantRepository.GetListAsync(providerName, providerKey);
@@ -262,12 +265,12 @@ public class PermissionManager : IPermissionManager, ISingletonDependency
     }
 
     /// <summary>
-    /// 
+    /// 获取单个权限的内部授予结果。
     /// </summary>
-    /// <param name="permission"></param>
-    /// <param name="providerName"></param>
-    /// <param name="providerKey"></param>
-    /// <returns></returns>
+    /// <param name="permission">权限定义。</param>
+    /// <param name="providerName">权限提供者名称。</param>
+    /// <param name="providerKey">权限提供者标识。</param>
+    /// <returns>权限授予结果。</returns>
     protected virtual async Task<PermissionWithGrantedProviders> GetInternalAsync(
         PermissionDefinition permission,
         string providerName,
@@ -283,12 +286,12 @@ public class PermissionManager : IPermissionManager, ISingletonDependency
     }
 
     /// <summary>
-    /// 
+    /// 对通过启用状态、租户侧和提供者范围校验的权限执行批量检查。
     /// </summary>
-    /// <param name="permissions"></param>
-    /// <param name="providerName"></param>
-    /// <param name="providerKey"></param>
-    /// <returns></returns>
+    /// <param name="permissions">权限定义集合。</param>
+    /// <param name="providerName">权限提供者名称。</param>
+    /// <param name="providerKey">权限提供者标识。</param>
+    /// <returns>多个权限的内部授予结果。</returns>
     protected virtual async Task<MultiplePermissionWithGrantedProviders> GetInternalAsync(
         PermissionDefinition[] permissions,
         string providerName,

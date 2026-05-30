@@ -11,7 +11,8 @@ using Volo.Abp.SimpleStateChecking;
 namespace Censeq.PermissionManagement;
 
 /// <summary>
-/// 权限应用服务
+/// 权限应用服务。
+/// 负责面向前端组装指定提供者的权限树，并把授权变更委托给领域层处理。
 /// </summary>
 [Authorize]
 public class PermissionAppService : ApplicationService, IPermissionAppService
@@ -53,11 +54,12 @@ public class PermissionAppService : ApplicationService, IPermissionAppService
     }
 
     /// <summary>
-    /// 
+    /// 获取指定权限提供者和提供者标识对应的权限列表。
+    /// 会过滤禁用权限、不匹配当前租户侧的权限，以及状态检查未通过的权限。
     /// </summary>
-    /// <param name="providerName"></param>
-    /// <param name="providerKey"></param>
-    /// <returns></returns>
+    /// <param name="providerName">权限提供者名称，例如角色、用户或客户端。</param>
+    /// <param name="providerKey">权限提供者标识，例如角色 Id 或用户 Id。</param>
+    /// <returns>按权限组组织后的权限授予状态。</returns>
     public virtual async Task<GetPermissionListResultDto> GetAsync(string providerName, string providerKey)
     {
         await CheckProviderPolicy(providerName);
@@ -133,10 +135,10 @@ public class PermissionAppService : ApplicationService, IPermissionAppService
     }
 
     /// <summary>
-    /// 创建权限授予信息
+    /// 创建权限授予信息。
     /// </summary>
     /// <param name="permission">权限定义</param>
-    /// <returns></returns>
+    /// <returns>包含显示名称、父级和可用提供者信息的权限 DTO。</returns>
     private PermissionGrantInfoDto CreatePermissionGrantInfoDto(PermissionDefinition permission)
     {
         return new PermissionGrantInfoDto
@@ -150,10 +152,10 @@ public class PermissionAppService : ApplicationService, IPermissionAppService
     }
 
     /// <summary>
-    /// 创建权限组
+    /// 创建权限组。
     /// </summary>
-    /// <param name="group"></param>
-    /// <returns></returns>
+    /// <param name="group">权限组定义。</param>
+    /// <returns>可返回给前端的权限组 DTO。</returns>
     private PermissionGroupDto CreatePermissionGroupDto(PermissionGroupDefinition group)
     {
         var localizableDisplayName = group.DisplayName as LocalizableString;
@@ -171,12 +173,12 @@ public class PermissionAppService : ApplicationService, IPermissionAppService
     }
 
     /// <summary>
-    /// 
+    /// 更新指定提供者下的一组权限授予状态。
     /// </summary>
-    /// <param name="providerName"></param>
-    /// <param name="providerKey"></param>
-    /// <param name="input"></param>
-    /// <returns></returns>
+    /// <param name="providerName">权限提供者名称。</param>
+    /// <param name="providerKey">权限提供者标识。</param>
+    /// <param name="input">待更新的权限授予状态。</param>
+    /// <returns>异步任务。</returns>
     public virtual async Task UpdateAsync(string providerName, string providerKey, UpdatePermissionsDto input)
     {
         await CheckProviderPolicy(providerName);
@@ -188,11 +190,11 @@ public class PermissionAppService : ApplicationService, IPermissionAppService
     }
 
     /// <summary>
-    /// 检查提供者策略
+    /// 检查当前用户是否具备管理指定权限提供者的策略。
     /// </summary>
     /// <param name="providerName">提供者名称</param>
-    /// <returns></returns>
-    /// <exception cref="AbpException"></exception>
+    /// <returns>异步任务。</returns>
+    /// <exception cref="BusinessException">未配置提供者策略时抛出。</exception>
     protected virtual async Task CheckProviderPolicy(string providerName)
     {
         var policyName = Options.ProviderPolicies.GetOrDefault(providerName);

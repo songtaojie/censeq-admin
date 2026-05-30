@@ -12,7 +12,8 @@ using Volo.Abp.SimpleStateChecking;
 namespace Censeq.PermissionManagement;
 
 /// <summary>
-/// 动态权限定义存储在内存缓存中
+/// 动态权限定义存储的进程内缓存实现。
+/// 负责把持久化的权限记录还原为 ABP 权限定义对象。
 /// </summary>
 public class DynamicPermissionDefinitionStoreInMemoryCache : IDynamicPermissionDefinitionStoreInMemoryCache,ISingletonDependency
 {
@@ -52,10 +53,10 @@ public class DynamicPermissionDefinitionStoreInMemoryCache : IDynamicPermissionD
     public DateTime? LastCheckTime { get; set; }
 
     /// <summary>
-    /// 
+    /// 初始化动态权限定义进程内缓存。
     /// </summary>
-    /// <param name="stateCheckerSerializer"></param>
-    /// <param name="localizableStringSerializer"></param>
+    /// <param name="stateCheckerSerializer">权限状态检查器序列化器。</param>
+    /// <param name="localizableStringSerializer">本地化字符串序列化器。</param>
     public DynamicPermissionDefinitionStoreInMemoryCache(ISimpleStateCheckerSerializer stateCheckerSerializer,
         ILocalizableStringSerializer localizableStringSerializer)
     {
@@ -67,11 +68,11 @@ public class DynamicPermissionDefinitionStoreInMemoryCache : IDynamicPermissionD
     }
 
     /// <summary>
-    /// 填充权限
+    /// 使用数据库中的权限组和权限定义记录重建缓存。
     /// </summary>
-    /// <param name="permissionGroupRecords"></param>
-    /// <param name="permissionRecords"></param>
-    /// <returns></returns>
+    /// <param name="permissionGroupRecords">权限组记录。</param>
+    /// <param name="permissionRecords">权限定义记录。</param>
+    /// <returns>异步任务。</returns>
     public Task FillAsync(List<PermissionGroup> permissionGroupRecords, List<PermissionDefinitionRecord> permissionRecords)
     {
         PermissionGroupDefinitions.Clear();
@@ -106,39 +107,39 @@ public class DynamicPermissionDefinitionStoreInMemoryCache : IDynamicPermissionD
     }
 
     /// <summary>
-    /// 获取权限
+    /// 根据名称获取权限定义。
     /// </summary>
-    /// <param name="name"></param>
-    /// <returns></returns>
+    /// <param name="name">权限名称。</param>
+    /// <returns>权限定义不存在时返回 null。</returns>
     public PermissionDefinition? GetPermissionOrNull(string name)
     {
         return PermissionDefinitions.GetOrDefault(name);
     }
 
     /// <summary>
-    /// 获取所有权限
+    /// 获取所有权限定义。
     /// </summary>
-    /// <returns></returns>
+    /// <returns>权限定义列表。</returns>
     public IReadOnlyList<PermissionDefinition> GetPermissions()
     {
         return [.. PermissionDefinitions.Values];
     }
 
     /// <summary>
-    /// 获取权限组定义
+    /// 获取所有权限组定义。
     /// </summary>
-    /// <returns></returns>
+    /// <returns>权限组定义列表。</returns>
     public IReadOnlyList<PermissionGroupDefinition> GetGroups()
     {
         return [.. PermissionGroupDefinitions.Values];
     }
 
     /// <summary>
-    /// 递归添加权限
+    /// 递归添加权限定义及其子权限。
     /// </summary>
-    /// <param name="permissionContainer">父级权限</param>
-    /// <param name="permissionRecord">子级权限</param>
-    /// <param name="allPermissionRecords">所有权限数据</param>
+    /// <param name="permissionContainer">权限组或父级权限容器。</param>
+    /// <param name="permissionRecord">当前权限记录。</param>
+    /// <param name="allPermissionRecords">全部权限记录。</param>
     private void AddPermissionRecursively(ICanAddChildPermission permissionContainer,PermissionDefinitionRecord permissionRecord,List<PermissionDefinitionRecord> allPermissionRecords)
     {
         var permission = permissionContainer.AddPermission(

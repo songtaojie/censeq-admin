@@ -20,70 +20,80 @@ using Censeq.PermissionManagement.Entities;
 namespace Censeq.PermissionManagement;
 
 /// <summary>
-/// ��̬Ȩ�ޱ���
+/// 静态权限保存器。
+/// 将代码中定义的静态权限同步到数据库，供动态权限定义存储和管理端读取。
 /// </summary>
 public class StaticPermissionSaver : IStaticPermissionSaver, ITransientDependency
 {
     /// <summary>
-    /// 
+    /// ABP 静态权限定义存储。
     /// </summary>
     protected IStaticPermissionDefinitionStore StaticStore { get; }
+
     /// <summary>
-    /// 
+    /// 权限组仓储。
     /// </summary>
     protected IPermissionGroupRepository PermissionGroupRepository { get; }
+
     /// <summary>
-    /// 
+    /// 权限定义记录仓储。
     /// </summary>
     protected IPermissionDefinitionRecordRepository PermissionRepository { get; }
+
     /// <summary>
-    /// 
+    /// 权限定义序列化器。
     /// </summary>
     protected IPermissionDefinitionSerializer PermissionSerializer { get; }
+
     /// <summary>
-    /// 
+    /// 分布式缓存。
     /// </summary>
     protected IDistributedCache Cache { get; }
+
     /// <summary>
-    /// 
+    /// 当前应用信息。
     /// </summary>
     protected IApplicationInfoAccessor ApplicationInfoAccessor { get; }
+
     /// <summary>
-    /// 
+    /// 分布式锁。
     /// </summary>
     protected IAbpDistributedLock DistributedLock { get; }
+
     /// <summary>
-    /// 
+    /// ABP 权限配置。
     /// </summary>
     protected AbpPermissionOptions PermissionOptions { get; }
+
     /// <summary>
-    /// 
+    /// 取消令牌提供器。
     /// </summary>
     protected ICancellationTokenProvider CancellationTokenProvider { get; }
+
     /// <summary>
-    /// 
+    /// 分布式缓存配置。
     /// </summary>
     protected AbpDistributedCacheOptions CacheOptions { get; }
 
     /// <summary>
-    /// 
+    /// 工作单元管理器。
     /// </summary>
     protected IUnitOfWorkManager UnitOfWorkManager { get; }
 
     /// <summary>
-    /// 
+    /// 初始化静态权限保存器。
     /// </summary>
-    /// <param name="staticStore"></param>
-    /// <param name="permissionGroupRepository"></param>
-    /// <param name="permissionRepository"></param>
-    /// <param name="permissionSerializer"></param>
-    /// <param name="cache"></param>
-    /// <param name="cacheOptions"></param>
-    /// <param name="applicationInfoAccessor"></param>
-    /// <param name="distributedLock"></param>
-    /// <param name="permissionOptions"></param>
-    /// <param name="cancellationTokenProvider"></param>
-    /// <param name="unitOfWorkManager"></param>
+    /// <param name="staticStore">静态权限定义存储。</param>
+    /// <param name="permissionGroupRepository">权限组仓储。</param>
+    /// <param name="permissionRepository">权限定义记录仓储。</param>
+    /// <param name="permissionSerializer">权限定义序列化器。</param>
+    /// <param name="cache">分布式缓存。</param>
+    /// <param name="cacheOptions">分布式缓存配置。</param>
+    /// <param name="applicationInfoAccessor">当前应用信息。</param>
+    /// <param name="distributedLock">分布式锁。</param>
+    /// <param name="permissionOptions">ABP 权限配置。</param>
+    /// <param name="cancellationTokenProvider">取消令牌提供器。</param>
+    /// <param name="unitOfWorkManager">工作单元管理器。</param>
     public StaticPermissionSaver(
         IStaticPermissionDefinitionStore staticStore,
         IPermissionGroupRepository permissionGroupRepository,
@@ -111,10 +121,11 @@ public class StaticPermissionSaver : IStaticPermissionSaver, ITransientDependenc
     }
 
     /// <summary>
-    /// 
+    /// 保存静态权限定义。
+    /// 使用应用级锁避免同一应用重复同步，使用公共锁保护跨应用共享的权限表更新。
     /// </summary>
-    /// <returns></returns>
-    /// <exception cref="AbpException"></exception>
+    /// <returns>异步任务。</returns>
+    /// <exception cref="AbpException">无法获取公共分布式锁时抛出。</exception>
     public async Task SaveAsync()
     {
         await using var applicationLockHandle = await DistributedLock.TryAcquireAsync(
@@ -210,6 +221,11 @@ public class StaticPermissionSaver : IStaticPermissionSaver, ITransientDependenc
         );
     }
 
+    /// <summary>
+    /// 同步权限组记录的新增、变更和删除。
+    /// </summary>
+    /// <param name="permissionGroupRecords">序列化后的权限组记录。</param>
+    /// <returns>存在数据库变更时返回 true。</returns>
     private async Task<bool> UpdateChangedPermissionGroupsAsync(
         IEnumerable<PermissionGroup> permissionGroupRecords)
     {
@@ -265,6 +281,12 @@ public class StaticPermissionSaver : IStaticPermissionSaver, ITransientDependenc
         return newRecords.Any() || changedRecords.Any() || deletedRecords.Any();
     }
 
+    /// <summary>
+    /// 同步权限定义记录的新增、变更和删除。
+    /// 被标记删除的权限组会连带删除其下权限定义。
+    /// </summary>
+    /// <param name="permissionRecords">序列化后的权限定义记录。</param>
+    /// <returns>存在数据库变更时返回 true。</returns>
     private async Task<bool> UpdateChangedPermissionsAsync(
         IEnumerable<PermissionDefinitionRecord> permissionRecords)
     {
@@ -332,26 +354,51 @@ public class StaticPermissionSaver : IStaticPermissionSaver, ITransientDependenc
         return newRecords.Any() || changedRecords.Any() || deletedRecords.Any();
     }
 
+    /// <summary>
+    /// 获取应用级分布式锁键。
+    /// </summary>
+    /// <returns>分布式锁键。</returns>
     private string GetApplicationDistributedLockKey()
     {
         return $"{CacheOptions.KeyPrefix}_{ApplicationInfoAccessor.ApplicationName}_AbpPermissionUpdateLock";
     }
 
+    /// <summary>
+    /// 获取跨应用共享的分布式锁键。
+    /// </summary>
+    /// <returns>分布式锁键。</returns>
     private string GetCommonDistributedLockKey()
     {
         return $"{CacheOptions.KeyPrefix}_Common_AbpPermissionUpdateLock";
     }
 
+    /// <summary>
+    /// 获取当前应用静态权限哈希缓存键。
+    /// </summary>
+    /// <returns>缓存键。</returns>
     private string GetApplicationHashCacheKey()
     {
         return $"{CacheOptions.KeyPrefix}_{ApplicationInfoAccessor.ApplicationName}_AbpPermissionsHash";
     }
 
+    /// <summary>
+    /// 获取公共权限定义缓存标记键。
+    /// </summary>
+    /// <returns>缓存键。</returns>
     private string GetCommonStampCacheKey()
     {
         return $"{CacheOptions.KeyPrefix}_AbpInMemoryPermissionCacheStamp";
     }
 
+    /// <summary>
+    /// 根据权限组、权限定义和删除配置计算静态权限哈希。
+    /// 哈希用于判断本应用的静态权限是否需要重新同步。
+    /// </summary>
+    /// <param name="permissionGroupRecords">权限组记录。</param>
+    /// <param name="permissionRecords">权限定义记录。</param>
+    /// <param name="deletedPermissionGroups">已删除权限组配置。</param>
+    /// <param name="deletedPermissions">已删除权限配置。</param>
+    /// <returns>静态权限哈希。</returns>
     private static string CalculateHash(
         PermissionGroup[] permissionGroupRecords,
         PermissionDefinitionRecord[] permissionRecords,

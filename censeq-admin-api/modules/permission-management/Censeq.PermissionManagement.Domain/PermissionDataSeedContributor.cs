@@ -8,7 +8,8 @@ using Volo.Abp.MultiTenancy;
 namespace Censeq.PermissionManagement;
 
 /// <summary>
-/// 权限种子设置
+/// 权限种子数据贡献者。
+/// 默认把当前租户侧可用的角色权限授予给 admin 角色。
 /// </summary>
 public class PermissionDataSeedContributor : IDataSeedContributor, ITransientDependency
 {
@@ -27,11 +28,11 @@ public class PermissionDataSeedContributor : IDataSeedContributor, ITransientDep
     protected IPermissionDataSeeder PermissionDataSeeder { get; }
 
     /// <summary>
-    /// 
+    /// 初始化权限种子数据贡献者。
     /// </summary>
-    /// <param name="permissionDefinitionManager"></param>
-    /// <param name="permissionDataSeeder"></param>
-    /// <param name="currentTenant"></param>
+    /// <param name="permissionDefinitionManager">权限定义管理器。</param>
+    /// <param name="permissionDataSeeder">权限种子数据服务。</param>
+    /// <param name="currentTenant">当前租户上下文。</param>
     public PermissionDataSeedContributor(
         IPermissionDefinitionManager permissionDefinitionManager,
         IPermissionDataSeeder permissionDataSeeder,
@@ -43,10 +44,10 @@ public class PermissionDataSeedContributor : IDataSeedContributor, ITransientDep
     }
 
     /// <summary>
-    /// 种子数据
+    /// 写入权限种子数据。
     /// </summary>
-    /// <param name="context"></param>
-    /// <returns></returns>
+    /// <param name="context">数据种子上下文。</param>
+    /// <returns>异步任务。</returns>
     public virtual async Task SeedAsync(DataSeedContext context)
     {
         var multiTenancySide = CurrentTenant.GetMultiTenancySide();

@@ -8,7 +8,8 @@ using Volo.Abp.DependencyInjection;
 namespace Censeq.PermissionManagement;
 
 /// <summary>
-/// 权限存储
+/// 权限存储。
+/// 为 ABP 权限检查流程提供授权读取能力，并通过分布式缓存减少仓储查询。
 /// </summary>
 public class PermissionStore : IPermissionStore, ITransientDependency
 {
@@ -33,7 +34,7 @@ public class PermissionStore : IPermissionStore, ITransientDependency
     protected IDistributedCache<PermissionGrantCacheItem> Cache { get; }
 
     /// <summary>
-    /// 
+    /// 初始化权限存储。
     /// </summary>
     /// <param name="permissionGrantRepository">权限授予存储库</param>
     /// <param name="cache">分布式缓存</param>
@@ -47,24 +48,25 @@ public class PermissionStore : IPermissionStore, ITransientDependency
     }
 
     /// <summary>
-    /// 
+    /// 判断指定权限是否已授予给指定提供者。
     /// </summary>
-    /// <param name="name"></param>
-    /// <param name="providerName"></param>
-    /// <param name="providerKey"></param>
-    /// <returns></returns>
+    /// <param name="name">权限名称。</param>
+    /// <param name="providerName">权限提供者名称。</param>
+    /// <param name="providerKey">权限提供者标识。</param>
+    /// <returns>已授予返回 true，否则返回 false。</returns>
     public virtual async Task<bool> IsGrantedAsync(string name, string providerName, string providerKey)
     {
         return (await GetCacheItemAsync(name, providerName, providerKey)).IsGranted;
     }
 
     /// <summary>
-    /// 获取权限缓存项
+    /// 获取权限缓存项。
+    /// 缓存未命中时会加载同一提供者下的权限授予数据并回填缓存。
     /// </summary>
-    /// <param name="name"></param>
-    /// <param name="providerName"></param>
-    /// <param name="providerKey"></param>
-    /// <returns></returns>
+    /// <param name="name">权限名称。</param>
+    /// <param name="providerName">权限提供者名称。</param>
+    /// <param name="providerKey">权限提供者标识。</param>
+    /// <returns>权限授予缓存项。</returns>
     protected virtual async Task<PermissionGrantCacheItem> GetCacheItemAsync(string name, string providerName, string providerKey)
     {
         var cacheKey = CalculateCacheKey(name, providerName, providerKey);
@@ -83,13 +85,14 @@ public class PermissionStore : IPermissionStore, ITransientDependency
     }
 
     /// <summary>
-    /// 设置权限缓存项
+    /// 设置权限缓存项。
+    /// 单权限查询未命中时，会顺带缓存该提供者下全部已定义权限的授予状态。
     /// </summary>
-    /// <param name="providerName"></param>
-    /// <param name="providerKey"></param>
-    /// <param name="currentName"></param>
-    /// <param name="currentCacheItem"></param>
-    /// <returns></returns>
+    /// <param name="providerName">权限提供者名称。</param>
+    /// <param name="providerKey">权限提供者标识。</param>
+    /// <param name="currentName">当前查询的权限名称。</param>
+    /// <param name="currentCacheItem">当前查询要返回的缓存项。</param>
+    /// <returns>异步任务。</returns>
     protected virtual async Task SetCacheItemsAsync(string providerName, string providerKey, string currentName, PermissionGrantCacheItem currentCacheItem)
     {
         var permissions = await PermissionDefinitionManager.GetPermissionsAsync();
@@ -125,12 +128,12 @@ public class PermissionStore : IPermissionStore, ITransientDependency
     }
 
     /// <summary>
-    /// 
+    /// 批量判断权限是否已授予给指定提供者。
     /// </summary>
-    /// <param name="names"></param>
-    /// <param name="providerName"></param>
-    /// <param name="providerKey"></param>
-    /// <returns></returns>
+    /// <param name="names">权限名称集合。</param>
+    /// <param name="providerName">权限提供者名称。</param>
+    /// <param name="providerKey">权限提供者标识。</param>
+    /// <returns>批量权限检查结果。</returns>
     public virtual async Task<MultiplePermissionGrantResult> IsGrantedAsync(string[] names, string providerName, string providerKey)
     {
         Check.NotNullOrEmpty(names, nameof(names));
@@ -160,12 +163,13 @@ public class PermissionStore : IPermissionStore, ITransientDependency
     }
 
     /// <summary>
-    /// 
+    /// 批量获取权限缓存项。
+    /// 仅对未命中的缓存键重新查询仓储并回填，避免重复读取已命中的缓存项。
     /// </summary>
-    /// <param name="names"></param>
-    /// <param name="providerName"></param>
-    /// <param name="providerKey"></param>
-    /// <returns></returns>
+    /// <param name="names">权限名称集合。</param>
+    /// <param name="providerName">权限提供者名称。</param>
+    /// <param name="providerKey">权限提供者标识。</param>
+    /// <returns>权限缓存键和值的列表。</returns>
     protected virtual async Task<List<KeyValuePair<string, PermissionGrantCacheItem>>> GetCacheItemsAsync(string[] names, string providerName, string providerKey)
     {
         var cacheKeys = names.Select(x => CalculateCacheKey(x, providerName, providerKey)).ToList();
@@ -201,12 +205,12 @@ public class PermissionStore : IPermissionStore, ITransientDependency
     }
 
     /// <summary>
-    /// 
+    /// 为批量查询中未命中的权限缓存键重新设置缓存项。
     /// </summary>
-    /// <param name="providerName"></param>
-    /// <param name="providerKey"></param>
-    /// <param name="notCacheKeys"></param>
-    /// <returns></returns>
+    /// <param name="providerName">权限提供者名称。</param>
+    /// <param name="providerKey">权限提供者标识。</param>
+    /// <param name="notCacheKeys">未命中的权限缓存键。</param>
+    /// <returns>新写入的缓存项。</returns>
     protected virtual async Task<List<KeyValuePair<string, PermissionGrantCacheItem>>> SetCacheItemsAsync(
         string providerName,
         string providerKey,
@@ -238,22 +242,22 @@ public class PermissionStore : IPermissionStore, ITransientDependency
     }
 
     /// <summary>
-    /// 
+    /// 生成权限授予缓存键。
     /// </summary>
-    /// <param name="name"></param>
-    /// <param name="providerName"></param>
-    /// <param name="providerKey"></param>
-    /// <returns></returns>
+    /// <param name="name">权限名称。</param>
+    /// <param name="providerName">权限提供者名称。</param>
+    /// <param name="providerKey">权限提供者标识。</param>
+    /// <returns>权限授予缓存键。</returns>
     protected virtual string CalculateCacheKey(string name, string providerName, string providerKey)
     {
         return PermissionGrantCacheItem.CalculateCacheKey(name, providerName, providerKey);
     }
 
     /// <summary>
-    /// 
+    /// 从权限授予缓存键中解析权限名称。
     /// </summary>
-    /// <param name="key"></param>
-    /// <returns></returns>
+    /// <param name="key">权限授予缓存键。</param>
+    /// <returns>解析出的权限名称，解析失败时返回 null。</returns>
     protected virtual string? GetPermissionNameFormCacheKeyOrNull(string key)
     {
         //TODO: 当名称为空时抛出 ex？

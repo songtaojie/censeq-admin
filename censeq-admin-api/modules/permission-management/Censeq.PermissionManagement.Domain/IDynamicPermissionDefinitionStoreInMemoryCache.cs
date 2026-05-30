@@ -8,49 +8,50 @@ using Volo.Abp.Authorization.Permissions;
 namespace Censeq.PermissionManagement;
 
 /// <summary>
-/// ��̬Ȩ�޶���洢���ڴ滺����
+/// 动态权限定义存储的进程内缓存。
+/// 保存从数据库还原出的权限组和权限定义对象。
 /// </summary>
 public interface IDynamicPermissionDefinitionStoreInMemoryCache
 {
     /// <summary>
-    /// ������
+    /// 缓存标记。
     /// </summary>
     string CacheStamp { get; set; }
 
     /// <summary>
-    /// ͬ���ź���
+    /// 同步信号量，用于串行化缓存刷新。
     /// </summary>
     SemaphoreSlim SyncSemaphore { get; }
 
     /// <summary>
-    /// �����ʱ��
+    /// 最后检查缓存标记的时间。
     /// </summary>
     DateTime? LastCheckTime { get; set; }
 
     /// <summary>
-    /// ���Ȩ��
+    /// 使用数据库记录填充进程内权限定义缓存。
     /// </summary>
-    /// <param name="permissionGroupRecords"></param>
-    /// <param name="permissionRecords"></param>
-    /// <returns></returns>
+    /// <param name="permissionGroupRecords">权限组记录。</param>
+    /// <param name="permissionRecords">权限定义记录。</param>
+    /// <returns>异步任务。</returns>
     Task FillAsync(List<PermissionGroup> permissionGroupRecords,List<PermissionDefinitionRecord> permissionRecords);
 
     /// <summary>
-    /// ��ȡȨ��
+    /// 根据名称获取权限定义。
     /// </summary>
-    /// <param name="name"></param>
-    /// <returns></returns>
+    /// <param name="name">权限名称。</param>
+    /// <returns>权限定义不存在时返回 null。</returns>
     PermissionDefinition? GetPermissionOrNull(string name);
 
     /// <summary>
-    /// ��ȡ����Ȩ��
+    /// 获取全部权限定义。
     /// </summary>
-    /// <returns></returns>
+    /// <returns>权限定义列表。</returns>
     IReadOnlyList<PermissionDefinition> GetPermissions();
 
     /// <summary>
-    /// ��ȡȨ���鶨��
+    /// 获取全部权限组定义。
     /// </summary>
-    /// <returns></returns>
+    /// <returns>权限组定义列表。</returns>
     IReadOnlyList<PermissionGroupDefinition> GetGroups();
 }

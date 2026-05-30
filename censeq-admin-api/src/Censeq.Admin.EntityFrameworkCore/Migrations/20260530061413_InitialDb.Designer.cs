@@ -13,8 +13,8 @@ using Volo.Abp.EntityFrameworkCore;
 namespace Censeq.Admin.Migrations
 {
     [DbContext(typeof(CenseqAdminDbContext))]
-    [Migration("20260528162749_AddFileRecordProvider")]
-    partial class AddFileRecordProvider
+    [Migration("20260530061413_InitialDb")]
+    partial class InitialDb
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -715,11 +715,142 @@ namespace Censeq.Admin.Migrations
                     b.ToTable("censeq_feature_value", (string)null);
                 });
 
+            modelBuilder.Entity("Censeq.FileManagement.Files.FileProvider", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uuid")
+                        .HasColumnName("id");
+
+                    b.Property<string>("AccessKey")
+                        .HasMaxLength(128)
+                        .HasColumnType("character varying(128)")
+                        .HasColumnName("access_key");
+
+                    b.Property<string>("BucketName")
+                        .IsRequired()
+                        .HasMaxLength(128)
+                        .HasColumnType("character varying(128)")
+                        .HasColumnName("bucket_name");
+
+                    b.Property<string>("ConcurrencyStamp")
+                        .IsConcurrencyToken()
+                        .IsRequired()
+                        .HasMaxLength(40)
+                        .HasColumnType("character varying(40)")
+                        .HasColumnName("concurrency_stamp");
+
+                    b.Property<DateTime>("CreationTime")
+                        .HasColumnType("timestamp without time zone")
+                        .HasColumnName("creation_time");
+
+                    b.Property<Guid?>("CreatorId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("creator_id");
+
+                    b.Property<string>("CustomDomain")
+                        .HasMaxLength(256)
+                        .HasColumnType("character varying(256)")
+                        .HasColumnName("custom_domain");
+
+                    b.Property<Guid?>("DeleterId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("deleter_id");
+
+                    b.Property<DateTime?>("DeletionTime")
+                        .HasColumnType("timestamp without time zone")
+                        .HasColumnName("deletion_time");
+
+                    b.Property<string>("Endpoint")
+                        .HasMaxLength(256)
+                        .HasColumnType("character varying(256)")
+                        .HasColumnName("endpoint");
+
+                    b.Property<string>("ExtraProperties")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("extra_properties");
+
+                    b.Property<bool>("IsDefault")
+                        .HasColumnType("boolean")
+                        .HasColumnName("is_default");
+
+                    b.Property<bool>("IsDeleted")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("boolean")
+                        .HasDefaultValue(false)
+                        .HasColumnName("is_deleted");
+
+                    b.Property<bool>("IsEnable")
+                        .HasColumnType("boolean")
+                        .HasColumnName("is_enable");
+
+                    b.Property<bool>("IsEnableCache")
+                        .HasColumnType("boolean")
+                        .HasColumnName("is_enable_cache");
+
+                    b.Property<bool>("IsEnableHttps")
+                        .HasColumnType("boolean")
+                        .HasColumnName("is_enable_https");
+
+                    b.Property<DateTime?>("LastModificationTime")
+                        .HasColumnType("timestamp without time zone")
+                        .HasColumnName("last_modification_time");
+
+                    b.Property<Guid?>("LastModifierId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("last_modifier_id");
+
+                    b.Property<int>("OrderNo")
+                        .HasColumnType("integer")
+                        .HasColumnName("order_no");
+
+                    b.Property<string>("Provider")
+                        .IsRequired()
+                        .HasMaxLength(16)
+                        .HasColumnType("character varying(16)")
+                        .HasColumnName("provider");
+
+                    b.Property<string>("Region")
+                        .HasMaxLength(64)
+                        .HasColumnType("character varying(64)")
+                        .HasColumnName("region");
+
+                    b.Property<string>("Remark")
+                        .HasMaxLength(512)
+                        .HasColumnType("character varying(512)")
+                        .HasColumnName("remark");
+
+                    b.Property<string>("SecretKey")
+                        .HasMaxLength(128)
+                        .HasColumnType("character varying(128)")
+                        .HasColumnName("secret_key");
+
+                    b.Property<Guid?>("TenantId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("tenant_id");
+
+                    b.HasKey("Id")
+                        .HasName("pk_censeq_file_provider");
+
+                    b.HasIndex("Provider", "BucketName")
+                        .HasDatabaseName("ix_censeq_file_provider_provider_bucket_name");
+
+                    b.HasIndex("TenantId", "IsEnable", "IsDefault", "OrderNo")
+                        .HasDatabaseName("ix_censeq_file_provider_tenant_id_is_enable_is_default_order_no");
+
+                    b.ToTable("censeq_file_provider", (string)null);
+                });
+
             modelBuilder.Entity("Censeq.FileManagement.Files.FileRecord", b =>
                 {
                     b.Property<Guid>("Id")
                         .HasColumnType("uuid")
                         .HasColumnName("id");
+
+                    b.Property<string>("BucketName")
+                        .HasMaxLength(128)
+                        .HasColumnType("character varying(128)")
+                        .HasColumnName("bucket_name");
 
                     b.Property<string>("Category")
                         .HasMaxLength(64)
@@ -820,6 +951,11 @@ namespace Censeq.Admin.Migrations
                     b.Property<long>("Size")
                         .HasColumnType("bigint")
                         .HasColumnName("size");
+
+                    b.Property<string>("StorageProvider")
+                        .HasMaxLength(32)
+                        .HasColumnType("character varying(32)")
+                        .HasColumnName("storage_provider");
 
                     b.Property<Guid?>("TenantId")
                         .HasColumnType("uuid")
