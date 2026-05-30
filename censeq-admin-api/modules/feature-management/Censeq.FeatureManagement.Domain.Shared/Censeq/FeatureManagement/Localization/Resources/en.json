@@ -6,7 +6,7 @@
     "ManageHostFeatures": "Manage host features",
     "ManageHostFeaturesText": "You can manage the host side features by clicking the following button.",
     "Permission:FeatureManagement": "Feature management",
-    "Permission:FeatureManagement.ManageHostFeatures": "Manage host features",
+    "Permission:FeatureManagement.ManageHostFeatures": "Feature management",
     "Censeq.FeatureManagement:InvalidFeatureValue": "{0} feature value is not valid!",
     "Menu:FeatureManagement": "Feature management",
     "ResetToDefault": "Reset to default",

@@ -10,5 +10,6 @@ export * from './localization-management/localization.service';
 export * from './menu/menu.service';
 export * from './permission-management/permissions.service';
 export * from './setting-management/settings.service';
+export * from './system-monitor/system-monitor.service';
 export * from './tenant-management/tenant.service';
 export * from './permission-management/permission-definition.service';

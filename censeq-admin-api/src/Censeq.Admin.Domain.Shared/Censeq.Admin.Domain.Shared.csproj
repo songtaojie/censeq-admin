@@ -5,8 +5,14 @@
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
     <Nullable>enable</Nullable>
+    <GenerateEmbeddedFilesManifest>true</GenerateEmbeddedFilesManifest>
     <RootNamespace>Censeq.Admin</RootNamespace>
   </PropertyGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Localization\Resources\*.json" />
+    <Content Remove="Localization\Resources\*.json" />
+  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Volo.Abp.Json.SystemTextJson" />

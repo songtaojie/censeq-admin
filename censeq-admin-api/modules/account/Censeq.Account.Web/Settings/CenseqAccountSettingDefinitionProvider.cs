@@ -15,6 +15,14 @@ namespace Censeq.Account.Web.Settings
                     L("DisplayName:Censeq.Account.EnableRememberMe"),
                     L("Description:Censeq.Account.EnableRememberMe"), isVisibleToClients: true)
             );
+
+            context.Add(
+                new SettingDefinition(
+                    CenseqAccountSettingNames.EnableCaptcha,
+                    "true",
+                    L("DisplayName:Censeq.Account.EnableCaptcha"),
+                    L("Description:Censeq.Account.EnableCaptcha"), isVisibleToClients: true)
+            );
         }
 
         private static LocalizableString L(string name)

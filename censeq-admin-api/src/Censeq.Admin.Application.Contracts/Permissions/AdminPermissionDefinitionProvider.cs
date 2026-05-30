@@ -19,6 +19,12 @@ public class AdminPermissionDefinitionProvider : PermissionDefinitionProvider
 
         var myGroup = context.AddGroup(AdminPermissions.GroupName, L("Permission:CenseqAdmin"));
 
+        var systemMonitorPermission = myGroup.AddPermission(AdminPermissions.SystemMonitor.Default, L("Permission:SystemMonitor"));
+        systemMonitorPermission.AddChild(AdminPermissions.SystemMonitor.Server, L("Permission:SystemMonitorServer"));
+        var cachePermission = systemMonitorPermission.AddChild(AdminPermissions.SystemMonitor.Cache, L("Permission:SystemMonitorCache"));
+        cachePermission.AddChild(AdminPermissions.SystemMonitor.CacheDelete, L("Permission:Delete"));
+        cachePermission.AddChild(AdminPermissions.SystemMonitor.CacheClear, L("Permission:Clear"));
+
         myGroup.AddPermission(AdminPermissions.Files.Default, L("Permission:Files"));
 
         var fileProvidersPermission = myGroup.AddPermission(AdminPermissions.FileProviders.Default, L("Permission:FileProviders"));

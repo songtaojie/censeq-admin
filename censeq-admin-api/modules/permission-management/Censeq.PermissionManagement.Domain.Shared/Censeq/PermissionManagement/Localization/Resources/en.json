@@ -2,7 +2,7 @@
   "culture": "en",
   "texts": {
     "Permission:PermissionManagement": "Permission management",
-    "Permission:DefinitionManagement": "Permission definition management",
+    "Permission:DefinitionManagement": "Permission management",
     "Permissions": "Permissions",
     "OnlyProviderPermissons": "Only this provider",
     "All": "All",

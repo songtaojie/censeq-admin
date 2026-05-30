@@ -30,6 +30,7 @@
     "Permission:Delete": "删除",
     "Permission:ManageConnectionStrings": "管理连接字符串",
     "Permission:ManageFeatures": "管理功能",
+    "Permission:ResetAdminPassword": "重置管理员密码",
     "DisplayName:AdminUserName": "管理员账号",
     "DisplayName:AdminName": "管理员名称",
     "DisplayName:AdminEmailAddress": "管理员电子邮箱",

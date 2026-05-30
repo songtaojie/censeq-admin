@@ -1,8 +1,8 @@
 {
   "culture": "en",
   "texts": {
-    "Permission:AuditLogging": "Audit logging",
-    "Permission:AuditLogs": "Audit logs",
+    "Permission:AuditLogging": "Log management",
+    "Permission:AuditLogs": "Operation logs",
     "Menu:AuditLogging": "Audit logs",
     "AuditLogs": "Audit logs",
     "HttpStatus": "HTTP status",

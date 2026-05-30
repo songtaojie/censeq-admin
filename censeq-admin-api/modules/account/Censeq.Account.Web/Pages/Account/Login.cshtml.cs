@@ -23,6 +23,7 @@ using Censeq.TenantManagement;
 using Censeq.Identity.Entities;
 using Censeq.TenantManagement.Entities;
 using Volo.Abp.Data;
+using Lazy.Captcha.Core;
 
 namespace Censeq.Account.Web.Pages.Account;
 
@@ -52,6 +53,8 @@ public class LoginModel : AccountPageModel
     public bool EnableLocalLogin { get; set; }
 
     public bool EnableRememberMe { get; set; }
+
+    public bool EnableCaptcha { get; set; }
 
     public bool IsSelfRegistrationEnabled { get; set; }
 
@@ -96,17 +99,37 @@ public class LoginModel : AccountPageModel
         LoginInput = new LoginInputModel();
         await InitializeTenantSelectionAsync();
 
-        ExternalProviders = await GetExternalProviders();
+        await ReloadLoginPageStateAsync();
 
-        EnableLocalLogin = await SettingProvider.IsTrueAsync(AccountSettingNames.EnableLocalLogin);
-        EnableRememberMe = await SettingProvider.IsTrueAsync(CenseqAccountSettingNames.EnableRememberMe);
-        IsSelfRegistrationEnabled = await SettingProvider.IsTrueAsync(AccountSettingNames.IsSelfRegistrationEnabled);
         if (IsExternalLoginOnly)
         {
-            return await OnPostExternalLogin(ExternalProviders.First().AuthenticationScheme ?? string.Empty);
+            return await OnPostExternalLogin(ExternalProviders!.First().AuthenticationScheme ?? string.Empty);
         }
 
         return Page();
+    }
+
+    public virtual async Task<IActionResult> OnGetCaptchaAsync()
+    {
+        if (!await IsCaptchaEnabledAsync())
+        {
+            return new JsonResult(new
+            {
+                enabled = false
+            });
+        }
+
+        var captchaId = Guid.NewGuid().ToString("N");
+        var captcha = LazyServiceProvider.LazyGetRequiredService<ICaptcha>().Generate(captchaId);
+        var captchaOptions = LazyServiceProvider.LazyGetRequiredService<IOptions<CaptchaOptions>>().Value;
+
+        return new JsonResult(new
+        {
+            enabled = true,
+            id = captchaId,
+            img = captcha.Base64,
+            expirySeconds = captchaOptions.ExpirySeconds
+        });
     }
 
     public virtual async Task<IActionResult> OnPostAsync(string action)
@@ -125,9 +148,12 @@ public class LoginModel : AccountPageModel
         //ValidateModel();
         ModelValidator?.Validate(ModelState);
 
-        ExternalProviders = await GetExternalProviders();
+        await ReloadLoginPageStateAsync();
 
-        EnableLocalLogin = await SettingProvider.IsTrueAsync(AccountSettingNames.EnableLocalLogin);
+        if (!await ValidateCaptchaAsync())
+        {
+            return Page();
+        }
 
         var resolution = await ResolveLoginUserAsync();
         if (resolution.RedirectResult != null)
@@ -297,7 +323,36 @@ public class LoginModel : AccountPageModel
         ExternalProviders = await GetExternalProviders();
         EnableLocalLogin = await SettingProvider.IsTrueAsync(AccountSettingNames.EnableLocalLogin);
         EnableRememberMe = await SettingProvider.IsTrueAsync(CenseqAccountSettingNames.EnableRememberMe);
+        EnableCaptcha = await SettingProvider.IsTrueAsync(CenseqAccountSettingNames.EnableCaptcha);
         IsSelfRegistrationEnabled = await SettingProvider.IsTrueAsync(AccountSettingNames.IsSelfRegistrationEnabled);
+    }
+
+    protected virtual async Task<bool> ValidateCaptchaAsync()
+    {
+        if (!await IsCaptchaEnabledAsync())
+        {
+            return true;
+        }
+
+        if (LoginInput.CaptchaId.IsNullOrWhiteSpace() || LoginInput.CaptchaCode.IsNullOrWhiteSpace())
+        {
+            SetLoginError("请输入验证码。");
+            return false;
+        }
+
+        var captcha = LazyServiceProvider.LazyGetRequiredService<ICaptcha>();
+        if (captcha.Validate(LoginInput.CaptchaId, LoginInput.CaptchaCode))
+        {
+            return true;
+        }
+
+        SetLoginError("验证码错误或已过期，请重新输入。", true);
+        return false;
+    }
+
+    protected virtual async Task<bool> IsCaptchaEnabledAsync()
+    {
+        return await SettingProvider.IsTrueAsync(CenseqAccountSettingNames.EnableCaptcha);
     }
 
     /// <summary>
@@ -727,6 +782,13 @@ public class LoginModel : AccountPageModel
         [DataType(DataType.Password)]
         [DisableAuditing]
         public string? Password { get; set; }
+
+        [DisableAuditing]
+        public string? CaptchaId { get; set; }
+
+        [Display(Name = "验证码")]
+        [DisableAuditing]
+        public string? CaptchaCode { get; set; }
 
         public bool RememberMe { get; set; }
     }

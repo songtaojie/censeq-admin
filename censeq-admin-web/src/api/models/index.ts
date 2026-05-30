@@ -7,4 +7,5 @@ export * from './identity';
 export * from './localization-management';
 export * from './menu';
 export * from './setting-management';
+export * from './system-monitor';
 export * from './tenant';

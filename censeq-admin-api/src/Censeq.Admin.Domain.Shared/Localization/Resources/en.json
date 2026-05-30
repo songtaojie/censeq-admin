@@ -73,6 +73,8 @@
     "Permission:Menus": "Menu management",
     "Permission:Files": "Files",
     "Permission:FileProviders": "File providers",
+    "Permission:TenantAdmin": "Tenant administration",
+    "Permission:TenantPermissions": "Tenant permissions",
     "Permission:Create": "Create",
     "Permission:Edit": "Edit",
     "Permission:Delete": "Delete",

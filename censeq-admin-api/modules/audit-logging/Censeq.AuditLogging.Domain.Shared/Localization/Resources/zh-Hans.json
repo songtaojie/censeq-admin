@@ -1,8 +1,8 @@
 {
   "culture": "zh-Hans",
   "texts": {
-    "Permission:AuditLogging": "审计日志",
-    "Permission:AuditLogs": "审计日志",
+    "Permission:AuditLogging": "日志管理",
+    "Permission:AuditLogs": "操作日志",
     "Menu:AuditLogging": "审计日志",
     "AuditLogs": "审计日志",
     "HttpStatus": "HTTP 状态",

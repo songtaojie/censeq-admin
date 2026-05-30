@@ -19,6 +19,10 @@ using Censeq.Account.Web.Consts;
 using Volo.Abp.Localization;
 using Censeq.Identity.AspNetCore;
 using Censeq.Identity.ObjectExtending;
+using Lazy.Captcha.Core;
+using Lazy.Captcha.Core.Generator;
+using Microsoft.Extensions.Configuration;
+using SkiaSharp;
 
 namespace Censeq.Account.Web;
 
@@ -82,6 +86,14 @@ public class CenseqAccountWebModule : AbpModule
                 .Get<AccountResource>() // 获取内置资源
                 .AddVirtualJson("/Localization/Resources"); // 添加你自定义的资源目录
         });
+
+        ConfigureCaptcha(context);
+    }
+
+    private static void ConfigureCaptcha(ServiceConfigurationContext context)
+    {
+        var configuration = context.Services.GetConfiguration();
+        context.Services.AddCaptcha(configuration);
     }
 
     private void ConfigureProfileManagementPage()

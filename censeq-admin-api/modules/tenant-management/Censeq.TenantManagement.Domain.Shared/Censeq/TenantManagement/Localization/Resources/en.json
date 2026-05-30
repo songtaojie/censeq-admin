@@ -30,6 +30,7 @@
     "Permission:Delete": "Delete",
     "Permission:ManageConnectionStrings": "Manage connection strings",
     "Permission:ManageFeatures": "Manage features",
+    "Permission:ResetAdminPassword": "Reset admin password",
     "DisplayName:AdminUserName": "Admin User Name",
     "DisplayName:AdminName": "Admin Name",
     "DisplayName:AdminEmailAddress": "Admin Email Address",

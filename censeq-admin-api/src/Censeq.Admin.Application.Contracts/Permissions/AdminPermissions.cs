@@ -21,6 +21,15 @@ public static class AdminPermissions
         public const string Default = GroupName + ".Files";
     }
 
+    public static class SystemMonitor
+    {
+        public const string Default = GroupName + ".SystemMonitor";
+        public const string Server = Default + ".Server";
+        public const string Cache = Default + ".Cache";
+        public const string CacheDelete = Cache + ".Delete";
+        public const string CacheClear = Cache + ".Clear";
+    }
+
     public static class FileProviders
     {
         public const string Default = GroupName + ".FileProviders";

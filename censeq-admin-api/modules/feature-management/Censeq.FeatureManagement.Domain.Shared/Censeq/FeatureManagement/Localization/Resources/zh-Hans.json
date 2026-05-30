@@ -6,7 +6,7 @@
     "ManageHostFeatures": "管理主机功能",
     "ManageHostFeaturesText": "点击以下按钮即可管理主机端功能。",
     "Permission:FeatureManagement": "功能管理",
-    "Permission:FeatureManagement.ManageHostFeatures": "管理主机功能",
+    "Permission:FeatureManagement.ManageHostFeatures": "特性管理",
     "Censeq.FeatureManagement:InvalidFeatureValue": "{0}功能值无效！",
     "Menu:FeatureManagement": "功能管理",
     "ResetToDefault": "重置为默认值",
