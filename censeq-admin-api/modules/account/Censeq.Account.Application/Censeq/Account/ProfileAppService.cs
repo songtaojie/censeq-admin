@@ -32,7 +32,10 @@ public class ProfileAppService : IdentityAppServiceBase, IProfileAppService
     {
         var currentUser = await UserManager.GetByIdAsync(CurrentUser.GetId());
 
-        return ObjectMapper.Map<IdentityUser, ProfileDto>(currentUser);
+        var profile = ObjectMapper.Map<IdentityUser, ProfileDto>(currentUser);
+        profile.SetProperty("signature", currentUser.GetProperty<string>("signature", null));
+
+        return profile;
     }
 
     public virtual async Task<ProfileDto> UpdateAsync(UpdateProfileDto input)
@@ -77,12 +80,33 @@ public class ProfileAppService : IdentityAppServiceBase, IProfileAppService
         user.SetProperty("AvatarUrl", input.AvatarUrl?.Trim());
 
         input.MapExtraPropertiesTo(user);
+        SyncSignatureExtraProperty(input, user);
 
         (await UserManager.UpdateAsync(user)).CheckErrors();
 
         await CurrentUnitOfWork!.SaveChangesAsync();
 
-        return ObjectMapper.Map<IdentityUser, ProfileDto>(user);
+        var profile = ObjectMapper.Map<IdentityUser, ProfileDto>(user);
+        profile.SetProperty("signature", user.GetProperty<string>("signature", null));
+
+        return profile;
+    }
+
+    private static void SyncSignatureExtraProperty(UpdateProfileDto input, IdentityUser user)
+    {
+        if (!input.ExtraProperties.TryGetValue("signature", out var signatureValue))
+        {
+            return;
+        }
+
+        var signature = signatureValue?.ToString()?.Trim();
+        if (signature.IsNullOrWhiteSpace())
+        {
+            user.ExtraProperties.Remove("signature");
+            return;
+        }
+
+        user.SetProperty("signature", signature);
     }
 
     public virtual async Task ChangePasswordAsync(ChangePasswordInput input)

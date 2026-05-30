@@ -30,7 +30,11 @@ export function useOidc() {
 			const cached = (Session.get('userInfo') as Partial<UserInfos> | undefined) ?? {};
 			const profile = user.profile as any;
 			const displayName =
-				profile.name || [profile.family_name, profile.given_name].filter(Boolean).join(' ') || user.profile.preferred_username || cached.displayName || '';
+				profile.name ||
+				[profile.family_name, profile.given_name].filter(Boolean).join(' ') ||
+				user.profile.preferred_username ||
+				cached.displayName ||
+				'';
 			var userInfos = {
 				authBtnList: cached.authBtnList ?? [],
 				userName: user.profile.preferred_username ?? cached.userName ?? '',
@@ -85,6 +89,11 @@ export function useOidc() {
 		await userManager.signoutRedirect();
 	};
 
+	const clearLocalUser = async () => {
+		Session.clear();
+		await userManager.removeUser();
+	};
+
 	// 处理静默续期回调（callback 页面中调用）
 	const signinSilentCallback = async () => {
 		try {
@@ -133,6 +142,7 @@ export function useOidc() {
 		signinSilentCallback,
 		trySilentRenew,
 		logout,
+		clearLocalUser,
 		getCurrentUser,
 		getCurrentTenantId,
 		getAcessToken,

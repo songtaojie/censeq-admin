@@ -3,10 +3,10 @@
 		<el-card shadow="hover" :body-style="{ paddingBottom: '0' }">
 			<el-form ref="queryFormRef" :model="state.queryParam" :inline="true">
 				<el-form-item label="账号">
-					<el-input v-model="state.queryParam.userName" placeholder="账号" clearable style="width: 160px" @keyup.enter="onQuery" />
+					<el-input v-model="state.queryParam.userName" placeholder="账号" clearable style="width: 180px" @keyup.enter="onQuery" />
 				</el-form-item>
 				<el-form-item label="姓名">
-					<el-input v-model="state.queryParam.name" placeholder="姓名" clearable style="width: 140px" @keyup.enter="onQuery" />
+					<el-input v-model="state.queryParam.name" placeholder="姓名" clearable style="width: 180px" @keyup.enter="onQuery" />
 				</el-form-item>
 				<el-form-item label="邮箱">
 					<el-input v-model="state.queryParam.email" placeholder="邮箱" clearable style="width: 180px" @keyup.enter="onQuery" />

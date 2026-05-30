@@ -36,22 +36,32 @@ const dynamicViewsModules: Record<string, Function> = Object.assign({}, { ...lay
 export async function initBackEndControlRoutes() {
 	// 界面 loading 动画开始执行
 	if (window.nextLoading === undefined) NextLoading.start();
-	const { isAuthenticated } = useOidc();
+	const { clearLocalUser, isAuthenticated, login } = useOidc();
 	if (!(await isAuthenticated())) return false;
-	const runtimeMenu = await getBackEndControlRoutes();
-	const { setUserInfos } = useUserInfo();
-	await setUserInfos({ roles: runtimeMenu.roles ?? [], authBtnList: runtimeMenu.authBtnList ?? [] });
-	// 无登录权限时，添加判断
-	// https://gitee.com/lyt-top/vue-next-admin/issues/I64HVO
-	if ((runtimeMenu.routes?.length ?? 0) <= 0) {
-		// 路由为空：清空 children 避免静态 demo 路由被注册到菜单，再完成路由注册结束 loading
-		dynamicRoutes[0].children = getLocalRuntimeRoutes();
-		dynamicRoutes[0].redirect = undefined;
-		await setAddRoute();
-		setFilterMenuAndCacheTagsViewRoutes();
-		return Promise.resolve(true);
+	try {
+		const runtimeMenu = await getBackEndControlRoutes();
+		const { setUserInfos } = useUserInfo();
+		await setUserInfos({ roles: runtimeMenu.roles ?? [], authBtnList: runtimeMenu.authBtnList ?? [] });
+		// 无登录权限时，添加判断
+		// https://gitee.com/lyt-top/vue-next-admin/issues/I64HVO
+		if ((runtimeMenu.routes?.length ?? 0) <= 0) {
+			// 路由为空：清空 children 避免静态 demo 路由被注册到菜单，再完成路由注册结束 loading
+			dynamicRoutes[0].children = getLocalRuntimeRoutes();
+			dynamicRoutes[0].redirect = undefined;
+			await setAddRoute();
+			setFilterMenuAndCacheTagsViewRoutes();
+			return Promise.resolve(true);
+		}
+		await applyRuntimeRoutes(runtimeMenu);
+		return true;
+	} catch (error: any) {
+		NextLoading.done();
+		if (error?.response?.status === 401 || error?.response?.status === 403) {
+			await clearLocalUser();
+			await login();
+		}
+		return false;
 	}
-	await applyRuntimeRoutes(runtimeMenu);
 }
 
 /**
