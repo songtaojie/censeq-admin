@@ -8,7 +8,8 @@ using Censeq.PermissionManagement.Entities;
 namespace Censeq.PermissionManagement;
 
 /// <summary>
-/// 权限授予缓存项无效器本地事件处理程序
+/// 权限授予缓存项失效处理器。
+/// 当权限授予记录发生变化时，移除对应的分布式缓存项。
 /// </summary>
 public class PermissionGrantCacheItemInvalidator :ILocalEventHandler<EntityChangedEventData<PermissionGrant>>,ITransientDependency
 {
@@ -34,10 +35,10 @@ public class PermissionGrantCacheItemInvalidator :ILocalEventHandler<EntityChang
     }
 
     /// <summary>
-    /// 事件处理
+    /// 处理权限授予实体变更事件。
     /// </summary>
-    /// <param name="eventData"></param>
-    /// <returns></returns>
+    /// <param name="eventData">权限授予实体变更事件数据。</param>
+    /// <returns>异步任务。</returns>
     public virtual async Task HandleEventAsync(EntityChangedEventData<PermissionGrant> eventData)
     {
         var cacheKey = CalculateCacheKey(eventData.Entity.Name, eventData.Entity.ProviderName,eventData.Entity.ProviderKey);
@@ -49,12 +50,12 @@ public class PermissionGrantCacheItemInvalidator :ILocalEventHandler<EntityChang
     }
 
     /// <summary>
-    /// 获取缓存的key
+    /// 获取权限授予缓存键。
     /// </summary>
     /// <param name="name">权限名称</param>
     /// <param name="providerName">提供者名称</param>
     /// <param name="providerKey">提供者key</param>
-    /// <returns></returns>
+    /// <returns>缓存键。</returns>
     protected virtual string CalculateCacheKey(string name, string providerName, string? providerKey)
     {
         return PermissionGrantCacheItem.CalculateCacheKey(name, providerName, providerKey);

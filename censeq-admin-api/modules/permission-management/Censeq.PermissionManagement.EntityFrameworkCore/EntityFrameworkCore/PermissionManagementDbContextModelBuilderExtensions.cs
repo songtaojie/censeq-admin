@@ -5,8 +5,16 @@ using Volo.Abp;
 
 namespace Censeq.PermissionManagement.EntityFrameworkCore
 {
+    /// <summary>
+    /// 权限管理 DbContext 模型构建扩展。
+    /// </summary>
     public static class PermissionManagementDbContextModelBuilderExtensions
     {
+        /// <summary>
+        /// 配置权限管理模块实体映射。
+        /// 授权记录在宿主和租户库中都可用，权限组和权限定义仅配置到宿主库。
+        /// </summary>
+        /// <param name="builder">模型构建器。</param>
         public static void ConfigurePermissionManagement(this ModelBuilder builder)
         {
             Check.NotNull(builder, "builder");
