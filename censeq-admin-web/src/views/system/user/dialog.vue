@@ -15,30 +15,14 @@
 				<el-tab-pane label="基本信息" name="basic">
 					<el-form ref="formRef" :model="state.ruleForm" :rules="formRules" label-width="100px" size="default" class="user-form-grid">
 						<el-row :gutter="20">
-							<el-col :span="24">
-								<el-form-item label="头像">
-									<div class="avatar-field">
-										<UserAvatar :src="state.ruleForm.avatarUrl" :name="displayName" :user-name="state.ruleForm.userName" :size="48" />
-										<el-input v-model="state.ruleForm.avatarUrl" placeholder="头像地址，可在个人中心上传生成" clearable />
-									</div>
-								</el-form-item>
-							</el-col>
-						</el-row>
-						<el-row :gutter="20">
 							<el-col :span="12">
 								<el-form-item label="用户名" prop="userName">
 									<el-input v-model="state.ruleForm.userName" placeholder="登录账号" :disabled="state.dialog.type === 'edit'" clearable />
 								</el-form-item>
 							</el-col>
-							<el-col :span="12">
-								<el-form-item :label="state.dialog.type === 'add' ? '密码' : '新密码'" prop="password" :required="state.dialog.type === 'add'">
-									<el-input
-										v-model="state.ruleForm.password"
-										type="password"
-										show-password
-										clearable
-										:placeholder="state.dialog.type === 'edit' ? '留空则不修改' : '请输入密码'"
-									/>
+							<el-col v-if="state.dialog.type === 'add'" :span="12">
+								<el-form-item label="密码" prop="password" required>
+									<el-input v-model="state.ruleForm.password" type="password" show-password clearable placeholder="请输入密码" />
 								</el-form-item>
 							</el-col>
 						</el-row>
@@ -124,7 +108,6 @@ import type { FormInstance, FormRules } from 'element-plus';
 import { ElMessage } from 'element-plus';
 import { useIdentityApi } from '/@/api/apis';
 import type { IdentityRoleDto, IdentityUserDto, OrganizationUnitDto } from '/@/api/models/identity';
-import UserAvatar from '/@/components/UserAvatar/index.vue';
 
 const emit = defineEmits(['refresh']);
 
@@ -139,7 +122,6 @@ interface RuleForm {
 	surname: string;
 	email: string;
 	phoneNumber: string;
-	avatarUrl: string;
 	isActive: boolean;
 	lockoutEnabled: boolean;
 	concurrencyStamp: string;
@@ -153,7 +135,6 @@ const emptyForm = (): RuleForm => ({
 	surname: '',
 	email: '',
 	phoneNumber: '',
-	avatarUrl: '',
 	isActive: true,
 	lockoutEnabled: true,
 	concurrencyStamp: '',
@@ -174,8 +155,6 @@ const state = reactive({
 	submitting: false,
 });
 
-const displayName = computed(() => [state.ruleForm.surname, state.ruleForm.name].filter(Boolean).join(' ') || state.ruleForm.userName || '用户');
-
 const formRules = computed<FormRules>(() => {
 	const rules: FormRules = {
 		userName: [{ required: true, message: '请输入用户名', trigger: 'blur' }],
@@ -189,19 +168,9 @@ const formRules = computed<FormRules>(() => {
 			{ required: true, message: '请输入初始密码', trigger: 'blur' },
 			{ min: 6, message: '至少 6 位', trigger: 'blur' },
 		];
-	} else {
-		rules.password = [{ validator: validateOptionalPassword, trigger: 'blur' }];
 	}
 	return rules;
 });
-
-function validateOptionalPassword(_: unknown, val: string, cb: (e?: Error) => void) {
-	if (val && val.length > 0 && val.length < 6) {
-		cb(new Error('若填写新密码须至少 6 位'));
-	} else {
-		cb();
-	}
-}
 
 function ouLabel(ou: OrganizationUnitDto): string {
 	const code = ou.code ? ` [${ou.code}]` : '';
@@ -232,7 +201,6 @@ const openDialog = async (type: string, row?: IdentityUserDto) => {
 		state.ruleForm.surname = row.surname ?? '';
 		state.ruleForm.email = row.email ?? '';
 		state.ruleForm.phoneNumber = row.phoneNumber ?? '';
-		state.ruleForm.avatarUrl = row.avatarUrl ?? '';
 		state.ruleForm.isActive = row.isActive ?? true;
 		state.ruleForm.lockoutEnabled = row.lockoutEnabled ?? true;
 		state.ruleForm.concurrencyStamp = row.concurrencyStamp ?? '';
@@ -261,7 +229,6 @@ const buildUserPayload = () => ({
 	surname: state.ruleForm.surname?.trim() || undefined,
 	email: state.ruleForm.email.trim(),
 	phoneNumber: state.ruleForm.phoneNumber?.trim() || undefined,
-	avatarUrl: state.ruleForm.avatarUrl?.trim() || undefined,
 	isActive: state.ruleForm.isActive,
 	lockoutEnabled: state.ruleForm.lockoutEnabled,
 	roleNames: [...state.roleNames],
@@ -284,11 +251,9 @@ const onSubmit = async () => {
 				}
 				ElMessage.success('创建成功');
 			} else if (state.dialog.type === 'edit' && state.ruleForm.userId) {
-				const pwd = state.ruleForm.password?.trim();
 				await api.updateUser(state.ruleForm.userId, {
 					...buildUserPayload(),
 					concurrencyStamp: state.ruleForm.concurrencyStamp,
-					...(pwd ? { password: pwd } : {}),
 				});
 				await api.updateUserOrganizationUnits(state.ruleForm.userId, { organizationUnitIds: [...state.organizationUnitIds] });
 				ElMessage.success('保存成功');
@@ -315,14 +280,6 @@ defineExpose({ openDialog });
 	:deep(.el-form-item) {
 		margin-bottom: 20px !important;
 	}
-}
-
-.avatar-field {
-	display: grid;
-	grid-template-columns: 48px minmax(0, 1fr);
-	align-items: center;
-	gap: 12px;
-	width: 100%;
 }
 
 .role-hint {

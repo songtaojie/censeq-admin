@@ -141,6 +141,21 @@ namespace Censeq.Identity.EntityFrameworkCore.Modeling
                     b.Property(uc => uc.Regex).HasMaxLength(IdentityClaimTypeConsts.MaxRegexLength);
                     b.Property(uc => uc.RegexDescription).HasMaxLength(IdentityClaimTypeConsts.MaxRegexDescriptionLength);
                     b.Property(uc => uc.Description).HasMaxLength(IdentityClaimTypeConsts.MaxDescriptionLength);
+                    b.HasMany(uc => uc.Options).WithOne().HasForeignKey(o => o.ClaimTypeId).OnDelete(DeleteBehavior.Cascade);
+
+                    b.ApplyObjectExtensionMappings();
+                });
+
+                builder.Entity<IdentityClaimTypeOption>(b =>
+                {
+                    b.ToCenseqTable(nameof(IdentityClaimTypeOption))
+                        .ConfigureCenseqByConvention();
+
+                    b.Property(o => o.Label).HasMaxLength(IdentityClaimTypeConsts.MaxOptionLabelLength).IsRequired();
+                    b.Property(o => o.Value).HasMaxLength(IdentityClaimTypeConsts.MaxOptionValueLength).IsRequired();
+                    b.Property(o => o.Sort).HasDefaultValue(0);
+                    b.Property(o => o.IsEnabled).HasDefaultValue(true);
+                    b.HasIndex(o => new { o.ClaimTypeId, o.Value }).IsUnique();
 
                     b.ApplyObjectExtensionMappings();
                 });

@@ -43,4 +43,15 @@ public interface IIdentityClaimTypeRepository : IBasicRepository<IdentityClaimTy
         IEnumerable<string> names,
         CancellationToken cancellationToken = default
     );
+
+    Task<IdentityClaimType> GetWithOptionsAsync(
+        Guid id,
+        CancellationToken cancellationToken = default
+    );
+
+    Task<IdentityClaimType?> FindByNameAsync(
+        string name,
+        bool includeOptions = false,
+        CancellationToken cancellationToken = default
+    );
 }

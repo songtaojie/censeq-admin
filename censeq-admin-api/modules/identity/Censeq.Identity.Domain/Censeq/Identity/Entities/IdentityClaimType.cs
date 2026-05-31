@@ -1,6 +1,9 @@
 using Censeq.Identity;
 using JetBrains.Annotations;
 using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Linq;
 using Volo.Abp.Domain.Entities;
 
 namespace Censeq.Identity.Entities;
@@ -27,9 +30,11 @@ public class IdentityClaimType : AggregateRoot<Guid>
     /// </summary>
     public virtual IdentityClaimValueType ValueType { get; set; }
 
+    public virtual ICollection<IdentityClaimTypeOption> Options { get; protected set; }
+
     protected IdentityClaimType()
     {
-
+        Options = new Collection<IdentityClaimTypeOption>();
     }
 
     public IdentityClaimType(
@@ -50,10 +55,20 @@ public class IdentityClaimType : AggregateRoot<Guid>
         RegexDescription = regexDescription;
         Description = description;
         ValueType = valueType;
+        Options = new Collection<IdentityClaimTypeOption>();
     }
 
     public void SetName([NotNull] string name)
     {
         Name = Check.NotNull(name, nameof(name));
+    }
+
+    public void SetOptions(IEnumerable<IdentityClaimTypeOption> options)
+    {
+        Options.Clear();
+        foreach (var option in options.OrderBy(x => x.Sort))
+        {
+            Options.Add(option);
+        }
     }
 }

@@ -24,4 +24,14 @@ public class IdentityClaimTypeConsts
     /// 最大描述长度，默认值：256
     /// </summary>
     public static int MaxDescriptionLength { get; set; } = 256;
+
+    /// <summary>
+    /// 最大选项显示名称长度，默认值：128
+    /// </summary>
+    public static int MaxOptionLabelLength { get; set; } = 128;
+
+    /// <summary>
+    /// 最大选项值长度，默认值：256
+    /// </summary>
+    public static int MaxOptionValueLength { get; set; } = 256;
 }

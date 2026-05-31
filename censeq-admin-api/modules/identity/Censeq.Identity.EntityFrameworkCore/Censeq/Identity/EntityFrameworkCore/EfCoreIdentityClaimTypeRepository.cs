@@ -44,6 +44,7 @@ public class EfCoreIdentityClaimTypeRepository : EfCoreRepository<ICenseqIdentit
         CancellationToken cancellationToken = default)
     {
         var identityClaimTypes = await (await GetDbSetAsync())
+            .Include(x => x.Options)
             .WhereIf(
                 !filter.IsNullOrWhiteSpace(),
                 u =>
@@ -83,7 +84,30 @@ public class EfCoreIdentityClaimTypeRepository : EfCoreRepository<ICenseqIdentit
     public virtual async Task<List<IdentityClaimType>> GetListByNamesAsync(IEnumerable<string> names, CancellationToken cancellationToken = default)
     {
         return await (await GetDbSetAsync())
+            .Include(x => x.Options)
             .Where(x => names.Contains(x.Name))
             .ToListAsync(GetCancellationToken(cancellationToken));
+    }
+
+    public virtual async Task<IdentityClaimType> GetWithOptionsAsync(Guid id, CancellationToken cancellationToken = default)
+    {
+        return await (await GetDbSetAsync())
+            .Include(x => x.Options)
+            .FirstAsync(x => x.Id == id, GetCancellationToken(cancellationToken));
+    }
+
+    public virtual async Task<IdentityClaimType?> FindByNameAsync(
+        string name,
+        bool includeOptions = false,
+        CancellationToken cancellationToken = default)
+    {
+        var query = (await GetDbSetAsync()).AsQueryable();
+
+        if (includeOptions)
+        {
+            query = query.Include(x => x.Options);
+        }
+
+        return await query.FirstOrDefaultAsync(x => x.Name == name, GetCancellationToken(cancellationToken));
     }
 }

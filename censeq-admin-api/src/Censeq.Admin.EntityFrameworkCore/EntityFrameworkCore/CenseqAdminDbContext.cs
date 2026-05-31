@@ -52,6 +52,7 @@ public class CenseqAdminDbContext(DbContextOptions<CenseqAdminDbContext> options
     public DbSet<IdentityUser> Users { get; set; }
     public DbSet<IdentityRole> Roles { get; set; }
     public DbSet<IdentityClaimType> ClaimTypes { get; set; }
+    public DbSet<IdentityClaimTypeOption> ClaimTypeOptions { get; set; }
     public DbSet<OrganizationUnit> OrganizationUnits { get; set; }
     public DbSet<IdentitySecurityLog> SecurityLogs { get; set; }
     public DbSet<IdentityLinkUser> LinkUsers { get; set; }

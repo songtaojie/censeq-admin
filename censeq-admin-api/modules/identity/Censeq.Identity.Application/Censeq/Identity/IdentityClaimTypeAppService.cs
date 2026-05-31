@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Censeq.Identity.Entities;
@@ -36,7 +37,7 @@ public class IdentityClaimTypeAppService : IdentityAppServiceBase, IIdentityClai
     /// </summary>
     public virtual async Task<IdentityClaimTypeDto> GetAsync(Guid id)
     {
-        return MapToDto(await ClaimTypeRepository.GetAsync(id));
+        return MapToDto(await ClaimTypeRepository.GetWithOptionsAsync(id));
     }
 
     /// <summary>
@@ -84,6 +85,7 @@ public class IdentityClaimTypeAppService : IdentityAppServiceBase, IIdentityClai
             input.RegexDescription,
             input.Description,
             ParseValueType(input.ValueType));
+        claimType.SetOptions(CreateOptions(claimType.Id, input.Options));
 
         claimType = await ClaimTypeManager.CreateAsync(claimType);
 
@@ -96,13 +98,14 @@ public class IdentityClaimTypeAppService : IdentityAppServiceBase, IIdentityClai
     /// </summary>
     public virtual async Task<IdentityClaimTypeDto> UpdateAsync(Guid id, IdentityClaimTypeUpdateDto input)
     {
-        var claimType = await ClaimTypeRepository.GetAsync(id);
+        var claimType = await ClaimTypeRepository.GetWithOptionsAsync(id);
         claimType.SetName(input.Name);
         claimType.Required = input.Required;
         claimType.Regex = input.Regex;
         claimType.RegexDescription = input.RegexDescription;
         claimType.Description = input.Description;
         claimType.ValueType = ParseValueType(input.ValueType);
+        claimType.SetOptions(CreateOptions(claimType.Id, input.Options));
 
         claimType = await ClaimTypeManager.UpdateAsync(claimType);
 
@@ -129,7 +132,18 @@ public class IdentityClaimTypeAppService : IdentityAppServiceBase, IIdentityClai
             Regex = claimType.Regex,
             RegexDescription = claimType.RegexDescription,
             Description = claimType.Description,
-            ValueType = claimType.ValueType.ToString()
+            ValueType = claimType.ValueType.ToString(),
+            Options = claimType.Options
+                .OrderBy(x => x.Sort)
+                .Select(x => new IdentityClaimTypeOptionDto
+                {
+                    Id = x.Id,
+                    Label = x.Label,
+                    Value = x.Value,
+                    Sort = x.Sort,
+                    IsEnabled = x.IsEnabled
+                })
+                .ToList()
         };
     }
 
@@ -153,5 +167,21 @@ public class IdentityClaimTypeAppService : IdentityAppServiceBase, IIdentityClai
     protected virtual IdentityClaimValueType ParseValueType(string valueType)
     {
         return Enum.Parse<IdentityClaimValueType>(valueType, ignoreCase: true);
+    }
+
+    protected virtual List<IdentityClaimTypeOption> CreateOptions(
+        Guid claimTypeId,
+        IEnumerable<IdentityClaimTypeOptionCreateOrUpdateDto>? options)
+    {
+        return (options ?? Array.Empty<IdentityClaimTypeOptionCreateOrUpdateDto>())
+            .Where(x => !x.Label.IsNullOrWhiteSpace() && !x.Value.IsNullOrWhiteSpace())
+            .Select((x, index) => new IdentityClaimTypeOption(
+                GuidGenerator.Create(),
+                claimTypeId,
+                x.Label,
+                x.Value,
+                x.Sort == 0 ? index + 1 : x.Sort,
+                x.IsEnabled))
+            .ToList();
     }
 }

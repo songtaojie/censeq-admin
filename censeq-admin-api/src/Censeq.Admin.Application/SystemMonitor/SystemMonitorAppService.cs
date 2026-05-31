@@ -108,6 +108,7 @@ public class SystemMonitorAppService : AdminAppService, ISystemMonitorAppService
             .Where(assembly => !assembly.IsDynamic)
             .Select(assembly => assembly.GetName())
             .Where(name => !string.IsNullOrWhiteSpace(name.Name))
+            .Where(name => !name.Name!.StartsWith("Censeq", StringComparison.OrdinalIgnoreCase))
             .OrderBy(name => name.Name)
             .Select(name => new AssemblyInfoDto
             {

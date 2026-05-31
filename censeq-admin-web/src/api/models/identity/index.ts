@@ -1,6 +1,6 @@
 import type { ExtensibleEntityDto, ExtensibleFullAuditedEntityDto, ExtensibleObject, PagedAndSortedRequestDto } from '../core';
 
-export type IdentityClaimValueType = 'String' | 'Int' | 'Boolean' | 'DateTime';
+export type IdentityClaimValueType = 'String' | 'Int' | 'Boolean' | 'DateTime' | 'Option';
 
 export enum CommonStatus {
 	Disabled = 0,
@@ -132,10 +132,26 @@ export interface IdentityClaimTypeDto extends ExtensibleEntityDto<string> {
 	regexDescription?: string;
 	description?: string;
 	valueType: IdentityClaimValueType;
+	options: IdentityClaimTypeOptionDto[];
 	creationTime?: string;
 	creatorId?: string;
 	lastModificationTime?: string;
 	lastModifierId?: string;
+}
+
+export interface IdentityClaimTypeOptionDto {
+	id: string;
+	label: string;
+	value: string;
+	sort: number;
+	isEnabled: boolean;
+}
+
+export interface IdentityClaimTypeOptionCreateOrUpdateDto {
+	label: string;
+	value: string;
+	sort: number;
+	isEnabled: boolean;
 }
 
 export interface IdentityClaimTypeCreateDto extends ExtensibleObject {
@@ -146,6 +162,7 @@ export interface IdentityClaimTypeCreateDto extends ExtensibleObject {
 	regexDescription?: string;
 	description?: string;
 	valueType: IdentityClaimValueType;
+	options: IdentityClaimTypeOptionCreateOrUpdateDto[];
 }
 
 export interface IdentityClaimTypeUpdateDto extends ExtensibleObject {
@@ -155,6 +172,7 @@ export interface IdentityClaimTypeUpdateDto extends ExtensibleObject {
 	regexDescription?: string;
 	description?: string;
 	valueType: IdentityClaimValueType;
+	options: IdentityClaimTypeOptionCreateOrUpdateDto[];
 }
 
 export interface GetIdentityClaimTypesRequest extends PagedAndSortedRequestDto {

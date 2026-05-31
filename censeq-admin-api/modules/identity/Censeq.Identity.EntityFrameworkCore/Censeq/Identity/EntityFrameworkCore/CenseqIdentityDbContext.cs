@@ -27,6 +27,8 @@ public class CenseqIdentityDbContext : AbpDbContext<CenseqIdentityDbContext>, IC
     /// </summary>
     public DbSet<IdentityClaimType> ClaimTypes { get; set; }
 
+    public DbSet<IdentityClaimTypeOption> ClaimTypeOptions { get; set; }
+
     /// <summary>
     /// 数据库Set<OrganizationUnit>
     /// </summary>

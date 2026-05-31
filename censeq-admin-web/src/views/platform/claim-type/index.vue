@@ -18,8 +18,8 @@
 		</el-card>
 
 		<el-card shadow="hover" style="margin-top: 5px">
-			<el-alert type="info" :closable="false" class="mb15" title="这里维护系统允许使用的角色声明类型，角色声明页会从这里读取可选项。" />
-			<el-table :data="state.tableData.data" v-loading="state.loading" border stripe style="width: 100%">
+			<el-alert type="info" :closable="false" class="mb15" title="这里维护系统允许使用的声明类型。值类型为下拉选项时，角色声明会自动读取这里配置的选项。" />
+			<el-table :data="state.tableData.data" v-loading="state.tableData.loading" border stripe style="width: 100%">
 				<el-table-column type="index" label="序号" width="60" align="center" />
 				<el-table-column prop="name" label="名称" min-width="160" show-overflow-tooltip>
 					<template #default="{ row }">
@@ -29,6 +29,12 @@
 				<el-table-column prop="valueType" label="值类型" width="120" align="center">
 					<template #default="{ row }">
 						<el-tag size="small" type="info" effect="light">{{ formatValueType(row.valueType) }}</el-tag>
+					</template>
+				</el-table-column>
+				<el-table-column label="选项" min-width="220" show-overflow-tooltip>
+					<template #default="{ row }">
+						<span v-if="row.options?.length">{{ row.options.filter((x: any) => x.isEnabled).map((x: any) => `${x.label}(${x.value})`).join('、') }}</span>
+						<span v-else>—</span>
 					</template>
 				</el-table-column>
 				<el-table-column prop="required" label="必填" width="80" align="center">
@@ -72,14 +78,7 @@
 			/>
 		</el-card>
 
-		<!-- 新增/编辑对话框 -->
-		<el-dialog
-			v-model="state.dialogVisible"
-			width="560px"
-			destroy-on-close
-			draggable
-			:close-on-click-modal="false"
-		>
+		<el-dialog v-model="state.dialogVisible" width="680px" destroy-on-close draggable :close-on-click-modal="false">
 			<template #header>
 				<div style="color: #fff">
 					<el-icon size="16" style="margin-right: 3px; display: inline; vertical-align: middle">
@@ -94,11 +93,12 @@
 					<el-input v-model="state.form.name" placeholder="请输入声明类型名称" :disabled="state.isEdit && state.form.isStatic" clearable />
 				</el-form-item>
 				<el-form-item label="值类型" prop="valueType">
-					<el-select v-model="state.form.valueType" placeholder="请选择值类型" style="width: 100%">
+					<el-select v-model="state.form.valueType" placeholder="请选择值类型" style="width: 100%" @change="onValueTypeChange">
 						<el-option label="字符串" value="String" />
 						<el-option label="整数" value="Int" />
 						<el-option label="布尔" value="Boolean" />
 						<el-option label="日期时间" value="DateTime" />
+						<el-option label="下拉选项" value="Option" />
 					</el-select>
 				</el-form-item>
 				<el-form-item label="必填">
@@ -116,11 +116,24 @@
 				<el-form-item label="描述">
 					<el-input v-model="state.form.description" type="textarea" :rows="3" placeholder="请输入描述" />
 				</el-form-item>
+
+				<el-form-item v-if="state.form.valueType === 'Option'" label="下拉选项" required>
+					<div class="option-editor">
+						<div v-for="(option, index) in state.form.options" :key="index" class="option-row">
+							<el-input v-model="option.label" placeholder="显示名称" />
+							<el-input v-model="option.value" placeholder="选项值" />
+							<el-input-number v-model="option.sort" :min="0" :controls="false" placeholder="排序" />
+							<el-switch v-model="option.isEnabled" inline-prompt active-text="启用" inactive-text="禁用" />
+							<el-button icon="ele-Delete" text type="danger" @click="removeOption(index)" />
+						</div>
+						<el-button icon="ele-Plus" @click="addOption">添加选项</el-button>
+					</div>
+				</el-form-item>
 			</el-form>
 			<template #footer>
-				<el-button icon="ele-CircleClose" @click="state.dialogVisible = false">取 消</el-button>
+				<el-button icon="ele-CircleClose" @click="state.dialogVisible = false">取消</el-button>
 				<el-button type="primary" icon="ele-Select" :loading="state.submitLoading" @click="onSubmit">
-					{{ state.isEdit ? '保 存' : '新 增' }}
+					{{ state.isEdit ? '保存' : '新增' }}
 				</el-button>
 			</template>
 		</el-dialog>
@@ -131,12 +144,29 @@
 import { reactive, ref, onMounted } from 'vue';
 import { ElMessage, ElMessageBox, type FormInstance, type FormRules } from 'element-plus';
 import { useIdentityClaimTypeApi } from '/@/api/apis';
-import type { IdentityClaimTypeDto, IdentityClaimTypeCreateDto, IdentityClaimTypeUpdateDto } from '/@/api/models/identity';
+import type {
+	IdentityClaimTypeDto,
+	IdentityClaimTypeCreateDto,
+	IdentityClaimTypeOptionCreateOrUpdateDto,
+	IdentityClaimTypeUpdateDto,
+} from '/@/api/models/identity';
 
 const { getList, get, create, update, delete: deleteClaimType } = useIdentityClaimTypeApi();
 
 const formRef = ref<FormInstance>();
 const queryFormRef = ref();
+
+const emptyForm = () => ({
+	id: '',
+	name: '',
+	required: false,
+	isStatic: false,
+	regex: '',
+	regexDescription: '',
+	description: '',
+	valueType: 'String' as IdentityClaimTypeDto['valueType'],
+	options: [] as IdentityClaimTypeOptionCreateOrUpdateDto[],
+});
 
 const state = reactive({
 	submitLoading: false,
@@ -152,16 +182,7 @@ const state = reactive({
 			pageSize: 10,
 		},
 	},
-	form: {
-		id: '',
-		name: '',
-		required: false,
-		isStatic: false,
-		regex: '',
-		regexDescription: '',
-		description: '',
-		valueType: 'String' as IdentityClaimTypeDto['valueType'],
-	},
+	form: emptyForm(),
 });
 
 const formRules = reactive<FormRules>({
@@ -203,16 +224,7 @@ const onPageSizeChange = () => {
 
 const onOpenAdd = () => {
 	state.isEdit = false;
-	state.form = {
-		id: '',
-		name: '',
-		required: false,
-		isStatic: false,
-		regex: '',
-		regexDescription: '',
-		description: '',
-		valueType: 'String',
-	};
+	state.form = emptyForm();
 	state.dialogVisible = true;
 };
 
@@ -228,6 +240,12 @@ const onOpenEdit = async (row: IdentityClaimTypeDto) => {
 		regexDescription: detail.regexDescription || '',
 		description: detail.description || '',
 		valueType: detail.valueType,
+		options: (detail.options || []).map((item) => ({
+			label: item.label,
+			value: item.value,
+			sort: item.sort,
+			isEnabled: item.isEnabled,
+		})),
 	};
 	state.dialogVisible = true;
 };
@@ -249,32 +267,64 @@ const onDelete = async (row: IdentityClaimTypeDto) => {
 	}
 };
 
+const onValueTypeChange = () => {
+	if (state.form.valueType === 'Option' && !state.form.options.length) {
+		addOption();
+	}
+};
+
+const addOption = () => {
+	state.form.options.push({
+		label: '',
+		value: '',
+		sort: state.form.options.length + 1,
+		isEnabled: true,
+	});
+};
+
+const removeOption = (index: number) => {
+	state.form.options.splice(index, 1);
+};
+
+const buildPayload = () => ({
+	name: state.form.name,
+	required: state.form.required,
+	regex: state.form.regex || undefined,
+	regexDescription: state.form.regexDescription || undefined,
+	description: state.form.description || undefined,
+	valueType: state.form.valueType,
+	options: state.form.valueType === 'Option' ? state.form.options : [],
+});
+
+const validateOptions = () => {
+	if (state.form.valueType !== 'Option') return true;
+	const options = state.form.options.filter((item) => item.label.trim() && item.value.trim());
+	if (!options.length) {
+		ElMessage.warning('请至少维护一个下拉选项');
+		return false;
+	}
+	if (new Set(options.map((item) => item.value)).size !== options.length) {
+		ElMessage.warning('下拉选项值不能重复');
+		return false;
+	}
+	state.form.options = options;
+	return true;
+};
+
 const onSubmit = async () => {
 	if (!formRef.value) return;
 	await formRef.value.validate(async (valid) => {
-		if (!valid) return;
+		if (!valid || !validateOptions()) return;
 		state.submitLoading = true;
 		try {
 			if (state.isEdit) {
-				const payload: IdentityClaimTypeUpdateDto = {
-					name: state.form.name,
-					required: state.form.required,
-					regex: state.form.regex || undefined,
-					regexDescription: state.form.regexDescription || undefined,
-					description: state.form.description || undefined,
-					valueType: state.form.valueType,
-				};
+				const payload: IdentityClaimTypeUpdateDto = buildPayload();
 				await update(state.form.id, payload);
 				ElMessage.success('更新成功');
 			} else {
 				const payload: IdentityClaimTypeCreateDto = {
-					name: state.form.name,
-					required: state.form.required,
+					...buildPayload(),
 					isStatic: state.form.isStatic,
-					regex: state.form.regex || undefined,
-					regexDescription: state.form.regexDescription || undefined,
-					description: state.form.description || undefined,
-					valueType: state.form.valueType,
 				};
 				await create(payload);
 				ElMessage.success('创建成功');
@@ -295,6 +345,7 @@ const formatValueType = (valueType: string) => {
 		Int: '整数',
 		Boolean: '布尔',
 		DateTime: '日期时间',
+		Option: '下拉选项',
 	};
 	return displayMap[valueType] || valueType;
 };
@@ -309,6 +360,20 @@ onMounted(() => {
 	display: flex;
 	flex-direction: column;
 	gap: 0;
-}
 
+	.option-editor {
+		display: flex;
+		flex: 1;
+		flex-direction: column;
+		gap: 10px;
+	}
+
+	.option-row {
+		display: grid;
+		grid-template-columns: minmax(120px, 1fr) minmax(120px, 1fr) 80px 82px 36px;
+		gap: 8px;
+		align-items: center;
+		width: 100%;
+	}
+}
 </style>

@@ -1,5 +1,5 @@
 <template>
-	<div class="platform-server-container layout-padding">
+	<div class="platform-server-container">
 		<div class="monitor-shell layout-padding-auto layout-padding-view">
 			<section class="summary-grid">
 				<el-card class="summary-card" shadow="hover">
@@ -179,13 +179,21 @@ onBeforeUnmount(stopTimer);
 
 <style scoped lang="scss">
 .platform-server-container {
-	min-height: 100%;
+	height: 100%;
+	min-height: 0;
+	padding: 8px;
+	overflow: hidden;
 }
 
 .monitor-shell {
 	display: grid;
 	gap: 12px;
-	overflow: auto;
+	align-content: start;
+	min-height: 0;
+	height: 100%;
+	padding-bottom: 16px;
+	overflow-x: hidden;
+	overflow-y: auto !important;
 }
 
 .summary-grid {

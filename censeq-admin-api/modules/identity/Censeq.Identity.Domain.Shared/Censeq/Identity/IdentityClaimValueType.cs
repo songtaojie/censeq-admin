@@ -23,5 +23,10 @@ public enum IdentityClaimValueType
     /// <summary>
     /// 日期时间类型
     /// </summary>
-    DateTime
+    DateTime,
+
+    /// <summary>
+    /// 下拉选项类型
+    /// </summary>
+    Option
 }

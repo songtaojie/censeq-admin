@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -15,35 +15,38 @@ namespace Censeq.Identity;
 
 [Authorize(IdentityPermissions.Roles.Default)]
 /// <summary>
-/// 身份角色应用服务
+/// 韬唤瑙掕壊搴旂敤鏈嶅姟
 /// </summary>
 public class IdentityRoleAppService : IdentityAppServiceBase, IIdentityRoleAppService
 {
     /// <summary>
-    /// 身份角色管理器
+    /// 韬唤瑙掕壊绠＄悊鍣?
     /// </summary>
     protected IdentityRoleManager RoleManager { get; }
     /// <summary>
-    /// I身份角色仓储
+    /// I韬唤瑙掕壊浠撳偍
     /// </summary>
     protected IIdentityRoleRepository RoleRepository { get; }
     /// <summary>
-    /// I身份声明类型仓储
+    /// I韬唤澹版槑绫诲瀷浠撳偍
     /// </summary>
     protected IIdentityClaimTypeRepository ClaimTypeRepository { get; }
+    protected IdentityClaimTypeManager ClaimTypeManager { get; }
 
     public IdentityRoleAppService(
         IdentityRoleManager roleManager,
         IIdentityRoleRepository roleRepository,
-        IIdentityClaimTypeRepository claimTypeRepository)
+        IIdentityClaimTypeRepository claimTypeRepository,
+        IdentityClaimTypeManager claimTypeManager)
     {
         RoleManager = roleManager;
         RoleRepository = roleRepository;
         ClaimTypeRepository = claimTypeRepository;
+        ClaimTypeManager = claimTypeManager;
     }
 
     /// <summary>
-    /// Task<Identity角色Dto>
+    /// Task<Identity瑙掕壊Dto>
     /// </summary>
     public virtual async Task<IdentityRoleDto> GetAsync(Guid id)
     {
@@ -53,7 +56,7 @@ public class IdentityRoleAppService : IdentityAppServiceBase, IIdentityRoleAppSe
     }
 
     /// <summary>
-    /// Task<List结果Dto<Identity角色Dto>>
+    /// Task<List缁撴灉Dto<Identity瑙掕壊Dto>>
     /// </summary>
     public virtual async Task<ListResultDto<IdentityRoleDto>> GetAllListAsync()
     {
@@ -64,7 +67,7 @@ public class IdentityRoleAppService : IdentityAppServiceBase, IIdentityRoleAppSe
     }
 
     /// <summary>
-    /// Task<Paged结果Dto<Identity角色Dto>>
+    /// Task<Paged缁撴灉Dto<Identity瑙掕壊Dto>>
     /// </summary>
     public virtual async Task<PagedResultDto<IdentityRoleDto>> GetListAsync(GetIdentityRolesInput input)
     {
@@ -79,7 +82,7 @@ public class IdentityRoleAppService : IdentityAppServiceBase, IIdentityRoleAppSe
 
     [Authorize(IdentityPermissions.Roles.Create)]
     /// <summary>
-    /// Task<Identity角色Dto>
+    /// Task<Identity瑙掕壊Dto>
     /// </summary>
     public virtual async Task<IdentityRoleDto> CreateAsync(IdentityRoleCreateDto input)
     {
@@ -110,7 +113,7 @@ public class IdentityRoleAppService : IdentityAppServiceBase, IIdentityRoleAppSe
 
     [Authorize(IdentityPermissions.Roles.Update)]
     /// <summary>
-    /// Task<Identity角色Dto>
+    /// Task<Identity瑙掕壊Dto>
     /// </summary>
     public virtual async Task<IdentityRoleDto> UpdateAsync(Guid id, IdentityRoleUpdateDto input)
     {
@@ -125,7 +128,7 @@ public class IdentityRoleAppService : IdentityAppServiceBase, IIdentityRoleAppSe
         if (!string.Equals(role.Name, input.Name, StringComparison.Ordinal))
         {
             (await RoleManager.SetRoleNameAsync(role, input.Name)).CheckErrors();
-            // SetRoleNameAsync 已经更新了角色，需要重新获取以更新 ConcurrencyStamp
+            // SetRoleNameAsync 宸茬粡鏇存柊浜嗚鑹诧紝闇€瑕侀噸鏂拌幏鍙栦互鏇存柊 ConcurrencyStamp
             role = await RoleManager.GetByIdAsync(id);
         }
 
@@ -167,7 +170,7 @@ public class IdentityRoleAppService : IdentityAppServiceBase, IIdentityRoleAppSe
 
     [Authorize(IdentityPermissions.Roles.Default)]
     /// <summary>
-    /// Task<Identity角色声明列表Dto>
+    /// Task<Identity瑙掕壊澹版槑鍒楄〃Dto>
     /// </summary>
     public virtual async Task<IdentityRoleClaimListDto> GetClaimsAsync(Guid roleId)
     {
@@ -190,10 +193,13 @@ public class IdentityRoleAppService : IdentityAppServiceBase, IIdentityRoleAppSe
     [Authorize(IdentityPermissions.Roles.Update)]
     public virtual async Task AddClaimAsync(Guid roleId, IdentityRoleClaimCreateDto input)
     {
-        if (!await ClaimTypeRepository.AnyAsync(input.ClaimType))
+        var claimType = await ClaimTypeRepository.FindByNameAsync(input.ClaimType, includeOptions: true);
+        if (claimType == null)
         {
             throw new UserFriendlyException($"声明类型 '{input.ClaimType}' 不存在，请先在声明类型管理中维护。");
         }
+
+        ClaimTypeManager.ValidateValue(claimType, input.ClaimValue);
 
         var role = await RoleRepository.FindByIdAsync(roleId, includeDetails: true);
         if (role == null)

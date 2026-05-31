@@ -17,6 +17,8 @@ public interface ICenseqIdentityDbContext : IEfCoreDbContext
 
     DbSet<IdentityClaimType> ClaimTypes { get; }
 
+    DbSet<IdentityClaimTypeOption> ClaimTypeOptions { get; }
+
     DbSet<OrganizationUnit> OrganizationUnits { get; }
 
     DbSet<IdentitySecurityLog> SecurityLogs { get; }

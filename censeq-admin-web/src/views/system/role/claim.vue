@@ -4,11 +4,11 @@
 			<template #header>
 				<div style="color: #fff">
 					<el-icon size="16" style="margin-right: 3px; display: inline; vertical-align: middle"><ele-DocumentChecked /></el-icon>
-					<span>角色声明【{{ state.roleName }}】</span>
+					<span>角色声明「{{ state.roleName }}」</span>
 				</div>
 			</template>
 			<div class="dialog-intro">
-				声明用于给角色附加结构化的业务信息，例如数据范围、部门标识或审批阈值。支持按声明类型动态维护值。
+				声明用于给角色附加结构化的业务信息，例如数据范围、部门标识或审批阈值。声明值会按照声明类型配置动态维护。
 			</div>
 			<div class="claim-toolbar">
 				<el-button type="primary" size="small" @click="onAddClaim" :icon="Plus">添加声明</el-button>
@@ -29,15 +29,11 @@
 						<el-tag v-else size="small" type="info">{{ scope.row.claimType }}</el-tag>
 					</template>
 				</el-table-column>
-				<el-table-column prop="claimValue" label="声明值" min-width="200">
+				<el-table-column prop="claimValue" label="声明值" min-width="220">
 					<template #default="scope">
 						<template v-if="scope.row.isEditing">
-							<el-select v-if="getClaimTypeMeta(scope.row.claimType)?.name === 'DataScope'" v-model="scope.row.claimValue" placeholder="选择数据范围" size="small">
-								<el-option label="全部数据 (All)" value="All" />
-								<el-option label="本部门及以下数据 (DepartmentAndChild)" value="DepartmentAndChild" />
-								<el-option label="本部门数据 (Department)" value="Department" />
-								<el-option label="仅本人数据 (Self)" value="Self" />
-								<el-option label="自定义数据 (Custom)" value="Custom" />
+							<el-select v-if="getEnabledOptions(scope.row.claimType).length" v-model="scope.row.claimValue" placeholder="请选择声明值" size="small" filterable>
+								<el-option v-for="option in getEnabledOptions(scope.row.claimType)" :key="option.value" :label="formatOptionLabel(option)" :value="option.value" />
 							</el-select>
 							<el-select v-else-if="getClaimTypeMeta(scope.row.claimType)?.valueType === 'Boolean'" v-model="scope.row.claimValue" placeholder="请选择布尔值" size="small">
 								<el-option label="是" value="true" />
@@ -47,7 +43,7 @@
 							<el-date-picker v-else-if="getClaimTypeMeta(scope.row.claimType)?.valueType === 'DateTime'" v-model="scope.row.claimValue" type="datetime" placeholder="选择日期时间" value-format="YYYY-MM-DD HH:mm:ss" size="small" />
 							<el-input v-else v-model="scope.row.claimValue" placeholder="请输入声明值" size="small" />
 						</template>
-						<span v-else>{{ scope.row.claimValue }}</span>
+						<span v-else>{{ formatClaimValue(scope.row) }}</span>
 					</template>
 				</el-table-column>
 				<el-table-column label="操作" width="150" align="center">
@@ -58,7 +54,7 @@
 						</template>
 						<template v-else>
 							<el-button type="primary" size="small" text @click="onEditClaim(scope.row)">修改</el-button>
-								<el-button type="danger" size="small" text @click="onConfirmDeleteClaim(scope.row)">删除</el-button>
+							<el-button type="danger" size="small" text @click="onConfirmDeleteClaim(scope.row)">删除</el-button>
 						</template>
 					</template>
 				</el-table-column>
@@ -69,13 +65,13 @@
 						<p><strong>常用声明说明：</strong></p>
 						<p>• <code>DataScope</code> - 数据范围：控制角色可以查看的数据范围</p>
 						<p>• <code>MaxAmount</code> - 最大审批金额，如：100000</p>
-						<p>• <code>DepartmentId</code> - 所属部门ID，用于数据过滤</p>
+						<p>• <code>DepartmentId</code> - 所属部门 ID，用于数据过滤</p>
 					</div>
 				</template>
 			</el-alert>
 			<template #footer>
 				<span class="dialog-footer">
-					<el-button @click="onCancel" size="default">关 闭</el-button>
+					<el-button @click="onCancel" size="default">关闭</el-button>
 				</span>
 			</template>
 		</el-dialog>
@@ -87,7 +83,7 @@ import { reactive } from 'vue';
 import { useRouter } from 'vue-router';
 import { ElMessage, ElMessageBox } from 'element-plus';
 import { Plus } from '@element-plus/icons-vue';
-import { IdentityRoleDto, IdentityClaimTypeDto } from '/@/api/models/identity';
+import { IdentityRoleDto, IdentityClaimTypeDto, IdentityClaimTypeOptionDto } from '/@/api/models/identity';
 import { useIdentityApi, useIdentityClaimTypeApi } from '/@/api/apis';
 
 interface ClaimItem {
@@ -154,7 +150,7 @@ const loadClaimTypes = async () => {
 };
 
 const openClaimTypeManage = () => {
-	router.push('/system/claim-type');
+	router.push('/platform/claim-type');
 };
 
 const getClaimTypeMeta = (claimType?: string) => {
@@ -162,18 +158,25 @@ const getClaimTypeMeta = (claimType?: string) => {
 	return state.claimTypes.find((item) => item.name === claimType);
 };
 
+const getEnabledOptions = (claimType?: string) => {
+	const options = getClaimTypeMeta(claimType)?.options || [];
+	return options.filter((item) => item.isEnabled).sort((a, b) => a.sort - b.sort);
+};
+
+const formatOptionLabel = (option: Pick<IdentityClaimTypeOptionDto, 'label' | 'value'>) => {
+	return option.label === option.value ? option.label : `${option.label} (${option.value})`;
+};
+
+const formatClaimValue = (row: ClaimItem) => {
+	const option = getEnabledOptions(row.claimType).find((item) => item.value === row.claimValue);
+	return option ? formatOptionLabel(option) : row.claimValue;
+};
+
 const formatClaimTypeLabel = (item: IdentityClaimTypeDto) => {
 	return `${item.name}（${formatValueType(item.valueType)}）`;
 };
 
 const normalizeClaimValue = (row: ClaimItem) => {
-	const claimType = getClaimTypeMeta(row.claimType);
-	if (claimType?.valueType === 'Int') {
-		return row.claimValue === null || row.claimValue === undefined ? '' : String(row.claimValue);
-	}
-	if (claimType?.valueType === 'Boolean') {
-		return row.claimValue === null || row.claimValue === undefined ? '' : String(row.claimValue);
-	}
 	return row.claimValue === null || row.claimValue === undefined ? '' : String(row.claimValue);
 };
 
@@ -229,8 +232,8 @@ const onSaveClaim = async (row: ClaimItem) => {
 			ElMessage.success('修改成功');
 		}
 		await loadRoleClaims();
-	} catch (error) {
-		ElMessage.error('操作失败');
+	} catch {
+		// 请求拦截器已展示后端错误信息，避免重复弹出“操作失败”。
 	}
 };
 
@@ -258,17 +261,15 @@ const onDeleteClaim = async (row: ClaimItem) => {
 };
 
 const onConfirmDeleteClaim = (row: ClaimItem) => {
-	ElMessageBox.confirm(
-		`确定要删除声明类型 <strong>「${row.claimType}」</strong> 吗？`,
-		'删除确认',
-		{
-			confirmButtonText: '确认删除',
-			cancelButtonText: '取消',
-			type: 'warning',
-			dangerouslyUseHTMLString: true,
-			confirmButtonClass: 'el-button--danger',
-		}
-	).then(() => onDeleteClaim(row)).catch(() => {});
+	ElMessageBox.confirm(`确定要删除声明类型 <strong>「${row.claimType}」</strong> 吗？`, '删除确认', {
+		confirmButtonText: '确认删除',
+		cancelButtonText: '取消',
+		type: 'warning',
+		dangerouslyUseHTMLString: true,
+		confirmButtonClass: 'el-button--danger',
+	})
+		.then(() => onDeleteClaim(row))
+		.catch(() => {});
 };
 
 const formatValueType = (valueType: string) => {
@@ -277,6 +278,7 @@ const formatValueType = (valueType: string) => {
 		Int: '整数',
 		Boolean: '布尔',
 		DateTime: '日期时间',
+		Option: '下拉选项',
 	};
 	return displayMap[valueType] || valueType;
 };

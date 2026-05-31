@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Censeq.Admin.Permissions;
 using Censeq.PermissionManagement;
@@ -234,17 +235,41 @@ public class IdentityDataSeeder : ITransientDependency, IIdentityDataSeeder
 
     protected virtual async Task SeedClaimTypesAsync()
     {
+        var dataScope = new IdentityClaimType(GuidGenerator.Create(), "DataScope", false, false, null, null, "数据范围", IdentityClaimValueType.Option);
+        dataScope.SetOptions(new[]
+        {
+            new IdentityClaimTypeOption(GuidGenerator.Create(), dataScope.Id, "全部数据", "All", 1),
+            new IdentityClaimTypeOption(GuidGenerator.Create(), dataScope.Id, "本部门及以下数据", "DepartmentAndChild", 2),
+            new IdentityClaimTypeOption(GuidGenerator.Create(), dataScope.Id, "本部门数据", "Department", 3),
+            new IdentityClaimTypeOption(GuidGenerator.Create(), dataScope.Id, "仅本人数据", "Self", 4),
+            new IdentityClaimTypeOption(GuidGenerator.Create(), dataScope.Id, "自定义数据", "Custom", 5)
+        });
+
         var claimTypes = new List<IdentityClaimType>
         {
-            new IdentityClaimType(GuidGenerator.Create(), "DataScope", false, false, null, null, "数据范围", IdentityClaimValueType.String),
+            dataScope,
             new IdentityClaimType(GuidGenerator.Create(), "MaxAmount", false, false, null, null, "最大审批金额", IdentityClaimValueType.Int),
             new IdentityClaimType(GuidGenerator.Create(), "DepartmentId", false, false, null, null, "部门ID", IdentityClaimValueType.String)
         };
 
         foreach (var claimType in claimTypes)
         {
-            if (await ClaimTypeRepository.AnyAsync(claimType.Name))
+            var existingClaimType = await ClaimTypeRepository.FindByNameAsync(claimType.Name, includeOptions: true);
+            if (existingClaimType != null)
             {
+                if (claimType.Name == "DataScope" && !existingClaimType.Options.Any())
+                {
+                    existingClaimType.ValueType = IdentityClaimValueType.Option;
+                    existingClaimType.SetOptions(new[]
+                    {
+                        new IdentityClaimTypeOption(GuidGenerator.Create(), existingClaimType.Id, "全部数据", "All", 1),
+                        new IdentityClaimTypeOption(GuidGenerator.Create(), existingClaimType.Id, "本部门及以下数据", "DepartmentAndChild", 2),
+                        new IdentityClaimTypeOption(GuidGenerator.Create(), existingClaimType.Id, "本部门数据", "Department", 3),
+                        new IdentityClaimTypeOption(GuidGenerator.Create(), existingClaimType.Id, "仅本人数据", "Self", 4),
+                        new IdentityClaimTypeOption(GuidGenerator.Create(), existingClaimType.Id, "自定义数据", "Custom", 5)
+                    });
+                    await ClaimTypeManager.UpdateAsync(existingClaimType);
+                }
                 continue;
             }
 
