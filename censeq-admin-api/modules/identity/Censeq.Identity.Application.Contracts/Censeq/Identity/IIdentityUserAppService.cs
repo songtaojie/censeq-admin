@@ -34,7 +34,7 @@ public interface IIdentityUserAppService
     /// <summary>
     /// 获取用户所属组织单元列表
     /// </summary>
-    Task<ListResultDto<OrganizationUnitDto>> GetOrganizationUnitsAsync(Guid id);
+    Task<ListResultDto<IdentityUserOrganizationUnitDto>> GetOrganizationUnitsAsync(Guid id);
 
     /// <summary>
     /// 更新用户组织单元

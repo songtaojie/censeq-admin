@@ -51,6 +51,11 @@ public static class IdentityErrorCodes
     public const string YouCannotDelegateYourself = "Censeq.Identity:010009";
 
     /// <summary>
+    /// 主组织机构必须在用户所属组织机构中
+    /// </summary>
+    public const string PrimaryOrganizationUnitMustBeSelected = "Censeq.Identity:010010";
+
+    /// <summary>
     /// 声明名称已存在
     /// </summary>
     public const string ClaimNameExist = "Censeq.Identity:010021";

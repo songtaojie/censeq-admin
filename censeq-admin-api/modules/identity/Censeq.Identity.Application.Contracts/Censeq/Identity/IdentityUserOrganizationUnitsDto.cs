@@ -12,4 +12,9 @@ public class IdentityUserOrganizationUnitsDto
     /// List<Guid>
     /// </summary>
     public List<Guid> OrganizationUnitIds { get; set; } = new();
+
+    /// <summary>
+    /// 主组织机构标识。为空时默认使用 OrganizationUnitIds 中的第一个。
+    /// </summary>
+    public Guid? PrimaryOrganizationUnitId { get; set; }
 }

@@ -335,6 +335,14 @@ public class IdentityUser : FullAuditedAggregateRoot<Guid>, IUser, IHasEntityVer
         );
     }
 
+    public virtual void SetPrimaryOrganizationUnit(Guid? organizationUnitId)
+    {
+        foreach (var organizationUnit in OrganizationUnits)
+        {
+            organizationUnit.SetPrimary(organizationUnit.OrganizationUnitId == organizationUnitId);
+        }
+    }
+
     public virtual void RemoveOrganizationUnit(Guid organizationUnitId)
     {
         if (!IsInOrganizationUnit(organizationUnitId))

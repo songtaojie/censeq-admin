@@ -1620,6 +1620,12 @@ namespace Censeq.Admin.Migrations
                         .HasColumnType("uuid")
                         .HasColumnName("identity_user_id");
 
+                    b.Property<bool>("IsPrimary")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("boolean")
+                        .HasDefaultValue(false)
+                        .HasColumnName("is_primary");
+
                     b.Property<Guid?>("TenantId")
                         .HasColumnType("uuid")
                         .HasColumnName("tenant_id");
@@ -1749,6 +1755,11 @@ namespace Censeq.Admin.Migrations
 
                     b.HasIndex("UserId", "OrganizationUnitId")
                         .HasDatabaseName("ix_censeq_identity_user_organization_unit_user_id_organization");
+
+                    b.HasIndex("UserId")
+                        .IsUnique()
+                        .HasFilter("is_primary")
+                        .HasDatabaseName("ix_censeq_identity_user_organization_unit_user_id_primary");
 
                     b.ToTable("censeq_identity_user_organization_unit", (string)null);
                 });

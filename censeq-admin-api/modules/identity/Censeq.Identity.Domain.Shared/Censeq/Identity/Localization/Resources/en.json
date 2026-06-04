@@ -76,6 +76,7 @@
     "Censeq.Identity:010007": "You can't change your two factor setting.",
     "Censeq.Identity:010008": "It's not allowed to change two factor setting.",
     "Censeq.Identity:010009": "You can not delegate yourself.",
+    "Censeq.Identity:010010": "The primary organization unit must be one of the user's organization units.",
     "Censeq.Identity:010021": "Name exist: '{0}'.",
     "Identity.OrganizationUnit.MaxUserMembershipCount": "Maximum allowed organization unit membership count for a user",
     "ThisUserIsNotActiveMessage": "This user is not active.",

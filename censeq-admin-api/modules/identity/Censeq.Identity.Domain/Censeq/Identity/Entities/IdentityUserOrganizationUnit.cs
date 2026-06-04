@@ -24,6 +24,11 @@ public class IdentityUserOrganizationUnit : CreationAuditedEntity, IMultiTenant
     /// </summary>
     public virtual Guid OrganizationUnitId { get; protected set; }
 
+    /// <summary>
+    /// 是否为用户的主组织机构。
+    /// </summary>
+    public virtual bool IsPrimary { get; protected set; }
+
     protected IdentityUserOrganizationUnit()
     {
 
@@ -34,6 +39,11 @@ public class IdentityUserOrganizationUnit : CreationAuditedEntity, IMultiTenant
         UserId = userId;
         OrganizationUnitId = organizationUnitId;
         TenantId = tenantId;
+    }
+
+    public virtual void SetPrimary(bool isPrimary)
+    {
+        IsPrimary = isPrimary;
     }
 
     /// <summary>

@@ -77,7 +77,7 @@ public class IdentityUserController : AbpControllerBase, IIdentityUserAppService
 
     [HttpGet]
     [Route("{id}/organization-units")]
-    public virtual Task<ListResultDto<OrganizationUnitDto>> GetOrganizationUnitsAsync(Guid id)
+    public virtual Task<ListResultDto<IdentityUserOrganizationUnitDto>> GetOrganizationUnitsAsync(Guid id)
     {
         return UserAppService.GetOrganizationUnitsAsync(id);
     }

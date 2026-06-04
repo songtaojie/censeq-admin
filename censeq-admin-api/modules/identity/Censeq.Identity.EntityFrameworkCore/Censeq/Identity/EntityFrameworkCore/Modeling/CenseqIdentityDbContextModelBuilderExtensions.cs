@@ -190,7 +190,9 @@ namespace Censeq.Identity.EntityFrameworkCore.Modeling
                     .ConfigureCenseqByConvention();
 
                 b.HasKey(x => new { x.OrganizationUnitId, x.UserId });
+                b.Property(x => x.IsPrimary).HasDefaultValue(false);
                 b.HasIndex(x => new { x.UserId, x.OrganizationUnitId });
+                b.HasIndex(x => x.UserId).IsUnique().HasFilter("is_primary");
                 b.ApplyObjectExtensionMappings();
             });
 

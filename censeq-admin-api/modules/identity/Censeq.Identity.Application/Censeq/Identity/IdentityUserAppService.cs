@@ -229,29 +229,52 @@ public class IdentityUserAppService : IdentityAppServiceBase, IIdentityUserAppSe
     /// <summary>
     /// Task<List结果Dto<Organization单元Dto>>
     /// </summary>
-    public virtual async Task<ListResultDto<OrganizationUnitDto>> GetOrganizationUnitsAsync(Guid id)
+    public virtual async Task<ListResultDto<IdentityUserOrganizationUnitDto>> GetOrganizationUnitsAsync(Guid id)
     {
+        var user = await UserRepository.GetAsync(id, includeDetails: true);
         var list = await UserRepository.GetOrganizationUnitsAsync(id, includeDetails: true);
-        return new ListResultDto<OrganizationUnitDto>(
-            ObjectMapper.Map<List<OrganizationUnit>, List<OrganizationUnitDto>>(list));
+        var primaryOrganizationUnitId = user.OrganizationUnits.FirstOrDefault(x => x.IsPrimary)?.OrganizationUnitId;
+
+        var result = ObjectMapper.Map<List<OrganizationUnit>, List<IdentityUserOrganizationUnitDto>>(list);
+        foreach (var organizationUnit in result)
+        {
+            organizationUnit.IsPrimary = organizationUnit.Id == primaryOrganizationUnitId;
+        }
+
+        return new ListResultDto<IdentityUserOrganizationUnitDto>(result);
     }
 
     [Authorize(IdentityPermissions.Users.Update)]
     public virtual async Task UpdateOrganizationUnitsAsync(Guid id, IdentityUserOrganizationUnitsDto input)
     {
         var user = await UserRepository.GetAsync(id, includeDetails: true);
-        var target = new HashSet<Guid>(input.OrganizationUnitIds ?? new List<Guid>());
+        var target = (input.OrganizationUnitIds ?? new List<Guid>()).Distinct().ToList();
+        var targetSet = target.ToHashSet();
+        Guid? primaryOrganizationUnitId = input.PrimaryOrganizationUnitId ?? target.FirstOrDefault();
+
+        if (primaryOrganizationUnitId == Guid.Empty)
+        {
+            primaryOrganizationUnitId = null;
+        }
+
+        if (primaryOrganizationUnitId.HasValue && !targetSet.Contains(primaryOrganizationUnitId.Value))
+        {
+            throw new BusinessException(IdentityErrorCodes.PrimaryOrganizationUnitMustBeSelected);
+        }
+
         var current = user.OrganizationUnits.Select(x => x.OrganizationUnitId).ToHashSet();
 
-        foreach (var ouId in current.Except(target).ToList())
+        foreach (var ouId in current.Except(targetSet).ToList())
         {
             user.RemoveOrganizationUnit(ouId);
         }
 
-        foreach (var ouId in target.Except(current).ToList())
+        foreach (var ouId in targetSet.Except(current).ToList())
         {
             user.AddOrganizationUnit(ouId);
         }
+
+        user.SetPrimaryOrganizationUnit(primaryOrganizationUnitId);
 
         await UserRepository.UpdateAsync(user);
     }

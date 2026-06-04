@@ -62,6 +62,28 @@
 								</el-form-item>
 							</el-col>
 						</el-row>
+						<el-form-item label="所属机构">
+							<el-select
+								v-model="state.organizationUnitIds"
+								multiple
+								filterable
+								collapse-tags
+								collapse-tags-tooltip
+								placeholder="可选多个组织单元"
+								class="w100"
+							>
+								<el-option v-for="ou in state.ouOptions" :key="ou.id" :label="ouLabel(ou)" :value="ou.id!" />
+							</el-select>
+						</el-form-item>
+						<el-form-item v-if="state.organizationUnitIds.length > 1" label="主组织机构">
+							<el-select v-model="state.primaryOrganizationUnitId" filterable placeholder="请选择主组织机构" class="w100">
+								<el-option v-for="ou in selectedOrganizationUnits" :key="ou.id" :label="ouLabel(ou)" :value="ou.id!" />
+							</el-select>
+						</el-form-item>
+						<div class="role-hint basic-org-hint">
+							<el-icon><ele-InfoFilled /></el-icon>
+							<span>可将用户归属到一个或多个组织机构，多选时默认第一个为主组织</span>
+						</div>
 					</el-form>
 				</el-tab-pane>
 
@@ -78,20 +100,6 @@
 						</div>
 					</el-form>
 				</el-tab-pane>
-
-				<el-tab-pane label="组织机构" name="orgs">
-					<el-form label-width="80px" size="default" style="margin-top: 8px">
-						<el-form-item label="所属机构">
-							<el-select v-model="state.organizationUnitIds" multiple filterable collapse-tags collapse-tags-tooltip placeholder="可选多个组织单元" class="w100">
-								<el-option v-for="ou in state.ouOptions" :key="ou.id" :label="ouLabel(ou)" :value="ou.id!" />
-							</el-select>
-						</el-form-item>
-						<div class="role-hint">
-							<el-icon><ele-InfoFilled /></el-icon>
-							<span>可将用户归属到一个或多个组织机构</span>
-						</div>
-					</el-form>
-				</el-tab-pane>
 			</el-tabs>
 
 			<template #footer>
@@ -103,7 +111,7 @@
 </template>
 
 <script setup lang="ts" name="systemUserDialog">
-import { reactive, ref, nextTick, computed } from 'vue';
+import { reactive, ref, nextTick, computed, watch } from 'vue';
 import type { FormInstance, FormRules } from 'element-plus';
 import { ElMessage } from 'element-plus';
 import { useIdentityApi } from '/@/api/apis';
@@ -144,6 +152,7 @@ const state = reactive({
 	ruleForm: emptyForm(),
 	roleNames: [] as string[],
 	organizationUnitIds: [] as string[],
+	primaryOrganizationUnitId: null as string | null,
 	roleOptions: [] as IdentityRoleDto[],
 	ouOptions: [] as OrganizationUnitDto[],
 	dialog: {
@@ -177,6 +186,21 @@ function ouLabel(ou: OrganizationUnitDto): string {
 	return `${ou.displayName ?? ''}${code}`;
 }
 
+const selectedOrganizationUnits = computed(() => state.ouOptions.filter((ou) => !!ou.id && state.organizationUnitIds.includes(ou.id)));
+
+function syncPrimaryOrganizationUnit() {
+	const ids = state.organizationUnitIds;
+	if (!ids.length) {
+		state.primaryOrganizationUnitId = null;
+		return;
+	}
+	if (!state.primaryOrganizationUnitId || !ids.includes(state.primaryOrganizationUnitId)) {
+		state.primaryOrganizationUnitId = ids[0];
+	}
+}
+
+watch(() => [...state.organizationUnitIds], syncPrimaryOrganizationUnit);
+
 const loadRolesAndOus = async () => {
 	const api = useIdentityApi();
 	const [rolesRes, ouRes] = await Promise.all([api.getAllRoles(), api.getOrganizationUnitAllList()]);
@@ -189,6 +213,7 @@ const openDialog = async (type: string, row?: IdentityUserDto) => {
 	state.ruleForm = emptyForm();
 	state.roleNames = [];
 	state.organizationUnitIds = [];
+	state.primaryOrganizationUnitId = null;
 	activeTab.value = 'basic';
 	state.dialog.isShowDialog = true;
 	state.dialog.title = type === 'edit' ? '修改用户' : '新增用户';
@@ -208,7 +233,9 @@ const openDialog = async (type: string, row?: IdentityUserDto) => {
 		const [roleRes, ouRes] = await Promise.all([api.getUserRoles(row.id), api.getUserOrganizationUnits(row.id)]);
 		state.roleNames = (roleRes.items ?? []).map((r: IdentityRoleDto) => r.name).filter(Boolean) as string[];
 		state.organizationUnitIds = (ouRes.items ?? []).map((o) => o.id!).filter(Boolean);
+		state.primaryOrganizationUnitId = (ouRes.items ?? []).find((o) => o.isPrimary)?.id ?? state.organizationUnitIds[0] ?? null;
 	}
+	syncPrimaryOrganizationUnit();
 	await nextTick();
 	formRef.value?.clearValidate();
 };
@@ -234,6 +261,11 @@ const buildUserPayload = () => ({
 	roleNames: [...state.roleNames],
 });
 
+const buildOrganizationUnitPayload = () => ({
+	organizationUnitIds: [...state.organizationUnitIds],
+	primaryOrganizationUnitId: state.primaryOrganizationUnitId,
+});
+
 const onSubmit = async () => {
 	if (!formRef.value) return;
 	await formRef.value.validate(async (valid) => {
@@ -247,7 +279,7 @@ const onSubmit = async () => {
 					password: state.ruleForm.password,
 				});
 				if (created.id && state.organizationUnitIds.length) {
-					await api.updateUserOrganizationUnits(created.id, { organizationUnitIds: [...state.organizationUnitIds] });
+					await api.updateUserOrganizationUnits(created.id, buildOrganizationUnitPayload());
 				}
 				ElMessage.success('创建成功');
 			} else if (state.dialog.type === 'edit' && state.ruleForm.userId) {
@@ -255,7 +287,7 @@ const onSubmit = async () => {
 					...buildUserPayload(),
 					concurrencyStamp: state.ruleForm.concurrencyStamp,
 				});
-				await api.updateUserOrganizationUnits(state.ruleForm.userId, { organizationUnitIds: [...state.organizationUnitIds] });
+				await api.updateUserOrganizationUnits(state.ruleForm.userId, buildOrganizationUnitPayload());
 				ElMessage.success('保存成功');
 			}
 			closeDialog();
@@ -294,5 +326,10 @@ defineExpose({ openDialog });
 	.el-icon {
 		color: var(--el-color-info);
 	}
+}
+
+.basic-org-hint {
+	margin-top: -12px;
+	padding-left: 100px;
 }
 </style>

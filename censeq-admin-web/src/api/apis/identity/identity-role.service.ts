@@ -9,6 +9,7 @@ import type {
 	IdentitySessionDto,
 	IdentityUserCreateDto,
 	IdentityUserDto,
+	IdentityUserOrganizationUnitDto,
 	IdentityUserOrganizationUnitsDto,
 	IdentityUserUpdateDto,
 	IdentityUserUpdateRolesDto,
@@ -73,8 +74,8 @@ export function useIdentityApi() {
 		updateUserRoles: async (id: string, input: IdentityUserUpdateRolesDto): Promise<void> => {
 			return await identityApi.request<void>(`api/identity/users/${id}/roles`, 'PUT', input);
 		},
-		getUserOrganizationUnits: async (id: string): Promise<ListResponseDto<OrganizationUnitDto>> => {
-			return await identityApi.request<ListResponseDto<OrganizationUnitDto>>(`api/identity/users/${id}/organization-units`, 'GET');
+		getUserOrganizationUnits: async (id: string): Promise<ListResponseDto<IdentityUserOrganizationUnitDto>> => {
+			return await identityApi.request<ListResponseDto<IdentityUserOrganizationUnitDto>>(`api/identity/users/${id}/organization-units`, 'GET');
 		},
 		updateUserOrganizationUnits: async (id: string, input: IdentityUserOrganizationUnitsDto): Promise<void> => {
 			return await identityApi.request<void>(`api/identity/users/${id}/organization-units`, 'PUT', input);

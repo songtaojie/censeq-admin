@@ -41,6 +41,12 @@ export interface OrganizationUnitUpdateDto {
 /** 用户所属组织机构 Id 列表 */
 export interface IdentityUserOrganizationUnitsDto {
 	organizationUnitIds: string[];
+	primaryOrganizationUnitId?: string | null;
+}
+
+/** 用户所属组织机构 */
+export interface IdentityUserOrganizationUnitDto extends OrganizationUnitDto {
+	isPrimary: boolean;
 }
 
 export interface IdentityRoleCreateDto extends IdentityRoleCreateOrUpdateDtoBase {}
