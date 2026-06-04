@@ -5,9 +5,15 @@ using Volo.Abp.ObjectExtending;
 
 namespace Censeq.OpenIddict.Applications;
 
+/// <summary>
+/// OpenIddict 应用程序模型。
+/// </summary>
 [Serializable, IgnoreMultiTenancy]
 public class OpenIddictApplicationModel : ExtensibleObject
 {
+    /// <summary>
+    /// 标识。
+    /// </summary>
     public Guid Id { get; set; }
 
     /// <summary>

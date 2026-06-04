@@ -19,10 +19,26 @@ using Volo.Abp.Uow;
 
 namespace Censeq.OpenIddict.Applications;
 
+/// <summary>
+/// OpenIddict 应用程序存储，适配 OpenIddict 存储契约。
+/// </summary>
 public class CenseqOpenIddictApplicationStore : CenseqOpenIddictStoreBase<IOpenIddictApplicationRepository>, ICenseqOpenIdApplicationStore
 {
+    /// <summary>
+    /// 令牌仓储。
+    /// </summary>
     protected IOpenIddictTokenRepository TokenRepository { get; }
 
+    /// <summary>
+    /// 初始化 CenseqOpenIddictApplicationStore 实例。
+    /// </summary>
+    /// <param name="repository">仓储。</param>
+    /// <param name="unitOfWorkManager">工作单元管理器。</param>
+    /// <param name="tokenRepository">令牌仓储。</param>
+    /// <param name="guidGenerator">GUID生成器。</param>
+    /// <param name="identifierConverter">dentifier转换器。</param>
+    /// <param name="concurrencyExceptionHandler">并发异常处理器。</param>
+    /// <param name="storeOptions">存储配置项。</param>
     public CenseqOpenIddictApplicationStore(
         IOpenIddictApplicationRepository repository,
         IUnitOfWorkManager unitOfWorkManager,
@@ -36,16 +52,33 @@ public class CenseqOpenIddictApplicationStore : CenseqOpenIddictStoreBase<IOpenI
         TokenRepository = tokenRepository;
     }
 
+    /// <summary>
+    /// 获取数据数量。
+    /// </summary>
+    /// <param name="cancellationToken">取消令牌。</param>
+    /// <returns>数据数量。</returns>
     public virtual async ValueTask<long> CountAsync(CancellationToken cancellationToken)
     {
         return await Repository.GetCountAsync(cancellationToken);
     }
 
+    /// <summary>
+    /// 获取数据数量。
+    /// </summary>
+    /// <param name="query">查询。</param>
+    /// <param name="cancellationToken">取消令牌。</param>
+    /// <returns>数据数量。</returns>
     public virtual ValueTask<long> CountAsync<TResult>(Func<IQueryable<OpenIddictApplicationModel>, IQueryable<TResult>> query, CancellationToken cancellationToken)
     {
         throw new NotSupportedException();
     }
 
+    /// <summary>
+    /// 创建数据。
+    /// </summary>
+    /// <param name="application">OpenIddict 应用程序。</param>
+    /// <param name="cancellationToken">取消令牌。</param>
+    /// <returns>创建后的数据。</returns>
     public virtual async ValueTask CreateAsync(OpenIddictApplicationModel application, CancellationToken cancellationToken)
     {
         Check.NotNull(application, nameof(application));
@@ -55,6 +88,12 @@ public class CenseqOpenIddictApplicationStore : CenseqOpenIddictStoreBase<IOpenI
         application = (await Repository.FindAsync(application.Id, cancellationToken: cancellationToken)).ToModel();
     }
 
+    /// <summary>
+    /// 删除数据。
+    /// </summary>
+    /// <param name="application">OpenIddict 应用程序。</param>
+    /// <param name="cancellationToken">取消令牌。</param>
+    /// <returns>表示异步操作的任务。</returns>
     public virtual async ValueTask DeleteAsync(OpenIddictApplicationModel application, CancellationToken cancellationToken)
     {
         Check.NotNull(application, nameof(application));
@@ -78,6 +117,12 @@ public class CenseqOpenIddictApplicationStore : CenseqOpenIddictStoreBase<IOpenI
         }
     }
 
+    /// <summary>
+    /// 根据标识查找数据。
+    /// </summary>
+    /// <param name="identifier">标识。</param>
+    /// <param name="cancellationToken">取消令牌。</param>
+    /// <returns>匹配的数据。</returns>
     public virtual async ValueTask<OpenIddictApplicationModel> FindByIdAsync(string identifier, CancellationToken cancellationToken)
     {
         Check.NotNullOrEmpty(identifier, nameof(identifier));
@@ -85,6 +130,12 @@ public class CenseqOpenIddictApplicationStore : CenseqOpenIddictStoreBase<IOpenI
         return (await Repository.FindAsync(ConvertIdentifierFromString(identifier),  cancellationToken: cancellationToken)).ToModel();
     }
 
+    /// <summary>
+    /// 根据客户端标识查找数据。
+    /// </summary>
+    /// <param name="identifier">标识。</param>
+    /// <param name="cancellationToken">取消令牌。</param>
+    /// <returns>匹配的数据。</returns>
     public virtual async ValueTask<OpenIddictApplicationModel> FindByClientIdAsync(string identifier, CancellationToken cancellationToken)
     {
         Check.NotNullOrEmpty(identifier, nameof(identifier));
@@ -92,6 +143,12 @@ public class CenseqOpenIddictApplicationStore : CenseqOpenIddictStoreBase<IOpenI
         return (await Repository.FindByClientIdAsync(identifier, cancellationToken: cancellationToken)).ToModel();
     }
 
+    /// <summary>
+    /// 根据登出后重定向 URI 查找应用程序。
+    /// </summary>
+    /// <param name="uris">URI。</param>
+    /// <param name="cancellationToken">取消令牌。</param>
+    /// <returns>匹配的数据。</returns>
     public virtual async IAsyncEnumerable<OpenIddictApplicationModel> FindByPostLogoutRedirectUriAsync(string uris, [EnumeratorCancellation] CancellationToken cancellationToken)
     {
         Check.NotNullOrEmpty(uris, nameof(uris));
@@ -108,6 +165,12 @@ public class CenseqOpenIddictApplicationStore : CenseqOpenIddictStoreBase<IOpenI
         }
     }
 
+    /// <summary>
+    /// 根据重定向 URI 查找应用程序。
+    /// </summary>
+    /// <param name="uri">URI。</param>
+    /// <param name="cancellationToken">取消令牌。</param>
+    /// <returns>匹配的数据。</returns>
     public virtual async IAsyncEnumerable<OpenIddictApplicationModel> FindByRedirectUriAsync(string uri, [EnumeratorCancellation] CancellationToken cancellationToken)
     {
         Check.NotNullOrEmpty(uri, nameof(uri));
@@ -123,6 +186,12 @@ public class CenseqOpenIddictApplicationStore : CenseqOpenIddictStoreBase<IOpenI
         }
     }
 
+    /// <summary>
+    /// 获取应用程序类型。
+    /// </summary>
+    /// <param name="application">OpenIddict 应用程序。</param>
+    /// <param name="cancellationToken">取消令牌。</param>
+    /// <returns>异步操作结果。</returns>
     public virtual ValueTask<string> GetApplicationTypeAsync(OpenIddictApplicationModel application, CancellationToken cancellationToken)
     {
         Check.NotNull(application, nameof(application));
@@ -130,11 +199,24 @@ public class CenseqOpenIddictApplicationStore : CenseqOpenIddictStoreBase<IOpenI
         return new ValueTask<string>(application.ApplicationType);
     }
 
+    /// <summary>
+    /// 获取指定标识的数据。
+    /// </summary>
+    /// <param name="query">查询。</param>
+    /// <param name="state">状态。</param>
+    /// <param name="cancellationToken">取消令牌。</param>
+    /// <returns>查询结果。</returns>
     public virtual ValueTask<TResult> GetAsync<TState, TResult>(Func<IQueryable<OpenIddictApplicationModel>, TState, IQueryable<TResult>> query, TState state, CancellationToken cancellationToken)
     {
         throw new NotSupportedException();
     }
 
+    /// <summary>
+    /// 获取客户端标识。
+    /// </summary>
+    /// <param name="application">OpenIddict 应用程序。</param>
+    /// <param name="cancellationToken">取消令牌。</param>
+    /// <returns>异步操作结果。</returns>
     public virtual ValueTask<string> GetClientIdAsync(OpenIddictApplicationModel application, CancellationToken cancellationToken)
     {
         Check.NotNull(application, nameof(application));
@@ -142,6 +224,12 @@ public class CenseqOpenIddictApplicationStore : CenseqOpenIddictStoreBase<IOpenI
         return new ValueTask<string>(application.ClientId);
     }
 
+    /// <summary>
+    /// 获取客户端密钥。
+    /// </summary>
+    /// <param name="application">OpenIddict 应用程序。</param>
+    /// <param name="cancellationToken">取消令牌。</param>
+    /// <returns>异步操作结果。</returns>
     public virtual ValueTask<string> GetClientSecretAsync(OpenIddictApplicationModel application, CancellationToken cancellationToken)
     {
         Check.NotNull(application, nameof(application));
@@ -149,12 +237,24 @@ public class CenseqOpenIddictApplicationStore : CenseqOpenIddictStoreBase<IOpenI
         return new ValueTask<string>(application.ClientSecret);
     }
 
+    /// <summary>
+    /// 获取客户端类型。
+    /// </summary>
+    /// <param name="application">OpenIddict 应用程序。</param>
+    /// <param name="cancellationToken">取消令牌。</param>
+    /// <returns>异步操作结果。</returns>
     public virtual ValueTask<string> GetClientTypeAsync(OpenIddictApplicationModel application, CancellationToken cancellationToken)
     {
         Check.NotNull(application, nameof(application));
         return new ValueTask<string>(application.ClientType);
     }
 
+    /// <summary>
+    /// 获取同意类型。
+    /// </summary>
+    /// <param name="application">OpenIddict 应用程序。</param>
+    /// <param name="cancellationToken">取消令牌。</param>
+    /// <returns>异步操作结果。</returns>
     public virtual ValueTask<string> GetConsentTypeAsync(OpenIddictApplicationModel application, CancellationToken cancellationToken)
     {
         Check.NotNull(application, nameof(application));
@@ -162,6 +262,12 @@ public class CenseqOpenIddictApplicationStore : CenseqOpenIddictStoreBase<IOpenI
         return new ValueTask<string>(application.ConsentType);
     }
 
+    /// <summary>
+    /// 获取显示名称。
+    /// </summary>
+    /// <param name="application">OpenIddict 应用程序。</param>
+    /// <param name="cancellationToken">取消令牌。</param>
+    /// <returns>异步操作结果。</returns>
     public virtual ValueTask<string> GetDisplayNameAsync(OpenIddictApplicationModel application, CancellationToken cancellationToken)
     {
         Check.NotNull(application, nameof(application));
@@ -169,6 +275,12 @@ public class CenseqOpenIddictApplicationStore : CenseqOpenIddictStoreBase<IOpenI
         return new ValueTask<string>(application.DisplayName);
     }
 
+    /// <summary>
+    /// 获取显示名称。
+    /// </summary>
+    /// <param name="application">OpenIddict 应用程序。</param>
+    /// <param name="cancellationToken">取消令牌。</param>
+    /// <returns>异步操作结果。</returns>
     public virtual ValueTask<ImmutableDictionary<CultureInfo, string>> GetDisplayNamesAsync(OpenIddictApplicationModel application, CancellationToken cancellationToken)
     {
         Check.NotNull(application, nameof(application));
@@ -197,6 +309,12 @@ public class CenseqOpenIddictApplicationStore : CenseqOpenIddictStoreBase<IOpenI
         }
     }
 
+    /// <summary>
+    /// 获取标识。
+    /// </summary>
+    /// <param name="application">OpenIddict 应用程序。</param>
+    /// <param name="cancellationToken">取消令牌。</param>
+    /// <returns>异步操作结果。</returns>
     public virtual ValueTask<string> GetIdAsync(OpenIddictApplicationModel application, CancellationToken cancellationToken)
     {
         Check.NotNull(application, nameof(application));
@@ -204,6 +322,12 @@ public class CenseqOpenIddictApplicationStore : CenseqOpenIddictStoreBase<IOpenI
         return new ValueTask<string>(ConvertIdentifierToString(application.Id));
     }
 
+    /// <summary>
+    /// 获取 JSON Web Key Set。
+    /// </summary>
+    /// <param name="application">OpenIddict 应用程序。</param>
+    /// <param name="cancellationToken">取消令牌。</param>
+    /// <returns>异步操作结果。</returns>
     public virtual ValueTask<JsonWebKeySet> GetJsonWebKeySetAsync(OpenIddictApplicationModel application, CancellationToken cancellationToken)
     {
         Check.NotNull(application, nameof(application));
@@ -211,6 +335,12 @@ public class CenseqOpenIddictApplicationStore : CenseqOpenIddictStoreBase<IOpenI
         return new ValueTask<JsonWebKeySet>(application.JsonWebKeySet);
     }
 
+    /// <summary>
+    /// 获取权限。
+    /// </summary>
+    /// <param name="application">OpenIddict 应用程序。</param>
+    /// <param name="cancellationToken">取消令牌。</param>
+    /// <returns>异步操作结果。</returns>
     public virtual ValueTask<ImmutableArray<string>> GetPermissionsAsync(OpenIddictApplicationModel application, CancellationToken cancellationToken)
     {
         Check.NotNull(application, nameof(application));
@@ -239,6 +369,12 @@ public class CenseqOpenIddictApplicationStore : CenseqOpenIddictStoreBase<IOpenI
         }
     }
 
+    /// <summary>
+    /// 获取登出后重定向 URI 列表。
+    /// </summary>
+    /// <param name="application">OpenIddict 应用程序。</param>
+    /// <param name="cancellationToken">取消令牌。</param>
+    /// <returns>异步操作结果。</returns>
     public virtual ValueTask<ImmutableArray<string>> GetPostLogoutRedirectUrisAsync(OpenIddictApplicationModel application, CancellationToken cancellationToken)
     {
         Check.NotNull(application, nameof(application));
@@ -267,6 +403,12 @@ public class CenseqOpenIddictApplicationStore : CenseqOpenIddictStoreBase<IOpenI
         };
     }
 
+    /// <summary>
+    /// 获取属性。
+    /// </summary>
+    /// <param name="application">OpenIddict 应用程序。</param>
+    /// <param name="cancellationToken">取消令牌。</param>
+    /// <returns>异步操作结果。</returns>
     public virtual ValueTask<ImmutableDictionary<string, JsonElement>> GetPropertiesAsync(OpenIddictApplicationModel application, CancellationToken cancellationToken)
     {
         Check.NotNull(application, nameof(application));
@@ -288,6 +430,12 @@ public class CenseqOpenIddictApplicationStore : CenseqOpenIddictStoreBase<IOpenI
         }
     }
 
+    /// <summary>
+    /// 获取重定向 URI 列表。
+    /// </summary>
+    /// <param name="application">OpenIddict 应用程序。</param>
+    /// <param name="cancellationToken">取消令牌。</param>
+    /// <returns>异步操作结果。</returns>
     public virtual ValueTask<ImmutableArray<string>> GetRedirectUrisAsync(OpenIddictApplicationModel application, CancellationToken cancellationToken)
     {
         Check.NotNull(application, nameof(application));
@@ -316,6 +464,12 @@ public class CenseqOpenIddictApplicationStore : CenseqOpenIddictStoreBase<IOpenI
         }
     }
 
+    /// <summary>
+    /// 获取需求。
+    /// </summary>
+    /// <param name="application">OpenIddict 应用程序。</param>
+    /// <param name="cancellationToken">取消令牌。</param>
+    /// <returns>异步操作结果。</returns>
     public virtual ValueTask<ImmutableArray<string>> GetRequirementsAsync(OpenIddictApplicationModel application, CancellationToken cancellationToken)
     {
         Check.NotNull(application, nameof(application));
@@ -344,6 +498,12 @@ public class CenseqOpenIddictApplicationStore : CenseqOpenIddictStoreBase<IOpenI
         }
     }
 
+    /// <summary>
+    /// 获取设置。
+    /// </summary>
+    /// <param name="application">OpenIddict 应用程序。</param>
+    /// <param name="cancellationToken">取消令牌。</param>
+    /// <returns>异步操作结果。</returns>
     public virtual ValueTask<ImmutableDictionary<string, string>> GetSettingsAsync(OpenIddictApplicationModel application, CancellationToken cancellationToken)
     {
         Check.NotNull(application, nameof(application));
@@ -372,6 +532,11 @@ public class CenseqOpenIddictApplicationStore : CenseqOpenIddictStoreBase<IOpenI
         }
     }
 
+    /// <summary>
+    /// 异步创建实例。
+    /// </summary>
+    /// <param name="cancellationToken">取消令牌。</param>
+    /// <returns>异步操作结果。</returns>
     public virtual ValueTask<OpenIddictApplicationModel> InstantiateAsync(CancellationToken cancellationToken)
     {
         return new ValueTask<OpenIddictApplicationModel>(new OpenIddictApplicationModel
@@ -380,6 +545,13 @@ public class CenseqOpenIddictApplicationStore : CenseqOpenIddictStoreBase<IOpenI
         });
     }
 
+    /// <summary>
+    /// 列出数据。
+    /// </summary>
+    /// <param name="count">count。</param>
+    /// <param name="offset">offset。</param>
+    /// <param name="cancellationToken">取消令牌。</param>
+    /// <returns>异步操作结果。</returns>
     public virtual async IAsyncEnumerable<OpenIddictApplicationModel> ListAsync(int? count, int? offset, [EnumeratorCancellation] CancellationToken cancellationToken)
     {
         var applications = await Repository.ListAsync(count, offset, cancellationToken);
@@ -389,11 +561,25 @@ public class CenseqOpenIddictApplicationStore : CenseqOpenIddictStoreBase<IOpenI
         }
     }
 
+    /// <summary>
+    /// 列出数据。
+    /// </summary>
+    /// <param name="query">查询。</param>
+    /// <param name="state">状态。</param>
+    /// <param name="cancellationToken">取消令牌。</param>
+    /// <returns>异步操作结果。</returns>
     public virtual IAsyncEnumerable<TResult> ListAsync<TState, TResult>(Func<IQueryable<OpenIddictApplicationModel>, TState, IQueryable<TResult>> query, TState state, CancellationToken cancellationToken)
     {
         throw new NotSupportedException();
     }
 
+    /// <summary>
+    /// 设置应用程序类型。
+    /// </summary>
+    /// <param name="application">OpenIddict 应用程序。</param>
+    /// <param name="type">type。</param>
+    /// <param name="cancellationToken">取消令牌。</param>
+    /// <returns>表示异步操作的任务。</returns>
     public virtual ValueTask SetApplicationTypeAsync(OpenIddictApplicationModel application, string type, CancellationToken cancellationToken)
     {
         Check.NotNull(application, nameof(application));
@@ -402,6 +588,13 @@ public class CenseqOpenIddictApplicationStore : CenseqOpenIddictStoreBase<IOpenI
         return default;
     }
 
+    /// <summary>
+    /// 设置客户端标识。
+    /// </summary>
+    /// <param name="application">OpenIddict 应用程序。</param>
+    /// <param name="identifier">标识。</param>
+    /// <param name="cancellationToken">取消令牌。</param>
+    /// <returns>表示异步操作的任务。</returns>
     public virtual ValueTask SetClientIdAsync(OpenIddictApplicationModel application, string identifier, CancellationToken cancellationToken)
     {
         Check.NotNull(application, nameof(application));
@@ -410,6 +603,13 @@ public class CenseqOpenIddictApplicationStore : CenseqOpenIddictStoreBase<IOpenI
         return default;
     }
 
+    /// <summary>
+    /// 设置客户端密钥。
+    /// </summary>
+    /// <param name="application">OpenIddict 应用程序。</param>
+    /// <param name="secret">密钥。</param>
+    /// <param name="cancellationToken">取消令牌。</param>
+    /// <returns>表示异步操作的任务。</returns>
     public virtual ValueTask SetClientSecretAsync(OpenIddictApplicationModel application, string secret, CancellationToken cancellationToken)
     {
         Check.NotNull(application, nameof(application));
@@ -418,6 +618,13 @@ public class CenseqOpenIddictApplicationStore : CenseqOpenIddictStoreBase<IOpenI
         return default;
     }
 
+    /// <summary>
+    /// 设置客户端类型。
+    /// </summary>
+    /// <param name="application">OpenIddict 应用程序。</param>
+    /// <param name="type">type。</param>
+    /// <param name="cancellationToken">取消令牌。</param>
+    /// <returns>表示异步操作的任务。</returns>
     public virtual ValueTask SetClientTypeAsync(OpenIddictApplicationModel application, string type, CancellationToken cancellationToken)
     {
         Check.NotNull(application, nameof(application));
@@ -426,6 +633,13 @@ public class CenseqOpenIddictApplicationStore : CenseqOpenIddictStoreBase<IOpenI
         return default;
     }
 
+    /// <summary>
+    /// 设置同意类型。
+    /// </summary>
+    /// <param name="application">OpenIddict 应用程序。</param>
+    /// <param name="type">type。</param>
+    /// <param name="cancellationToken">取消令牌。</param>
+    /// <returns>表示异步操作的任务。</returns>
     public virtual ValueTask SetConsentTypeAsync(OpenIddictApplicationModel application, string type, CancellationToken cancellationToken)
     {
         Check.NotNull(application, nameof(application));
@@ -434,6 +648,13 @@ public class CenseqOpenIddictApplicationStore : CenseqOpenIddictStoreBase<IOpenI
         return default;
     }
 
+    /// <summary>
+    /// 设置显示名称。
+    /// </summary>
+    /// <param name="application">OpenIddict 应用程序。</param>
+    /// <param name="name">name。</param>
+    /// <param name="cancellationToken">取消令牌。</param>
+    /// <returns>表示异步操作的任务。</returns>
     public virtual ValueTask SetDisplayNameAsync(OpenIddictApplicationModel application, string name, CancellationToken cancellationToken)
     {
         Check.NotNull(application, nameof(application));
@@ -442,6 +663,13 @@ public class CenseqOpenIddictApplicationStore : CenseqOpenIddictStoreBase<IOpenI
         return default;
     }
 
+    /// <summary>
+    /// 设置显示名称。
+    /// </summary>
+    /// <param name="application">OpenIddict 应用程序。</param>
+    /// <param name="names">名称。</param>
+    /// <param name="cancellationToken">取消令牌。</param>
+    /// <returns>表示异步操作的任务。</returns>
     public virtual ValueTask SetDisplayNamesAsync(OpenIddictApplicationModel application, ImmutableDictionary<CultureInfo, string> names, CancellationToken cancellationToken)
     {
         Check.NotNull(application, nameof(application));
@@ -466,6 +694,13 @@ public class CenseqOpenIddictApplicationStore : CenseqOpenIddictStoreBase<IOpenI
         return default;
     }
 
+    /// <summary>
+    /// 设置 JSON Web Key Set。
+    /// </summary>
+    /// <param name="application">OpenIddict 应用程序。</param>
+    /// <param name="set">set。</param>
+    /// <param name="cancellationToken">取消令牌。</param>
+    /// <returns>表示异步操作的任务。</returns>
     public virtual ValueTask SetJsonWebKeySetAsync(OpenIddictApplicationModel application, JsonWebKeySet set, CancellationToken cancellationToken)
     {
         Check.NotNull(application, nameof(application));
@@ -474,6 +709,13 @@ public class CenseqOpenIddictApplicationStore : CenseqOpenIddictStoreBase<IOpenI
         return default;
     }
 
+    /// <summary>
+    /// 设置权限。
+    /// </summary>
+    /// <param name="application">OpenIddict 应用程序。</param>
+    /// <param name="permissions">permissions。</param>
+    /// <param name="cancellationToken">取消令牌。</param>
+    /// <returns>表示异步操作的任务。</returns>
     public virtual ValueTask SetPermissionsAsync(OpenIddictApplicationModel application, ImmutableArray<string> permissions,
         CancellationToken cancellationToken)
     {
@@ -498,6 +740,13 @@ public class CenseqOpenIddictApplicationStore : CenseqOpenIddictStoreBase<IOpenI
         return default;
     }
 
+    /// <summary>
+    /// 设置登出后重定向 URI 列表。
+    /// </summary>
+    /// <param name="application">OpenIddict 应用程序。</param>
+    /// <param name="uris">URI。</param>
+    /// <param name="cancellationToken">取消令牌。</param>
+    /// <returns>表示异步操作的任务。</returns>
     public virtual ValueTask SetPostLogoutRedirectUrisAsync(OpenIddictApplicationModel application, ImmutableArray<string> uris,
         CancellationToken cancellationToken)
     {
@@ -522,6 +771,13 @@ public class CenseqOpenIddictApplicationStore : CenseqOpenIddictStoreBase<IOpenI
         return default;
     }
 
+    /// <summary>
+    /// 设置属性。
+    /// </summary>
+    /// <param name="application">OpenIddict 应用程序。</param>
+    /// <param name="properties">properties。</param>
+    /// <param name="cancellationToken">取消令牌。</param>
+    /// <returns>表示异步操作的任务。</returns>
     public virtual ValueTask SetPropertiesAsync(OpenIddictApplicationModel application, ImmutableDictionary<string, JsonElement> properties,
         CancellationToken cancellationToken)
     {
@@ -547,6 +803,13 @@ public class CenseqOpenIddictApplicationStore : CenseqOpenIddictStoreBase<IOpenI
         return default;
     }
 
+    /// <summary>
+    /// 设置重定向 URI 列表。
+    /// </summary>
+    /// <param name="application">OpenIddict 应用程序。</param>
+    /// <param name="uris">URI。</param>
+    /// <param name="cancellationToken">取消令牌。</param>
+    /// <returns>表示异步操作的任务。</returns>
     public virtual ValueTask SetRedirectUrisAsync(OpenIddictApplicationModel application, ImmutableArray<string> uris,
         CancellationToken cancellationToken)
     {
@@ -571,6 +834,13 @@ public class CenseqOpenIddictApplicationStore : CenseqOpenIddictStoreBase<IOpenI
         return default;
     }
 
+    /// <summary>
+    /// 设置需求。
+    /// </summary>
+    /// <param name="application">OpenIddict 应用程序。</param>
+    /// <param name="requirements">requirements。</param>
+    /// <param name="cancellationToken">取消令牌。</param>
+    /// <returns>表示异步操作的任务。</returns>
     public virtual ValueTask SetRequirementsAsync(OpenIddictApplicationModel application, ImmutableArray<string> requirements,
         CancellationToken cancellationToken)
     {
@@ -595,6 +865,13 @@ public class CenseqOpenIddictApplicationStore : CenseqOpenIddictStoreBase<IOpenI
         return default;
     }
 
+    /// <summary>
+    /// 设置设置。
+    /// </summary>
+    /// <param name="application">OpenIddict 应用程序。</param>
+    /// <param name="settings">settings。</param>
+    /// <param name="cancellationToken">取消令牌。</param>
+    /// <returns>表示异步操作的任务。</returns>
     public virtual ValueTask SetSettingsAsync(OpenIddictApplicationModel application, ImmutableDictionary<string, string> settings, CancellationToken cancellationToken)
     {
         Check.NotNull(application, nameof(application));
@@ -619,6 +896,12 @@ public class CenseqOpenIddictApplicationStore : CenseqOpenIddictStoreBase<IOpenI
         return default;
     }
 
+    /// <summary>
+    /// 更新数据。
+    /// </summary>
+    /// <param name="application">OpenIddict 应用程序。</param>
+    /// <param name="cancellationToken">取消令牌。</param>
+    /// <returns>更新后的数据。</returns>
     public virtual async ValueTask UpdateAsync(OpenIddictApplicationModel application, CancellationToken cancellationToken)
     {
         Check.NotNull(application, nameof(application));
@@ -639,6 +922,12 @@ public class CenseqOpenIddictApplicationStore : CenseqOpenIddictStoreBase<IOpenI
         application = (await Repository.FindAsync(entity.Id, cancellationToken: cancellationToken)).ToModel();
     }
 
+    /// <summary>
+    /// 获取客户端 URI。
+    /// </summary>
+    /// <param name="application">OpenIddict 应用程序。</param>
+    /// <param name="cancellationToken">取消令牌。</param>
+    /// <returns>异步操作结果。</returns>
     public virtual ValueTask<string> GetClientUriAsync(OpenIddictApplicationModel application, CancellationToken cancellationToken = default)
     {
         Check.NotNull(application, nameof(application));
@@ -646,6 +935,12 @@ public class CenseqOpenIddictApplicationStore : CenseqOpenIddictStoreBase<IOpenI
         return new ValueTask<string>(application.ClientUri);
     }
 
+    /// <summary>
+    /// 获取 Logo URI。
+    /// </summary>
+    /// <param name="application">OpenIddict 应用程序。</param>
+    /// <param name="cancellationToken">取消令牌。</param>
+    /// <returns>异步操作结果。</returns>
     public virtual ValueTask<string> GetLogoUriAsync(OpenIddictApplicationModel application, CancellationToken cancellationToken = default)
     {
         Check.NotNull(application, nameof(application));

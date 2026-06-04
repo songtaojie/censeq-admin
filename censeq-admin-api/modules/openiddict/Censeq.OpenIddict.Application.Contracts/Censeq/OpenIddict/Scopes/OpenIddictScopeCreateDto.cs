@@ -3,6 +3,9 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Censeq.OpenIddict.Scopes;
 
+/// <summary>
+/// OpenIddict 作用域创建 DTO。
+/// </summary>
 public class OpenIddictScopeCreateDto
 {
     /// <summary>

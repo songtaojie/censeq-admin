@@ -3,6 +3,9 @@ using Volo.Abp.BackgroundWorkers;
 
 namespace Censeq.OpenIddict.Tokens;
 
+/// <summary>
+/// 令牌清理配置项，用于配置相关行为。
+/// </summary>
 public class TokenCleanupOptions
 {
     /// <summary>

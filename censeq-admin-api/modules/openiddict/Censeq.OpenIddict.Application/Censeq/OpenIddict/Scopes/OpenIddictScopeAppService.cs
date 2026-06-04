@@ -9,6 +9,9 @@ using Volo.Abp.Application.Services;
 
 namespace Censeq.OpenIddict.Scopes;
 
+/// <summary>
+/// OpenIddict 作用域应用服务，提供应用层操作。
+/// </summary>
 public class OpenIddictScopeAppService :
     CrudAppService<
         OpenIddictScope,
@@ -19,9 +22,20 @@ public class OpenIddictScopeAppService :
         OpenIddictScopeUpdateDto>,
     IOpenIddictScopeAppService
 {
+    /// <summary>
+    /// OpenIddict 作用域管理器。
+    /// </summary>
     protected IOpenIddictScopeManager ScopeManager { get; }
+    /// <summary>
+    /// OpenIddict 作用域仓储。
+    /// </summary>
     protected IOpenIddictScopeRepository ScopeRepository { get; }
 
+    /// <summary>
+    /// 初始化 OpenIddictScopeAppService 实例。
+    /// </summary>
+    /// <param name="repository">仓储。</param>
+    /// <param name="scopeManager">OpenIddict 作用域管理器。</param>
     public OpenIddictScopeAppService(
         IOpenIddictScopeRepository repository,
         IOpenIddictScopeManager scopeManager)
@@ -37,12 +51,22 @@ public class OpenIddictScopeAppService :
         GetListPolicyName = OpenIddictPermissions.Scopes.Default;
     }
 
+    /// <summary>
+    /// 获取指定标识的数据。
+    /// </summary>
+    /// <param name="id">标识。</param>
+    /// <returns>查询结果。</returns>
     public override async Task<OpenIddictScopeDto> GetAsync(Guid id)
     {
         var scope = await ScopeRepository.GetAsync(id);
         return MapToDto(scope);
     }
 
+    /// <summary>
+    /// 获取分页数据列表。
+    /// </summary>
+    /// <param name="input">输入参数。</param>
+    /// <returns>分页查询结果。</returns>
     public override async Task<PagedResultDto<OpenIddictScopeDto>> GetListAsync(GetOpenIddictScopesInput input)
     {
         await CheckGetListPolicyAsync();
@@ -60,6 +84,11 @@ public class OpenIddictScopeAppService :
         return new PagedResultDto<OpenIddictScopeDto>(count, dtos);
     }
 
+    /// <summary>
+    /// 创建数据。
+    /// </summary>
+    /// <param name="input">输入参数。</param>
+    /// <returns>创建后的数据。</returns>
     public override async Task<OpenIddictScopeDto> CreateAsync(OpenIddictScopeCreateDto input)
     {
         await CheckCreatePolicyAsync();
@@ -89,6 +118,12 @@ public class OpenIddictScopeAppService :
         return MapToDto(scope);
     }
 
+    /// <summary>
+    /// 更新数据。
+    /// </summary>
+    /// <param name="id">标识。</param>
+    /// <param name="input">输入参数。</param>
+    /// <returns>更新后的数据。</returns>
     public override async Task<OpenIddictScopeDto> UpdateAsync(Guid id, OpenIddictScopeUpdateDto input)
     {
         await CheckUpdatePolicyAsync();
@@ -114,6 +149,11 @@ public class OpenIddictScopeAppService :
         return MapToDto(scope);
     }
 
+    /// <summary>
+    /// 删除数据。
+    /// </summary>
+    /// <param name="id">标识。</param>
+    /// <returns>表示异步操作的任务。</returns>
     public override async Task DeleteAsync(Guid id)
     {
         await CheckDeletePolicyAsync();
@@ -122,6 +162,12 @@ public class OpenIddictScopeAppService :
         await ScopeManager.DeleteAsync(scope.ToModel());
     }
 
+    /// <summary>
+    /// 检查名称是否已存在。
+    /// </summary>
+    /// <param name="name">name。</param>
+    /// <param name="excludeId">需要排除的标识。</param>
+    /// <returns>存在时返回 true，否则返回 false。</returns>
     public virtual async Task<bool> CheckNameExistsAsync(string name, Guid? excludeId = null)
     {
         var existing = await ScopeRepository.FindByNameAsync(name);
@@ -132,6 +178,11 @@ public class OpenIddictScopeAppService :
         return true;
     }
 
+    /// <summary>
+    /// 将领域对象映射为 DTO。
+    /// </summary>
+    /// <param name="scope">OpenIddict 作用域。</param>
+    /// <returns>操作结果。</returns>
     protected virtual OpenIddictScopeDto MapToDto(OpenIddictScope scope)
     {
         return new OpenIddictScopeDto

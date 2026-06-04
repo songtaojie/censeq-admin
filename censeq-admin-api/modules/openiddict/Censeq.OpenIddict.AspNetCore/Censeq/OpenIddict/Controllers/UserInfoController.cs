@@ -10,12 +10,19 @@ using Volo.Abp.Security.Claims;
 
 namespace Censeq.OpenIddict.Controllers;
 
+/// <summary>
+/// 用户信息控制器，提供对应的 HTTP API。
+/// </summary>
 [Route("connect/userinfo")]
 [IgnoreAntiforgeryToken]
 [Authorize(AuthenticationSchemes = OpenIddictServerAspNetCoreDefaults.AuthenticationScheme)]
 [ApiExplorerSettings(IgnoreApi = true)]
 public class UserInfoController : CenseqOpenIddictControllerBase
 {
+    /// <summary>
+    /// 用户信息。
+    /// </summary>
+    /// <returns>异步操作结果。</returns>
     [HttpGet]
     [HttpPost]
     [Produces("application/json")]
@@ -36,6 +43,10 @@ public class UserInfoController : CenseqOpenIddictControllerBase
         return Ok(claims);
     }
 
+    /// <summary>
+    /// 获取用户信息声明。
+    /// </summary>
+    /// <returns>异步操作结果。</returns>
     protected virtual async Task<Dictionary<string, object>?> GetUserInfoClaims()
     {
         var user = await UserManager.GetUserAsync(User);

@@ -4,8 +4,15 @@ using Volo.Abp.Localization;
 
 namespace Censeq.OpenIddict;
 
+/// <summary>
+/// OpenIddict 权限定义提供者，用于定义模块权限项。
+/// </summary>
 public class OpenIddictPermissionDefinitionProvider : PermissionDefinitionProvider
 {
+    /// <summary>
+    /// 定义 OpenIddict 模块的权限项。
+    /// </summary>
+    /// <param name="context">权限定义上下文。</param>
     public override void Define(IPermissionDefinitionContext context)
     {
         var openIddictGroup = context.AddGroup(OpenIddictPermissions.GroupName, L("Permission:OpenIddict"));
@@ -31,6 +38,11 @@ public class OpenIddictPermissionDefinitionProvider : PermissionDefinitionProvid
         tokensPermission.AddChild(OpenIddictPermissions.Tokens.Delete, L("Permission:Delete"));
     }
 
+    /// <summary>
+    /// 创建 OpenIddict 模块的本地化字符串。
+    /// </summary>
+    /// <param name="name">name。</param>
+    /// <returns>操作结果。</returns>
     private static LocalizableString L(string name)
     {
         return LocalizableString.Create<CenseqOpenIddictResource>(name);

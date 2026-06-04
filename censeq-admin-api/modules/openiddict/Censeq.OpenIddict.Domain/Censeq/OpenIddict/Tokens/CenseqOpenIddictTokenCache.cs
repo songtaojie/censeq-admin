@@ -8,10 +8,19 @@ using Volo.Abp.DependencyInjection;
 
 namespace Censeq.OpenIddict.Tokens;
 
+/// <summary>
+/// OpenIddict 令牌缓存，封装缓存访问。
+/// </summary>
 public class CenseqOpenIddictTokenCache : CenseqOpenIddictCacheBase<OpenIddictToken, OpenIddictTokenModel, IOpenIddictTokenStore<OpenIddictTokenModel>>,
     IOpenIddictTokenCache<OpenIddictTokenModel>,
     ITransientDependency
 {
+    /// <summary>
+    /// 初始化 CenseqOpenIddictTokenCache 实例。
+    /// </summary>
+    /// <param name="cache">缓存。</param>
+    /// <param name="arrayCache">array缓存。</param>
+    /// <param name="store">存储。</param>
     public CenseqOpenIddictTokenCache(
         IDistributedCache<OpenIddictTokenModel> cache,
         IDistributedCache<OpenIddictTokenModel[]> arrayCache,
@@ -20,6 +29,12 @@ public class CenseqOpenIddictTokenCache : CenseqOpenIddictCacheBase<OpenIddictTo
     {
     }
 
+    /// <summary>
+    /// 异步添加数据。
+    /// </summary>
+    /// <param name="token">OpenIddict 令牌。</param>
+    /// <param name="cancellationToken">取消令牌。</param>
+    /// <returns>表示异步操作的任务。</returns>
     public virtual async ValueTask AddAsync(OpenIddictTokenModel token, CancellationToken cancellationToken)
     {
         Check.NotNull(token, nameof(token));
@@ -30,6 +45,13 @@ public class CenseqOpenIddictTokenCache : CenseqOpenIddictCacheBase<OpenIddictTo
         await Cache.SetAsync($"{nameof(FindByReferenceIdAsync)}_{await Store.GetReferenceIdAsync(token, cancellationToken)}", token, token: cancellationToken);
     }
 
+    /// <summary>
+    /// 异步查找数据。
+    /// </summary>
+    /// <param name="subject">subject。</param>
+    /// <param name="client">客户端标识。</param>
+    /// <param name="cancellationToken">取消令牌。</param>
+    /// <returns>匹配的数据。</returns>
     public virtual async IAsyncEnumerable<OpenIddictTokenModel> FindAsync(string subject, string client, [EnumeratorCancellation] CancellationToken cancellationToken)
     {
         Check.NotNullOrEmpty(subject, nameof(subject));
@@ -52,6 +74,14 @@ public class CenseqOpenIddictTokenCache : CenseqOpenIddictCacheBase<OpenIddictTo
         }
     }
 
+    /// <summary>
+    /// 异步查找数据。
+    /// </summary>
+    /// <param name="subject">subject。</param>
+    /// <param name="client">客户端标识。</param>
+    /// <param name="status">status。</param>
+    /// <param name="cancellationToken">取消令牌。</param>
+    /// <returns>匹配的数据。</returns>
     public virtual async IAsyncEnumerable<OpenIddictTokenModel> FindAsync(string subject, string client, string status, [EnumeratorCancellation] CancellationToken cancellationToken)
     {
         Check.NotNullOrEmpty(subject, nameof(subject));
@@ -75,6 +105,15 @@ public class CenseqOpenIddictTokenCache : CenseqOpenIddictCacheBase<OpenIddictTo
         }
     }
 
+    /// <summary>
+    /// 异步查找数据。
+    /// </summary>
+    /// <param name="subject">subject。</param>
+    /// <param name="client">客户端标识。</param>
+    /// <param name="status">status。</param>
+    /// <param name="type">type。</param>
+    /// <param name="cancellationToken">取消令牌。</param>
+    /// <returns>匹配的数据。</returns>
     public virtual async IAsyncEnumerable<OpenIddictTokenModel> FindAsync(string subject, string client, string status, string type, [EnumeratorCancellation] CancellationToken cancellationToken)
     {
         Check.NotNullOrEmpty(subject, nameof(subject));
@@ -99,6 +138,12 @@ public class CenseqOpenIddictTokenCache : CenseqOpenIddictCacheBase<OpenIddictTo
         }
     }
 
+    /// <summary>
+    /// 根据应用程序标识查找数据。
+    /// </summary>
+    /// <param name="identifier">标识。</param>
+    /// <param name="cancellationToken">取消令牌。</param>
+    /// <returns>匹配的数据。</returns>
     public virtual async IAsyncEnumerable<OpenIddictTokenModel> FindByApplicationIdAsync(string identifier, [EnumeratorCancellation] CancellationToken cancellationToken)
     {
         Check.NotNullOrEmpty(identifier, nameof(identifier));
@@ -120,6 +165,12 @@ public class CenseqOpenIddictTokenCache : CenseqOpenIddictCacheBase<OpenIddictTo
         }
     }
 
+    /// <summary>
+    /// 根据授权标识查找数据。
+    /// </summary>
+    /// <param name="identifier">标识。</param>
+    /// <param name="cancellationToken">取消令牌。</param>
+    /// <returns>匹配的数据。</returns>
     public virtual async IAsyncEnumerable<OpenIddictTokenModel> FindByAuthorizationIdAsync(string identifier, [EnumeratorCancellation] CancellationToken cancellationToken)
     {
         Check.NotNullOrEmpty(identifier, nameof(identifier));
@@ -141,6 +192,12 @@ public class CenseqOpenIddictTokenCache : CenseqOpenIddictCacheBase<OpenIddictTo
         }
     }
 
+    /// <summary>
+    /// 根据标识查找数据。
+    /// </summary>
+    /// <param name="identifier">标识。</param>
+    /// <param name="cancellationToken">取消令牌。</param>
+    /// <returns>匹配的数据。</returns>
     public virtual async ValueTask<OpenIddictTokenModel> FindByIdAsync(string identifier, CancellationToken cancellationToken)
     {
         Check.NotNullOrEmpty(identifier, nameof(identifier));
@@ -156,6 +213,12 @@ public class CenseqOpenIddictTokenCache : CenseqOpenIddictCacheBase<OpenIddictTo
         }, token: cancellationToken);
     }
 
+    /// <summary>
+    /// 根据引用标识查找数据。
+    /// </summary>
+    /// <param name="identifier">标识。</param>
+    /// <param name="cancellationToken">取消令牌。</param>
+    /// <returns>匹配的数据。</returns>
     public virtual async ValueTask<OpenIddictTokenModel> FindByReferenceIdAsync(string identifier, CancellationToken cancellationToken)
     {
         Check.NotNullOrEmpty(identifier, nameof(identifier));
@@ -171,6 +234,12 @@ public class CenseqOpenIddictTokenCache : CenseqOpenIddictCacheBase<OpenIddictTo
         }, token: cancellationToken);
     }
 
+    /// <summary>
+    /// 根据主体查找数据。
+    /// </summary>
+    /// <param name="subject">subject。</param>
+    /// <param name="cancellationToken">取消令牌。</param>
+    /// <returns>匹配的数据。</returns>
     public virtual async IAsyncEnumerable<OpenIddictTokenModel> FindBySubjectAsync(string subject, [EnumeratorCancellation] CancellationToken cancellationToken)
     {
         Check.NotNullOrEmpty(subject, nameof(subject));
@@ -192,6 +261,12 @@ public class CenseqOpenIddictTokenCache : CenseqOpenIddictCacheBase<OpenIddictTo
         }
     }
 
+    /// <summary>
+    /// 异步移除数据。
+    /// </summary>
+    /// <param name="token">OpenIddict 令牌。</param>
+    /// <param name="cancellationToken">取消令牌。</param>
+    /// <returns>表示异步操作的任务。</returns>
     public virtual async ValueTask RemoveAsync(OpenIddictTokenModel token, CancellationToken cancellationToken)
     {
         await ArrayCache.RemoveManyAsync(new[]

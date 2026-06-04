@@ -8,11 +8,18 @@ using Volo.Abp;
 
 namespace Censeq.OpenIddict.Controllers;
 
+/// <summary>
+/// 令牌控制器，提供对应的 HTTP API。
+/// </summary>
 [Route("connect/token")]
 [IgnoreAntiforgeryToken]
 [ApiExplorerSettings(IgnoreApi = true)]
 public partial class TokenController : CenseqOpenIddictControllerBase
 {
+    /// <summary>
+    /// 处理当前请求。
+    /// </summary>
+    /// <returns>异步操作结果。</returns>
     [HttpGet, HttpPost, Produces("application/json")]
     public virtual async Task<IActionResult> HandleAsync()
     {

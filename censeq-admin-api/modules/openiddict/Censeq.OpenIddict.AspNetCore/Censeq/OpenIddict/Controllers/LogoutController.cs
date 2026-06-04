@@ -5,10 +5,17 @@ using OpenIddict.Server.AspNetCore;
 
 namespace Censeq.OpenIddict.Controllers;
 
+/// <summary>
+/// 登出控制器，提供对应的 HTTP API。
+/// </summary>
 [Route("connect/logout")]
 [ApiExplorerSettings(IgnoreApi = true)]
 public class LogoutController : CenseqOpenIddictControllerBase
 {
+    /// <summary>
+    /// 获取指定标识的数据。
+    /// </summary>
+    /// <returns>查询结果。</returns>
     [HttpGet]
     public virtual async Task<IActionResult> GetAsync()
     {

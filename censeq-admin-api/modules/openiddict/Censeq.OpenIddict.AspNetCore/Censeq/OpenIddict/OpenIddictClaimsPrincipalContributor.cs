@@ -15,8 +15,16 @@ using Volo.Abp.Security.Claims;
 
 namespace Censeq.OpenIddict;
 
+/// <summary>
+/// OpenIddict 声明主体贡献器。
+/// </summary>
 public class OpenIddictClaimsPrincipalContributor : IAbpClaimsPrincipalContributor, ITransientDependency
 {
+    /// <summary>
+    /// 异步贡献声明主体。
+    /// </summary>
+    /// <param name="context">当前上下文。</param>
+    /// <returns>表示异步操作的任务。</returns>
     public Task ContributeAsync(AbpClaimsPrincipalContributorContext context)
     {
         var identity = context.ClaimsPrincipal.Identities.FirstOrDefault();

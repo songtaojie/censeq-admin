@@ -2,6 +2,9 @@
 
 namespace Censeq.OpenIddict;
 
+/// <summary>
+/// OpenIddict ASP.NET Core 配置项，用于配置相关行为。
+/// </summary>
 public class CenseqOpenIddictAspNetCoreOptions
 {
     /// <summary>

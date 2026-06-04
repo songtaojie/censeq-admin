@@ -5,8 +5,16 @@ using Microsoft.IdentityModel.Tokens;
 
 namespace Censeq.OpenIddict.Applications;
 
+/// <summary>
+/// OpenIddict 应用程序扩展方法。
+/// </summary>
 public static class OpenIddictApplicationExtensions
 {
+    /// <summary>
+    /// 转换为实体。
+    /// </summary>
+    /// <param name="model">模型。</param>
+    /// <returns>操作结果。</returns>
     public static OpenIddictApplication ToEntity(this OpenIddictApplicationModel model)
     {
         Check.NotNull(model, nameof(model));
@@ -40,6 +48,12 @@ public static class OpenIddictApplicationExtensions
         return entity;
     }
 
+    /// <summary>
+    /// 转换为实体。
+    /// </summary>
+    /// <param name="model">模型。</param>
+    /// <param name="entity">实体。</param>
+    /// <returns>操作结果。</returns>
     public static OpenIddictApplication ToEntity(this OpenIddictApplicationModel model, OpenIddictApplication entity)
     {
         Check.NotNull(model, nameof(model));
@@ -76,6 +90,11 @@ public static class OpenIddictApplicationExtensions
     /// </summary>
     private readonly static ConcurrentDictionary<string, JsonWebKeySet> JsonWebKeySetCache = new ConcurrentDictionary<string, JsonWebKeySet>();
 
+    /// <summary>
+    /// 转换为模型。
+    /// </summary>
+    /// <param name="entity">实体。</param>
+    /// <returns>操作结果。</returns>
     public static OpenIddictApplicationModel ToModel(this OpenIddictApplication entity)
     {
         if(entity == null)

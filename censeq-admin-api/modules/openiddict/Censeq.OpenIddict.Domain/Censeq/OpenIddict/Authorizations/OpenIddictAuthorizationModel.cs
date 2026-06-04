@@ -4,9 +4,15 @@ using Volo.Abp.ObjectExtending;
 
 namespace Censeq.OpenIddict.Authorizations;
 
+/// <summary>
+/// OpenIddict 授权模型。
+/// </summary>
 [Serializable, IgnoreMultiTenancy]
 public class OpenIddictAuthorizationModel : ExtensibleObject
 {
+    /// <summary>
+    /// 标识。
+    /// </summary>
     public Guid Id { get; set; }
 
     /// <summary>

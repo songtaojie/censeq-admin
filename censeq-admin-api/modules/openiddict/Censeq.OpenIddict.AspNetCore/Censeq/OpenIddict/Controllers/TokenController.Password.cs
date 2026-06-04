@@ -19,18 +19,50 @@ using SignInResult = Microsoft.AspNetCore.Identity.SignInResult;
 
 namespace Censeq.OpenIddict.Controllers;
 
+/// <summary>
+/// 令牌控制器，提供对应的 HTTP API。
+/// </summary>
 public partial class TokenController
 {
+    /// <summary>
+    /// 服务作用域工厂。
+    /// </summary>
     protected IServiceScopeFactory ServiceScopeFactory => LazyServiceProvider.LazyGetRequiredService<IServiceScopeFactory>();
+    /// <summary>
+    /// 租户配置提供者。
+    /// </summary>
     protected ITenantConfigurationProvider TenantConfigurationProvider=> LazyServiceProvider.LazyGetRequiredService<ITenantConfigurationProvider>();
+    /// <summary>
+    /// Identity 配置项。
+    /// </summary>
     protected IOptions<CenseqIdentityOptions> CenseqIdentityOptions => LazyServiceProvider.LazyGetRequiredService<IOptions<CenseqIdentityOptions>>();
+    /// <summary>
+    /// Identity 配置项。
+    /// </summary>
     protected IOptions<IdentityOptions> IdentityOptions => LazyServiceProvider.LazyGetRequiredService<IOptions<IdentityOptions>>();
+    /// <summary>
+    /// Identity 安全日志管理器。
+    /// </summary>
     protected IdentitySecurityLogManager IdentitySecurityLogManager => LazyServiceProvider.LazyGetRequiredService<IdentitySecurityLogManager>();
+    /// <summary>
+    /// Identity 会话管理器。
+    /// </summary>
     protected IdentitySessionManager IdentitySessionManager => LazyServiceProvider.LazyGetRequiredService<IdentitySessionManager>();
 
+    /// <summary>
+    /// 设置提供者。
+    /// </summary>
     protected ISettingProvider SettingProvider => LazyServiceProvider.LazyGetRequiredService<ISettingProvider>();
+    /// <summary>
+    /// Identity 动态声明主体贡献器缓存。
+    /// </summary>
     protected IdentityDynamicClaimsPrincipalContributorCache IdentityDynamicClaimsPrincipalContributorCache => LazyServiceProvider.LazyGetRequiredService<IdentityDynamicClaimsPrincipalContributorCache>();
 
+    /// <summary>
+    /// 处理密码授权请求。
+    /// </summary>
+    /// <param name="request">OpenIddict 请求。</param>
+    /// <returns>异步操作结果。</returns>
     [UnitOfWork]
     protected virtual async Task<IActionResult> HandlePasswordAsync(OpenIddictRequest request)
     {
@@ -155,6 +187,11 @@ public partial class TokenController
         }
     }
 
+    /// <summary>
+    /// 必要时将邮箱替换为用户名查询输入。
+    /// </summary>
+    /// <param name="request">OpenIddict 请求。</param>
+    /// <returns>表示异步操作的任务。</returns>
     protected virtual async Task ReplaceEmailToUsernameOfInputIfNeeds(OpenIddictRequest request)
     {
         if (!ValidationHelper.IsValidEmailAddress(request.Username ?? string.Empty))
@@ -177,6 +214,12 @@ public partial class TokenController
         request.Username = userByEmail.UserName ?? string.Empty;
     }
 
+    /// <summary>
+    /// 处理当前请求。
+    /// </summary>
+    /// <param name="request">OpenIddict 请求。</param>
+    /// <param name="user">用户。</param>
+    /// <returns>异步操作结果。</returns>
     protected virtual async Task<IActionResult> HandleTwoFactorLoginAsync(OpenIddictRequest request, IdentityUser user)
     {
         var recoveryCode = request.GetParameter("RecoveryCode")?.ToString() ?? string.Empty;
@@ -248,16 +291,38 @@ public partial class TokenController
         }
     }
 
+    /// <summary>
+    /// 处理当前请求。
+    /// </summary>
+    /// <param name="request">OpenIddict 请求。</param>
+    /// <param name="user">用户。</param>
+    /// <param name="currentPassword">当前密码。</param>
+    /// <returns>异步操作结果。</returns>
     protected virtual async Task<IActionResult> HandleShouldChangePasswordOnNextLoginAsync(OpenIddictRequest request, IdentityUser user, string currentPassword)
     {
         return await HandleChangePasswordAsync(request, user, currentPassword, ChangePasswordType.ShouldChangePasswordOnNextLogin);
     }
 
+    /// <summary>
+    /// 处理当前请求。
+    /// </summary>
+    /// <param name="request">OpenIddict 请求。</param>
+    /// <param name="user">用户。</param>
+    /// <param name="currentPassword">当前密码。</param>
+    /// <returns>异步操作结果。</returns>
     protected virtual async Task<IActionResult> HandlePeriodicallyChangePasswordAsync(OpenIddictRequest request, IdentityUser user, string currentPassword)
     {
         return await HandleChangePasswordAsync(request, user, currentPassword, ChangePasswordType.PeriodicallyChangePassword);
     }
 
+    /// <summary>
+    /// 处理当前请求。
+    /// </summary>
+    /// <param name="request">OpenIddict 请求。</param>
+    /// <param name="user">用户。</param>
+    /// <param name="currentPassword">当前密码。</param>
+    /// <param name="changePasswordType">change密码Type。</param>
+    /// <returns>异步操作结果。</returns>
     protected virtual async Task<IActionResult> HandleChangePasswordAsync(OpenIddictRequest request, IdentityUser user, string currentPassword, ChangePasswordType changePasswordType)
     {
         var changePasswordToken = request.GetParameter("ChangePasswordToken")?.ToString();
@@ -338,6 +403,12 @@ public partial class TokenController
         }
     }
 
+    /// <summary>
+    /// 处理当前请求。
+    /// </summary>
+    /// <param name="request">OpenIddict 请求。</param>
+    /// <param name="user">用户。</param>
+    /// <returns>异步操作结果。</returns>
     protected virtual Task<IActionResult> HandleConfirmUserAsync(OpenIddictRequest request, IdentityUser user)
     {
         Logger.LogInformation($"{request.Username} needs to confirm email/phone number");
@@ -358,6 +429,12 @@ public partial class TokenController
         return Task.FromResult<IActionResult>(Forbid(properties, OpenIddictServerAspNetCoreDefaults.AuthenticationScheme));
     }
 
+    /// <summary>
+    /// 设置成功结果。
+    /// </summary>
+    /// <param name="request">OpenIddict 请求。</param>
+    /// <param name="user">用户。</param>
+    /// <returns>异步操作结果。</returns>
     protected virtual async Task<IActionResult> SetSuccessResultAsync(OpenIddictRequest request, IdentityUser user)
     {
         // Clear the dynamic claims cache.
@@ -401,6 +478,12 @@ public partial class TokenController
         return SignIn(principal, OpenIddictServerAspNetCoreDefaults.AuthenticationScheme);
     }
 
+    /// <summary>
+    /// 异步创建会话。
+    /// </summary>
+    /// <param name="user">用户。</param>
+    /// <param name="request">OpenIddict 请求。</param>
+    /// <returns>异步操作结果。</returns>
     protected virtual async Task<IdentitySession?> CreateSessionAsync(IdentityUser user, OpenIddictRequest request)
     {
         try
@@ -438,6 +521,10 @@ public partial class TokenController
         }
     }
 
+    /// <summary>
+    /// 获取设备类型。
+    /// </summary>
+    /// <returns>操作结果。</returns>
     protected virtual string GetDeviceType()
     {
         var httpContext = HttpContext;
@@ -462,6 +549,10 @@ public partial class TokenController
         return IdentitySessionDevices.Web;
     }
 
+    /// <summary>
+    /// 获取设备信息。
+    /// </summary>
+    /// <returns>操作结果。</returns>
     protected virtual string GetDeviceInfo()
     {
         try
@@ -489,6 +580,10 @@ public partial class TokenController
         }
     }
 
+    /// <summary>
+    /// 获取客户端 IP 地址。
+    /// </summary>
+    /// <returns>操作结果。</returns>
     protected virtual string GetClientIpAddresses()
     {
         try
@@ -523,6 +618,11 @@ public partial class TokenController
         }
     }
 
+    /// <summary>
+    /// 异步判断是否启用双因素认证。
+    /// </summary>
+    /// <param name="user">用户。</param>
+    /// <returns>异步操作结果。</returns>
     protected virtual async Task<bool> IsTfaEnabledAsync(IdentityUser user)
     {
         return UserManager.SupportsUserTwoFactor &&
@@ -530,6 +630,9 @@ public partial class TokenController
                (await UserManager.GetValidTwoFactorProvidersAsync(user)).Count > 0;
     }
 
+    /// <summary>
+    /// 修改密码类型。
+    /// </summary>
     public enum ChangePasswordType
     {
         ShouldChangePasswordOnNextLogin,

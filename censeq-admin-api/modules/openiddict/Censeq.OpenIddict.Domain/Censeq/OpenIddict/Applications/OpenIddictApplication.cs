@@ -3,12 +3,22 @@ using Volo.Abp.Domain.Entities.Auditing;
 
 namespace Censeq.OpenIddict.Applications;
 
+/// <summary>
+/// OpenIddict 应用程序。
+/// </summary>
 public class OpenIddictApplication : FullAuditedAggregateRoot<Guid>
 {
+    /// <summary>
+    /// 初始化 OpenIddictApplication 实例。
+    /// </summary>
     public OpenIddictApplication()
     {
     }
 
+    /// <summary>
+    /// 初始化 OpenIddictApplication 实例。
+    /// </summary>
+    /// <param name="id">标识。</param>
     public OpenIddictApplication(Guid id)
         : base(id)
     {

@@ -1,7 +1,15 @@
 ﻿namespace Censeq.OpenIddict.Tokens;
 
+/// <summary>
+/// OpenIddict 令牌扩展方法。
+/// </summary>
 public static class OpenIddictTokenExtensions
 {
+    /// <summary>
+    /// 转换为实体。
+    /// </summary>
+    /// <param name="model">模型。</param>
+    /// <returns>操作结果。</returns>
     public static OpenIddictToken ToEntity(this OpenIddictTokenModel model)
     {
         Check.NotNull(model, nameof(model));
@@ -31,6 +39,12 @@ public static class OpenIddictTokenExtensions
         return entity;
     }
 
+    /// <summary>
+    /// 转换为实体。
+    /// </summary>
+    /// <param name="model">模型。</param>
+    /// <param name="entity">实体。</param>
+    /// <returns>操作结果。</returns>
     public static OpenIddictToken ToEntity(this OpenIddictTokenModel model, OpenIddictToken entity)
     {
         Check.NotNull(model, nameof(model));
@@ -57,6 +71,11 @@ public static class OpenIddictTokenExtensions
         return entity;
     }
 
+    /// <summary>
+    /// 转换为模型。
+    /// </summary>
+    /// <param name="entity">实体。</param>
+    /// <returns>操作结果。</returns>
     public static OpenIddictTokenModel ToModel(this OpenIddictToken entity)
     {
         if(entity == null)

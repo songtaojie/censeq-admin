@@ -8,8 +8,16 @@ using OpenIddict.Server.AspNetCore;
 
 namespace Censeq.OpenIddict.Controllers;
 
+/// <summary>
+/// 令牌控制器，提供对应的 HTTP API。
+/// </summary>
 public partial class TokenController
 {
+    /// <summary>
+    /// 处理当前请求。
+    /// </summary>
+    /// <param name="request">OpenIddict 请求。</param>
+    /// <returns>异步操作结果。</returns>
     protected virtual async Task<IActionResult> HandleClientCredentialsAsync(OpenIddictRequest request)
     {
         // Note: the client credentials are automatically validated by OpenIddict:

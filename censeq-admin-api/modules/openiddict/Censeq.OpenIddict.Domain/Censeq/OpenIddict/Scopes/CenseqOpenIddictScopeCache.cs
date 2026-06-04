@@ -9,10 +9,19 @@ using Volo.Abp.DependencyInjection;
 
 namespace Censeq.OpenIddict.Scopes;
 
+/// <summary>
+/// OpenIddict 作用域缓存，封装缓存访问。
+/// </summary>
 public class CenseqOpenIddictScopeCache : CenseqOpenIddictCacheBase<OpenIddictScope, OpenIddictScopeModel, IOpenIddictScopeStore<OpenIddictScopeModel>>,
     IOpenIddictScopeCache<OpenIddictScopeModel>,
     ITransientDependency
 {
+    /// <summary>
+    /// 初始化 CenseqOpenIddictScopeCache 实例。
+    /// </summary>
+    /// <param name="cache">缓存。</param>
+    /// <param name="arrayCache">array缓存。</param>
+    /// <param name="store">存储。</param>
     public CenseqOpenIddictScopeCache(
         IDistributedCache<OpenIddictScopeModel> cache,
         IDistributedCache<OpenIddictScopeModel[]> arrayCache,
@@ -21,6 +30,12 @@ public class CenseqOpenIddictScopeCache : CenseqOpenIddictCacheBase<OpenIddictSc
     {
     }
 
+    /// <summary>
+    /// 异步添加数据。
+    /// </summary>
+    /// <param name="scope">OpenIddict 作用域。</param>
+    /// <param name="cancellationToken">取消令牌。</param>
+    /// <returns>表示异步操作的任务。</returns>
     public virtual async ValueTask AddAsync(OpenIddictScopeModel scope, CancellationToken cancellationToken)
     {
         Check.NotNull(scope, nameof(scope));
@@ -31,6 +46,12 @@ public class CenseqOpenIddictScopeCache : CenseqOpenIddictCacheBase<OpenIddictSc
         await Cache.SetAsync($"{nameof(FindByNameAsync)}_{await Store.GetNameAsync(scope, cancellationToken)}", scope, token: cancellationToken);
     }
 
+    /// <summary>
+    /// 根据标识查找数据。
+    /// </summary>
+    /// <param name="id">标识。</param>
+    /// <param name="cancellationToken">取消令牌。</param>
+    /// <returns>匹配的数据。</returns>
     public virtual async ValueTask<OpenIddictScopeModel> FindByIdAsync(string id, CancellationToken cancellationToken)
     {
         Check.NotNullOrEmpty(id, nameof(id));
@@ -46,6 +67,12 @@ public class CenseqOpenIddictScopeCache : CenseqOpenIddictCacheBase<OpenIddictSc
         }, token: cancellationToken);
     }
 
+    /// <summary>
+    /// 根据名称查找数据。
+    /// </summary>
+    /// <param name="name">name。</param>
+    /// <param name="cancellationToken">取消令牌。</param>
+    /// <returns>匹配的数据。</returns>
     public virtual async ValueTask<OpenIddictScopeModel> FindByNameAsync(string name, CancellationToken cancellationToken)
     {
         Check.NotNullOrEmpty(name, nameof(name));
@@ -61,6 +88,12 @@ public class CenseqOpenIddictScopeCache : CenseqOpenIddictCacheBase<OpenIddictSc
         }, token: cancellationToken);
     }
 
+    /// <summary>
+    /// 根据名称查找数据。
+    /// </summary>
+    /// <param name="names">名称。</param>
+    /// <param name="cancellationToken">取消令牌。</param>
+    /// <returns>匹配的数据。</returns>
     public virtual async IAsyncEnumerable<OpenIddictScopeModel> FindByNamesAsync(ImmutableArray<string> names, [EnumeratorCancellation] CancellationToken cancellationToken)
     {
         Check.NotNull(names, nameof(names));
@@ -78,6 +111,12 @@ public class CenseqOpenIddictScopeCache : CenseqOpenIddictCacheBase<OpenIddictSc
         }
     }
 
+    /// <summary>
+    /// 根据资源查找数据。
+    /// </summary>
+    /// <param name="resource">资源。</param>
+    /// <param name="cancellationToken">取消令牌。</param>
+    /// <returns>匹配的数据。</returns>
     public virtual async IAsyncEnumerable<OpenIddictScopeModel> FindByResourceAsync(string resource, [EnumeratorCancellation] CancellationToken cancellationToken)
     {
         Check.NotNullOrEmpty(resource, nameof(resource));
@@ -99,6 +138,12 @@ public class CenseqOpenIddictScopeCache : CenseqOpenIddictCacheBase<OpenIddictSc
         }
     }
 
+    /// <summary>
+    /// 异步移除数据。
+    /// </summary>
+    /// <param name="scope">OpenIddict 作用域。</param>
+    /// <param name="cancellationToken">取消令牌。</param>
+    /// <returns>表示异步操作的任务。</returns>
     public virtual async ValueTask RemoveAsync(OpenIddictScopeModel scope, CancellationToken cancellationToken)
     {
         Check.NotNull(scope, nameof(scope));

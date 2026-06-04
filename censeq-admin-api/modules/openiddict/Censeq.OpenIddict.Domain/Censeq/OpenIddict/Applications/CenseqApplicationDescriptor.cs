@@ -2,6 +2,9 @@
 
 namespace Censeq.OpenIddict.Applications;
 
+/// <summary>
+/// 应用程序描述符。
+/// </summary>
 public class CenseqApplicationDescriptor : OpenIddictApplicationDescriptor
 {
     /// <summary>

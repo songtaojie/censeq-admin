@@ -9,8 +9,16 @@ using Volo.Abp.Security.Claims;
 
 namespace Censeq.OpenIddict;
 
+/// <summary>
+/// 默认 OpenIddict 声明主体处理器。
+/// </summary>
 public class CenseqDefaultOpenIddictClaimsPrincipalHandler : ICenseqOpenIddictClaimsPrincipalHandler, ITransientDependency
 {
+    /// <summary>
+    /// 处理当前请求。
+    /// </summary>
+    /// <param name="context">当前上下文。</param>
+    /// <returns>表示异步操作的任务。</returns>
     public virtual Task HandleAsync(CenseqOpenIddictClaimsPrincipalHandlerContext context)
     {
         var securityStampClaimType = context

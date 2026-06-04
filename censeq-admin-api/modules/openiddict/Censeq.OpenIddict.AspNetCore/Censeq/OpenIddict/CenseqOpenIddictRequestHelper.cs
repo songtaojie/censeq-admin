@@ -8,8 +8,16 @@ using Volo.Abp.DependencyInjection;
 
 namespace Censeq.OpenIddict;
 
+/// <summary>
+/// OpenIddict 请求辅助器。
+/// </summary>
 public class CenseqOpenIddictRequestHelper : ITransientDependency
 {
+    /// <summary>
+    /// 从返回地址获取数据。
+    /// </summary>
+    /// <param name="returnUrl">returnURL。</param>
+    /// <returns>异步操作结果。</returns>
     public virtual Task<OpenIddictRequest> GetFromReturnUrlAsync(string returnUrl)
     {
         if (!returnUrl.IsNullOrWhiteSpace())

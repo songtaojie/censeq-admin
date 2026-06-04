@@ -8,11 +8,18 @@ using Volo.Abp.VirtualFileSystem;
 
 namespace Censeq.OpenIddict;
 
+/// <summary>
+/// OpenIddict 领域共享模块。
+/// </summary>
 [DependsOn(
     typeof(AbpValidationModule)
 )]
 public class CenseqOpenIddictDomainSharedModule : AbpModule
 {
+    /// <summary>
+    /// 配置 OpenIddict 领域共享模块 服务。
+    /// </summary>
+    /// <param name="context">当前上下文。</param>
     public override void ConfigureServices(ServiceConfigurationContext context)
     {
         Configure<AbpVirtualFileSystemOptions>(options =>

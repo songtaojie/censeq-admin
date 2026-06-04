@@ -9,10 +9,24 @@ using OpenIddict.Core;
 
 namespace Censeq.OpenIddict.Applications;
 
+/// <summary>
+/// 应用程序管理器，封装领域管理逻辑。
+/// </summary>
 public class CenseqApplicationManager : OpenIddictApplicationManager<OpenIddictApplicationModel>, ICenseqApplicationManager
 {
+    /// <summary>
+    /// 标识转换器。
+    /// </summary>
     protected CenseqOpenIddictIdentifierConverter IdentifierConverter { get; }
 
+    /// <summary>
+    /// 初始化 CenseqApplicationManager 实例。
+    /// </summary>
+    /// <param name="cache">缓存。</param>
+    /// <param name="logger">logger。</param>
+    /// <param name="options">配置项。</param>
+    /// <param name="resolver">resolver。</param>
+    /// <param name="identifierConverter">dentifier转换器。</param>
     public CenseqApplicationManager(
         [NotNull] IOpenIddictApplicationCache<OpenIddictApplicationModel> cache,
         [NotNull] ILogger<CenseqApplicationManager> logger,
@@ -24,6 +38,12 @@ public class CenseqApplicationManager : OpenIddictApplicationManager<OpenIddictA
         IdentifierConverter = identifierConverter;
     }
 
+    /// <summary>
+    /// 更新数据。
+    /// </summary>
+    /// <param name="application">OpenIddict 应用程序。</param>
+    /// <param name="cancellationToken">取消令牌。</param>
+    /// <returns>更新后的数据。</returns>
     public async override ValueTask UpdateAsync(OpenIddictApplicationModel application, CancellationToken cancellationToken = default)
     {
         if (!Options.CurrentValue.DisableEntityCaching)
@@ -38,6 +58,13 @@ public class CenseqApplicationManager : OpenIddictApplicationManager<OpenIddictA
         await base.UpdateAsync(application, cancellationToken);
     }
 
+    /// <summary>
+    /// 异步填充数据。
+    /// </summary>
+    /// <param name="descriptor">描述符。</param>
+    /// <param name="application">OpenIddict 应用程序。</param>
+    /// <param name="cancellationToken">取消令牌。</param>
+    /// <returns>表示异步操作的任务。</returns>
     public async override ValueTask PopulateAsync(OpenIddictApplicationDescriptor descriptor, OpenIddictApplicationModel application, CancellationToken cancellationToken = default)
     {
         await base.PopulateAsync(descriptor, application, cancellationToken);
@@ -49,6 +76,13 @@ public class CenseqApplicationManager : OpenIddictApplicationManager<OpenIddictA
         }
     }
 
+    /// <summary>
+    /// 异步填充数据。
+    /// </summary>
+    /// <param name="application">OpenIddict 应用程序。</param>
+    /// <param name="descriptor">描述符。</param>
+    /// <param name="cancellationToken">取消令牌。</param>
+    /// <returns>表示异步操作的任务。</returns>
     public async override ValueTask PopulateAsync(OpenIddictApplicationModel application, OpenIddictApplicationDescriptor descriptor, CancellationToken cancellationToken = default)
     {
         await base.PopulateAsync(application, descriptor, cancellationToken);
@@ -60,6 +94,12 @@ public class CenseqApplicationManager : OpenIddictApplicationManager<OpenIddictA
         }
     }
 
+    /// <summary>
+    /// 获取客户端 URI。
+    /// </summary>
+    /// <param name="application">OpenIddict 应用程序。</param>
+    /// <param name="cancellationToken">取消令牌。</param>
+    /// <returns>异步操作结果。</returns>
     public virtual async ValueTask<string> GetClientUriAsync(object application, CancellationToken cancellationToken = default)
     {
         Check.NotNull(application, nameof(application));
@@ -68,6 +108,12 @@ public class CenseqApplicationManager : OpenIddictApplicationManager<OpenIddictA
         return await Store.As<ICenseqOpenIdApplicationStore>().GetClientUriAsync(application.As<OpenIddictApplicationModel>(), cancellationToken);
     }
 
+    /// <summary>
+    /// 获取 Logo URI。
+    /// </summary>
+    /// <param name="application">OpenIddict 应用程序。</param>
+    /// <param name="cancellationToken">取消令牌。</param>
+    /// <returns>异步操作结果。</returns>
     public virtual async ValueTask<string> GetLogoUriAsync(object application, CancellationToken cancellationToken = default)
     {
         Check.NotNull(application, nameof(application));

@@ -2,6 +2,9 @@ using Volo.Abp.Application.Dtos;
 
 namespace Censeq.OpenIddict.Scopes;
 
+/// <summary>
+/// OpenIddict 作用域查询输入。
+/// </summary>
 public class GetOpenIddictScopesInput : PagedAndSortedResultRequestDto
 {
     /// <summary>

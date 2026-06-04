@@ -4,12 +4,22 @@ using Volo.Abp.Timing;
 
 namespace Censeq.OpenIddict.Tokens;
 
+/// <summary>
+/// OpenIddict 令牌。
+/// </summary>
 public class OpenIddictToken : FullAuditedAggregateRoot<Guid>
 {
+    /// <summary>
+    /// 初始化 OpenIddictToken 实例。
+    /// </summary>
     public OpenIddictToken()
     {
     }
 
+    /// <summary>
+    /// 初始化 OpenIddictToken 实例。
+    /// </summary>
+    /// <param name="id">标识。</param>
     public OpenIddictToken(Guid id)
         : base(id)
     {

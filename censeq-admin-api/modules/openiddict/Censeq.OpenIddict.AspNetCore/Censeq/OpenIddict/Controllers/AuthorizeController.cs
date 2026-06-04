@@ -17,10 +17,17 @@ using Volo.Abp.Security.Claims;
 
 namespace Censeq.OpenIddict.Controllers;
 
+/// <summary>
+/// 授权控制器，提供对应的 HTTP API。
+/// </summary>
 [Route("connect/authorize")]
 [ApiExplorerSettings(IgnoreApi = true)]
 public class AuthorizeController : CenseqOpenIddictControllerBase
 {
+    /// <summary>
+    /// 处理当前请求。
+    /// </summary>
+    /// <returns>异步操作结果。</returns>
     [HttpGet, HttpPost]
     [IgnoreAntiforgeryToken]
     [IgnoreAbpSecurityHeader]
@@ -178,6 +185,10 @@ public class AuthorizeController : CenseqOpenIddictControllerBase
         }
     }
 
+    /// <summary>
+    /// 处理当前请求。
+    /// </summary>
+    /// <returns>异步操作结果。</returns>
     [HttpPost]
     [Authorize]
     [Route("callback")]

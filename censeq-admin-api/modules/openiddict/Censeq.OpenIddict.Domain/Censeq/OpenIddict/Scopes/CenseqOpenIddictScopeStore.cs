@@ -16,8 +16,20 @@ using Volo.Abp.Uow;
 
 namespace Censeq.OpenIddict.Scopes;
 
+/// <summary>
+/// OpenIddict 作用域存储，适配 OpenIddict 存储契约。
+/// </summary>
 public class CenseqOpenIddictScopeStore : CenseqOpenIddictStoreBase<IOpenIddictScopeRepository>, IOpenIddictScopeStore<OpenIddictScopeModel>
 {
+    /// <summary>
+    /// 初始化 CenseqOpenIddictScopeStore 实例。
+    /// </summary>
+    /// <param name="repository">仓储。</param>
+    /// <param name="unitOfWorkManager">工作单元管理器。</param>
+    /// <param name="guidGenerator">GUID生成器。</param>
+    /// <param name="identifierConverter">dentifier转换器。</param>
+    /// <param name="concurrencyExceptionHandler">并发异常处理器。</param>
+    /// <param name="storeOptions">存储配置项。</param>
     public CenseqOpenIddictScopeStore(
         IOpenIddictScopeRepository repository,
         IUnitOfWorkManager unitOfWorkManager,
@@ -30,16 +42,33 @@ public class CenseqOpenIddictScopeStore : CenseqOpenIddictStoreBase<IOpenIddictS
 
     }
 
+   /// <summary>
+   /// 获取数据数量。
+   /// </summary>
+   /// <param name="cancellationToken">取消令牌。</param>
+   /// <returns>数据数量。</returns>
    public virtual async ValueTask<long> CountAsync(CancellationToken cancellationToken)
    {
        return await Repository.GetCountAsync(cancellationToken);
    }
 
+   /// <summary>
+   /// 获取数据数量。
+   /// </summary>
+   /// <param name="query">查询。</param>
+   /// <param name="cancellationToken">取消令牌。</param>
+   /// <returns>数据数量。</returns>
    public virtual ValueTask<long> CountAsync<TResult>(Func<IQueryable<OpenIddictScopeModel>, IQueryable<TResult>> query, CancellationToken cancellationToken)
    {
        throw new NotSupportedException();
    }
 
+   /// <summary>
+   /// 创建数据。
+   /// </summary>
+   /// <param name="scope">OpenIddict 作用域。</param>
+   /// <param name="cancellationToken">取消令牌。</param>
+   /// <returns>创建后的数据。</returns>
    public virtual async ValueTask CreateAsync(OpenIddictScopeModel scope, CancellationToken cancellationToken)
    {
        Check.NotNull(scope, nameof(scope));
@@ -49,6 +78,12 @@ public class CenseqOpenIddictScopeStore : CenseqOpenIddictStoreBase<IOpenIddictS
        scope = (await Repository.FindAsync(scope.Id, cancellationToken: cancellationToken)).ToModel();
    }
 
+   /// <summary>
+   /// 删除数据。
+   /// </summary>
+   /// <param name="scope">OpenIddict 作用域。</param>
+   /// <param name="cancellationToken">取消令牌。</param>
+   /// <returns>表示异步操作的任务。</returns>
    public virtual async ValueTask DeleteAsync(OpenIddictScopeModel scope, CancellationToken cancellationToken)
    {
        Check.NotNull(scope, nameof(scope));
@@ -65,6 +100,12 @@ public class CenseqOpenIddictScopeStore : CenseqOpenIddictStoreBase<IOpenIddictS
        }
    }
 
+   /// <summary>
+   /// 根据标识查找数据。
+   /// </summary>
+   /// <param name="identifier">标识。</param>
+   /// <param name="cancellationToken">取消令牌。</param>
+   /// <returns>匹配的数据。</returns>
    public virtual async ValueTask<OpenIddictScopeModel> FindByIdAsync(string identifier, CancellationToken cancellationToken)
    {
        Check.NotNullOrEmpty(identifier, nameof(identifier));
@@ -72,6 +113,12 @@ public class CenseqOpenIddictScopeStore : CenseqOpenIddictStoreBase<IOpenIddictS
        return (await Repository.FindByIdAsync(ConvertIdentifierFromString(identifier), cancellationToken)).ToModel();
    }
 
+    /// <summary>
+    /// 根据名称查找数据。
+    /// </summary>
+    /// <param name="name">name。</param>
+    /// <param name="cancellationToken">取消令牌。</param>
+    /// <returns>匹配的数据。</returns>
     public virtual async ValueTask<OpenIddictScopeModel> FindByNameAsync(string name, CancellationToken cancellationToken)
     {
         Check.NotNullOrEmpty(name, nameof(name));
@@ -79,6 +126,12 @@ public class CenseqOpenIddictScopeStore : CenseqOpenIddictStoreBase<IOpenIddictS
         return (await Repository.FindByNameAsync(name, cancellationToken)).ToModel();
     }
 
+    /// <summary>
+    /// 根据名称查找数据。
+    /// </summary>
+    /// <param name="names">名称。</param>
+    /// <param name="cancellationToken">取消令牌。</param>
+    /// <returns>匹配的数据。</returns>
     public virtual async IAsyncEnumerable<OpenIddictScopeModel> FindByNamesAsync(ImmutableArray<string> names, [EnumeratorCancellation] CancellationToken cancellationToken)
     {
         Check.NotNull(names, nameof(names));
@@ -95,6 +148,12 @@ public class CenseqOpenIddictScopeStore : CenseqOpenIddictStoreBase<IOpenIddictS
         }
     }
 
+    /// <summary>
+    /// 根据资源查找数据。
+    /// </summary>
+    /// <param name="resource">资源。</param>
+    /// <param name="cancellationToken">取消令牌。</param>
+    /// <returns>匹配的数据。</returns>
     public virtual async IAsyncEnumerable<OpenIddictScopeModel> FindByResourceAsync(string resource, [EnumeratorCancellation] CancellationToken cancellationToken)
     {
         Check.NotNullOrEmpty(resource, nameof(resource));
@@ -110,11 +169,24 @@ public class CenseqOpenIddictScopeStore : CenseqOpenIddictStoreBase<IOpenIddictS
         }
     }
 
+    /// <summary>
+    /// 获取指定标识的数据。
+    /// </summary>
+    /// <param name="query">查询。</param>
+    /// <param name="state">状态。</param>
+    /// <param name="cancellationToken">取消令牌。</param>
+    /// <returns>查询结果。</returns>
     public virtual ValueTask<TResult> GetAsync<TState, TResult>(Func<IQueryable<OpenIddictScopeModel>, TState, IQueryable<TResult>> query, TState state, CancellationToken cancellationToken)
     {
         throw new NotSupportedException();
     }
 
+    /// <summary>
+    /// 获取描述。
+    /// </summary>
+    /// <param name="scope">OpenIddict 作用域。</param>
+    /// <param name="cancellationToken">取消令牌。</param>
+    /// <returns>异步操作结果。</returns>
     public virtual  ValueTask<string> GetDescriptionAsync(OpenIddictScopeModel scope, CancellationToken cancellationToken)
     {
         Check.NotNull(scope, nameof(scope));
@@ -122,6 +194,12 @@ public class CenseqOpenIddictScopeStore : CenseqOpenIddictStoreBase<IOpenIddictS
         return new ValueTask<string>(scope.Description);
     }
 
+    /// <summary>
+    /// 获取描述。
+    /// </summary>
+    /// <param name="scope">OpenIddict 作用域。</param>
+    /// <param name="cancellationToken">取消令牌。</param>
+    /// <returns>异步操作结果。</returns>
     public virtual ValueTask<ImmutableDictionary<CultureInfo, string>> GetDescriptionsAsync(OpenIddictScopeModel scope, CancellationToken cancellationToken)
     {
         Check.NotNull(scope, nameof(scope));
@@ -150,6 +228,12 @@ public class CenseqOpenIddictScopeStore : CenseqOpenIddictStoreBase<IOpenIddictS
         }
     }
 
+    /// <summary>
+    /// 获取显示名称。
+    /// </summary>
+    /// <param name="scope">OpenIddict 作用域。</param>
+    /// <param name="cancellationToken">取消令牌。</param>
+    /// <returns>异步操作结果。</returns>
     public virtual ValueTask<string> GetDisplayNameAsync(OpenIddictScopeModel scope, CancellationToken cancellationToken)
     {
         Check.NotNull(scope, nameof(scope));
@@ -157,6 +241,12 @@ public class CenseqOpenIddictScopeStore : CenseqOpenIddictStoreBase<IOpenIddictS
         return new ValueTask<string>(scope.DisplayName);
     }
 
+    /// <summary>
+    /// 获取显示名称。
+    /// </summary>
+    /// <param name="scope">OpenIddict 作用域。</param>
+    /// <param name="cancellationToken">取消令牌。</param>
+    /// <returns>异步操作结果。</returns>
     public virtual ValueTask<ImmutableDictionary<CultureInfo, string>> GetDisplayNamesAsync(OpenIddictScopeModel scope, CancellationToken cancellationToken)
     {
         Check.NotNull(scope, nameof(scope));
@@ -185,6 +275,12 @@ public class CenseqOpenIddictScopeStore : CenseqOpenIddictStoreBase<IOpenIddictS
         }
     }
 
+    /// <summary>
+    /// 获取标识。
+    /// </summary>
+    /// <param name="scope">OpenIddict 作用域。</param>
+    /// <param name="cancellationToken">取消令牌。</param>
+    /// <returns>异步操作结果。</returns>
     public virtual ValueTask<string> GetIdAsync(OpenIddictScopeModel scope, CancellationToken cancellationToken)
     {
         Check.NotNull(scope, nameof(scope));
@@ -192,6 +288,12 @@ public class CenseqOpenIddictScopeStore : CenseqOpenIddictStoreBase<IOpenIddictS
         return new ValueTask<string>(ConvertIdentifierToString(scope.Id));
     }
 
+    /// <summary>
+    /// 获取名称。
+    /// </summary>
+    /// <param name="scope">OpenIddict 作用域。</param>
+    /// <param name="cancellationToken">取消令牌。</param>
+    /// <returns>异步操作结果。</returns>
     public virtual ValueTask<string> GetNameAsync(OpenIddictScopeModel scope, CancellationToken cancellationToken)
     {
         Check.NotNull(scope, nameof(scope));
@@ -199,6 +301,12 @@ public class CenseqOpenIddictScopeStore : CenseqOpenIddictStoreBase<IOpenIddictS
         return new ValueTask<string>(scope.Name);
     }
 
+    /// <summary>
+    /// 获取属性。
+    /// </summary>
+    /// <param name="scope">OpenIddict 作用域。</param>
+    /// <param name="cancellationToken">取消令牌。</param>
+    /// <returns>异步操作结果。</returns>
     public virtual ValueTask<ImmutableDictionary<string, JsonElement>> GetPropertiesAsync(OpenIddictScopeModel scope, CancellationToken cancellationToken)
     {
         Check.NotNull(scope, nameof(scope));
@@ -221,6 +329,12 @@ public class CenseqOpenIddictScopeStore : CenseqOpenIddictStoreBase<IOpenIddictS
         }
     }
 
+    /// <summary>
+    /// 获取资源。
+    /// </summary>
+    /// <param name="scope">OpenIddict 作用域。</param>
+    /// <param name="cancellationToken">取消令牌。</param>
+    /// <returns>异步操作结果。</returns>
     public virtual ValueTask<ImmutableArray<string>> GetResourcesAsync(OpenIddictScopeModel scope, CancellationToken cancellationToken)
     {
         Check.NotNull(scope, nameof(scope));
@@ -249,6 +363,11 @@ public class CenseqOpenIddictScopeStore : CenseqOpenIddictStoreBase<IOpenIddictS
         }
     }
 
+    /// <summary>
+    /// 异步创建实例。
+    /// </summary>
+    /// <param name="cancellationToken">取消令牌。</param>
+    /// <returns>异步操作结果。</returns>
     public virtual ValueTask<OpenIddictScopeModel> InstantiateAsync(CancellationToken cancellationToken)
     {
         return new ValueTask<OpenIddictScopeModel>(new OpenIddictScopeModel
@@ -257,6 +376,13 @@ public class CenseqOpenIddictScopeStore : CenseqOpenIddictStoreBase<IOpenIddictS
         });
     }
 
+    /// <summary>
+    /// 列出数据。
+    /// </summary>
+    /// <param name="count">count。</param>
+    /// <param name="offset">offset。</param>
+    /// <param name="cancellationToken">取消令牌。</param>
+    /// <returns>异步操作结果。</returns>
     public virtual async IAsyncEnumerable<OpenIddictScopeModel> ListAsync(int? count, int? offset, [EnumeratorCancellation] CancellationToken cancellationToken)
     {
         var scopes = await Repository.ListAsync(count, offset, cancellationToken);
@@ -266,11 +392,25 @@ public class CenseqOpenIddictScopeStore : CenseqOpenIddictStoreBase<IOpenIddictS
         }
     }
 
+    /// <summary>
+    /// 列出数据。
+    /// </summary>
+    /// <param name="query">查询。</param>
+    /// <param name="state">状态。</param>
+    /// <param name="cancellationToken">取消令牌。</param>
+    /// <returns>异步操作结果。</returns>
     public IAsyncEnumerable<TResult> ListAsync<TState, TResult>(Func<IQueryable<OpenIddictScopeModel>, TState, IQueryable<TResult>> query, TState state, CancellationToken cancellationToken)
     {
         throw new NotSupportedException();
     }
 
+    /// <summary>
+    /// 设置描述。
+    /// </summary>
+    /// <param name="scope">OpenIddict 作用域。</param>
+    /// <param name="description">描述。</param>
+    /// <param name="cancellationToken">取消令牌。</param>
+    /// <returns>表示异步操作的任务。</returns>
     public virtual ValueTask SetDescriptionAsync(OpenIddictScopeModel scope, string description, CancellationToken cancellationToken)
     {
         Check.NotNull(scope, nameof(scope));
@@ -280,6 +420,13 @@ public class CenseqOpenIddictScopeStore : CenseqOpenIddictStoreBase<IOpenIddictS
         return default;
     }
 
+    /// <summary>
+    /// 设置描述。
+    /// </summary>
+    /// <param name="scope">OpenIddict 作用域。</param>
+    /// <param name="descriptions">descriptions。</param>
+    /// <param name="cancellationToken">取消令牌。</param>
+    /// <returns>表示异步操作的任务。</returns>
     public virtual ValueTask SetDescriptionsAsync(OpenIddictScopeModel scope, ImmutableDictionary<CultureInfo, string> descriptions, CancellationToken cancellationToken)
     {
         Check.NotNull(scope, nameof(scope));
@@ -304,6 +451,13 @@ public class CenseqOpenIddictScopeStore : CenseqOpenIddictStoreBase<IOpenIddictS
         return default;
     }
 
+    /// <summary>
+    /// 设置显示名称。
+    /// </summary>
+    /// <param name="scope">OpenIddict 作用域。</param>
+    /// <param name="name">name。</param>
+    /// <param name="cancellationToken">取消令牌。</param>
+    /// <returns>表示异步操作的任务。</returns>
     public virtual ValueTask SetDisplayNameAsync(OpenIddictScopeModel scope, string name, CancellationToken cancellationToken)
     {
         Check.NotNull(scope, nameof(scope));
@@ -313,6 +467,13 @@ public class CenseqOpenIddictScopeStore : CenseqOpenIddictStoreBase<IOpenIddictS
         return default;
     }
 
+    /// <summary>
+    /// 设置显示名称。
+    /// </summary>
+    /// <param name="scope">OpenIddict 作用域。</param>
+    /// <param name="names">名称。</param>
+    /// <param name="cancellationToken">取消令牌。</param>
+    /// <returns>表示异步操作的任务。</returns>
     public virtual ValueTask SetDisplayNamesAsync(OpenIddictScopeModel scope, ImmutableDictionary<CultureInfo, string> names, CancellationToken cancellationToken)
     {
         Check.NotNull(scope, nameof(scope));
@@ -337,6 +498,13 @@ public class CenseqOpenIddictScopeStore : CenseqOpenIddictStoreBase<IOpenIddictS
         return default;
     }
 
+    /// <summary>
+    /// 设置名称。
+    /// </summary>
+    /// <param name="scope">OpenIddict 作用域。</param>
+    /// <param name="name">name。</param>
+    /// <param name="cancellationToken">取消令牌。</param>
+    /// <returns>表示异步操作的任务。</returns>
     public virtual ValueTask SetNameAsync(OpenIddictScopeModel scope, string name, CancellationToken cancellationToken)
     {
         Check.NotNull(scope, nameof(scope));
@@ -346,6 +514,13 @@ public class CenseqOpenIddictScopeStore : CenseqOpenIddictStoreBase<IOpenIddictS
         return default;
     }
 
+    /// <summary>
+    /// 设置属性。
+    /// </summary>
+    /// <param name="scope">OpenIddict 作用域。</param>
+    /// <param name="properties">properties。</param>
+    /// <param name="cancellationToken">取消令牌。</param>
+    /// <returns>表示异步操作的任务。</returns>
     public virtual ValueTask SetPropertiesAsync(OpenIddictScopeModel scope, ImmutableDictionary<string, JsonElement> properties, CancellationToken cancellationToken)
     {
         Check.NotNull(scope, nameof(scope));
@@ -370,6 +545,13 @@ public class CenseqOpenIddictScopeStore : CenseqOpenIddictStoreBase<IOpenIddictS
         return default;
     }
 
+    /// <summary>
+    /// 设置资源。
+    /// </summary>
+    /// <param name="scope">OpenIddict 作用域。</param>
+    /// <param name="resources">resources。</param>
+    /// <param name="cancellationToken">取消令牌。</param>
+    /// <returns>表示异步操作的任务。</returns>
     public virtual ValueTask SetResourcesAsync(OpenIddictScopeModel scope, ImmutableArray<string> resources, CancellationToken cancellationToken)
     {
         Check.NotNull(scope, nameof(scope));
@@ -393,6 +575,12 @@ public class CenseqOpenIddictScopeStore : CenseqOpenIddictStoreBase<IOpenIddictS
         return default;
     }
 
+    /// <summary>
+    /// 更新数据。
+    /// </summary>
+    /// <param name="scope">OpenIddict 作用域。</param>
+    /// <param name="cancellationToken">取消令牌。</param>
+    /// <returns>更新后的数据。</returns>
     public virtual async ValueTask UpdateAsync(OpenIddictScopeModel scope, CancellationToken cancellationToken)
     {
         Check.NotNull(scope, nameof(scope));

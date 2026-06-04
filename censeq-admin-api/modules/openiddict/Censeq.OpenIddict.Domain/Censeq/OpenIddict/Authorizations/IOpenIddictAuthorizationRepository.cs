@@ -6,21 +6,79 @@ using Volo.Abp.Domain.Repositories;
 
 namespace Censeq.OpenIddict.Authorizations;
 
+/// <summary>
+/// OpenIddict 授权仓储接口。
+/// </summary>
 public interface IOpenIddictAuthorizationRepository : IBasicRepository<OpenIddictAuthorization, Guid>
 {
+    /// <summary>
+    /// 异步查找数据。
+    /// </summary>
+    /// <param name="subject">subject。</param>
+    /// <param name="client">客户端标识。</param>
+    /// <param name="cancellationToken">取消令牌。</param>
+    /// <returns>匹配的数据。</returns>
     Task<List<OpenIddictAuthorization>> FindAsync(string subject, Guid client, CancellationToken cancellationToken = default);
 
+    /// <summary>
+    /// 异步查找数据。
+    /// </summary>
+    /// <param name="subject">subject。</param>
+    /// <param name="client">客户端标识。</param>
+    /// <param name="status">status。</param>
+    /// <param name="cancellationToken">取消令牌。</param>
+    /// <returns>匹配的数据。</returns>
     Task<List<OpenIddictAuthorization>> FindAsync(string subject, Guid client, string status, CancellationToken cancellationToken = default);
 
+    /// <summary>
+    /// 异步查找数据。
+    /// </summary>
+    /// <param name="subject">subject。</param>
+    /// <param name="client">客户端标识。</param>
+    /// <param name="status">status。</param>
+    /// <param name="type">type。</param>
+    /// <param name="cancellationToken">取消令牌。</param>
+    /// <returns>匹配的数据。</returns>
     Task<List<OpenIddictAuthorization>> FindAsync(string subject, Guid client, string status, string type, CancellationToken cancellationToken = default);
 
+    /// <summary>
+    /// 根据应用程序标识查找数据。
+    /// </summary>
+    /// <param name="applicationId">应用程序标识。</param>
+    /// <param name="cancellationToken">取消令牌。</param>
+    /// <returns>匹配的数据。</returns>
     Task<List<OpenIddictAuthorization>> FindByApplicationIdAsync(Guid applicationId, CancellationToken cancellationToken = default);
 
+    /// <summary>
+    /// 根据标识查找数据。
+    /// </summary>
+    /// <param name="id">标识。</param>
+    /// <param name="cancellationToken">取消令牌。</param>
+    /// <returns>匹配的数据。</returns>
     Task<OpenIddictAuthorization> FindByIdAsync(Guid id, CancellationToken cancellationToken = default);
 
+    /// <summary>
+    /// 根据主体查找数据。
+    /// </summary>
+    /// <param name="subject">subject。</param>
+    /// <param name="cancellationToken">取消令牌。</param>
+    /// <returns>匹配的数据。</returns>
     Task<List<OpenIddictAuthorization>> FindBySubjectAsync(string subject, CancellationToken cancellationToken = default);
 
+    /// <summary>
+    /// 列出数据。
+    /// </summary>
+    /// <param name="count">count。</param>
+    /// <param name="offset">offset。</param>
+    /// <param name="cancellationToken">取消令牌。</param>
+    /// <returns>异步操作结果。</returns>
     Task<List<OpenIddictAuthorization>> ListAsync(int? count, int? offset, CancellationToken cancellationToken = default);
 
+    /// <summary>
+    /// 清理过期或无效数据。
+    /// </summary>
+    /// <param name="date">date。</param>
+    /// <param name="cancellationToken">取消令牌。</param>
+    /// <returns>异步操作结果。</returns>
     Task<long> PruneAsync(DateTime date, CancellationToken cancellationToken = default);
 }

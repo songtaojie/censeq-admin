@@ -18,11 +18,31 @@ using Volo.Abp.Uow;
 
 namespace Censeq.OpenIddict.Authorizations;
 
+/// <summary>
+/// OpenIddict 授权存储，适配 OpenIddict 存储契约。
+/// </summary>
 public class CenseqOpenIddictAuthorizationStore : CenseqOpenIddictStoreBase<IOpenIddictAuthorizationRepository>, IOpenIddictAuthorizationStore<OpenIddictAuthorizationModel>
 {
+    /// <summary>
+    /// OpenIddict 应用程序仓储。
+    /// </summary>
     protected IOpenIddictApplicationRepository ApplicationRepository { get; }
+    /// <summary>
+    /// 令牌仓储。
+    /// </summary>
     protected IOpenIddictTokenRepository TokenRepository { get; }
 
+    /// <summary>
+    /// 初始化 CenseqOpenIddictAuthorizationStore 实例。
+    /// </summary>
+    /// <param name="repository">仓储。</param>
+    /// <param name="unitOfWorkManager">工作单元管理器。</param>
+    /// <param name="guidGenerator">GUID生成器。</param>
+    /// <param name="applicationRepository">应用程序仓储。</param>
+    /// <param name="tokenRepository">令牌仓储。</param>
+    /// <param name="identifierConverter">dentifier转换器。</param>
+    /// <param name="concurrencyExceptionHandler">并发异常处理器。</param>
+    /// <param name="storeOptions">存储配置项。</param>
     public CenseqOpenIddictAuthorizationStore(
         IOpenIddictAuthorizationRepository repository,
         IUnitOfWorkManager unitOfWorkManager,
@@ -38,16 +58,33 @@ public class CenseqOpenIddictAuthorizationStore : CenseqOpenIddictStoreBase<IOpe
         TokenRepository = tokenRepository;
     }
 
+    /// <summary>
+    /// 获取数据数量。
+    /// </summary>
+    /// <param name="cancellationToken">取消令牌。</param>
+    /// <returns>数据数量。</returns>
     public virtual async ValueTask<long> CountAsync(CancellationToken cancellationToken)
     {
         return await Repository.GetCountAsync(cancellationToken);
     }
 
+    /// <summary>
+    /// 获取数据数量。
+    /// </summary>
+    /// <param name="query">查询。</param>
+    /// <param name="cancellationToken">取消令牌。</param>
+    /// <returns>数据数量。</returns>
     public virtual ValueTask<long> CountAsync<TResult>(Func<IQueryable<OpenIddictAuthorizationModel>, IQueryable<TResult>> query, CancellationToken cancellationToken)
     {
         throw new NotSupportedException();
     }
 
+    /// <summary>
+    /// 创建数据。
+    /// </summary>
+    /// <param name="authorization">OpenIddict 授权。</param>
+    /// <param name="cancellationToken">取消令牌。</param>
+    /// <returns>创建后的数据。</returns>
     public virtual async ValueTask CreateAsync(OpenIddictAuthorizationModel authorization, CancellationToken cancellationToken)
     {
         Check.NotNull(authorization, nameof(authorization));
@@ -57,6 +94,12 @@ public class CenseqOpenIddictAuthorizationStore : CenseqOpenIddictStoreBase<IOpe
         authorization = (await Repository.FindAsync(authorization.Id, cancellationToken: cancellationToken)).ToModel();
     }
 
+    /// <summary>
+    /// 删除数据。
+    /// </summary>
+    /// <param name="authorization">OpenIddict 授权。</param>
+    /// <param name="cancellationToken">取消令牌。</param>
+    /// <returns>表示异步操作的任务。</returns>
     public virtual async ValueTask DeleteAsync(OpenIddictAuthorizationModel authorization, CancellationToken cancellationToken)
     {
         Check.NotNull(authorization, nameof(authorization));
@@ -80,6 +123,13 @@ public class CenseqOpenIddictAuthorizationStore : CenseqOpenIddictStoreBase<IOpe
         }
     }
 
+    /// <summary>
+    /// 异步查找数据。
+    /// </summary>
+    /// <param name="subject">subject。</param>
+    /// <param name="client">客户端标识。</param>
+    /// <param name="cancellationToken">取消令牌。</param>
+    /// <returns>匹配的数据。</returns>
     public virtual async IAsyncEnumerable<OpenIddictAuthorizationModel> FindAsync(string subject, string client, [EnumeratorCancellation] CancellationToken cancellationToken)
     {
         Check.NotNullOrEmpty(subject, nameof(subject));
@@ -92,6 +142,14 @@ public class CenseqOpenIddictAuthorizationStore : CenseqOpenIddictStoreBase<IOpe
         }
     }
 
+    /// <summary>
+    /// 异步查找数据。
+    /// </summary>
+    /// <param name="subject">subject。</param>
+    /// <param name="client">客户端标识。</param>
+    /// <param name="status">status。</param>
+    /// <param name="cancellationToken">取消令牌。</param>
+    /// <returns>匹配的数据。</returns>
     public virtual async IAsyncEnumerable<OpenIddictAuthorizationModel> FindAsync(string subject, string client, string status, [EnumeratorCancellation] CancellationToken cancellationToken)
     {
         Check.NotNullOrEmpty(subject, nameof(subject));
@@ -105,6 +163,15 @@ public class CenseqOpenIddictAuthorizationStore : CenseqOpenIddictStoreBase<IOpe
         }
     }
 
+    /// <summary>
+    /// 异步查找数据。
+    /// </summary>
+    /// <param name="subject">subject。</param>
+    /// <param name="client">客户端标识。</param>
+    /// <param name="status">status。</param>
+    /// <param name="type">type。</param>
+    /// <param name="cancellationToken">取消令牌。</param>
+    /// <returns>匹配的数据。</returns>
     public virtual async IAsyncEnumerable<OpenIddictAuthorizationModel> FindAsync(string subject, string client, string status, string type, [EnumeratorCancellation] CancellationToken cancellationToken)
     {
         Check.NotNullOrEmpty(subject, nameof(subject));
@@ -119,6 +186,16 @@ public class CenseqOpenIddictAuthorizationStore : CenseqOpenIddictStoreBase<IOpe
         }
     }
 
+    /// <summary>
+    /// 异步查找数据。
+    /// </summary>
+    /// <param name="subject">subject。</param>
+    /// <param name="client">客户端标识。</param>
+    /// <param name="status">status。</param>
+    /// <param name="type">type。</param>
+    /// <param name="scopes">作用域。</param>
+    /// <param name="cancellationToken">取消令牌。</param>
+    /// <returns>匹配的数据。</returns>
     public virtual async IAsyncEnumerable<OpenIddictAuthorizationModel> FindAsync(string subject, string client, string status, string type, ImmutableArray<string> scopes, [EnumeratorCancellation] CancellationToken cancellationToken)
     {
         Check.NotNullOrEmpty(subject, nameof(subject));
@@ -137,6 +214,12 @@ public class CenseqOpenIddictAuthorizationStore : CenseqOpenIddictStoreBase<IOpe
         }
     }
 
+    /// <summary>
+    /// 根据应用程序标识查找数据。
+    /// </summary>
+    /// <param name="identifier">标识。</param>
+    /// <param name="cancellationToken">取消令牌。</param>
+    /// <returns>匹配的数据。</returns>
     public virtual async IAsyncEnumerable<OpenIddictAuthorizationModel> FindByApplicationIdAsync(string identifier, [EnumeratorCancellation] CancellationToken cancellationToken)
     {
         Check.NotNullOrEmpty(identifier, nameof(identifier));
@@ -148,6 +231,12 @@ public class CenseqOpenIddictAuthorizationStore : CenseqOpenIddictStoreBase<IOpe
         }
     }
 
+    /// <summary>
+    /// 根据标识查找数据。
+    /// </summary>
+    /// <param name="identifier">标识。</param>
+    /// <param name="cancellationToken">取消令牌。</param>
+    /// <returns>匹配的数据。</returns>
     public virtual async ValueTask<OpenIddictAuthorizationModel> FindByIdAsync(string identifier, CancellationToken cancellationToken)
     {
         Check.NotNullOrEmpty(identifier, nameof(identifier));
@@ -155,6 +244,12 @@ public class CenseqOpenIddictAuthorizationStore : CenseqOpenIddictStoreBase<IOpe
         return (await Repository.FindByIdAsync(ConvertIdentifierFromString(identifier), cancellationToken)).ToModel();
     }
 
+    /// <summary>
+    /// 根据主体查找数据。
+    /// </summary>
+    /// <param name="subject">subject。</param>
+    /// <param name="cancellationToken">取消令牌。</param>
+    /// <returns>匹配的数据。</returns>
     public virtual async IAsyncEnumerable<OpenIddictAuthorizationModel> FindBySubjectAsync(string subject, [EnumeratorCancellation] CancellationToken cancellationToken)
     {
         Check.NotNullOrEmpty(subject, nameof(subject));
@@ -166,6 +261,12 @@ public class CenseqOpenIddictAuthorizationStore : CenseqOpenIddictStoreBase<IOpe
         }
     }
 
+    /// <summary>
+    /// 获取应用程序标识。
+    /// </summary>
+    /// <param name="authorization">OpenIddict 授权。</param>
+    /// <param name="cancellationToken">取消令牌。</param>
+    /// <returns>操作结果。</returns>
     public virtual ValueTask <string> GetApplicationIdAsync(OpenIddictAuthorizationModel authorization, CancellationToken cancellationToken)
     {
         Check.NotNull(authorization, nameof(authorization));
@@ -175,11 +276,24 @@ public class CenseqOpenIddictAuthorizationStore : CenseqOpenIddictStoreBase<IOpe
             : null);
     }
 
+    /// <summary>
+    /// 获取指定标识的数据。
+    /// </summary>
+    /// <param name="query">查询。</param>
+    /// <param name="state">状态。</param>
+    /// <param name="cancellationToken">取消令牌。</param>
+    /// <returns>查询结果。</returns>
     public virtual ValueTask<TResult> GetAsync<TState, TResult>(Func<IQueryable<OpenIddictAuthorizationModel>, TState, IQueryable<TResult>> query, TState state, CancellationToken cancellationToken)
     {
         throw new NotSupportedException();
     }
 
+    /// <summary>
+    /// 获取创建时间。
+    /// </summary>
+    /// <param name="authorization">OpenIddict 授权。</param>
+    /// <param name="cancellationToken">取消令牌。</param>
+    /// <returns>操作结果。</returns>
     public virtual ValueTask <DateTimeOffset?> GetCreationDateAsync(OpenIddictAuthorizationModel authorization, CancellationToken cancellationToken)
     {
         Check.NotNull(authorization, nameof(authorization));
@@ -189,6 +303,12 @@ public class CenseqOpenIddictAuthorizationStore : CenseqOpenIddictStoreBase<IOpe
             : new ValueTask<DateTimeOffset?>(DateTime.SpecifyKind(authorization.CreationDate.Value, DateTimeKind.Utc));
     }
 
+    /// <summary>
+    /// 获取标识。
+    /// </summary>
+    /// <param name="authorization">OpenIddict 授权。</param>
+    /// <param name="cancellationToken">取消令牌。</param>
+    /// <returns>操作结果。</returns>
     public virtual ValueTask <string> GetIdAsync(OpenIddictAuthorizationModel authorization, CancellationToken cancellationToken)
     {
         Check.NotNull(authorization, nameof(authorization));
@@ -196,6 +316,12 @@ public class CenseqOpenIddictAuthorizationStore : CenseqOpenIddictStoreBase<IOpe
         return new ValueTask<string>(ConvertIdentifierToString(authorization.Id));
     }
 
+    /// <summary>
+    /// 获取属性。
+    /// </summary>
+    /// <param name="authorization">OpenIddict 授权。</param>
+    /// <param name="cancellationToken">取消令牌。</param>
+    /// <returns>操作结果。</returns>
     public virtual ValueTask <ImmutableDictionary<string, JsonElement>> GetPropertiesAsync(OpenIddictAuthorizationModel authorization, CancellationToken cancellationToken)
     {
         Check.NotNull(authorization, nameof(authorization));
@@ -218,6 +344,12 @@ public class CenseqOpenIddictAuthorizationStore : CenseqOpenIddictStoreBase<IOpe
         }
     }
 
+    /// <summary>
+    /// 获取作用域。
+    /// </summary>
+    /// <param name="authorization">OpenIddict 授权。</param>
+    /// <param name="cancellationToken">取消令牌。</param>
+    /// <returns>操作结果。</returns>
     public virtual ValueTask <ImmutableArray<string>> GetScopesAsync(OpenIddictAuthorizationModel authorization, CancellationToken cancellationToken)
     {
         Check.NotNull(authorization, nameof(authorization));
@@ -246,6 +378,12 @@ public class CenseqOpenIddictAuthorizationStore : CenseqOpenIddictStoreBase<IOpe
         }
     }
 
+    /// <summary>
+    /// 获取状态。
+    /// </summary>
+    /// <param name="authorization">OpenIddict 授权。</param>
+    /// <param name="cancellationToken">取消令牌。</param>
+    /// <returns>操作结果。</returns>
     public virtual ValueTask <string> GetStatusAsync(OpenIddictAuthorizationModel authorization, CancellationToken cancellationToken)
     {
         Check.NotNull(authorization, nameof(authorization));
@@ -253,6 +391,12 @@ public class CenseqOpenIddictAuthorizationStore : CenseqOpenIddictStoreBase<IOpe
         return new ValueTask<string>(authorization.Status);
     }
 
+    /// <summary>
+    /// 获取主体。
+    /// </summary>
+    /// <param name="authorization">OpenIddict 授权。</param>
+    /// <param name="cancellationToken">取消令牌。</param>
+    /// <returns>操作结果。</returns>
     public virtual ValueTask <string> GetSubjectAsync(OpenIddictAuthorizationModel authorization, CancellationToken cancellationToken)
     {
         Check.NotNull(authorization, nameof(authorization));
@@ -260,6 +404,12 @@ public class CenseqOpenIddictAuthorizationStore : CenseqOpenIddictStoreBase<IOpe
         return new ValueTask<string>(authorization.Subject);
     }
 
+    /// <summary>
+    /// 获取类型。
+    /// </summary>
+    /// <param name="authorization">OpenIddict 授权。</param>
+    /// <param name="cancellationToken">取消令牌。</param>
+    /// <returns>操作结果。</returns>
     public virtual ValueTask <string> GetTypeAsync(OpenIddictAuthorizationModel authorization, CancellationToken cancellationToken)
     {
         Check.NotNull(authorization, nameof(authorization));
@@ -267,6 +417,11 @@ public class CenseqOpenIddictAuthorizationStore : CenseqOpenIddictStoreBase<IOpe
         return new ValueTask<string>(authorization.Type);
     }
 
+    /// <summary>
+    /// 异步创建实例。
+    /// </summary>
+    /// <param name="cancellationToken">取消令牌。</param>
+    /// <returns>操作结果。</returns>
     public virtual ValueTask <OpenIddictAuthorizationModel> InstantiateAsync(CancellationToken cancellationToken)
     {
         return new ValueTask<OpenIddictAuthorizationModel>(new OpenIddictAuthorizationModel
@@ -275,6 +430,13 @@ public class CenseqOpenIddictAuthorizationStore : CenseqOpenIddictStoreBase<IOpe
         });
     }
 
+    /// <summary>
+    /// 列出数据。
+    /// </summary>
+    /// <param name="count">count。</param>
+    /// <param name="offset">offset。</param>
+    /// <param name="cancellationToken">取消令牌。</param>
+    /// <returns>异步操作结果。</returns>
     public virtual async IAsyncEnumerable<OpenIddictAuthorizationModel> ListAsync(int? count, int? offset, [EnumeratorCancellation] CancellationToken cancellationToken)
     {
         var authorizations = await Repository.ListAsync(count, offset, cancellationToken);
@@ -284,11 +446,24 @@ public class CenseqOpenIddictAuthorizationStore : CenseqOpenIddictStoreBase<IOpe
         }
     }
 
+    /// <summary>
+    /// 列出数据。
+    /// </summary>
+    /// <param name="query">查询。</param>
+    /// <param name="state">状态。</param>
+    /// <param name="cancellationToken">取消令牌。</param>
+    /// <returns>异步操作结果。</returns>
     public virtual IAsyncEnumerable<TResult> ListAsync<TState, TResult>(Func<IQueryable<OpenIddictAuthorizationModel>, TState, IQueryable<TResult>> query, TState state, CancellationToken cancellationToken)
     {
         throw new NotSupportedException();
     }
 
+    /// <summary>
+    /// 清理过期或无效数据。
+    /// </summary>
+    /// <param name="threshold">threshold。</param>
+    /// <param name="cancellationToken">取消令牌。</param>
+    /// <returns>异步操作结果。</returns>
     public virtual async ValueTask<long> PruneAsync(DateTimeOffset threshold, CancellationToken cancellationToken)
     {
         using (var uow = UnitOfWorkManager.Begin(requiresNew: true, isTransactional: true, isolationLevel: StoreOptions.Value.PruneIsolationLevel))
@@ -300,6 +475,13 @@ public class CenseqOpenIddictAuthorizationStore : CenseqOpenIddictStoreBase<IOpe
         }
     }
 
+    /// <summary>
+    /// 设置应用程序标识。
+    /// </summary>
+    /// <param name="authorization">OpenIddict 授权。</param>
+    /// <param name="identifier">标识。</param>
+    /// <param name="cancellationToken">取消令牌。</param>
+    /// <returns>表示异步操作的任务。</returns>
     public virtual async ValueTask SetApplicationIdAsync(OpenIddictAuthorizationModel authorization, string identifier, CancellationToken cancellationToken)
     {
         Check.NotNull(authorization, nameof(authorization));
@@ -315,6 +497,13 @@ public class CenseqOpenIddictAuthorizationStore : CenseqOpenIddictStoreBase<IOpe
         }
     }
 
+    /// <summary>
+    /// 设置创建时间。
+    /// </summary>
+    /// <param name="authorization">OpenIddict 授权。</param>
+    /// <param name="date">date。</param>
+    /// <param name="cancellationToken">取消令牌。</param>
+    /// <returns>表示异步操作的任务。</returns>
     public virtual ValueTask SetCreationDateAsync(OpenIddictAuthorizationModel authorization, DateTimeOffset? date, CancellationToken cancellationToken)
     {
         Check.NotNull(authorization, nameof(authorization));
@@ -324,6 +513,13 @@ public class CenseqOpenIddictAuthorizationStore : CenseqOpenIddictStoreBase<IOpe
         return default;
     }
 
+    /// <summary>
+    /// 设置属性。
+    /// </summary>
+    /// <param name="authorization">OpenIddict 授权。</param>
+    /// <param name="properties">properties。</param>
+    /// <param name="cancellationToken">取消令牌。</param>
+    /// <returns>表示异步操作的任务。</returns>
     public virtual ValueTask SetPropertiesAsync(OpenIddictAuthorizationModel authorization, ImmutableDictionary<string, JsonElement> properties, CancellationToken cancellationToken)
     {
         if (properties is null || properties.IsEmpty)
@@ -346,6 +542,13 @@ public class CenseqOpenIddictAuthorizationStore : CenseqOpenIddictStoreBase<IOpe
         return default;
     }
 
+    /// <summary>
+    /// 设置作用域。
+    /// </summary>
+    /// <param name="authorization">OpenIddict 授权。</param>
+    /// <param name="scopes">作用域。</param>
+    /// <param name="cancellationToken">取消令牌。</param>
+    /// <returns>表示异步操作的任务。</returns>
     public virtual ValueTask SetScopesAsync(OpenIddictAuthorizationModel authorization, ImmutableArray<string> scopes, CancellationToken cancellationToken)
     {
         Check.NotNull(authorization, nameof(authorization));
@@ -369,6 +572,13 @@ public class CenseqOpenIddictAuthorizationStore : CenseqOpenIddictStoreBase<IOpe
         return default;
     }
 
+    /// <summary>
+    /// 设置状态。
+    /// </summary>
+    /// <param name="authorization">OpenIddict 授权。</param>
+    /// <param name="status">status。</param>
+    /// <param name="cancellationToken">取消令牌。</param>
+    /// <returns>表示异步操作的任务。</returns>
     public virtual ValueTask SetStatusAsync(OpenIddictAuthorizationModel authorization, string status, CancellationToken cancellationToken)
     {
         Check.NotNull(authorization, nameof(authorization));
@@ -378,6 +588,13 @@ public class CenseqOpenIddictAuthorizationStore : CenseqOpenIddictStoreBase<IOpe
         return default;
     }
 
+    /// <summary>
+    /// 设置主体。
+    /// </summary>
+    /// <param name="authorization">OpenIddict 授权。</param>
+    /// <param name="subject">subject。</param>
+    /// <param name="cancellationToken">取消令牌。</param>
+    /// <returns>表示异步操作的任务。</returns>
     public virtual ValueTask SetSubjectAsync(OpenIddictAuthorizationModel authorization, string subject, CancellationToken cancellationToken)
     {
         Check.NotNull(authorization, nameof(authorization));
@@ -387,6 +604,13 @@ public class CenseqOpenIddictAuthorizationStore : CenseqOpenIddictStoreBase<IOpe
         return default;
     }
 
+    /// <summary>
+    /// 设置类型。
+    /// </summary>
+    /// <param name="authorization">OpenIddict 授权。</param>
+    /// <param name="type">type。</param>
+    /// <param name="cancellationToken">取消令牌。</param>
+    /// <returns>表示异步操作的任务。</returns>
     public virtual ValueTask SetTypeAsync(OpenIddictAuthorizationModel authorization, string type, CancellationToken cancellationToken)
     {
         Check.NotNull(authorization, nameof(authorization));
@@ -396,6 +620,12 @@ public class CenseqOpenIddictAuthorizationStore : CenseqOpenIddictStoreBase<IOpe
         return default;
     }
 
+    /// <summary>
+    /// 更新数据。
+    /// </summary>
+    /// <param name="authorization">OpenIddict 授权。</param>
+    /// <param name="cancellationToken">取消令牌。</param>
+    /// <returns>更新后的数据。</returns>
     public virtual async ValueTask UpdateAsync(OpenIddictAuthorizationModel authorization, CancellationToken cancellationToken)
     {
         Check.NotNull(authorization, nameof(authorization));

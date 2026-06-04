@@ -11,6 +11,9 @@ using Volo.Abp.Security.Claims;
 
 namespace Censeq.OpenIddict;
 
+/// <summary>
+/// OpenIddict ASP.NET Core 模块。
+/// </summary>
 [DependsOn(
     typeof(AbpAspNetCoreMvcUiThemeSharedModule),
     typeof(AbpAspNetCoreMultiTenancyModule),
@@ -18,6 +21,10 @@ namespace Censeq.OpenIddict;
 )]
 public class CenseqOpenIddictAspNetCoreModule : AbpModule
 {
+    /// <summary>
+    /// 配置 OpenIddict ASP.NET Core 模块服务。
+    /// </summary>
+    /// <param name="context">当前上下文。</param>
     public override void ConfigureServices(ServiceConfigurationContext context)
     {
         AddOpenIddictServer(context.Services);
@@ -33,6 +40,10 @@ public class CenseqOpenIddictAspNetCoreModule : AbpModule
         });
     }
 
+    /// <summary>
+    /// 添加 OpenIddict Server 配置。
+    /// </summary>
+    /// <param name="services">services。</param>
     private void AddOpenIddictServer(IServiceCollection services)
     {
         var builderOptions = services.ExecutePreConfiguredActions<CenseqOpenIddictAspNetCoreOptions>();

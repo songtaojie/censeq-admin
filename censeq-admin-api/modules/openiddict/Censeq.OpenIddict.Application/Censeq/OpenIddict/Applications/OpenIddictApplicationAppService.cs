@@ -10,6 +10,9 @@ using Volo.Abp.Guids;
 
 namespace Censeq.OpenIddict.Applications;
 
+/// <summary>
+/// OpenIddict 应用程序应用服务，提供应用层操作。
+/// </summary>
 public class OpenIddictApplicationAppService :
     CrudAppService<
         OpenIddictApplication,
@@ -20,9 +23,20 @@ public class OpenIddictApplicationAppService :
         OpenIddictApplicationUpdateDto>,
     IOpenIddictApplicationAppService
 {
+    /// <summary>
+    /// OpenIddict 应用程序管理器。
+    /// </summary>
     protected IOpenIddictApplicationManager ApplicationManager { get; }
+    /// <summary>
+    /// OpenIddict 应用程序仓储。
+    /// </summary>
     protected IOpenIddictApplicationRepository ApplicationRepository { get; }
 
+    /// <summary>
+    /// 初始化 OpenIddictApplicationAppService 实例。
+    /// </summary>
+    /// <param name="repository">仓储。</param>
+    /// <param name="applicationManager">OpenIddict 应用程序管理器。</param>
     public OpenIddictApplicationAppService(
         IOpenIddictApplicationRepository repository,
         IOpenIddictApplicationManager applicationManager)
@@ -38,12 +52,22 @@ public class OpenIddictApplicationAppService :
         GetListPolicyName = OpenIddictPermissions.Applications.Default;
     }
 
+    /// <summary>
+    /// 获取指定标识的数据。
+    /// </summary>
+    /// <param name="id">标识。</param>
+    /// <returns>查询结果。</returns>
     public override async Task<OpenIddictApplicationDto> GetAsync(Guid id)
     {
         var application = await ApplicationRepository.GetAsync(id);
             return MapToDto(application);
     }
 
+    /// <summary>
+    /// 获取分页数据列表。
+    /// </summary>
+    /// <param name="input">输入参数。</param>
+    /// <returns>分页查询结果。</returns>
     public override async Task<PagedResultDto<OpenIddictApplicationDto>> GetListAsync(GetOpenIddictApplicationsInput input)
     {
         await CheckGetListPolicyAsync();
@@ -66,6 +90,11 @@ public class OpenIddictApplicationAppService :
         return new PagedResultDto<OpenIddictApplicationDto>(count, dtos);
     }
 
+    /// <summary>
+    /// 创建数据。
+    /// </summary>
+    /// <param name="input">输入参数。</param>
+    /// <returns>创建后的数据。</returns>
     public override async Task<OpenIddictApplicationDto> CreateAsync(OpenIddictApplicationCreateDto input)
     {
         await CheckCreatePolicyAsync();
@@ -118,6 +147,12 @@ public class OpenIddictApplicationAppService :
             return MapToDto(application);
     }
 
+    /// <summary>
+    /// 更新数据。
+    /// </summary>
+    /// <param name="id">标识。</param>
+    /// <param name="input">输入参数。</param>
+    /// <returns>更新后的数据。</returns>
     public override async Task<OpenIddictApplicationDto> UpdateAsync(Guid id, OpenIddictApplicationUpdateDto input)
     {
         await CheckUpdatePolicyAsync();
@@ -172,6 +207,11 @@ public class OpenIddictApplicationAppService :
             return MapToDto(application);
     }
 
+    /// <summary>
+    /// 删除数据。
+    /// </summary>
+    /// <param name="id">标识。</param>
+    /// <returns>表示异步操作的任务。</returns>
     public override async Task DeleteAsync(Guid id)
     {
         await CheckDeletePolicyAsync();
@@ -180,6 +220,11 @@ public class OpenIddictApplicationAppService :
         await ApplicationManager.DeleteAsync(application);
     }
 
+    /// <summary>
+    /// 生成新的客户端密钥。
+    /// </summary>
+    /// <param name="id">标识。</param>
+    /// <returns>新生成的客户端密钥。</returns>
     public virtual async Task<string> GenerateClientSecretAsync(Guid id)
     {
         await CheckUpdatePolicyAsync();
@@ -198,6 +243,12 @@ public class OpenIddictApplicationAppService :
         return secret;
     }
 
+    /// <summary>
+    /// 检查客户端标识是否已存在。
+    /// </summary>
+    /// <param name="clientId">客户端标识。</param>
+    /// <param name="excludeId">需要排除的标识。</param>
+    /// <returns>存在时返回 true，否则返回 false。</returns>
     public virtual async Task<bool> CheckClientIdExistsAsync(string clientId, Guid? excludeId = null)
     {
         var existing = await ApplicationRepository.FindByClientIdAsync(clientId);
@@ -208,6 +259,11 @@ public class OpenIddictApplicationAppService :
         return true;
     }
 
+        /// <summary>
+        /// 将领域对象映射为 DTO。
+        /// </summary>
+        /// <param name="application">OpenIddict 应用程序。</param>
+        /// <returns>操作结果。</returns>
         protected virtual OpenIddictApplicationDto MapToDto(OpenIddictApplication application)
     {
         var dto = new OpenIddictApplicationDto

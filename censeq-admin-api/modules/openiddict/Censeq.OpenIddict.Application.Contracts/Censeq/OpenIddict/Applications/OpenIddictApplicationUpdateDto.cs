@@ -4,6 +4,9 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Censeq.OpenIddict.Applications;
 
+/// <summary>
+/// OpenIddict 应用程序更新 DTO。
+/// </summary>
 public class OpenIddictApplicationUpdateDto
 {
     /// <summary>

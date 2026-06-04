@@ -21,6 +21,9 @@ using Volo.Abp;
 
 namespace Censeq.OpenIddict;
 
+/// <summary>
+/// OpenIddict 领域模块。
+/// </summary>
 [DependsOn(
     typeof(AbpDddDomainModule),
     typeof(CenseqIdentityDomainModule),
@@ -31,18 +34,34 @@ namespace Censeq.OpenIddict;
 )]
 public class CenseqOpenIddictDomainModule : AbpModule
 {
+    /// <summary>
+    /// 一次性执行器。
+    /// </summary>
     private readonly static OneTimeRunner OneTimeRunner = new OneTimeRunner();
 
+    /// <summary>
+    /// 配置 OpenIddict 领域模块 服务。
+    /// </summary>
+    /// <param name="context">当前上下文。</param>
     public override void ConfigureServices(ServiceConfigurationContext context)
     {
         AddOpenIddictCore(context.Services);
     }
 
+    /// <summary>
+    /// 应用程序初始化时执行。
+    /// </summary>
+    /// <param name="context">当前上下文。</param>
     public override void OnApplicationInitialization(ApplicationInitializationContext context)
     {
         AsyncHelper.RunSync(() => OnApplicationInitializationAsync(context));
     }
 
+    /// <summary>
+    /// 异步执行应用程序初始化。
+    /// </summary>
+    /// <param name="context">当前上下文。</param>
+    /// <returns>表示异步操作的任务。</returns>
     public async override Task OnApplicationInitializationAsync(ApplicationInitializationContext context)
     {
         var options = context.ServiceProvider.GetRequiredService<IOptions<TokenCleanupOptions>>().Value;
@@ -54,6 +73,10 @@ public class CenseqOpenIddictDomainModule : AbpModule
         }
     }
 
+    /// <summary>
+    /// 添加 OpenIddict Core 配置。
+    /// </summary>
+    /// <param name="services">services。</param>
     private void AddOpenIddictCore(IServiceCollection services)
     {
         var openIddictBuilder = services.AddOpenIddict()
@@ -84,6 +107,10 @@ public class CenseqOpenIddictDomainModule : AbpModule
         services.ExecutePreConfiguredActions(openIddictBuilder);
     }
 
+    /// <summary>
+    /// 后置配置服务。
+    /// </summary>
+    /// <param name="context">当前上下文。</param>
     public override void PostConfigureServices(ServiceConfigurationContext context)
     {
         OneTimeRunner.Run(() =>

@@ -4,9 +4,15 @@ using Volo.Abp.ObjectExtending;
 
 namespace Censeq.OpenIddict.Tokens;
 
+/// <summary>
+/// OpenIddict 令牌模型。
+/// </summary>
 [Serializable, IgnoreMultiTenancy]
 public class OpenIddictTokenModel : ExtensibleObject
 {
+    /// <summary>
+    /// 标识。
+    /// </summary>
     public Guid Id { get; set; }
 
     /// <summary>

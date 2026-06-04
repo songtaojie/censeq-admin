@@ -5,6 +5,9 @@ using Volo.Abp.Application.Services;
 
 namespace Censeq.OpenIddict.Applications;
 
+/// <summary>
+/// OpenIddict 应用程序应用服务接口。
+/// </summary>
 public interface IOpenIddictApplicationAppService :
     ICrudAppService<
         OpenIddictApplicationDto,

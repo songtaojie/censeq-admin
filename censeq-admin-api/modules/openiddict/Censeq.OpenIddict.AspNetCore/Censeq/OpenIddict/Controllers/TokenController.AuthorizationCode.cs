@@ -15,8 +15,16 @@ using IdentityUser = Censeq.Identity.Entities.IdentityUser;
 
 namespace Censeq.OpenIddict.Controllers;
 
+/// <summary>
+/// 令牌控制器，提供对应的 HTTP API。
+/// </summary>
 public partial class TokenController
 {
+    /// <summary>
+    /// 处理当前请求。
+    /// </summary>
+    /// <param name="request">OpenIddict 请求。</param>
+    /// <returns>异步操作结果。</returns>
     protected virtual async Task<IActionResult> HandleAuthorizationCodeAsync(OpenIddictRequest request)
     {
         // Retrieve the claims principal stored in the authorization code/device code/refresh token.
@@ -68,6 +76,12 @@ public partial class TokenController
         }
     }
 
+    /// <summary>
+    /// 异步为授权码创建会话。
+    /// </summary>
+    /// <param name="user">用户。</param>
+    /// <param name="request">OpenIddict 请求。</param>
+    /// <returns>异步操作结果。</returns>
     protected virtual async Task<IdentitySession?> CreateSessionForAuthorizationCodeAsync(IdentityUser user, OpenIddictRequest request)
     {
         try

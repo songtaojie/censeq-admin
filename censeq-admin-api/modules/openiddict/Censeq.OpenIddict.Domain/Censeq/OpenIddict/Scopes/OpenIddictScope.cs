@@ -3,12 +3,22 @@ using Volo.Abp.Domain.Entities.Auditing;
 
 namespace Censeq.OpenIddict.Scopes;
 
+/// <summary>
+/// OpenIddict 作用域。
+/// </summary>
 public class OpenIddictScope : FullAuditedAggregateRoot<Guid>
 {
+    /// <summary>
+    /// 初始化 OpenIddictScope 实例。
+    /// </summary>
     public OpenIddictScope()
     {
     }
 
+    /// <summary>
+    /// 初始化 OpenIddictScope 实例。
+    /// </summary>
+    /// <param name="id">标识。</param>
     public OpenIddictScope(Guid id)
         : base(id)
     {

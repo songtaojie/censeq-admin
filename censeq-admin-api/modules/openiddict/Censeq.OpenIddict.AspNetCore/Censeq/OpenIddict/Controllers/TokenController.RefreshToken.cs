@@ -11,8 +11,16 @@ using Volo.Abp.Security.Claims;
 
 namespace Censeq.OpenIddict.Controllers;
 
+/// <summary>
+/// 令牌控制器，提供对应的 HTTP API。
+/// </summary>
 public partial class TokenController
 {
+    /// <summary>
+    /// 处理当前请求。
+    /// </summary>
+    /// <param name="request">OpenIddict 请求。</param>
+    /// <returns>异步操作结果。</returns>
     protected virtual async Task<IActionResult> HandleRefreshTokenAsync(OpenIddictRequest request)
     {
         // Retrieve the claims principal stored in the authorization code/device code/refresh token.
@@ -58,6 +66,11 @@ public partial class TokenController
         }
     }
 
+    /// <summary>
+    /// 异步更新会话最后访问时间。
+    /// </summary>
+    /// <param name="principal">主体。</param>
+    /// <returns>表示异步操作的任务。</returns>
     protected virtual async Task UpdateSessionLastAccessedTimeAsync(ClaimsPrincipal principal)
     {
         try

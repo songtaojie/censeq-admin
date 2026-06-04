@@ -4,9 +4,15 @@ using Volo.Abp.ObjectExtending;
 
 namespace Censeq.OpenIddict.Scopes;
 
+/// <summary>
+/// OpenIddict 作用域模型。
+/// </summary>
 [Serializable, IgnoreMultiTenancy]
 public class OpenIddictScopeModel : ExtensibleObject
 {
+    /// <summary>
+    /// 标识。
+    /// </summary>
     public Guid Id { get; set; }
 
     /// <summary>

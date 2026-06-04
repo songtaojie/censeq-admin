@@ -6,8 +6,14 @@ using Volo.Abp;
 
 namespace Censeq.OpenIddict.WildcardDomains;
 
+/// <summary>
+/// 验证授权方。
+/// </summary>
 public class CenseqValidateAuthorizedParty : CenseqOpenIddictWildcardDomainBase<CenseqValidateAuthorizedParty, OpenIddictServerHandlers.Session.ValidateAuthorizedParty, OpenIddictServerEvents.ValidateLogoutRequestContext>
 {
+    /// <summary>
+    /// 描述符。
+    /// </summary>
     public static OpenIddictServerHandlerDescriptor Descriptor { get; }
         = OpenIddictServerHandlerDescriptor.CreateBuilder<OpenIddictServerEvents.ValidateLogoutRequestContext>()
             .UseScopedHandler<CenseqValidateAuthorizedParty>()
@@ -15,6 +21,11 @@ public class CenseqValidateAuthorizedParty : CenseqOpenIddictWildcardDomainBase<
             .SetType(OpenIddictServerHandlerType.BuiltIn)
             .Build();
 
+    /// <summary>
+    /// 初始化 CenseqValidateAuthorizedParty 实例。
+    /// </summary>
+    /// <param name="wildcardDomainsOptions">通配域名Domains配置项。</param>
+    /// <param name="applicationManager">OpenIddict 应用程序管理器。</param>
     public CenseqValidateAuthorizedParty(
         IOptions<CenseqOpenIddictWildcardDomainOptions> wildcardDomainsOptions,
         IOpenIddictApplicationManager applicationManager)
@@ -23,6 +34,11 @@ public class CenseqValidateAuthorizedParty : CenseqOpenIddictWildcardDomainBase<
         OriginalHandler = new OpenIddictServerHandlers.Session.ValidateAuthorizedParty(applicationManager);
     }
 
+    /// <summary>
+    /// 处理当前请求。
+    /// </summary>
+    /// <param name="context">当前上下文。</param>
+    /// <returns>表示异步操作的任务。</returns>
     public async override ValueTask HandleAsync(OpenIddictServerEvents.ValidateLogoutRequestContext context)
     {
         Check.NotNull(context, nameof(context));

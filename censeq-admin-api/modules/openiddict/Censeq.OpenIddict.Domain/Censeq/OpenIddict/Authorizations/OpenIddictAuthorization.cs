@@ -4,12 +4,22 @@ using Volo.Abp.Timing;
 
 namespace Censeq.OpenIddict.Authorizations;
 
+/// <summary>
+/// OpenIddict 授权。
+/// </summary>
 public class OpenIddictAuthorization : FullAuditedAggregateRoot<Guid>
 {
+    /// <summary>
+    /// 初始化 OpenIddictAuthorization 实例。
+    /// </summary>
     public OpenIddictAuthorization()
     {
     }
 
+    /// <summary>
+    /// 初始化 OpenIddictAuthorization 实例。
+    /// </summary>
+    /// <param name="id">标识。</param>
     public OpenIddictAuthorization(Guid id)
         : base(id)
     {

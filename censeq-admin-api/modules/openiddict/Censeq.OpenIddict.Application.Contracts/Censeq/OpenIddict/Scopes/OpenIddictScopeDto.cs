@@ -4,6 +4,9 @@ using Volo.Abp.Application.Dtos;
 
 namespace Censeq.OpenIddict.Scopes;
 
+/// <summary>
+/// OpenIddict 作用域 DTO。
+/// </summary>
 public class OpenIddictScopeDto : FullAuditedEntityDto<Guid>
 {
     /// <summary>

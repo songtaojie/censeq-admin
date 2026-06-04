@@ -9,10 +9,19 @@ using Volo.Abp.DependencyInjection;
 
 namespace Censeq.OpenIddict.Authorizations;
 
+/// <summary>
+/// OpenIddict 授权缓存，封装缓存访问。
+/// </summary>
 public class CenseqOpenIddictAuthorizationCache : CenseqOpenIddictCacheBase<OpenIddictAuthorization, OpenIddictAuthorizationModel, IOpenIddictAuthorizationStore<OpenIddictAuthorizationModel>>,
     IOpenIddictAuthorizationCache<OpenIddictAuthorizationModel>,
     ITransientDependency
 {
+    /// <summary>
+    /// 初始化 CenseqOpenIddictAuthorizationCache 实例。
+    /// </summary>
+    /// <param name="cache">缓存。</param>
+    /// <param name="arrayCache">array缓存。</param>
+    /// <param name="store">存储。</param>
     public CenseqOpenIddictAuthorizationCache(
         IDistributedCache<OpenIddictAuthorizationModel> cache,
         IDistributedCache<OpenIddictAuthorizationModel[]> arrayCache,
@@ -21,6 +30,12 @@ public class CenseqOpenIddictAuthorizationCache : CenseqOpenIddictCacheBase<Open
     {
     }
 
+    /// <summary>
+    /// 异步添加数据。
+    /// </summary>
+    /// <param name="authorization">OpenIddict 授权。</param>
+    /// <param name="cancellationToken">取消令牌。</param>
+    /// <returns>表示异步操作的任务。</returns>
     public virtual async ValueTask AddAsync(OpenIddictAuthorizationModel authorization, CancellationToken cancellationToken)
     {
         Check.NotNull(authorization, nameof(authorization));
@@ -30,6 +45,13 @@ public class CenseqOpenIddictAuthorizationCache : CenseqOpenIddictCacheBase<Open
         await Cache.SetAsync($"{nameof(FindByIdAsync)}_{await Store.GetIdAsync(authorization, cancellationToken)}", authorization, token: cancellationToken);
     }
 
+    /// <summary>
+    /// 异步查找数据。
+    /// </summary>
+    /// <param name="subject">subject。</param>
+    /// <param name="client">客户端标识。</param>
+    /// <param name="cancellationToken">取消令牌。</param>
+    /// <returns>匹配的数据。</returns>
     public virtual async IAsyncEnumerable<OpenIddictAuthorizationModel> FindAsync(string subject, string client, [EnumeratorCancellation] CancellationToken cancellationToken)
     {
         Check.NotNullOrEmpty(subject, nameof(subject));
@@ -52,6 +74,14 @@ public class CenseqOpenIddictAuthorizationCache : CenseqOpenIddictCacheBase<Open
         }
     }
 
+    /// <summary>
+    /// 异步查找数据。
+    /// </summary>
+    /// <param name="subject">subject。</param>
+    /// <param name="client">客户端标识。</param>
+    /// <param name="status">status。</param>
+    /// <param name="cancellationToken">取消令牌。</param>
+    /// <returns>匹配的数据。</returns>
     public virtual async IAsyncEnumerable<OpenIddictAuthorizationModel> FindAsync(string subject, string client, string status, [EnumeratorCancellation] CancellationToken cancellationToken)
     {
         Check.NotNullOrEmpty(subject, nameof(subject));
@@ -75,6 +105,15 @@ public class CenseqOpenIddictAuthorizationCache : CenseqOpenIddictCacheBase<Open
         }
     }
 
+    /// <summary>
+    /// 异步查找数据。
+    /// </summary>
+    /// <param name="subject">subject。</param>
+    /// <param name="client">客户端标识。</param>
+    /// <param name="status">status。</param>
+    /// <param name="type">type。</param>
+    /// <param name="cancellationToken">取消令牌。</param>
+    /// <returns>匹配的数据。</returns>
     public virtual async IAsyncEnumerable<OpenIddictAuthorizationModel> FindAsync(string subject, string client, string status, string type, [EnumeratorCancellation] CancellationToken cancellationToken)
     {
         Check.NotNullOrEmpty(subject, nameof(subject));
@@ -99,6 +138,16 @@ public class CenseqOpenIddictAuthorizationCache : CenseqOpenIddictCacheBase<Open
         }
     }
 
+    /// <summary>
+    /// 异步查找数据。
+    /// </summary>
+    /// <param name="subject">subject。</param>
+    /// <param name="client">客户端标识。</param>
+    /// <param name="status">status。</param>
+    /// <param name="type">type。</param>
+    /// <param name="scopes">作用域。</param>
+    /// <param name="cancellationToken">取消令牌。</param>
+    /// <returns>匹配的数据。</returns>
     public virtual async IAsyncEnumerable<OpenIddictAuthorizationModel> FindAsync(string subject, string client, string status, string type, ImmutableArray<string> scopes, [EnumeratorCancellation] CancellationToken cancellationToken)
     {
         Check.NotNullOrEmpty(subject, nameof(subject));
@@ -114,6 +163,12 @@ public class CenseqOpenIddictAuthorizationCache : CenseqOpenIddictCacheBase<Open
         }
     }
 
+    /// <summary>
+    /// 根据应用程序标识查找数据。
+    /// </summary>
+    /// <param name="applicationId">应用程序标识。</param>
+    /// <param name="cancellationToken">取消令牌。</param>
+    /// <returns>匹配的数据。</returns>
     public virtual async IAsyncEnumerable<OpenIddictAuthorizationModel> FindByApplicationIdAsync(string applicationId, [EnumeratorCancellation] CancellationToken cancellationToken)
     {
         Check.NotNullOrEmpty(applicationId, nameof(applicationId));
@@ -135,6 +190,12 @@ public class CenseqOpenIddictAuthorizationCache : CenseqOpenIddictCacheBase<Open
         }
     }
 
+    /// <summary>
+    /// 根据标识查找数据。
+    /// </summary>
+    /// <param name="id">标识。</param>
+    /// <param name="cancellationToken">取消令牌。</param>
+    /// <returns>匹配的数据。</returns>
     public virtual async ValueTask<OpenIddictAuthorizationModel> FindByIdAsync(string id, CancellationToken cancellationToken)
     {
         Check.NotNullOrEmpty(id, nameof(id));
@@ -143,6 +204,12 @@ public class CenseqOpenIddictAuthorizationCache : CenseqOpenIddictCacheBase<Open
             async () => await Store.FindByIdAsync(id, cancellationToken), token: cancellationToken);
     }
 
+    /// <summary>
+    /// 根据主体查找数据。
+    /// </summary>
+    /// <param name="subject">subject。</param>
+    /// <param name="cancellationToken">取消令牌。</param>
+    /// <returns>匹配的数据。</returns>
     public virtual async IAsyncEnumerable<OpenIddictAuthorizationModel> FindBySubjectAsync(string subject, [EnumeratorCancellation] CancellationToken cancellationToken)
     {
         Check.NotNullOrEmpty(subject, nameof(subject));
@@ -164,6 +231,12 @@ public class CenseqOpenIddictAuthorizationCache : CenseqOpenIddictCacheBase<Open
         }
     }
 
+    /// <summary>
+    /// 异步移除数据。
+    /// </summary>
+    /// <param name="authorization">OpenIddict 授权。</param>
+    /// <param name="cancellationToken">取消令牌。</param>
+    /// <returns>表示异步操作的任务。</returns>
     public virtual async ValueTask RemoveAsync(OpenIddictAuthorizationModel authorization, CancellationToken cancellationToken)
     {
         Check.NotNull(authorization, nameof(authorization));

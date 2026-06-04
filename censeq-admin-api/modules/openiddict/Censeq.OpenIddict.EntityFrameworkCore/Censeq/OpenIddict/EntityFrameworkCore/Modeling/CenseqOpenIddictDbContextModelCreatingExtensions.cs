@@ -8,8 +8,15 @@ using Censeq.OpenIddict.Tokens;
 
 namespace Censeq.OpenIddict.EntityFrameworkCore.Modeling
 {
+    /// <summary>
+    /// OpenIddict 数据库上下文模型创建扩展方法。
+    /// </summary>
     public static class CenseqOpenIddictDbContextModelCreatingExtensions
     {
+        /// <summary>
+        /// 配置 OpenIddict 数据库模型。
+        /// </summary>
+        /// <param name="builder">构建器。</param>
         public static void ConfigureOpenIddict(this ModelBuilder builder)
         {
             Check.NotNull(builder, nameof(builder));
