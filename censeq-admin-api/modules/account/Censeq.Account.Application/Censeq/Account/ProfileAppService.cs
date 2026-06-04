@@ -14,12 +14,26 @@ using Censeq.Identity.Entities;
 
 namespace Censeq.Account;
 
+/// <summary>
+/// 个人资料应用服务，提供个人资料查询和维护能力。
+/// </summary>
 [Authorize]
 public class ProfileAppService : IdentityAppServiceBase, IProfileAppService
 {
+    /// <summary>
+    /// 用户管理器。
+    /// </summary>
     protected IdentityUserManager UserManager { get; }
+    /// <summary>
+    /// Identity 配置项。
+    /// </summary>
     protected IOptions<IdentityOptions> IdentityOptions { get; }
 
+    /// <summary>
+    /// 初始化 ProfileAppService 实例。
+    /// </summary>
+    /// <param name="userManager">用户管理器。</param>
+    /// <param name="identityOptions">Identity 配置项。</param>
     public ProfileAppService(
         IdentityUserManager userManager,
         IOptions<IdentityOptions> identityOptions)
@@ -28,6 +42,10 @@ public class ProfileAppService : IdentityAppServiceBase, IProfileAppService
         IdentityOptions = identityOptions;
     }
 
+    /// <summary>
+    /// 异步获取个人资料。
+    /// </summary>
+    /// <returns>个人资料。</returns>
     public virtual async Task<ProfileDto> GetAsync()
     {
         var currentUser = await UserManager.GetByIdAsync(CurrentUser.GetId());
@@ -38,6 +56,11 @@ public class ProfileAppService : IdentityAppServiceBase, IProfileAppService
         return profile;
     }
 
+    /// <summary>
+    /// 异步更新个人资料。
+    /// </summary>
+    /// <param name="input">输入数据。</param>
+    /// <returns>个人资料。</returns>
     public virtual async Task<ProfileDto> UpdateAsync(UpdateProfileDto input)
     {
         await IdentityOptions.SetAsync();
@@ -92,6 +115,11 @@ public class ProfileAppService : IdentityAppServiceBase, IProfileAppService
         return profile;
     }
 
+    /// <summary>
+    /// 同步签名扩展属性。
+    /// </summary>
+    /// <param name="input">输入数据。</param>
+    /// <param name="user">用户。</param>
     private static void SyncSignatureExtraProperty(UpdateProfileDto input, IdentityUser user)
     {
         if (!input.ExtraProperties.TryGetValue("signature", out var signatureValue))
@@ -109,6 +137,11 @@ public class ProfileAppService : IdentityAppServiceBase, IProfileAppService
         user.SetProperty("signature", signature);
     }
 
+    /// <summary>
+    /// 异步修改密码。
+    /// </summary>
+    /// <param name="input">输入数据。</param>
+    /// <returns>表示异步操作的任务。</returns>
     public virtual async Task ChangePasswordAsync(ChangePasswordInput input)
     {
         await IdentityOptions.SetAsync();

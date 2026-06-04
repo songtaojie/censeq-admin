@@ -11,13 +11,23 @@ using Censeq.Identity.ObjectExtending;
 
 namespace Censeq.Account;
 
+/// <summary>
+/// 账户应用程序契约模块。
+/// </summary>
 [DependsOn(
     typeof(CenseqIdentityApplicationContractsModule)
 )]
 public class CenseqAccountApplicationContractsModule : AbpModule
 {
+    /// <summary>
+    /// 一次性执行器。
+    /// </summary>
     private static readonly OneTimeRunner OneTimeRunner = new();
 
+    /// <summary>
+    /// 配置 账户 应用程序 Contracts 模块服务。
+    /// </summary>
+    /// <param name="context">当前上下文。</param>
     public override void ConfigureServices(ServiceConfigurationContext context)
     {
         Configure<AbpVirtualFileSystemOptions>(options =>
@@ -39,6 +49,10 @@ public class CenseqAccountApplicationContractsModule : AbpModule
         });
     }
 
+    /// <summary>
+    /// 后置配置 账户 应用程序 Contracts 模块服务。
+    /// </summary>
+    /// <param name="context">当前上下文。</param>
     public override void PostConfigureServices(ServiceConfigurationContext context)
     {
         OneTimeRunner.Run(() =>

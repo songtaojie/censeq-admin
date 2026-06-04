@@ -8,8 +8,14 @@ using Volo.Abp.Validation;
 
 namespace Censeq.Account.Web.Pages.Account;
 
+/// <summary>
+/// 忘记密码页面模型。
+/// </summary>
 public class ForgotPasswordModel : AccountPageModel
 {
+    /// <summary>
+    /// 邮箱。
+    /// </summary>
     [Required]
     [EmailAddress]
     [DynamicStringLength(typeof(IdentityUserConsts), nameof(IdentityUserConsts.MaxEmailLength))]
@@ -17,19 +23,33 @@ public class ForgotPasswordModel : AccountPageModel
     [DisplayName("邮箱")]
     public string? Email { get; set; }
 
+    /// <summary>
+    /// 返回地址。
+    /// </summary>
     [HiddenInput]
     [BindProperty(SupportsGet = true)]
     public string? ReturnUrl { get; set; }
 
+    /// <summary>
+    /// 返回地址哈希。
+    /// </summary>
     [HiddenInput]
     [BindProperty(SupportsGet = true)]
     public string? ReturnUrlHash { get; set; }
 
+    /// <summary>
+    /// 异步处理页面 GET 请求。
+    /// </summary>
+    /// <returns>页面处理结果。</returns>
     public virtual Task<IActionResult> OnGetAsync()
     {
         return Task.FromResult<IActionResult>(Page());
     }
 
+    /// <summary>
+    /// 异步处理页面 POST 请求。
+    /// </summary>
+    /// <returns>页面处理结果。</returns>
     public virtual async Task<IActionResult> OnPostAsync()
     {
         if (string.IsNullOrWhiteSpace(Email))

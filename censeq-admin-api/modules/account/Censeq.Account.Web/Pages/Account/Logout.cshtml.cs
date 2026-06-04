@@ -7,18 +7,34 @@ using Volo.Abp.Settings;
 
 namespace Censeq.Account.Web.Pages.Account;
 
+/// <summary>
+/// 退出登录页面模型。
+/// </summary>
 public class LogoutModel : AccountPageModel
 {
+    /// <summary>
+    /// Identity 会话管理器。
+    /// </summary>
     public IdentitySessionManager IdentitySessionManager { get; set; }
 
+    /// <summary>
+    /// 返回地址。
+    /// </summary>
     [HiddenInput]
     [BindProperty(SupportsGet = true)]
     public string? ReturnUrl { get; set; }
 
+    /// <summary>
+    /// 返回地址哈希。
+    /// </summary>
     [HiddenInput]
     [BindProperty(SupportsGet = true)]
     public string? ReturnUrlHash { get; set; }
 
+    /// <summary>
+    /// 异步处理页面 GET 请求。
+    /// </summary>
+    /// <returns>页面处理结果。</returns>
     public virtual async Task<IActionResult> OnGetAsync()
     {
         // 删除当前会话
@@ -44,11 +60,19 @@ public class LogoutModel : AccountPageModel
         return RedirectToPage("/");
     }
 
+    /// <summary>
+    /// 异步处理页面 POST 请求。
+    /// </summary>
+    /// <returns>页面处理结果。</returns>
     public virtual Task<IActionResult> OnPostAsync()
     {
         return Task.FromResult<IActionResult>(Page());
     }
 
+    /// <summary>
+    /// 异步删除当前会话。
+    /// </summary>
+    /// <returns>表示异步操作的任务。</returns>
     protected virtual async Task DeleteCurrentSessionAsync()
     {
         try

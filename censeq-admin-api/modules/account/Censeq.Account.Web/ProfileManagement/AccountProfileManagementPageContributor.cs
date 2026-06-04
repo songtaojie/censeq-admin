@@ -9,8 +9,16 @@ using Volo.Abp.Users;
 
 namespace Censeq.Account.Web.ProfileManagement;
 
+/// <summary>
+/// 账户个人资料管理页面贡献器。
+/// </summary>
 public class AccountProfileManagementPageContributor : IProfileManagementPageContributor
 {
+    /// <summary>
+    /// 异步配置页面分组。
+    /// </summary>
+    /// <param name="context">当前上下文。</param>
+    /// <returns>表示异步操作的任务。</returns>
     public async Task ConfigureAsync(ProfileManagementPageCreationContext context)
     {
         var l = context.ServiceProvider.GetRequiredService<IStringLocalizer<AccountResource>>();
@@ -35,6 +43,11 @@ public class AccountProfileManagementPageContributor : IProfileManagementPageCon
         );
     }
 
+    /// <summary>
+    /// Is 密码 修改 Enabled。
+    /// </summary>
+    /// <param name="context">当前上下文。</param>
+    /// <returns>异步操作结果。</returns>
     protected virtual async Task<bool> IsPasswordChangeEnabled(ProfileManagementPageCreationContext context)
     {
         var userManager = context.ServiceProvider.GetRequiredService<IdentityUserManager>();

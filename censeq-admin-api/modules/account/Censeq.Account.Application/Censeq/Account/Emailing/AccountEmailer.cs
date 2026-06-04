@@ -15,14 +15,40 @@ using Censeq.Identity.Entities;
 
 namespace Censeq.Account.Emailing;
 
+/// <summary>
+/// 账户邮件发送器，负责发送账户相关邮件。
+/// </summary>
 public class AccountEmailer : IAccountEmailer, ITransientDependency
 {
+    /// <summary>
+    /// 模板渲染器。
+    /// </summary>
     protected ITemplateRenderer TemplateRenderer { get; }
+    /// <summary>
+    /// 邮件发送器。
+    /// </summary>
     protected IEmailSender EmailSender { get; }
+    /// <summary>
+    /// 字符串本地化器。
+    /// </summary>
     protected IStringLocalizer<AccountResource> StringLocalizer { get; }
+    /// <summary>
+    /// 应用地址提供者。
+    /// </summary>
     protected IAppUrlProvider AppUrlProvider { get; }
+    /// <summary>
+    /// 当前租户。
+    /// </summary>
     protected ICurrentTenant CurrentTenant { get; }
 
+    /// <summary>
+    /// 初始化 AccountEmailer 实例。
+    /// </summary>
+    /// <param name="emailSender">邮件发送器。</param>
+    /// <param name="templateRenderer">模板渲染器。</param>
+    /// <param name="stringLocalizer">字符串本地化器。</param>
+    /// <param name="appUrlProvider">应用地址提供者。</param>
+    /// <param name="currentTenant">当前租户。</param>
     public AccountEmailer(
         IEmailSender emailSender,
         ITemplateRenderer templateRenderer,
@@ -37,6 +63,15 @@ public class AccountEmailer : IAccountEmailer, ITransientDependency
         TemplateRenderer = templateRenderer;
     }
 
+    /// <summary>
+    /// 异步发送密码重置链接。
+    /// </summary>
+    /// <param name="user">用户。</param>
+    /// <param name="resetToken">重置令牌。</param>
+    /// <param name="appName">应用程序名称。</param>
+    /// <param name="returnUrl">返回地址。</param>
+    /// <param name="returnUrlHash">返回地址哈希。</param>
+    /// <returns>表示异步操作的任务。</returns>
     public virtual async Task SendPasswordResetLinkAsync(
         IdentityUser user,
         string resetToken,
@@ -72,6 +107,11 @@ public class AccountEmailer : IAccountEmailer, ITransientDependency
         );
     }
 
+    /// <summary>
+    /// 规范化返回地址。
+    /// </summary>
+    /// <param name="returnUrl">返回地址。</param>
+    /// <returns>规范化后的返回地址。</returns>
     protected virtual string NormalizeReturnUrl(string returnUrl)
     {
         if (returnUrl.IsNullOrEmpty())

@@ -8,12 +8,19 @@ using Censeq.Identity;
 
 namespace Censeq.Account;
 
+/// <summary>
+/// 账户 HTTP API 模块。
+/// </summary>
 [DependsOn(
     typeof(CenseqAccountApplicationContractsModule),
     typeof(CenseqIdentityHttpApiModule),
     typeof(AbpAspNetCoreMvcModule))]
 public class CenseqAccountHttpApiModule : AbpModule
 {
+    /// <summary>
+    /// 预配置 账户 HTTP API 模块服务。
+    /// </summary>
+    /// <param name="context">当前上下文。</param>
     public override void PreConfigureServices(ServiceConfigurationContext context)
     {
         PreConfigure<IMvcBuilder>(mvcBuilder =>
@@ -22,6 +29,10 @@ public class CenseqAccountHttpApiModule : AbpModule
         });
     }
 
+    /// <summary>
+    /// 配置 账户 HTTP API 模块服务。
+    /// </summary>
+    /// <param name="context">当前上下文。</param>
     public override void ConfigureServices(ServiceConfigurationContext context)
     {
         Configure<AbpLocalizationOptions>(options =>

@@ -6,6 +6,9 @@ using Censeq.Account.Settings;
 
 namespace Censeq.Account;
 
+/// <summary>
+/// 账户应用程序模块。
+/// </summary>
 [DependsOn(
     typeof(CenseqAccountApplicationContractsModule),
     typeof(Censeq.Identity.CenseqIdentityApplicationModule),
@@ -14,6 +17,10 @@ namespace Censeq.Account;
 )]
 public class CenseqAccountApplicationModule : AbpModule
 {
+    /// <summary>
+    /// 配置 账户 应用程序 模块服务。
+    /// </summary>
+    /// <param name="context">当前上下文。</param>
     public override void ConfigureServices(ServiceConfigurationContext context)
     {
         Configure<AbpVirtualFileSystemOptions>(options =>

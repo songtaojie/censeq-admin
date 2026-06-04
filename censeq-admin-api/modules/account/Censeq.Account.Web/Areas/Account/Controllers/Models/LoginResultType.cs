@@ -1,5 +1,8 @@
 ﻿namespace Censeq.Account.Web.Areas.Account.Controllers.Models;
 
+/// <summary>
+/// 登录结果类型。
+/// </summary>
 public enum LoginResultType : byte
 {
     Success = 1,

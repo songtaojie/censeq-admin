@@ -1,5 +1,8 @@
 ﻿namespace Censeq.AuditLogging;
 
+/// <summary>
+/// 实体属性变更常量，集中声明常量。
+/// </summary>
 public class EntityPropertyChangeConsts
 {
     /// <summary>

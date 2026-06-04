@@ -13,14 +13,40 @@ using Censeq.Identity.Entities;
 
 namespace Censeq.Account;
 
+/// <summary>
+/// 账户应用服务，提供注册和密码重置能力。
+/// </summary>
 public class AccountAppService : ApplicationService, IAccountAppService
 {
+    /// <summary>
+    /// 角色仓储。
+    /// </summary>
     protected IIdentityRoleRepository RoleRepository { get; }
+    /// <summary>
+    /// 用户管理器。
+    /// </summary>
     protected IdentityUserManager UserManager { get; }
+    /// <summary>
+    /// 账户邮件发送器。
+    /// </summary>
     protected IAccountEmailer AccountEmailer { get; }
+    /// <summary>
+    /// Identity 安全日志管理器。
+    /// </summary>
     protected IdentitySecurityLogManager IdentitySecurityLogManager { get; }
+    /// <summary>
+    /// Identity 配置项。
+    /// </summary>
     protected IOptions<IdentityOptions> IdentityOptions { get; }
 
+    /// <summary>
+    /// 初始化 AccountAppService 实例。
+    /// </summary>
+    /// <param name="userManager">用户管理器。</param>
+    /// <param name="roleRepository">角色仓储。</param>
+    /// <param name="accountEmailer">账户邮件发送器。</param>
+    /// <param name="identitySecurityLogManager">Identity 安全日志管理器。</param>
+    /// <param name="identityOptions">Identity 配置项。</param>
     public AccountAppService(
         IdentityUserManager userManager,
         IIdentityRoleRepository roleRepository,
@@ -37,6 +63,11 @@ public class AccountAppService : ApplicationService, IAccountAppService
         LocalizationResource = typeof(AccountResource);
     }
 
+    /// <summary>
+    /// 异步注册账户。
+    /// </summary>
+    /// <param name="input">输入数据。</param>
+    /// <returns>注册结果。</returns>
     public virtual async Task<IdentityUserDto> RegisterAsync(RegisterDto input)
     {
         await CheckSelfRegistrationAsync();
@@ -55,6 +86,11 @@ public class AccountAppService : ApplicationService, IAccountAppService
         return ObjectMapper.Map<IdentityUser, IdentityUserDto>(user);
     }
 
+    /// <summary>
+    /// 异步发送密码重置码。
+    /// </summary>
+    /// <param name="input">输入数据。</param>
+    /// <returns>表示异步操作的任务。</returns>
     public virtual async Task SendPasswordResetCodeAsync(SendPasswordResetCodeDto input)
     {
         var user = await GetUserByEmailAsync(input.Email);
@@ -62,6 +98,11 @@ public class AccountAppService : ApplicationService, IAccountAppService
         await AccountEmailer.SendPasswordResetLinkAsync(user, resetToken, input.AppName, input.ReturnUrl, input.ReturnUrlHash);
     }
 
+    /// <summary>
+    /// 异步验证密码重置令牌。
+    /// </summary>
+    /// <param name="input">输入数据。</param>
+    /// <returns>密码重置令牌是否有效。</returns>
     public virtual async Task<bool> VerifyPasswordResetTokenAsync(VerifyPasswordResetTokenInput input)
     {
         var user = await UserManager.GetByIdAsync(input.UserId);
@@ -72,6 +113,11 @@ public class AccountAppService : ApplicationService, IAccountAppService
             input.ResetToken);
     }
 
+    /// <summary>
+    /// 异步重置密码。
+    /// </summary>
+    /// <param name="input">输入数据。</param>
+    /// <returns>表示异步操作的任务。</returns>
     public virtual async Task ResetPasswordAsync(ResetPasswordDto input)
     {
         await IdentityOptions.SetAsync();
@@ -86,6 +132,11 @@ public class AccountAppService : ApplicationService, IAccountAppService
         });
     }
 
+    /// <summary>
+    /// 异步根据邮箱获取用户。
+    /// </summary>
+    /// <param name="email">邮箱。</param>
+    /// <returns>用户实体。</returns>
     protected virtual async Task<IdentityUser> GetUserByEmailAsync(string email)
     {
         var user = await UserManager.FindByEmailAsync(email);
@@ -97,6 +148,10 @@ public class AccountAppService : ApplicationService, IAccountAppService
         return user;
     }
 
+    /// <summary>
+    /// 异步检查是否允许自助注册。
+    /// </summary>
+    /// <returns>表示异步操作的任务。</returns>
     protected virtual async Task CheckSelfRegistrationAsync()
     {
         if (!await SettingProvider.IsTrueAsync(AccountSettingNames.IsSelfRegistrationEnabled))

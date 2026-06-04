@@ -7,8 +7,16 @@ using Volo.Abp.UI.Navigation;
 
 namespace Censeq.Account.Web;
 
+/// <summary>
+/// 账户用户菜单贡献器。
+/// </summary>
 public class CenseqAccountUserMenuContributor : IMenuContributor
 {
+    /// <summary>
+    /// 异步配置用户菜单。
+    /// </summary>
+    /// <param name="context">当前上下文。</param>
+    /// <returns>表示异步操作的任务。</returns>
     public virtual Task ConfigureMenuAsync(MenuConfigurationContext context)
     {
         if (context.Menu.Name != StandardMenus.User)

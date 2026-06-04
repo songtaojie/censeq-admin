@@ -26,6 +26,9 @@ using SkiaSharp;
 
 namespace Censeq.Account.Web;
 
+/// <summary>
+/// 账户 Web 模块。
+/// </summary>
 [DependsOn(
     typeof(CenseqAccountApplicationContractsModule),
     typeof(CenseqIdentityAspNetCoreModule),
@@ -35,8 +38,15 @@ namespace Censeq.Account.Web;
     )]
 public class CenseqAccountWebModule : AbpModule
 {
+    /// <summary>
+    /// 一次性执行器。
+    /// </summary>
     private readonly static OneTimeRunner OneTimeRunner = new OneTimeRunner();
     
+    /// <summary>
+    /// 预配置 账户 Web 模块服务。
+    /// </summary>
+    /// <param name="context">当前上下文。</param>
     public override void PreConfigureServices(ServiceConfigurationContext context)
     {
         context.Services.PreConfigure<AbpMvcDataAnnotationsLocalizationOptions>(options =>
@@ -50,6 +60,10 @@ public class CenseqAccountWebModule : AbpModule
         });
     }
 
+    /// <summary>
+    /// 配置 账户 Web 模块服务。
+    /// </summary>
+    /// <param name="context">当前上下文。</param>
     public override void ConfigureServices(ServiceConfigurationContext context)
     {
         Configure<AbpVirtualFileSystemOptions>(options =>
@@ -90,12 +104,19 @@ public class CenseqAccountWebModule : AbpModule
         ConfigureCaptcha(context);
     }
 
+    /// <summary>
+    /// Configure 验证码。
+    /// </summary>
+    /// <param name="context">当前上下文。</param>
     private static void ConfigureCaptcha(ServiceConfigurationContext context)
     {
         var configuration = context.Services.GetConfiguration();
         context.Services.AddCaptcha(configuration);
     }
 
+    /// <summary>
+    /// Configure 个人资料 管理 页面。
+    /// </summary>
     private void ConfigureProfileManagementPage()
     {
         Configure<RazorPagesOptions>(options =>
@@ -122,6 +143,10 @@ public class CenseqAccountWebModule : AbpModule
 
     }
     
+    /// <summary>
+    /// 后置配置 账户 Web 模块服务。
+    /// </summary>
+    /// <param name="context">当前上下文。</param>
     public override void PostConfigureServices(ServiceConfigurationContext context)
     {
         OneTimeRunner.Run(() =>

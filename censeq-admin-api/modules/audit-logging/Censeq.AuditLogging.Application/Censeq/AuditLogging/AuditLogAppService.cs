@@ -9,16 +9,31 @@ using Volo.Abp.Application.Services;
 
 namespace Censeq.AuditLogging;
 
+/// <summary>
+/// 审计日志应用服务，提供审计日志查询和删除能力。
+/// </summary>
 [Authorize]
 public class AuditLogAppService : ApplicationService, IAuditLogAppService
 {
+    /// <summary>
+    /// 审计日志仓储。
+    /// </summary>
     protected IAuditLogRepository AuditLogRepository { get; }
 
+    /// <summary>
+    /// 初始化 AuditLogAppService 实例。
+    /// </summary>
+    /// <param name="auditLogRepository">审计日志仓储。</param>
     public AuditLogAppService(IAuditLogRepository auditLogRepository)
     {
         AuditLogRepository = auditLogRepository;
     }
 
+    /// <summary>
+    /// 异步获取审计日志列表。
+    /// </summary>
+    /// <param name="input">查询输入。</param>
+    /// <returns>审计日志列表。</returns>
     public virtual async Task<PagedResultDto<AuditLogDto>> GetListAsync(GetAuditLogsInput input)
     {
         var count = await AuditLogRepository.GetCountAsync(
@@ -55,18 +70,34 @@ public class AuditLogAppService : ApplicationService, IAuditLogAppService
         return new PagedResultDto<AuditLogDto>(count, dtos);
     }
 
+    /// <summary>
+    /// 异步获取审计日志详情。
+    /// </summary>
+    /// <param name="id">标识。</param>
+    /// <returns>审计日志详情。</returns>
     public virtual async Task<AuditLogDto> GetAsync(Guid id)
     {
         var auditLog = await AuditLogRepository.GetAsync(id);
         return MapToAuditLogDto(auditLog, includeDetails: true);
     }
 
+    /// <summary>
+    /// 异步删除审计日志。
+    /// </summary>
+    /// <param name="id">标识。</param>
+    /// <returns>表示异步操作的任务。</returns>
     [Authorize]
     public virtual async Task DeleteAsync(Guid id)
     {
         await AuditLogRepository.DeleteAsync(id);
     }
 
+    /// <summary>
+    /// 将审计日志实体映射为 DTO。
+    /// </summary>
+    /// <param name="auditLog">审计日志。</param>
+    /// <param name="includeDetails">是否包含详情。</param>
+    /// <returns>审计日志 DTO。</returns>
     protected virtual AuditLogDto MapToAuditLogDto(AuditLog auditLog, bool includeDetails = false)
     {
         var dto = new AuditLogDto

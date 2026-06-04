@@ -4,8 +4,15 @@ using Volo.Abp.Settings;
 
 namespace Censeq.Account.Web.Settings
 {
+    /// <summary>
+    /// 账户 Web 设置定义提供者。
+    /// </summary>
     public class CenseqAccountSettingDefinitionProvider : SettingDefinitionProvider
     {
+        /// <summary>
+        /// 定义账户模块配置项。
+        /// </summary>
+        /// <param name="context">当前上下文。</param>
         public override void Define(ISettingDefinitionContext context)
         {
             context.Add(
@@ -25,6 +32,11 @@ namespace Censeq.Account.Web.Settings
             );
         }
 
+        /// <summary>
+        /// 创建账户模块的本地化字符串。
+        /// </summary>
+        /// <param name="name">名称。</param>
+        /// <returns>本地化字符串。</returns>
         private static LocalizableString L(string name)
         {
             return LocalizableString.Create<AccountResource>(name);

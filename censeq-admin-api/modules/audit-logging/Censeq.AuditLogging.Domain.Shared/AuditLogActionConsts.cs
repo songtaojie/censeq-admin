@@ -1,5 +1,8 @@
 ﻿namespace Censeq.AuditLogging;
 
+/// <summary>
+/// 审计日志操作常量，集中声明常量。
+/// </summary>
 public class AuditLogActionConsts
 {
     /// <summary>

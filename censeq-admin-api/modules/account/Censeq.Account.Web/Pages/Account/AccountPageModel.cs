@@ -10,27 +10,55 @@ using IdentityUser = Censeq.Identity.Entities.IdentityUser;
 
 namespace Censeq.Account.Web.Pages.Account;
 
+/// <summary>
+/// 账户页面模型基类。
+/// </summary>
 public abstract class AccountPageModel : AbpPageModel
 {
+    /// <summary>
+    /// 账户应用服务。
+    /// </summary>
     protected IAccountAppService AccountAppService  =>
          LazyServiceProvider.LazyGetRequiredService<IAccountAppService>();
+    /// <summary>
+    /// 登录管理器。
+    /// </summary>
     protected SignInManager<IdentityUser> SignInManager =>
             LazyServiceProvider.LazyGetRequiredService<SignInManager<IdentityUser>>();
+    /// <summary>
+    /// 用户管理器。
+    /// </summary>
     protected IdentityUserManager UserManager =>
             LazyServiceProvider.LazyGetRequiredService<IdentityUserManager>();
+    /// <summary>
+    /// Identity 安全日志管理器。
+    /// </summary>
     protected IdentitySecurityLogManager IdentitySecurityLogManager =>
             LazyServiceProvider.LazyGetRequiredService<IdentitySecurityLogManager>();
+    /// <summary>
+    /// Identity 配置项。
+    /// </summary>
     protected IOptions<IdentityOptions> IdentityOptions =>
             LazyServiceProvider.LazyGetRequiredService<IOptions<IdentityOptions>>();
+    /// <summary>
+    /// 异常错误信息转换器。
+    /// </summary>
     protected IExceptionToErrorInfoConverter ExceptionToErrorInfoConverter =>
             LazyServiceProvider.LazyGetRequiredService<IExceptionToErrorInfoConverter>();
 
+    /// <summary>
+    /// 初始化 AccountPageModel 实例。
+    /// </summary>
     protected AccountPageModel()
     {
         LocalizationResourceType = typeof(AccountResource);
         ObjectMapperContext = typeof(CenseqAccountWebModule);
     }
 
+    /// <summary>
+    /// Check Current 租户。
+    /// </summary>
+    /// <param name="tenantId">租户标识。</param>
     protected virtual void CheckCurrentTenant(Guid? tenantId)
     {
         if (CurrentTenant.Id != tenantId)
@@ -39,6 +67,10 @@ public abstract class AccountPageModel : AbpPageModel
         }
     }
 
+    /// <summary>
+    /// Check Identity Errors。
+    /// </summary>
+    /// <param name="identityResult">Identity 结果。</param>
     protected virtual void CheckIdentityErrors(IdentityResult identityResult)
     {
         if (!identityResult.Succeeded)
@@ -49,6 +81,11 @@ public abstract class AccountPageModel : AbpPageModel
         //identityResult.CheckErrors(LocalizationManager); //TODO: Get from old Abp
     }
 
+    /// <summary>
+    /// Get Localize Exception Message。
+    /// </summary>
+    /// <param name="exception">exception。</param>
+    /// <returns>返回结果。</returns>
     protected virtual string GetLocalizeExceptionMessage(Exception exception)
     {
         if (exception is ILocalizeErrorMessage || exception is IHasErrorCode)

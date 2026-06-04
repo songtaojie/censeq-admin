@@ -16,6 +16,9 @@ using Censeq.Identity.AspNetCore;
 
 namespace Censeq.Account.Web.Areas.Account.Controllers;
 
+/// <summary>
+/// 账户控制器，提供对应的 HTTP API。
+/// </summary>
 [RemoteService(Name = AccountRemoteServiceConsts.RemoteServiceName)]
 [Controller]
 [ControllerName("Login")]
@@ -23,13 +26,40 @@ namespace Censeq.Account.Web.Areas.Account.Controllers;
 [Route("api/account")]
 public class AccountController : AbpControllerBase
 {
+    /// <summary>
+    /// 登录管理器。
+    /// </summary>
     protected SignInManager<IdentityUser> SignInManager { get; }
+    /// <summary>
+    /// 用户管理器。
+    /// </summary>
     protected IdentityUserManager UserManager { get; }
+    /// <summary>
+    /// 设置提供者。
+    /// </summary>
     protected ISettingProvider SettingProvider { get; }
+    /// <summary>
+    /// Identity 安全日志管理器。
+    /// </summary>
     protected IdentitySecurityLogManager IdentitySecurityLogManager { get; }
+    /// <summary>
+    /// Identity 配置项。
+    /// </summary>
     protected IOptions<IdentityOptions> IdentityOptions { get; }
+    /// <summary>
+    /// Identity 动态声明主体贡献器缓存。
+    /// </summary>
     protected IdentityDynamicClaimsPrincipalContributorCache IdentityDynamicClaimsPrincipalContributorCache { get; }
 
+    /// <summary>
+    /// 初始化 AccountController 实例。
+    /// </summary>
+    /// <param name="signInManager">登录管理器。</param>
+    /// <param name="userManager">用户管理器。</param>
+    /// <param name="settingProvider">设置提供者。</param>
+    /// <param name="identitySecurityLogManager">Identity 安全日志管理器。</param>
+    /// <param name="identityOptions">Identity 配置项。</param>
+    /// <param name="identityDynamicClaimsPrincipalContributorCache">Identity 动态声明主体贡献器缓存。</param>
     public AccountController(
         SignInManager<IdentityUser> signInManager,
         IdentityUserManager userManager,
@@ -48,6 +78,11 @@ public class AccountController : AbpControllerBase
         IdentityDynamicClaimsPrincipalContributorCache = identityDynamicClaimsPrincipalContributorCache;
     }
 
+    /// <summary>
+    /// 执行登录。
+    /// </summary>
+    /// <param name="login">登录。</param>
+    /// <returns>异步操作结果。</returns>
     [HttpPost]
     [Route("login")]
     public virtual async Task<AbpLoginResult> Login(UserLoginInfo login)
@@ -87,6 +122,10 @@ public class AccountController : AbpControllerBase
         return GetAbpLoginResult(signInResult);
     }
 
+    /// <summary>
+    /// 登出。
+    /// </summary>
+    /// <returns>表示异步操作的任务。</returns>
     [HttpGet]
     [Route("logout")]
     public virtual async Task Logout()
@@ -100,6 +139,11 @@ public class AccountController : AbpControllerBase
         await SignInManager.SignOutAsync();
     }
 
+    /// <summary>
+    /// Check 密码 Compatible。
+    /// </summary>
+    /// <param name="login">登录。</param>
+    /// <returns>异步操作结果。</returns>
     [HttpPost]
     [Route("checkPassword")]
     [ApiExplorerSettings(IgnoreApi = true)]
@@ -108,6 +152,11 @@ public class AccountController : AbpControllerBase
         return CheckPassword(login);
     }
 
+    /// <summary>
+    /// Check 密码。
+    /// </summary>
+    /// <param name="login">登录。</param>
+    /// <returns>异步操作结果。</returns>
     [HttpPost]
     [Route("check-password")]
     public virtual async Task<AbpLoginResult> CheckPassword(UserLoginInfo login)
@@ -127,6 +176,11 @@ public class AccountController : AbpControllerBase
         return GetAbpLoginResult(await SignInManager.CheckPasswordSignInAsync(identityUser, login.Password!, true));
     }
 
+    /// <summary>
+    /// 必要时将输入邮箱替换为用户名。
+    /// </summary>
+    /// <param name="login">登录。</param>
+    /// <returns>表示异步操作的任务。</returns>
     protected virtual async Task ReplaceEmailToUsernameOfInputIfNeeds(UserLoginInfo login)
     {
         if (!ValidationHelper.IsValidEmailAddress(login.UserNameOrEmailAddress!))
@@ -149,6 +203,11 @@ public class AccountController : AbpControllerBase
         login.UserNameOrEmailAddress = userByEmail.UserName;
     }
 
+    /// <summary>
+    /// Get Abp 登录 结果。
+    /// </summary>
+    /// <param name="result">结果。</param>
+    /// <returns>返回结果。</returns>
     private static AbpLoginResult GetAbpLoginResult(SignInResult result)
     {
         if (result.IsLockedOut)
@@ -174,6 +233,10 @@ public class AccountController : AbpControllerBase
         return new AbpLoginResult(LoginResultType.Success);
     }
 
+    /// <summary>
+    /// 验证登录信息。
+    /// </summary>
+    /// <param name="login">登录。</param>
     protected virtual void ValidateLoginInfo(UserLoginInfo login)
     {
         if (login == null)
@@ -192,6 +255,10 @@ public class AccountController : AbpControllerBase
         }
     }
 
+    /// <summary>
+    /// 异步检查本地登录。
+    /// </summary>
+    /// <returns>表示异步操作的任务。</returns>
     protected virtual async Task CheckLocalLoginAsync()
     {
         if (!await SettingProvider.IsTrueAsync(AccountSettingNames.EnableLocalLogin))

@@ -27,42 +27,84 @@ using Lazy.Captcha.Core;
 
 namespace Censeq.Account.Web.Pages.Account;
 
+/// <summary>
+/// 登录页面模型。
+/// </summary>
 public class LoginModel : AccountPageModel
 {
+    /// <summary>
+    /// 返回地址。
+    /// </summary>
     [HiddenInput]
     [BindProperty(SupportsGet = true)]
     public string? ReturnUrl { get; set; }
 
+    /// <summary>
+    /// 返回地址哈希。
+    /// </summary>
     [HiddenInput]
     [BindProperty(SupportsGet = true)]
     public string? ReturnUrlHash { get; set; }
 
+    /// <summary>
+    /// 登录输入。
+    /// </summary>
     [BindProperty]
     public LoginInputModel LoginInput { get; set; } = default!;
 
+    /// <summary>
+    /// 是否使用指定租户。
+    /// </summary>
     [BindProperty]
     [Display(Name = "指定企业编码")]
     public bool UseSpecifiedTenant { get; set; }
 
+    /// <summary>
+    /// 企业租户编码。
+    /// </summary>
     [BindProperty]
     public string? EnterpriseTenantCode { get; set; }
 
     /// <summary>授权链接带 __tenant 时为 true，租户编码只读并固定使用链接值。</summary>
     public bool IsEnterpriseTenantPresetFromLink { get; set; }
 
+    /// <summary>
+    /// 是否启用本地登录。
+    /// </summary>
     public bool EnableLocalLogin { get; set; }
 
+    /// <summary>
+    /// 是否启用记住登录。
+    /// </summary>
     public bool EnableRememberMe { get; set; }
 
+    /// <summary>
+    /// 是否启用验证码。
+    /// </summary>
     public bool EnableCaptcha { get; set; }
 
+    /// <summary>
+    /// 是否启用自助注册。
+    /// </summary>
     public bool IsSelfRegistrationEnabled { get; set; }
 
     //TODO: Why there is an ExternalProviders if only the VisibleExternalProviders is used.
+    /// <summary>
+    /// 外部登录提供者列表。
+    /// </summary>
     public IEnumerable<ExternalProviderModel>? ExternalProviders { get; set; }
+    /// <summary>
+    /// 可见外部登录提供者列表。
+    /// </summary>
     public IEnumerable<ExternalProviderModel>? VisibleExternalProviders => ExternalProviders?.Where(x => !string.IsNullOrWhiteSpace(x.DisplayName));
 
+    /// <summary>
+    /// 是否仅允许外部登录。
+    /// </summary>
     public bool IsExternalLoginOnly => EnableLocalLogin == false && ExternalProviders?.Count() == 1;
+    /// <summary>
+    /// 外部登录方案。
+    /// </summary>
     public string? ExternalLoginScheme => IsExternalLoginOnly ? ExternalProviders?.SingleOrDefault()?.AuthenticationScheme : null;
 
     //Optional IdentityServer services
@@ -70,16 +112,48 @@ public class LoginModel : AccountPageModel
     //public IClientStore ClientStore { get; set; }
     //public IEventService IdentityServerEvents { get; set; }
 
+    /// <summary>
+    /// 认证方案提供者。
+    /// </summary>
     protected IAuthenticationSchemeProvider SchemeProvider { get; }
+    /// <summary>
+    /// 账户配置项。
+    /// </summary>
     protected CenseqAccountOptions AccountOptions { get; }
     //protected IOptions<IdentityOptions> IdentityOptions { get; }
+    /// <summary>
+    /// Identity 动态声明主体贡献器缓存。
+    /// </summary>
     protected IdentityDynamicClaimsPrincipalContributorCache IdentityDynamicClaimsPrincipalContributorCache { get; }
+    /// <summary>
+    /// Web 主机环境。
+    /// </summary>
     protected IWebHostEnvironment WebHostEnvironment { get; }
+    /// <summary>
+    /// Identity 会话管理器。
+    /// </summary>
     protected IdentitySessionManager IdentitySessionManager { get; }
+    /// <summary>
+    /// 是否显示取消按钮。
+    /// </summary>
     public bool ShowCancelButton { get; set; }
+    /// <summary>
+    /// 是否显示迁移种子数据提示。
+    /// </summary>
     public bool ShowRequireMigrateSeedMessage { get; set; }
+    /// <summary>
+    /// 登录错误消息。
+    /// </summary>
     public string? LoginErrorMessage { get; set; }
 
+    /// <summary>
+    /// 初始化 LoginModel 实例。
+    /// </summary>
+    /// <param name="schemeProvider">认证方案提供者。</param>
+    /// <param name="accountOptions">账户配置项。</param>
+    /// <param name="identityDynamicClaimsPrincipalContributorCache">Identity 动态声明主体贡献器缓存。</param>
+    /// <param name="webHostEnvironment">Web 主机环境。</param>
+    /// <param name="identitySessionManager">Identity 会话管理器。</param>
     public LoginModel(
         IAuthenticationSchemeProvider schemeProvider,
         IOptions<CenseqAccountOptions> accountOptions,
@@ -94,6 +168,10 @@ public class LoginModel : AccountPageModel
         IdentitySessionManager = identitySessionManager;
     }
 
+    /// <summary>
+    /// 异步处理页面 GET 请求。
+    /// </summary>
+    /// <returns>页面处理结果。</returns>
     public virtual async Task<IActionResult> OnGetAsync()
     {
         LoginInput = new LoginInputModel();
@@ -109,6 +187,10 @@ public class LoginModel : AccountPageModel
         return Page();
     }
 
+    /// <summary>
+    /// 异步获取验证码。
+    /// </summary>
+    /// <returns>验证码结果。</returns>
     public virtual async Task<IActionResult> OnGetCaptchaAsync()
     {
         if (!await IsCaptchaEnabledAsync())
@@ -132,6 +214,11 @@ public class LoginModel : AccountPageModel
         });
     }
 
+    /// <summary>
+    /// 异步处理页面 POST 请求。
+    /// </summary>
+    /// <param name="action">action。</param>
+    /// <returns>页面处理结果。</returns>
     public virtual async Task<IActionResult> OnPostAsync(string action)
     {
         if (string.Equals(action, "Login", StringComparison.OrdinalIgnoreCase))
@@ -255,6 +342,10 @@ public class LoginModel : AccountPageModel
         }
     }
 
+    /// <summary>
+    /// 异步尝试准备租户选择。
+    /// </summary>
+    /// <returns>异步操作结果。</returns>
     protected virtual async Task<bool> TryPrepareTenantSelectionAsync()
     {
         await InitializeTenantSelectionAsync();
@@ -278,12 +369,20 @@ public class LoginModel : AccountPageModel
         return true;
     }
 
+    /// <summary>
+    /// Clear 租户 上下文 For Host 登录。
+    /// </summary>
     protected virtual void ClearTenantContextForHostLogin()
     {
         CurrentTenant.Change(null);
         Response.Cookies.Delete(TenantResolverConsts.DefaultTenantKey);
     }
 
+    /// <summary>
+    /// 异步根据编码或域名查找租户。
+    /// </summary>
+    /// <param name="raw">raw。</param>
+    /// <returns>异步操作结果。</returns>
     protected virtual async Task<Tenant?> FindTenantByCodeOrDomainAsync(string raw)
     {
         if (string.IsNullOrWhiteSpace(raw))
@@ -296,6 +395,10 @@ public class LoginModel : AccountPageModel
             ?? await tenantRepository.FindByDomainAsync(raw.Trim());
     }
 
+    /// <summary>
+    /// Apply 租户 上下文。
+    /// </summary>
+    /// <param name="tenantId">租户标识。</param>
     protected virtual void ApplyTenantContext(Guid? tenantId)
     {
         if (!tenantId.HasValue)
@@ -318,6 +421,10 @@ public class LoginModel : AccountPageModel
             });
     }
 
+    /// <summary>
+    /// 异步重新加载登录页面状态。
+    /// </summary>
+    /// <returns>表示异步操作的任务。</returns>
     protected virtual async Task ReloadLoginPageStateAsync()
     {
         ExternalProviders = await GetExternalProviders();
@@ -327,6 +434,10 @@ public class LoginModel : AccountPageModel
         IsSelfRegistrationEnabled = await SettingProvider.IsTrueAsync(AccountSettingNames.IsSelfRegistrationEnabled);
     }
 
+    /// <summary>
+    /// 异步验证验证码。
+    /// </summary>
+    /// <returns>异步操作结果。</returns>
     protected virtual async Task<bool> ValidateCaptchaAsync()
     {
         if (!await IsCaptchaEnabledAsync())
@@ -350,6 +461,10 @@ public class LoginModel : AccountPageModel
         return false;
     }
 
+    /// <summary>
+    /// 异步判断是否启用验证码。
+    /// </summary>
+    /// <returns>异步操作结果。</returns>
     protected virtual async Task<bool> IsCaptchaEnabledAsync()
     {
         return await SettingProvider.IsTrueAsync(CenseqAccountSettingNames.EnableCaptcha);
@@ -363,6 +478,10 @@ public class LoginModel : AccountPageModel
         throw new NotImplementedException();
     }
 
+    /// <summary>
+    /// 获取外部登录提供者。
+    /// </summary>
+    /// <returns>外部登录提供者列表。</returns>
     protected virtual async Task<List<ExternalProviderModel>> GetExternalProviders()
     {
         var schemes = await SchemeProvider.GetAllSchemesAsync();
@@ -377,6 +496,11 @@ public class LoginModel : AccountPageModel
             .ToList();
     }
 
+    /// <summary>
+    /// 处理外部登录提交。
+    /// </summary>
+    /// <param name="provider">提供者。</param>
+    /// <returns>页面处理结果。</returns>
     public virtual async Task<IActionResult> OnPostExternalLogin(string provider)
     {
         var redirectUrl = Url.Page("./Login", pageHandler: "ExternalLoginCallback", values: new { ReturnUrl, ReturnUrlHash });
@@ -386,6 +510,13 @@ public class LoginModel : AccountPageModel
         return await Task.FromResult(Challenge(properties, provider));
     }
 
+    /// <summary>
+    /// 异步处理外部登录回调。
+    /// </summary>
+    /// <param name="returnUrl">返回地址。</param>
+    /// <param name="returnUrlHash">返回地址哈希。</param>
+    /// <param name="remoteError">远程 Error。</param>
+    /// <returns>页面处理结果。</returns>
     public virtual async Task<IActionResult> OnGetExternalLoginCallbackAsync(string returnUrl = "", string returnUrlHash = "", string? remoteError = null)
     {
         //TODO: Did not implemented Identity Server 4 sample for this method (see ExternalLoginCallback in Quickstart of IDS4 sample)
@@ -491,6 +622,10 @@ public class LoginModel : AccountPageModel
         return await RedirectSafelyAsync(returnUrl, returnUrlHash);
     }
 
+    /// <summary>
+    /// 异步解析登录用户。
+    /// </summary>
+    /// <returns>登录用户解析结果。</returns>
     protected virtual async Task<LoginUserResolutionResult> ResolveLoginUserAsync()
     {
         var loginName = LoginInput.UserNameOrEmailAddress?.Trim();
@@ -568,6 +703,12 @@ public class LoginModel : AccountPageModel
         return LoginUserResolutionResult.Success(resolvedUser);
     }
 
+    /// <summary>
+    /// 异步创建租户选择重定向。
+    /// </summary>
+    /// <param name="loginName">登录 Name。</param>
+    /// <param name="matchedUsers">matched Users。</param>
+    /// <returns>异步操作结果。</returns>
     protected virtual async Task<IActionResult> CreateTenantSelectionRedirectAsync(string loginName, List<IdentityUser> matchedUsers)
     {
         var cache = LazyServiceProvider.LazyGetRequiredService<IDistributedCache<LoginTenantSelectionCacheItem>>();
@@ -599,6 +740,11 @@ public class LoginModel : AccountPageModel
         });
     }
 
+    /// <summary>
+    /// 异步构建租户选择配置。
+    /// </summary>
+    /// <param name="matchedUsers">matched Users。</param>
+    /// <returns>异步操作结果。</returns>
     protected virtual async Task<List<LoginTenantSelectionOption>> BuildTenantSelectionOptionsAsync(List<IdentityUser> matchedUsers)
     {
         var options = new List<LoginTenantSelectionOption>();
@@ -642,6 +788,10 @@ public class LoginModel : AccountPageModel
         return options;
     }
 
+    /// <summary>
+    /// 异步获取指定租户。
+    /// </summary>
+    /// <returns>租户信息。</returns>
     protected virtual async Task<Tenant?> GetSpecifiedTenantAsync()
     {
         if (!UseSpecifiedTenant)
@@ -657,6 +807,11 @@ public class LoginModel : AccountPageModel
         return await FindTenantByCodeOrDomainAsync(EnterpriseTenantCode.Trim());
     }
 
+    /// <summary>
+    /// 设置登录错误信息。
+    /// </summary>
+    /// <param name="message">message。</param>
+    /// <param name="isDanger">is Danger。</param>
     protected virtual void SetLoginError(string message, bool isDanger = false)
     {
         LoginErrorMessage = message;
@@ -669,6 +824,10 @@ public class LoginModel : AccountPageModel
         Alerts.Warning(message);
     }
 
+    /// <summary>
+    /// 异步检查本地登录。
+    /// </summary>
+    /// <returns>表示异步操作的任务。</returns>
     protected virtual async Task CheckLocalLoginAsync()
     {
         if (!await SettingProvider.IsTrueAsync(AccountSettingNames.EnableLocalLogin))
@@ -677,6 +836,11 @@ public class LoginModel : AccountPageModel
         }
     }
 
+    /// <summary>
+    /// 异步创建会话。
+    /// </summary>
+    /// <param name="user">用户。</param>
+    /// <returns>表示异步操作的任务。</returns>
     protected virtual async Task CreateSessionAsync(IdentityUser user)
     {
         try
@@ -705,6 +869,10 @@ public class LoginModel : AccountPageModel
         }
     }
 
+    /// <summary>
+    /// 获取设备类型。
+    /// </summary>
+    /// <returns>返回结果。</returns>
     protected virtual string GetDeviceType()
     {
         var userAgent = Request.Headers.UserAgent.ToString();
@@ -722,6 +890,10 @@ public class LoginModel : AccountPageModel
         return IdentitySessionDevices.Web;
     }
 
+    /// <summary>
+    /// Get Device 信息。
+    /// </summary>
+    /// <returns>返回结果。</returns>
     protected virtual string GetDeviceInfo()
     {
         try
@@ -743,6 +915,10 @@ public class LoginModel : AccountPageModel
         }
     }
 
+    /// <summary>
+    /// Get Client Ip Addresses。
+    /// </summary>
+    /// <returns>返回结果。</returns>
     protected virtual string GetClientIpAddresses()
     {
         try
@@ -771,75 +947,170 @@ public class LoginModel : AccountPageModel
         }
     }
 
+    /// <summary>
+    /// 登录输入模型。
+    /// </summary>
     public class LoginInputModel
     {
+        /// <summary>
+        /// 用户名或邮箱地址。
+        /// </summary>
         [Required]
         [DynamicStringLength(typeof(IdentityUserConsts), nameof(IdentityUserConsts.MaxEmailLength))]
         public string? UserNameOrEmailAddress { get; set; }
 
+        /// <summary>
+        /// 密码。
+        /// </summary>
         [Required]
         [DynamicStringLength(typeof(IdentityUserConsts), nameof(IdentityUserConsts.MaxPasswordLength))]
         [DataType(DataType.Password)]
         [DisableAuditing]
         public string? Password { get; set; }
 
+        /// <summary>
+        /// 验证码标识。
+        /// </summary>
         [DisableAuditing]
         public string? CaptchaId { get; set; }
 
+        /// <summary>
+        /// 验证码。
+        /// </summary>
         [Display(Name = "验证码")]
         [DisableAuditing]
         public string? CaptchaCode { get; set; }
 
+        /// <summary>
+        /// 是否记住登录。
+        /// </summary>
         public bool RememberMe { get; set; }
     }
 
+    /// <summary>
+    /// 外部登录提供者模型。
+    /// </summary>
     public class ExternalProviderModel
     {
+        /// <summary>
+        /// 显示名称。
+        /// </summary>
         public required string DisplayName { get; set; }
+        /// <summary>
+        /// 认证方案。
+        /// </summary>
         public string? AuthenticationScheme { get; set; }
     }
 
+    /// <summary>
+    /// 登录用户解析结果。
+    /// </summary>
     public class LoginUserResolutionResult
     {
+        /// <summary>
+        /// 用户。
+        /// </summary>
         public IdentityUser? User { get; init; }
+        /// <summary>
+        /// 重定向结果。
+        /// </summary>
         public IActionResult? RedirectResult { get; init; }
 
+        /// <summary>
+        /// 返回登录成功结果。
+        /// </summary>
+        /// <param name="user">用户。</param>
+        /// <returns>登录结果。</returns>
         public static LoginUserResolutionResult Success(IdentityUser user)
         {
             return new LoginUserResolutionResult { User = user };
         }
 
+        /// <summary>
+        /// Failed。
+        /// </summary>
+        /// <returns>返回结果。</returns>
         public static LoginUserResolutionResult Failed()
         {
             return new LoginUserResolutionResult();
         }
 
+        /// <summary>
+        /// 执行重定向。
+        /// </summary>
+        /// <param name="redirectResult">redirect 结果。</param>
+        /// <returns>返回结果。</returns>
         public static LoginUserResolutionResult Redirect(IActionResult redirectResult)
         {
             return new LoginUserResolutionResult { RedirectResult = redirectResult };
         }
     }
 
+    /// <summary>
+    /// 登录租户选择缓存项。
+    /// </summary>
     [Serializable]
     public class LoginTenantSelectionCacheItem
     {
+        /// <summary>
+        /// 登录名称。
+        /// </summary>
         public string LoginName { get; set; } = string.Empty;
+        /// <summary>
+        /// 是否记住登录。
+        /// </summary>
         public bool RememberMe { get; set; }
+        /// <summary>
+        /// 返回地址。
+        /// </summary>
         public string? ReturnUrl { get; set; }
+        /// <summary>
+        /// 返回地址哈希。
+        /// </summary>
         public string? ReturnUrlHash { get; set; }
+        /// <summary>
+        /// 配置项。
+        /// </summary>
         public List<LoginTenantSelectionOption> Options { get; set; } = new();
     }
 
+    /// <summary>
+    /// 登录租户选择项。
+    /// </summary>
     [Serializable]
     public class LoginTenantSelectionOption
     {
+        /// <summary>
+        /// 用户标识。
+        /// </summary>
         public Guid UserId { get; set; }
+        /// <summary>
+        /// 实际租户标识。
+        /// </summary>
         public Guid? ActualTenantId { get; set; }
+        /// <summary>
+        /// 租户标识。
+        /// </summary>
         public Guid TenantId { get; set; }
+        /// <summary>
+        /// 租户编码。
+        /// </summary>
         public string TenantCode { get; set; } = string.Empty;
+        /// <summary>
+        /// 租户名称。
+        /// </summary>
         public string TenantName { get; set; } = string.Empty;
+        /// <summary>
+        /// 用户名。
+        /// </summary>
         public string UserName { get; set; } = string.Empty;
+        /// <summary>
+        /// 显示名称。
+        /// </summary>
         public string DisplayName { get; set; } = string.Empty;
+        /// <summary>
+        /// 邮箱。
+        /// </summary>
         public string Email { get; set; } = string.Empty;
     }
 }

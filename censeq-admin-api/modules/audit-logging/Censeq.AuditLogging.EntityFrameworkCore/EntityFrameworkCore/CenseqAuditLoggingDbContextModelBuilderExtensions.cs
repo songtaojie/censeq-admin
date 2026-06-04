@@ -5,8 +5,15 @@ using Volo.Abp;
 
 namespace Censeq.AuditLogging.EntityFrameworkCore
 {
+    /// <summary>
+    /// 审计日志数据库上下文模型创建扩展方法。
+    /// </summary>
     public static class CenseqAuditLoggingDbContextModelBuilderExtensions
     {
+        /// <summary>
+        /// 配置审计日志模块扩展。
+        /// </summary>
+        /// <param name="builder">builder。</param>
         public static void ConfigureAuditLogging(this ModelBuilder builder)
         {
             Check.NotNull(builder, nameof(builder));
