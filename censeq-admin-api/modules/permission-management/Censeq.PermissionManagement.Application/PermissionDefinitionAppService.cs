@@ -12,6 +12,11 @@ public class PermissionDefinitionAppService : ApplicationService, IPermissionDef
     private readonly IPermissionGroupRepository _groupRepo;
     private readonly IPermissionDefinitionRecordRepository _permissionRepo;
 
+    /// <summary>
+    /// 初始化 PermissionDefinitionAppService 实例。
+    /// </summary>
+    /// <param name="groupRepo">groupRepo。</param>
+    /// <param name="permissionRepo">permissionRepo。</param>
     public PermissionDefinitionAppService(
         IPermissionGroupRepository groupRepo,
         IPermissionDefinitionRecordRepository permissionRepo)
@@ -21,6 +26,10 @@ public class PermissionDefinitionAppService : ApplicationService, IPermissionDef
     }
 
     /// <inheritdoc/>
+    /// <summary>
+    /// 获取权限组定义列表。
+    /// </summary>
+    /// <returns>权限组定义列表。</returns>
     public async Task<List<PermissionGroupDefinitionDto>> GetGroupsAsync()
     {
         var groups = await _groupRepo.GetListAsync();
@@ -36,6 +45,12 @@ public class PermissionDefinitionAppService : ApplicationService, IPermissionDef
     }
 
     /// <inheritdoc/>
+    /// <summary>
+    /// 更新权限组显示名称。
+    /// </summary>
+    /// <param name="groupName">权限组名称。</param>
+    /// <param name="input">更新请求数据。</param>
+    /// <returns>更新后的权限组定义。</returns>
     public async Task<PermissionGroupDefinitionDto> UpdateGroupAsync(
         string groupName, UpdatePermissionGroupDefinitionDto input)
     {
@@ -56,6 +71,11 @@ public class PermissionDefinitionAppService : ApplicationService, IPermissionDef
     }
 
     /// <inheritdoc/>
+    /// <summary>
+    /// 获取指定权限组下的权限定义列表。
+    /// </summary>
+    /// <param name="groupName">权限组名称。</param>
+    /// <returns>权限定义列表。</returns>
     public async Task<List<PermissionDefinitionDto>> GetPermissionsAsync(string groupName)
     {
         var allGroups = await _groupRepo.GetListAsync();
@@ -80,6 +100,12 @@ public class PermissionDefinitionAppService : ApplicationService, IPermissionDef
     }
 
     /// <inheritdoc/>
+    /// <summary>
+    /// 更新权限定义显示名称。
+    /// </summary>
+    /// <param name="name">权限名称。</param>
+    /// <param name="input">更新请求数据。</param>
+    /// <returns>更新后的权限定义。</returns>
     public async Task<PermissionDefinitionDto> UpdatePermissionAsync(
         string name, UpdatePermissionDefinitionDto input)
     {

@@ -6,20 +6,53 @@ using Volo.Abp.MultiTenancy;
 
 namespace Censeq.PermissionManagement.Entities;
 
+/// <summary>
+/// 权限定义持久化记录。
+/// </summary>
 public class PermissionDefinitionRecord : BasicAggregateRoot<Guid>, IHasExtraProperties
 {
+    /// <summary>
+    /// 权限组名称。
+    /// </summary>
     public required string GroupName { get; set; }
+    /// <summary>
+    /// 权限名称。
+    /// </summary>
     public required string Name { get; set; }
+    /// <summary>
+    /// 父级权限名称。
+    /// </summary>
     public string? ParentName { get; set; }
+    /// <summary>
+    /// 显示名称。
+    /// </summary>
     public required string DisplayName { get; set; }
     /// <summary>系统原始多语言 key，格式为 L:ResourceName,Key，只读，由系统同步写入</summary>
     public string? LocalizationKey { get; set; }
+    /// <summary>
+    /// 是否启用。
+    /// </summary>
     public bool IsEnabled { get; set; }
+    /// <summary>
+    /// 权限适用的多租户侧。
+    /// </summary>
     public MultiTenancySides MultiTenancySide { get; set; }
+    /// <summary>
+    /// 允许使用该权限的提供者列表。
+    /// </summary>
     public string? Providers { get; set; }
+    /// <summary>
+    /// 权限状态检查器列表。
+    /// </summary>
     public string? StateCheckers { get; set; }
+    /// <summary>
+    /// 扩展属性。
+    /// </summary>
     public ExtraPropertyDictionary ExtraProperties { get; protected set; } = [];
 
+    /// <summary>
+    /// 初始化 PermissionDefinitionRecord 实例。
+    /// </summary>
     public PermissionDefinitionRecord()
     {
         GroupName = string.Empty;
@@ -29,12 +62,21 @@ public class PermissionDefinitionRecord : BasicAggregateRoot<Guid>, IHasExtraPro
         this.SetDefaultsForExtraProperties();
     }
 
+    /// <summary>
+    /// 初始化 PermissionDefinitionRecord 实例。
+    /// </summary>
+    /// <param name="id">实体标识。</param>
     public PermissionDefinitionRecord(Guid id) : base(id)
     {
         ExtraProperties = [];
         this.SetDefaultsForExtraProperties();
     }
 
+    /// <summary>
+    /// 判断当前记录与指定记录的数据是否一致。
+    /// </summary>
+    /// <param name="otherRecord">用于比较或更新的记录。</param>
+    /// <returns>数据一致时返回 true，否则返回 false。</returns>
     public bool HasSameData(PermissionDefinitionRecord? otherRecord)
     {
         if (otherRecord == null) return false;
@@ -48,6 +90,10 @@ public class PermissionDefinitionRecord : BasicAggregateRoot<Guid>, IHasExtraPro
         return this.HasSameExtraProperties(otherRecord);
     }
 
+    /// <summary>
+    /// 使用指定记录修补当前记录。
+    /// </summary>
+    /// <param name="otherRecord">用于比较或更新的记录。</param>
     public void Patch(PermissionDefinitionRecord otherRecord)
     {
         if (Name != otherRecord.Name) Name = otherRecord.Name;
