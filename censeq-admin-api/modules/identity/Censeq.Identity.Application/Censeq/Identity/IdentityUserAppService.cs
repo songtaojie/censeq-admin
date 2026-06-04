@@ -76,8 +76,11 @@ public class IdentityUserAppService : IdentityAppServiceBase, IIdentityUserAppSe
     /// </summary>
     public virtual async Task<PagedResultDto<IdentityUserDto>> GetListAsync(GetIdentityUsersInput input)
     {
-        var count = await UserRepository.GetCountAsync(input.Filter);
-        var list = await UserRepository.GetListAsync(input.Sorting, input.MaxResultCount, input.SkipCount, input.Filter);
+        var organizationUnitIds = input.OrganizationUnitIds?.Distinct().ToList();
+        var organizationUnitId = organizationUnitIds is { Count: > 0 } ? null : input.OrganizationUnitId;
+
+        var count = await UserRepository.GetCountAsync(input.Filter, organizationUnitId: organizationUnitId, organizationUnitIds: organizationUnitIds);
+        var list = await UserRepository.GetListAsync(input.Sorting, input.MaxResultCount, input.SkipCount, input.Filter, organizationUnitId: organizationUnitId, organizationUnitIds: organizationUnitIds);
 
         return new PagedResultDto<IdentityUserDto>(
             count,

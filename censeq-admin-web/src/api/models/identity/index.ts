@@ -13,6 +13,8 @@ export interface GetIdentityRolesRequest extends PagedAndSortedRequestDto {
 
 export interface GetIdentityUsersRequest extends PagedAndSortedRequestDto {
 	filter?: string;
+	organizationUnitId?: string | null;
+	organizationUnitIds?: string[];
 }
 
 /** 与后端 OrganizationUnitDto 一致（组织机构 / 部门） */

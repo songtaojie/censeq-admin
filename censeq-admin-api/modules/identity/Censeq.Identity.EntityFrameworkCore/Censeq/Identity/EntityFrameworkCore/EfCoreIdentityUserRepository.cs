@@ -230,6 +230,7 @@ public class EfCoreIdentityUserRepository : EfCoreRepository<ICenseqIdentityDbCo
         bool includeDetails = false,
         Guid? roleId = null,
         Guid? organizationUnitId = null,
+        List<Guid>? organizationUnitIds = null,
         string? userName = null,
         string? phoneNumber = null,
         string? emailAddress = null,
@@ -249,6 +250,7 @@ public class EfCoreIdentityUserRepository : EfCoreRepository<ICenseqIdentityDbCo
             filter,
             roleId,
             organizationUnitId,
+            organizationUnitIds,
             userName,
             phoneNumber,
             emailAddress,
@@ -312,6 +314,7 @@ public class EfCoreIdentityUserRepository : EfCoreRepository<ICenseqIdentityDbCo
         string? filter = null,
         Guid? roleId = null,
         Guid? organizationUnitId = null,
+        List<Guid>? organizationUnitIds = null,
         string? userName = null,
         string? phoneNumber = null,
         string? emailAddress = null,
@@ -331,6 +334,7 @@ public class EfCoreIdentityUserRepository : EfCoreRepository<ICenseqIdentityDbCo
             filter,
             roleId,
             organizationUnitId,
+            organizationUnitIds,
             userName,
             phoneNumber,
             emailAddress,
@@ -501,6 +505,7 @@ public class EfCoreIdentityUserRepository : EfCoreRepository<ICenseqIdentityDbCo
         string? filter = null,
         Guid? roleId = null,
         Guid? organizationUnitId = null,
+        List<Guid>? organizationUnitIds = null,
         string? userName = null,
         string? phoneNumber = null,
         string? emailAddress = null,
@@ -522,8 +527,8 @@ public class EfCoreIdentityUserRepository : EfCoreRepository<ICenseqIdentityDbCo
         if (roleId.HasValue)
         {
             var dbContext = await GetDbContextAsync();
-            var organizationUnitIds = await dbContext.Set<OrganizationUnitRole>().Where(q => q.RoleId == roleId!.Value).Select(q => q.OrganizationUnitId).ToArrayAsync(cancellationToken: cancellationToken);
-            query = query.Where(identityUser => identityUser.Roles.Any(x => x.RoleId == roleId!.Value) || identityUser.OrganizationUnits.Any(x => organizationUnitIds.Contains(x.OrganizationUnitId)));
+            var roleOrganizationUnitIds = await dbContext.Set<OrganizationUnitRole>().Where(q => q.RoleId == roleId!.Value).Select(q => q.OrganizationUnitId).ToArrayAsync(cancellationToken: cancellationToken);
+            query = query.Where(identityUser => identityUser.Roles.Any(x => x.RoleId == roleId!.Value) || identityUser.OrganizationUnits.Any(x => roleOrganizationUnitIds.Contains(x.OrganizationUnitId)));
         }
 
         return query
@@ -537,6 +542,7 @@ public class EfCoreIdentityUserRepository : EfCoreRepository<ICenseqIdentityDbCo
                     (u.PhoneNumber != null && u.PhoneNumber.Contains(filter!))
             )
             .WhereIf(organizationUnitId.HasValue, identityUser => identityUser.OrganizationUnits.Any(x => x.OrganizationUnitId == organizationUnitId!.Value))
+            .WhereIf(organizationUnitIds is { Count: > 0 }, identityUser => identityUser.OrganizationUnits.Any(x => organizationUnitIds!.Contains(x.OrganizationUnitId)))
             .WhereIf(!string.IsNullOrWhiteSpace(userName), x => x.UserName == userName)
             .WhereIf(!string.IsNullOrWhiteSpace(phoneNumber), x => x.PhoneNumber == phoneNumber)
             .WhereIf(!string.IsNullOrWhiteSpace(emailAddress), x => x.Email == emailAddress)

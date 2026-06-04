@@ -1,3 +1,5 @@
+using System;
+using System.Collections.Generic;
 using Volo.Abp.Application.Dtos;
 
 namespace Censeq.Identity;
@@ -11,4 +13,14 @@ public class GetIdentityUsersInput : ExtensiblePagedAndSortedResultRequestDto
     /// 过滤条件
     /// </summary>
     public string? Filter { get; set; }
+
+    /// <summary>
+    /// 组织机构Id
+    /// </summary>
+    public Guid? OrganizationUnitId { get; set; }
+
+    /// <summary>
+    /// 组织机构Id列表
+    /// </summary>
+    public List<Guid>? OrganizationUnitIds { get; set; }
 }

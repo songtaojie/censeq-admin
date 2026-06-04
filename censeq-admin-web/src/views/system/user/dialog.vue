@@ -62,43 +62,114 @@
 								</el-form-item>
 							</el-col>
 						</el-row>
-						<el-form-item label="所属机构">
-							<el-select
-								v-model="state.organizationUnitIds"
+						<el-form-item prop="organizationUnitIds" required>
+							<template #label>
+								<span class="form-label-with-help">
+									所属机构
+									<el-tooltip content="用户至少需要归属到一个组织机构，多选时默认第一个为主组织" placement="top">
+										<el-icon class="form-label-help"><ele-QuestionFilled /></el-icon>
+									</el-tooltip>
+								</span>
+							</template>
+							<el-tree-select
+								v-model="state.ruleForm.organizationUnitIds"
+								:data="organizationUnitTreeOptions"
+								:props="organizationUnitTreeProps"
+								node-key="id"
 								multiple
+								show-checkbox
+								check-strictly
 								filterable
 								collapse-tags
 								collapse-tags-tooltip
+								default-expand-all
+								:render-after-expand="false"
 								placeholder="可选多个组织单元"
 								class="w100"
-							>
-								<el-option v-for="ou in state.ouOptions" :key="ou.id" :label="ouLabel(ou)" :value="ou.id!" />
-							</el-select>
+								@change="onOrganizationUnitsChange"
+							/>
 						</el-form-item>
-						<el-form-item v-if="state.organizationUnitIds.length > 1" label="主组织机构">
+						<el-form-item v-if="state.ruleForm.organizationUnitIds.length > 1" label="主组织机构">
 							<el-select v-model="state.primaryOrganizationUnitId" filterable placeholder="请选择主组织机构" class="w100">
 								<el-option v-for="ou in selectedOrganizationUnits" :key="ou.id" :label="ouLabel(ou)" :value="ou.id!" />
 							</el-select>
 						</el-form-item>
-						<div class="role-hint basic-org-hint">
-							<el-icon><ele-InfoFilled /></el-icon>
-							<span>可将用户归属到一个或多个组织机构，多选时默认第一个为主组织</span>
-						</div>
 					</el-form>
 				</el-tab-pane>
 
 				<el-tab-pane label="角色授权" name="roles">
-					<el-form label-width="80px" size="default" style="margin-top: 8px">
-						<el-form-item label="所属角色">
-							<el-select v-model="state.roleNames" multiple filterable collapse-tags collapse-tags-tooltip placeholder="请选择角色" class="w100">
-								<el-option v-for="r in state.roleOptions" :key="r.id" :label="r.name ?? ''" :value="r.name ?? ''" />
-							</el-select>
-						</el-form-item>
-						<div class="role-hint">
-							<el-icon><ele-InfoFilled /></el-icon>
-							<span>用户将继承所选角色的权限</span>
+					<div class="role-transfer">
+						<div class="role-transfer-panel">
+							<div class="role-transfer-header">
+								<el-checkbox
+									:model-value="isAllAvailableChecked"
+									:indeterminate="isAvailableIndeterminate"
+									:disabled="!availableRoles.length"
+									@change="toggleAvailableChecked"
+								>
+									未授权
+								</el-checkbox>
+								<span>{{ state.roleTransfer.availableCheckedRoleNames.length }}/{{ availableRoles.length }}</span>
+							</div>
+							<div class="role-transfer-search">
+								<el-input v-model="state.roleTransfer.availableKeyword" placeholder="搜索" :prefix-icon="Search" clearable />
+							</div>
+							<el-checkbox-group v-model="state.roleTransfer.availableCheckedRoleNames" class="role-transfer-list">
+								<el-checkbox v-for="role in availableRoles" :key="role.name" :label="role.name">
+									{{ roleDisplayName(role) }}
+								</el-checkbox>
+							</el-checkbox-group>
 						</div>
-					</el-form>
+
+						<div class="role-transfer-actions">
+							<el-button
+								type="primary"
+								icon="ele-DArrowRight"
+								:disabled="!availableRoles.length"
+								@click="authorizeRoles(availableRoles.map((role) => role.name))"
+							/>
+							<el-button
+								type="primary"
+								icon="ele-ArrowRight"
+								:disabled="!state.roleTransfer.availableCheckedRoleNames.length"
+								@click="authorizeRoles(state.roleTransfer.availableCheckedRoleNames)"
+							/>
+							<el-button
+								type="primary"
+								icon="ele-ArrowLeft"
+								:disabled="!state.roleTransfer.selectedCheckedRoleNames.length"
+								@click="revokeRoles(state.roleTransfer.selectedCheckedRoleNames)"
+							/>
+							<el-button
+								type="primary"
+								icon="ele-DArrowLeft"
+								:disabled="!selectedRoles.length"
+								@click="revokeRoles(selectedRoles.map((role) => role.name))"
+							/>
+						</div>
+
+						<div class="role-transfer-panel">
+							<div class="role-transfer-header">
+								<el-checkbox
+									:model-value="isAllSelectedChecked"
+									:indeterminate="isSelectedIndeterminate"
+									:disabled="!selectedRoles.length"
+									@change="toggleSelectedChecked"
+								>
+									已授权
+								</el-checkbox>
+								<span>{{ state.roleTransfer.selectedCheckedRoleNames.length }}/{{ selectedRoles.length }}</span>
+							</div>
+							<div class="role-transfer-search">
+								<el-input v-model="state.roleTransfer.selectedKeyword" placeholder="搜索" :prefix-icon="Search" clearable />
+							</div>
+							<el-checkbox-group v-model="state.roleTransfer.selectedCheckedRoleNames" class="role-transfer-list">
+								<el-checkbox v-for="role in selectedRoles" :key="role.name" :label="role.name">
+									{{ roleDisplayName(role) }}
+								</el-checkbox>
+							</el-checkbox-group>
+						</div>
+					</div>
 				</el-tab-pane>
 			</el-tabs>
 
@@ -114,6 +185,7 @@
 import { reactive, ref, nextTick, computed, watch } from 'vue';
 import type { FormInstance, FormRules } from 'element-plus';
 import { ElMessage } from 'element-plus';
+import { Search } from '@element-plus/icons-vue';
 import { useIdentityApi } from '/@/api/apis';
 import type { IdentityRoleDto, IdentityUserDto, OrganizationUnitDto } from '/@/api/models/identity';
 
@@ -121,6 +193,12 @@ const emit = defineEmits(['refresh']);
 
 const formRef = ref<FormInstance>();
 const activeTab = ref('basic');
+
+type OrganizationUnitTreeOption = OrganizationUnitDto & {
+	value: string;
+	label: string;
+	children?: OrganizationUnitTreeOption[];
+};
 
 interface RuleForm {
 	userId: string;
@@ -133,6 +211,7 @@ interface RuleForm {
 	isActive: boolean;
 	lockoutEnabled: boolean;
 	concurrencyStamp: string;
+	organizationUnitIds: string[];
 }
 
 const emptyForm = (): RuleForm => ({
@@ -146,12 +225,18 @@ const emptyForm = (): RuleForm => ({
 	isActive: true,
 	lockoutEnabled: true,
 	concurrencyStamp: '',
+	organizationUnitIds: [],
 });
 
 const state = reactive({
 	ruleForm: emptyForm(),
 	roleNames: [] as string[],
-	organizationUnitIds: [] as string[],
+	roleTransfer: {
+		availableKeyword: '',
+		selectedKeyword: '',
+		availableCheckedRoleNames: [] as string[],
+		selectedCheckedRoleNames: [] as string[],
+	},
 	primaryOrganizationUnitId: null as string | null,
 	roleOptions: [] as IdentityRoleDto[],
 	ouOptions: [] as OrganizationUnitDto[],
@@ -171,6 +256,18 @@ const formRules = computed<FormRules>(() => {
 			{ required: true, message: '请输入邮箱', trigger: 'blur' },
 			{ type: 'email', message: '邮箱格式不正确', trigger: 'blur' },
 		],
+		organizationUnitIds: [
+			{
+				validator: (_rule, _value, callback) => {
+					if (state.ruleForm.organizationUnitIds.length) {
+						callback();
+					} else {
+						callback(new Error('请选择所属机构'));
+					}
+				},
+				trigger: 'change',
+			},
+		],
 	};
 	if (state.dialog.type === 'add') {
 		rules.password = [
@@ -182,14 +279,108 @@ const formRules = computed<FormRules>(() => {
 });
 
 function ouLabel(ou: OrganizationUnitDto): string {
-	const code = ou.code ? ` [${ou.code}]` : '';
-	return `${ou.displayName ?? ''}${code}`;
+	return ou.displayName ?? '';
 }
 
-const selectedOrganizationUnits = computed(() => state.ouOptions.filter((ou) => !!ou.id && state.organizationUnitIds.includes(ou.id)));
+const organizationUnitTreeProps = {
+	label: 'label',
+	value: 'value',
+	children: 'children',
+};
+
+function buildOrganizationUnitTree(items: OrganizationUnitDto[]): OrganizationUnitTreeOption[] {
+	const byId = new Map<string, OrganizationUnitTreeOption>();
+	items.forEach((item) => {
+		if (!item.id) return;
+		byId.set(item.id, { ...item, value: item.id, label: ouLabel(item), children: [] });
+	});
+
+	const roots: OrganizationUnitTreeOption[] = [];
+	byId.forEach((node) => {
+		const parentId = node.parentId;
+		if (parentId && byId.has(parentId)) {
+			byId.get(parentId)!.children!.push(node);
+		} else {
+			roots.push(node);
+		}
+	});
+
+	const sortTree = (nodes: OrganizationUnitTreeOption[]) => {
+		nodes.sort((a, b) => (a.code ?? '').localeCompare(b.code ?? '', undefined, { numeric: true }));
+		nodes.forEach((node) => {
+			if (node.children?.length) {
+				sortTree(node.children);
+			}
+		});
+	};
+	sortTree(roots);
+	return roots;
+}
+
+const organizationUnitTreeOptions = computed(() => buildOrganizationUnitTree(state.ouOptions));
+
+const selectedOrganizationUnits = computed(() => state.ouOptions.filter((ou) => !!ou.id && state.ruleForm.organizationUnitIds.includes(ou.id)));
+
+type RoleTransferItem = IdentityRoleDto & { name: string };
+
+function roleDisplayName(role: RoleTransferItem): string {
+	return role.code ? `${role.name} [${role.code}]` : role.name;
+}
+
+function roleMatchesKeyword(role: RoleTransferItem, keyword: string): boolean {
+	const value = keyword.trim().toLowerCase();
+	if (!value) return true;
+	return [role.name, role.code, role.remark].some((text) => (text ?? '').toLowerCase().includes(value));
+}
+
+const normalizedRoleOptions = computed<RoleTransferItem[]>(() => state.roleOptions.filter((role): role is RoleTransferItem => !!role.name));
+const selectedRoleNameSet = computed(() => new Set(state.roleNames));
+const availableRoles = computed(() =>
+	normalizedRoleOptions.value.filter((role) => !selectedRoleNameSet.value.has(role.name) && roleMatchesKeyword(role, state.roleTransfer.availableKeyword))
+);
+const selectedRoles = computed(() =>
+	normalizedRoleOptions.value.filter((role) => selectedRoleNameSet.value.has(role.name) && roleMatchesKeyword(role, state.roleTransfer.selectedKeyword))
+);
+
+const isAllAvailableChecked = computed(() => availableRoles.value.length > 0 && state.roleTransfer.availableCheckedRoleNames.length === availableRoles.value.length);
+const isAvailableIndeterminate = computed(
+	() => state.roleTransfer.availableCheckedRoleNames.length > 0 && state.roleTransfer.availableCheckedRoleNames.length < availableRoles.value.length
+);
+const isAllSelectedChecked = computed(() => selectedRoles.value.length > 0 && state.roleTransfer.selectedCheckedRoleNames.length === selectedRoles.value.length);
+const isSelectedIndeterminate = computed(
+	() => state.roleTransfer.selectedCheckedRoleNames.length > 0 && state.roleTransfer.selectedCheckedRoleNames.length < selectedRoles.value.length
+);
+
+function toggleAvailableChecked(checked: boolean) {
+	state.roleTransfer.availableCheckedRoleNames = checked ? availableRoles.value.map((role) => role.name) : [];
+}
+
+function toggleSelectedChecked(checked: boolean) {
+	state.roleTransfer.selectedCheckedRoleNames = checked ? selectedRoles.value.map((role) => role.name) : [];
+}
+
+function authorizeRoles(roleNames: string[]) {
+	const next = new Set(state.roleNames);
+	roleNames.forEach((name) => next.add(name));
+	state.roleNames = normalizedRoleOptions.value.filter((role) => next.has(role.name)).map((role) => role.name);
+	state.roleTransfer.availableCheckedRoleNames = [];
+}
+
+function revokeRoles(roleNames: string[]) {
+	const revokeSet = new Set(roleNames);
+	state.roleNames = state.roleNames.filter((name) => !revokeSet.has(name));
+	state.roleTransfer.selectedCheckedRoleNames = [];
+}
+
+watch([availableRoles, selectedRoles], () => {
+	const availableNameSet = new Set(availableRoles.value.map((role) => role.name));
+	const selectedNameSet = new Set(selectedRoles.value.map((role) => role.name));
+	state.roleTransfer.availableCheckedRoleNames = state.roleTransfer.availableCheckedRoleNames.filter((name) => availableNameSet.has(name));
+	state.roleTransfer.selectedCheckedRoleNames = state.roleTransfer.selectedCheckedRoleNames.filter((name) => selectedNameSet.has(name));
+});
 
 function syncPrimaryOrganizationUnit() {
-	const ids = state.organizationUnitIds;
+	const ids = state.ruleForm.organizationUnitIds;
 	if (!ids.length) {
 		state.primaryOrganizationUnitId = null;
 		return;
@@ -199,7 +390,13 @@ function syncPrimaryOrganizationUnit() {
 	}
 }
 
-watch(() => [...state.organizationUnitIds], syncPrimaryOrganizationUnit);
+watch(() => [...state.ruleForm.organizationUnitIds], syncPrimaryOrganizationUnit);
+
+async function onOrganizationUnitsChange() {
+	syncPrimaryOrganizationUnit();
+	await nextTick();
+	formRef.value?.validateField('organizationUnitIds');
+}
 
 const loadRolesAndOus = async () => {
 	const api = useIdentityApi();
@@ -212,7 +409,10 @@ const openDialog = async (type: string, row?: IdentityUserDto) => {
 	state.dialog.type = type as 'add' | 'edit';
 	state.ruleForm = emptyForm();
 	state.roleNames = [];
-	state.organizationUnitIds = [];
+	state.roleTransfer.availableKeyword = '';
+	state.roleTransfer.selectedKeyword = '';
+	state.roleTransfer.availableCheckedRoleNames = [];
+	state.roleTransfer.selectedCheckedRoleNames = [];
 	state.primaryOrganizationUnitId = null;
 	activeTab.value = 'basic';
 	state.dialog.isShowDialog = true;
@@ -232,8 +432,8 @@ const openDialog = async (type: string, row?: IdentityUserDto) => {
 		const api = useIdentityApi();
 		const [roleRes, ouRes] = await Promise.all([api.getUserRoles(row.id), api.getUserOrganizationUnits(row.id)]);
 		state.roleNames = (roleRes.items ?? []).map((r: IdentityRoleDto) => r.name).filter(Boolean) as string[];
-		state.organizationUnitIds = (ouRes.items ?? []).map((o) => o.id!).filter(Boolean);
-		state.primaryOrganizationUnitId = (ouRes.items ?? []).find((o) => o.isPrimary)?.id ?? state.organizationUnitIds[0] ?? null;
+		state.ruleForm.organizationUnitIds = (ouRes.items ?? []).map((o) => o.id!).filter(Boolean);
+		state.primaryOrganizationUnitId = (ouRes.items ?? []).find((o) => o.isPrimary)?.id ?? state.ruleForm.organizationUnitIds[0] ?? null;
 	}
 	syncPrimaryOrganizationUnit();
 	await nextTick();
@@ -262,7 +462,7 @@ const buildUserPayload = () => ({
 });
 
 const buildOrganizationUnitPayload = () => ({
-	organizationUnitIds: [...state.organizationUnitIds],
+	organizationUnitIds: [...state.ruleForm.organizationUnitIds],
 	primaryOrganizationUnitId: state.primaryOrganizationUnitId,
 });
 
@@ -278,7 +478,7 @@ const onSubmit = async () => {
 					...buildUserPayload(),
 					password: state.ruleForm.password,
 				});
-				if (created.id && state.organizationUnitIds.length) {
+				if (created.id && state.ruleForm.organizationUnitIds.length) {
 					await api.updateUserOrganizationUnits(created.id, buildOrganizationUnitPayload());
 				}
 				ElMessage.success('创建成功');
@@ -331,5 +531,93 @@ defineExpose({ openDialog });
 .basic-org-hint {
 	margin-top: -12px;
 	padding-left: 100px;
+}
+
+.form-label-with-help {
+	display: inline-flex;
+	align-items: center;
+	gap: 4px;
+}
+
+.form-label-help {
+	color: var(--el-text-color-secondary);
+	cursor: help;
+	font-size: 14px;
+	vertical-align: middle;
+}
+
+.role-transfer {
+	display: grid;
+	grid-template-columns: minmax(0, 1fr) 56px minmax(0, 1fr);
+	gap: 16px;
+	align-items: center;
+	min-height: 330px;
+	margin-top: 8px;
+}
+
+.role-transfer-panel {
+	height: 330px;
+	border: 1px solid var(--el-border-color);
+	border-radius: 4px;
+	background: var(--el-bg-color);
+	display: flex;
+	flex-direction: column;
+	overflow: hidden;
+}
+
+.role-transfer-header {
+	height: 36px;
+	padding: 0 10px;
+	border-bottom: 1px solid var(--el-border-color-lighter);
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	color: var(--el-text-color-primary);
+	font-size: 13px;
+	background: var(--el-fill-color-extra-light);
+}
+
+.role-transfer-search {
+	padding: 8px;
+	border-bottom: 1px solid var(--el-border-color-lighter);
+
+	:deep(.el-input__wrapper) {
+		border-radius: 4px;
+	}
+}
+
+.role-transfer-list {
+	flex: 1;
+	padding: 8px 10px;
+	overflow-y: auto;
+
+	:deep(.el-checkbox) {
+		width: 100%;
+		height: 28px;
+		margin-right: 0;
+		display: flex;
+		align-items: center;
+	}
+
+	:deep(.el-checkbox__label) {
+		min-width: 0;
+		overflow: hidden;
+		text-overflow: ellipsis;
+		white-space: nowrap;
+	}
+}
+
+.role-transfer-actions {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: 10px;
+
+	:deep(.el-button) {
+		width: 34px;
+		height: 28px;
+		margin-left: 0;
+		padding: 0;
+	}
 }
 </style>
