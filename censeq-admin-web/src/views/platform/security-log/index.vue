@@ -73,7 +73,7 @@
 					<template #default="{ row }">
 						<el-popconfirm title="确定删除该登录日志吗？" @confirm="onDelete(row)">
 							<template #reference>
-								<el-button icon="ele-Delete" size="small" text type="danger">删除</el-button>
+								<el-button v-auth="'CenseqIdentity.SecurityLogs.Delete'" icon="ele-Delete" size="small" text type="danger">删除</el-button>
 							</template>
 						</el-popconfirm>
 					</template>

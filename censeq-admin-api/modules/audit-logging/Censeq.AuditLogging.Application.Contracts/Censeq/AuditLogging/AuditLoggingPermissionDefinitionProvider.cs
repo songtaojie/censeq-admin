@@ -19,9 +19,10 @@ public class AuditLoggingPermissionDefinitionProvider : PermissionDefinitionProv
             AuditLoggingPermissions.GroupName,
             L("Permission:AuditLogging"));
 
-        group.AddPermission(
+        var auditLogsPermission = group.AddPermission(
             AuditLoggingPermissions.AuditLogs,
             L("Permission:AuditLogs"));
+        auditLogsPermission.AddChild(AuditLoggingPermissions.AuditLogsDelete, L("Permission:Delete"));
     }
 
     /// <summary>

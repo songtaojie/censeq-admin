@@ -1,36 +1,41 @@
 <template>
 	<div class="role-permission-dialog-container">
-		<el-dialog v-model="state.dialog.isShowDialog" width="720px" destroy-on-close draggable :close-on-click-modal="false">
+		<el-drawer
+			v-model="state.dialog.isShowDialog"
+			direction="rtl"
+			size="720px"
+			destroy-on-close
+			:close-on-click-modal="false"
+			class="role-permission-drawer"
+		>
 			<template #header>
-				<div style="color: #fff">
-					<el-icon size="16" style="margin-right: 3px; display: inline; vertical-align: middle"><ele-Menu /></el-icon>
+				<div class="drawer-title">
+					<el-icon size="16"><ele-Menu /></el-icon>
 					<span>角色菜单授权【{{ state.roleName }}】</span>
 				</div>
 			</template>
-			<div class="dialog-intro">
-				为当前角色配置可访问的菜单权限。树形勾选会同步影响角色可见菜单，保存后立即生效。
+			<div class="drawer-content">
+				<div class="dialog-intro">
+					为当前角色配置可访问的菜单权限。树形勾选会同步影响角色可见菜单，保存后立即生效。
+				</div>
+				<PermissionTree
+					ref="permTreeRef"
+					v-model="checkedPermissions"
+					:data="state.menuData"
+					:loading="state.loading"
+					:show-summary="true"
+					:referenced-names="referencedPermissionNames"
+				/>
 			</div>
-			<PermissionTree
-				ref="permTreeRef"
-				v-model="checkedPermissions"
-				:data="state.menuData"
-				:loading="state.loading"
-				:show-summary="true"
-				:referenced-names="referencedPermissionNames"
-			>
-				<template #summary-extra>
-					<el-tag type="primary">角色：{{ state.roleName || '-' }}</el-tag>
-				</template>
-			</PermissionTree>
 			<template #footer>
-				<span class="dialog-footer">
+				<span class="drawer-footer">
 					<el-button @click="onCancel" size="default">取 消</el-button>
 					<el-button type="primary" @click="onSubmit" size="default" :loading="state.submitLoading">
 						保 存
 					</el-button>
 				</span>
 			</template>
-		</el-dialog>
+		</el-drawer>
 	</div>
 </template>
 
@@ -48,7 +53,7 @@ const permTreeRef = ref<InstanceType<typeof PermissionTree>>();
 const checkedPermissions = ref<string[]>([]);
 
 const state = reactive({
-	roleId: '',
+	roleKey: '',
 	roleName: '',
 	menuData: [] as PermissionGroupDto[],
 	dialog: {
@@ -62,7 +67,7 @@ const referencedPermissionNames = ref<Set<string>>(new Set());
 
 // 打开弹窗
 const openDialog = (row: IdentityRoleDto) => {
-	state.roleId = row.id!;
+	state.roleKey = row.name!;
 	state.roleName = row.name!;
 	state.dialog.isShowDialog = true;
 	getMenuData();
@@ -71,6 +76,8 @@ const openDialog = (row: IdentityRoleDto) => {
 // 关闭弹窗
 const closeDialog = () => {
 	state.dialog.isShowDialog = false;
+	state.roleKey = '';
+	state.roleName = '';
 	state.menuData = [];
 	checkedPermissions.value = [];
 	referencedPermissionNames.value = new Set();
@@ -80,7 +87,7 @@ const onCancel = () => closeDialog();
 
 // 提交
 const onSubmit = async () => {
-	if (!state.roleId) return;
+	if (!state.roleKey) return;
 	state.submitLoading = true;
 	try {
 		const { updatePermission } = usePermissionApi();
@@ -95,7 +102,7 @@ const onSubmit = async () => {
 			}))
 		);
 
-		await updatePermission('R', state.roleId, { permissions: updatePayload });
+		await updatePermission('R', state.roleKey, { permissions: updatePayload });
 		ElMessage.success('授权成功');
 		closeDialog();
 	} finally {
@@ -105,7 +112,7 @@ const onSubmit = async () => {
 
 // 获取权限数据，并在租户上下文时过滤为租户已被授权的范围
 const getMenuData = async () => {
-	if (!state.roleId) return;
+	if (!state.roleKey) return;
 	state.loading = true;
 	try {
 		const { getPermissionList } = usePermissionApi();
@@ -115,7 +122,7 @@ const getMenuData = async () => {
 		const tenantId = await getCurrentTenantId();
 
 		const requests: Promise<any>[] = [
-			getPermissionList('R', state.roleId),
+			getPermissionList('R', state.roleKey),
 			menuApi.getReferencedPermissionNames(),
 		];
 		// 租户上下文：额外加载当前租户被平台授权的权限范围
@@ -159,6 +166,43 @@ defineExpose({ openDialog });
 
 <style scoped lang="scss">
 .role-permission-dialog-container {
+	:deep(.role-permission-drawer) {
+		max-width: 92vw;
+	}
+
+	:deep(.el-drawer__header) {
+		margin-bottom: 0;
+		padding: 16px 20px;
+		border-bottom: 1px solid var(--el-border-color-lighter);
+		color: var(--el-text-color-primary);
+	}
+
+	:deep(.el-drawer__body) {
+		display: flex;
+		flex-direction: column;
+		padding: 18px 20px;
+		overflow: hidden;
+	}
+
+	:deep(.el-drawer__footer) {
+		padding: 14px 20px;
+		border-top: 1px solid var(--el-border-color-lighter);
+	}
+
+	.drawer-title {
+		display: inline-flex;
+		align-items: center;
+		gap: 6px;
+		font-weight: 600;
+	}
+
+	.drawer-content {
+		display: flex;
+		min-height: 0;
+		flex: 1;
+		flex-direction: column;
+	}
+
 	.dialog-intro {
 		margin-bottom: 12px;
 		padding: 12px 14px;
@@ -166,6 +210,24 @@ defineExpose({ openDialog });
 		background: var(--el-fill-color-light);
 		color: var(--el-text-color-secondary);
 		line-height: 1.7;
+	}
+
+	:deep(.permission-tree-wrapper) {
+		display: flex;
+		min-height: 0;
+		flex: 1;
+		flex-direction: column;
+	}
+
+	:deep(.permission-tree) {
+		flex: 1;
+		max-height: none;
+	}
+
+	.drawer-footer {
+		display: flex;
+		justify-content: flex-end;
+		gap: 10px;
 	}
 }
 </style>

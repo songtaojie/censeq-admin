@@ -62,6 +62,8 @@ public static class AdminSeedPermissionNames
 
     public static IReadOnlyList<string> PermissionDefinitionMenu { get; } = ["PermissionManagement.DefinitionManagement"];
     public static IReadOnlyList<string> AuditLogMenu { get; } = ["AuditLogging.AuditLogs"];
+    public static IReadOnlyList<string> AuditLogDelete { get; } = ["AuditLogging.AuditLogs.Delete"];
+    public static IReadOnlyList<string> LogManagementMenu { get; } = Merge(AuditLogMenu, SecurityLogMenu);
 
     public static IReadOnlyList<string> SettingMenu { get; } = ["SettingManagement.Emailing", "SettingManagement.TimeZone"];
     public static IReadOnlyList<string> SettingDefinitions { get; } =
@@ -132,7 +134,9 @@ public static class AdminSeedPermissionNames
         SettingMenu,
         SettingDefinitions,
         PermissionDefinitionMenu,
+        LogManagementMenu,
         AuditLogMenu,
+        AuditLogDelete,
         SecurityLogMenu,
         SecurityLogDelete,
         LocalizationTexts,

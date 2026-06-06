@@ -18,6 +18,11 @@ public static class AuditLoggingPermissions
     public const string AuditLogs = GroupName + ".AuditLogs";
 
     /// <summary>
+    /// 删除审计日志。
+    /// </summary>
+    public const string AuditLogsDelete = AuditLogs + ".Delete";
+
+    /// <summary>
     /// 获取全部审计日志模块扩展配置。
     /// </summary>
     /// <returns>模块扩展配置集合。</returns>

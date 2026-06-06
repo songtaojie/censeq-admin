@@ -83,7 +83,7 @@
 						<el-button icon="ele-View" size="small" text type="primary" @click="onViewDetail(row)">详情</el-button>
 						<el-popconfirm title="确定删除该操作日志吗？" @confirm="onDelete(row)">
 							<template #reference>
-								<el-button icon="ele-Delete" size="small" text type="danger">删除</el-button>
+								<el-button v-auth="'AuditLogging.AuditLogs.Delete'" icon="ele-Delete" size="small" text type="danger">删除</el-button>
 							</template>
 						</el-popconfirm>
 					</template>

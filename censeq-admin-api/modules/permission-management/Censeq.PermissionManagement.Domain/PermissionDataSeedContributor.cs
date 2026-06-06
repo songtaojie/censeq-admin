@@ -59,7 +59,7 @@ public class PermissionDataSeedContributor : IDataSeedContributor, ITransientDep
 
         await PermissionDataSeeder.SeedAsync(
             RolePermissionValueProvider.ProviderName,
-            "admin",
+            "管理员",
             permissionNames,
             context?.TenantId
         );

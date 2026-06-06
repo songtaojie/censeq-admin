@@ -38,7 +38,11 @@
 <script setup lang="ts">
 import { ref, computed, watch, nextTick } from 'vue';
 import type { ElTree } from 'element-plus';
-import type { PermissionGroupDto } from '/@/api/models/permission';
+import type { PermissionGrantInfoDto, PermissionGroupDto } from '/@/api/models/permission';
+
+type PermissionTreeNode = PermissionGrantInfoDto & {
+	permissions?: PermissionTreeNode[];
+};
 
 // ── Props ──────────────────────────────────────────────────────────────────
 const props = withDefaults(
@@ -81,13 +85,11 @@ const treeRef = ref<InstanceType<typeof ElTree>>();
 let _skipSync = false;
 
 // ── Computed ──────────────────────────────────────────────────────────────
-/** 所有叶子权限名称集合（分组内 permissions[].name） */
+/** 所有权限名称集合（分组内 permissions[].name） */
 const allPermNames = computed<Set<string>>(() => {
 	const s = new Set<string>();
 	for (const group of props.data) {
-		for (const p of group.permissions) {
-			s.add(p.name);
-		}
+		collectPermissionNames(group.permissions as PermissionTreeNode[], s);
 	}
 	return s;
 });
@@ -98,7 +100,12 @@ const grantedCount = computed(
 	() => (props.modelValue ?? []).filter((n) => allPermNames.value.has(n)).length
 );
 
-const treeData = computed(() => props.data);
+const treeData = computed<PermissionGroupDto[]>(() =>
+	props.data.map((group) => ({
+		...group,
+		permissions: buildPermissionTree(group.permissions as PermissionTreeNode[]) as PermissionGrantInfoDto[],
+	}))
+);
 
 // ── 同步工具 ──────────────────────────────────────────────────────────────
 function syncChecked(names: string[]) {
@@ -163,6 +170,51 @@ function uncheckAll() {
 }
 
 defineExpose({ getGrantedNames, checkAll, uncheckAll });
+
+function collectPermissionNames(nodes: PermissionTreeNode[], target: Set<string>) {
+	for (const node of nodes ?? []) {
+		target.add(node.name);
+		if (node.permissions?.length) {
+			collectPermissionNames(node.permissions, target);
+		}
+	}
+}
+
+function flattenPermissions(nodes: PermissionTreeNode[]): PermissionTreeNode[] {
+	const result: PermissionTreeNode[] = [];
+
+	for (const node of nodes ?? []) {
+		const { permissions = [], ...rest } = node;
+		result.push({ ...rest, permissions: [] });
+		result.push(...flattenPermissions(permissions));
+	}
+
+	return result;
+}
+
+function buildPermissionTree(permissions: PermissionTreeNode[]): PermissionTreeNode[] {
+	const flatPermissions = flattenPermissions(permissions);
+	const nodeMap = new Map<string, PermissionTreeNode>();
+	const roots: PermissionTreeNode[] = [];
+
+	for (const permission of flatPermissions) {
+		nodeMap.set(permission.name, {
+			...permission,
+			permissions: [],
+		});
+	}
+
+	for (const permission of flatPermissions) {
+		const node = nodeMap.get(permission.name)!;
+		if (permission.parentName && nodeMap.has(permission.parentName)) {
+			nodeMap.get(permission.parentName)!.permissions!.push(node);
+		} else {
+			roots.push(node);
+		}
+	}
+
+	return roots;
+}
 </script>
 
 <style scoped lang="scss">

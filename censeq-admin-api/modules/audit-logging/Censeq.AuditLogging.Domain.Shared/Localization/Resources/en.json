@@ -3,6 +3,7 @@
   "texts": {
     "Permission:AuditLogging": "Log management",
     "Permission:AuditLogs": "Operation logs",
+    "Permission:Delete": "Delete",
     "Menu:AuditLogging": "Audit logs",
     "AuditLogs": "Audit logs",
     "HttpStatus": "HTTP status",

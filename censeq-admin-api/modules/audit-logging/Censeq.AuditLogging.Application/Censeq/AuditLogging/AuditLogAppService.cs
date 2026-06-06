@@ -12,7 +12,7 @@ namespace Censeq.AuditLogging;
 /// <summary>
 /// 审计日志应用服务，提供审计日志查询和删除能力。
 /// </summary>
-[Authorize]
+[Authorize(AuditLoggingPermissions.AuditLogs)]
 public class AuditLogAppService : ApplicationService, IAuditLogAppService
 {
     /// <summary>
@@ -86,7 +86,7 @@ public class AuditLogAppService : ApplicationService, IAuditLogAppService
     /// </summary>
     /// <param name="id">标识。</param>
     /// <returns>表示异步操作的任务。</returns>
-    [Authorize]
+    [Authorize(AuditLoggingPermissions.AuditLogsDelete)]
     public virtual async Task DeleteAsync(Guid id)
     {
         await AuditLogRepository.DeleteAsync(id);
