@@ -214,7 +214,7 @@ public class IdentityDataSeeder : ITransientDependency, IIdentityDataSeeder
 
             await PermissionDataSeeder.SeedAsync(
                 RolePermissionValueProvider.ProviderName,
-                AdminRoleName,
+                adminRole.Id.ToString(),
                 defaultAdminPermissions,
                 tenantId
             );

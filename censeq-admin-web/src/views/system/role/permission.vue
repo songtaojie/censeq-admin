@@ -67,7 +67,7 @@ const referencedPermissionNames = ref<Set<string>>(new Set());
 
 // 打开弹窗
 const openDialog = (row: IdentityRoleDto) => {
-	state.roleKey = row.name!;
+	state.roleKey = row.id!;
 	state.roleName = row.name!;
 	state.dialog.isShowDialog = true;
 	getMenuData();

@@ -22,4 +22,11 @@ public interface IUserRoleFinder
     /// <param name="userId">用户标识</param>
     /// <returns>角色名称数组</returns>
     Task<string[]> GetRoleNamesAsync(Guid userId);
+
+    /// <summary>
+    /// 异步获取用户角色 ID 列表
+    /// </summary>
+    /// <param name="userId">用户标识</param>
+    /// <returns>角色 ID 数组</returns>
+    Task<Guid[]> GetRoleIdsAsync(Guid userId);
 }

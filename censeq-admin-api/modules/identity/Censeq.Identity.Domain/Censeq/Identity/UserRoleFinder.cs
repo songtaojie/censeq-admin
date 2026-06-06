@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using Volo.Abp.DependencyInjection;
 
@@ -34,5 +35,16 @@ public class UserRoleFinder : IUserRoleFinder, ITransientDependency
     public async Task<string[]> GetRoleNamesAsync(Guid userId)
     {
         return (await IdentityUserRepository.GetRoleNamesAsync(userId)).ToArray();
+    }
+
+    /// <summary>
+    /// 异步获取用户拥有的角色 ID 列表。
+    /// 包含用户直接拥有的角色，以及通过组织机构继承的角色。
+    /// </summary>
+    /// <param name="userId">用户标识。</param>
+    /// <returns>角色 ID 数组。</returns>
+    public async Task<Guid[]> GetRoleIdsAsync(Guid userId)
+    {
+        return (await IdentityUserRepository.GetRolesAsync(userId)).Select(x => x.Id).ToArray();
     }
 }

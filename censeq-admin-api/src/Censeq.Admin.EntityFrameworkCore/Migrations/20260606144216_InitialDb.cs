@@ -782,6 +782,28 @@ namespace Censeq.Admin.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "censeq_identity_claim_type_option",
+                columns: table => new
+                {
+                    id = table.Column<Guid>(type: "uuid", nullable: false),
+                    claim_type_id = table.Column<Guid>(type: "uuid", nullable: false),
+                    label = table.Column<string>(type: "character varying(128)", maxLength: 128, nullable: false),
+                    value = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: false),
+                    sort = table.Column<int>(type: "integer", nullable: false, defaultValue: 0),
+                    is_enabled = table.Column<bool>(type: "boolean", nullable: false, defaultValue: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("pk_censeq_identity_claim_type_option", x => x.id);
+                    table.ForeignKey(
+                        name: "fk_censeq_identity_claim_type_option_censeq_identity_claim_typ",
+                        column: x => x.claim_type_id,
+                        principalTable: "censeq_identity_claim_type",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "censeq_identity_role_claim",
                 columns: table => new
                 {
@@ -851,6 +873,7 @@ namespace Censeq.Admin.Migrations
                     user_id = table.Column<Guid>(type: "uuid", nullable: false),
                     organization_unit_id = table.Column<Guid>(type: "uuid", nullable: false),
                     tenant_id = table.Column<Guid>(type: "uuid", nullable: true),
+                    is_primary = table.Column<bool>(type: "boolean", nullable: false, defaultValue: false),
                     identity_user_id = table.Column<Guid>(type: "uuid", nullable: true),
                     creation_time = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
                     creator_id = table.Column<Guid>(type: "uuid", nullable: true)
@@ -1066,6 +1089,12 @@ namespace Censeq.Admin.Migrations
                 column: "url");
 
             migrationBuilder.CreateIndex(
+                name: "ix_censeq_identity_claim_type_option_claim_type_id_value",
+                table: "censeq_identity_claim_type_option",
+                columns: new[] { "claim_type_id", "value" },
+                unique: true);
+
+            migrationBuilder.CreateIndex(
                 name: "ix_censeq_identity_link_user_source_user_id_source_tenant_id_t",
                 table: "censeq_identity_link_user",
                 columns: new[] { "source_user_id", "source_tenant_id", "target_user_id", "target_tenant_id" },
@@ -1171,6 +1200,13 @@ namespace Censeq.Admin.Migrations
                 name: "ix_censeq_identity_user_organization_unit_identity_user_id",
                 table: "censeq_identity_user_organization_unit",
                 column: "identity_user_id");
+
+            migrationBuilder.CreateIndex(
+                name: "ix_censeq_identity_user_organization_unit_user_id",
+                table: "censeq_identity_user_organization_unit",
+                column: "user_id",
+                unique: true,
+                filter: "is_primary");
 
             migrationBuilder.CreateIndex(
                 name: "ix_censeq_identity_user_organization_unit_user_id_organization",
@@ -1374,7 +1410,7 @@ namespace Censeq.Admin.Migrations
                 name: "censeq_file_record");
 
             migrationBuilder.DropTable(
-                name: "censeq_identity_claim_type");
+                name: "censeq_identity_claim_type_option");
 
             migrationBuilder.DropTable(
                 name: "censeq_identity_link_user");
@@ -1456,6 +1492,9 @@ namespace Censeq.Admin.Migrations
 
             migrationBuilder.DropTable(
                 name: "censeq_entity_change");
+
+            migrationBuilder.DropTable(
+                name: "censeq_identity_claim_type");
 
             migrationBuilder.DropTable(
                 name: "censeq_identity_role");

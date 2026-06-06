@@ -62,11 +62,11 @@ public class RolePermissionManagementProvider : PermissionManagementProvider
         if (providerName == UserPermissionValueProvider.ProviderName)
         {
             var userId = Guid.Parse(providerKey);
-            var roleNames = await UserRoleFinder.GetRoleNamesAsync(userId);
+            var roleIds = await UserRoleFinder.GetRoleIdsAsync(userId);
 
-            foreach (var roleName in roleNames)
+            foreach (var roleId in roleIds)
             {
-                permissionGrants.AddRange(await PermissionGrantRepository.GetListAsync(names, Name, roleName));
+                permissionGrants.AddRange(await PermissionGrantRepository.GetListAsync(names, Name, roleId.ToString()));
             }
         }
 

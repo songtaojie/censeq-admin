@@ -29,6 +29,6 @@ public class RoleDeletedEventHandler :
     [UnitOfWork]
     public virtual async Task HandleEventAsync(EntityDeletedEto<IdentityRoleEto> eventData)
     {
-        await PermissionManager.DeleteAsync(RolePermissionValueProvider.ProviderName, eventData.Entity.Name);
+        await PermissionManager.DeleteAsync(RolePermissionValueProvider.ProviderName, eventData.Entity.Id.ToString());
     }
 }

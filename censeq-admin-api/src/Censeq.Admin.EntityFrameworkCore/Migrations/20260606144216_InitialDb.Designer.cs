@@ -13,7 +13,7 @@ using Volo.Abp.EntityFrameworkCore;
 namespace Censeq.Admin.Migrations
 {
     [DbContext(typeof(CenseqAdminDbContext))]
-    [Migration("20260530061413_InitialDb")]
+    [Migration("20260606144216_InitialDb")]
     partial class InitialDb
     {
         /// <inheritdoc />
@@ -1036,6 +1036,50 @@ namespace Censeq.Admin.Migrations
                     b.ToTable("censeq_identity_claim_type", (string)null);
                 });
 
+            modelBuilder.Entity("Censeq.Identity.Entities.IdentityClaimTypeOption", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uuid")
+                        .HasColumnName("id");
+
+                    b.Property<Guid>("ClaimTypeId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("claim_type_id");
+
+                    b.Property<bool>("IsEnabled")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("boolean")
+                        .HasDefaultValue(true)
+                        .HasColumnName("is_enabled");
+
+                    b.Property<string>("Label")
+                        .IsRequired()
+                        .HasMaxLength(128)
+                        .HasColumnType("character varying(128)")
+                        .HasColumnName("label");
+
+                    b.Property<int>("Sort")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasDefaultValue(0)
+                        .HasColumnName("sort");
+
+                    b.Property<string>("Value")
+                        .IsRequired()
+                        .HasMaxLength(256)
+                        .HasColumnType("character varying(256)")
+                        .HasColumnName("value");
+
+                    b.HasKey("Id")
+                        .HasName("pk_censeq_identity_claim_type_option");
+
+                    b.HasIndex("ClaimTypeId", "Value")
+                        .IsUnique()
+                        .HasDatabaseName("ix_censeq_identity_claim_type_option_claim_type_id_value");
+
+                    b.ToTable("censeq_identity_claim_type_option", (string)null);
+                });
+
             modelBuilder.Entity("Censeq.Identity.Entities.IdentityLinkUser", b =>
                 {
                     b.Property<Guid>("Id")
@@ -1696,6 +1740,12 @@ namespace Censeq.Admin.Migrations
                         .HasColumnType("uuid")
                         .HasColumnName("identity_user_id");
 
+                    b.Property<bool>("IsPrimary")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("boolean")
+                        .HasDefaultValue(false)
+                        .HasColumnName("is_primary");
+
                     b.Property<Guid?>("TenantId")
                         .HasColumnType("uuid")
                         .HasColumnName("tenant_id");
@@ -1705,6 +1755,11 @@ namespace Censeq.Admin.Migrations
 
                     b.HasIndex("IdentityUserId")
                         .HasDatabaseName("ix_censeq_identity_user_organization_unit_identity_user_id");
+
+                    b.HasIndex("UserId")
+                        .IsUnique()
+                        .HasDatabaseName("ix_censeq_identity_user_organization_unit_user_id")
+                        .HasFilter("is_primary");
 
                     b.HasIndex("UserId", "OrganizationUnitId")
                         .HasDatabaseName("ix_censeq_identity_user_organization_unit_user_id_organization");
@@ -2970,6 +3025,16 @@ namespace Censeq.Admin.Migrations
                         .HasConstraintName("fk_censeq_entity_property_change_censeq_entity_change_entity_c");
                 });
 
+            modelBuilder.Entity("Censeq.Identity.Entities.IdentityClaimTypeOption", b =>
+                {
+                    b.HasOne("Censeq.Identity.Entities.IdentityClaimType", null)
+                        .WithMany("Options")
+                        .HasForeignKey("ClaimTypeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("fk_censeq_identity_claim_type_option_censeq_identity_claim_typ");
+                });
+
             modelBuilder.Entity("Censeq.Identity.Entities.IdentityRoleClaim", b =>
                 {
                     b.HasOne("Censeq.Identity.Entities.IdentityRole", null)
@@ -3053,6 +3118,11 @@ namespace Censeq.Admin.Migrations
             modelBuilder.Entity("Censeq.AuditLogging.Entities.EntityChange", b =>
                 {
                     b.Navigation("PropertyChanges");
+                });
+
+            modelBuilder.Entity("Censeq.Identity.Entities.IdentityClaimType", b =>
+                {
+                    b.Navigation("Options");
                 });
 
             modelBuilder.Entity("Censeq.Identity.Entities.IdentityRole", b =>

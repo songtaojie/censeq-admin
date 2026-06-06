@@ -14,27 +14,27 @@ public static class RolePermissionManagerExtensions
     /// <summary>
     /// Task<PermissionWithGrantedProviders>
     /// </summary>
-    public static Task<PermissionWithGrantedProviders> GetForRoleAsync([NotNull] this IPermissionManager permissionManager, string roleName, string permissionName)
+    public static Task<PermissionWithGrantedProviders> GetForRoleAsync([NotNull] this IPermissionManager permissionManager, string roleId, string permissionName)
     {
         Check.NotNull(permissionManager, nameof(permissionManager));
 
-        return permissionManager.GetAsync(permissionName, RolePermissionValueProvider.ProviderName, roleName);
+        return permissionManager.GetAsync(permissionName, RolePermissionValueProvider.ProviderName, roleId);
     }
 
     /// <summary>
     /// Task<List<PermissionWithGrantedProviders>>
     /// </summary>
-    public static Task<List<PermissionWithGrantedProviders>> GetAllForRoleAsync([NotNull] this IPermissionManager permissionManager, string roleName)
+    public static Task<List<PermissionWithGrantedProviders>> GetAllForRoleAsync([NotNull] this IPermissionManager permissionManager, string roleId)
     {
         Check.NotNull(permissionManager, nameof(permissionManager));
 
-        return permissionManager.GetAllAsync(RolePermissionValueProvider.ProviderName, roleName);
+        return permissionManager.GetAllAsync(RolePermissionValueProvider.ProviderName, roleId);
     }
 
-    public static Task SetForRoleAsync([NotNull] this IPermissionManager permissionManager, string roleName, [NotNull] string permissionName, bool isGranted)
+    public static Task SetForRoleAsync([NotNull] this IPermissionManager permissionManager, string roleId, [NotNull] string permissionName, bool isGranted)
     {
         Check.NotNull(permissionManager, nameof(permissionManager));
 
-        return permissionManager.SetAsync(permissionName, RolePermissionValueProvider.ProviderName, roleName, isGranted);
+        return permissionManager.SetAsync(permissionName, RolePermissionValueProvider.ProviderName, roleId, isGranted);
     }
 }
