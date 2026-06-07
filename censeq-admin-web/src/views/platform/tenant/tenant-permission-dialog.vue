@@ -1,40 +1,47 @@
 <template>
-	<el-dialog
-		v-model="visible"
-		width="760px"
-		destroy-on-close
-		draggable
-		:close-on-click-modal="false"
-	>
-		<template #header>
-			<div style="color: #fff">
-				<el-icon size="16" style="margin-right: 4px; vertical-align: middle"><ele-Key /></el-icon>
-				<span>租户权限配置【{{ tenantName }}】</span>
+	<div class="tenant-permission-drawer-container">
+		<el-drawer
+			v-model="visible"
+			direction="rtl"
+			size="720px"
+			destroy-on-close
+			:close-on-click-modal="false"
+			class="tenant-permission-drawer"
+		>
+			<template #header>
+				<div class="drawer-title">
+					<el-icon size="16"><ele-Key /></el-icon>
+					<span>租户权限配置【{{ tenantName }}】</span>
+				</div>
+			</template>
+
+			<div class="drawer-content">
+				<div class="dialog-intro">
+					配置平台向该租户开放的权限范围。租户管理员只能将范围内的权限分配给其角色，保存后立即生效。
+				</div>
+
+				<div class="toolbar">
+					<el-button size="small" @click="onCheckAll">全选</el-button>
+					<el-button size="small" @click="onUncheckAll">清空</el-button>
+				</div>
+
+				<PermissionTree
+					ref="treeRef"
+					v-model="checkedPermissions"
+					:data="permissionGroups"
+					:loading="loading"
+					:show-summary="true"
+				/>
 			</div>
-		</template>
 
-		<div class="dialog-intro">
-			配置平台向该租户开放的权限范围。租户管理员只能将范围内的权限分配给其角色，保存后立即生效。
-		</div>
-
-		<div class="toolbar">
-			<el-button size="small" @click="onCheckAll">全选</el-button>
-			<el-button size="small" @click="onUncheckAll">清空</el-button>
-		</div>
-
-		<PermissionTree
-			ref="treeRef"
-			v-model="checkedPermissions"
-			:data="permissionGroups"
-			:loading="loading"
-			:show-summary="true"
-		/>
-
-		<template #footer>
-			<el-button @click="visible = false">取 消</el-button>
-			<el-button type="primary" :loading="submitLoading" @click="onSubmit">保 存</el-button>
-		</template>
-	</el-dialog>
+			<template #footer>
+				<span class="drawer-footer">
+					<el-button @click="visible = false" size="default">取 消</el-button>
+					<el-button type="primary" :loading="submitLoading" @click="onSubmit" size="default">保 存</el-button>
+				</span>
+			</template>
+		</el-drawer>
+	</div>
 </template>
 
 <script setup lang="ts">
@@ -91,61 +98,61 @@ async function loadData() {
 		// 只展示被租户菜单引用过的权限（过滤掉平台专属权限如 TenantManagement）
 		const tenantScopeSet = new Set<string>(scopeResult.items ?? []);
 
-		// 逐组加载权限定义，构建 PermissionGroupDto[] 树结构
-		const fullGroups = await Promise.all(
-			groups.map(async (group: PermissionGroupDefinitionDto) => {
-				const perms: PermissionDefinitionDto[] = await getPermDefs(group.name);
-				// 构建层级树：先处理根权限，再挂子权限
-				const permMap = new Map<string, PermNode>();
-				const rootPerms: PermNode[] = [];
+		const allPermissions = (
+			await Promise.all(groups.map((group: PermissionGroupDefinitionDto) => getPermDefs(group.name)))
+		).flat();
 
-				// 过滤：若 tenantScopeSet 非空，只保留租户作用域菜单引用的权限及其子孙节点
-				// 判断标准：当前节点或任意祖先节点在 tenantScopeSet 中
-				const filteredPerms = tenantScopeSet.size > 0
-					? perms.filter((p) => {
-						let cur: PermissionDefinitionDto | undefined = p;
-						while (cur) {
-							if (tenantScopeSet.has(cur.name)) return true;
-							cur = cur.parentName ? perms.find((x) => x.name === cur!.parentName) : undefined;
-						}
-						return false;
-					})
-					: perms;
-
-				for (const p of filteredPerms) {
-					const node: PermNode = {
-						name: p.name,
-						displayName: p.displayName,
-						parentName: p.parentName,
-						isGranted: false,
-						allowedProviders: [],
-						grantedProviders: [],
-						permissions: [],
-					};
-					permMap.set(p.name, node);
-				}
-
-				for (const node of permMap.values()) {
-					if (node.parentName && permMap.has(node.parentName)) {
-						permMap.get(node.parentName)!.permissions.push(node);
-					} else {
-						rootPerms.push(node);
-					}
-				}
-
-				return {
-					name: group.name,
-					displayName: group.displayName,
-					permissions: rootPerms,
-				} as PermissionGroupDto;
-			})
-		);
-
-		permissionGroups.value = fullGroups.filter((g) => g.permissions.length > 0);
+		permissionGroups.value = buildTenantScopeGroup(allPermissions, tenantScopeSet);
 		checkedPermissions.value = granted;
 	} finally {
 		loading.value = false;
 	}
+}
+
+function buildTenantScopeGroup(perms: PermissionDefinitionDto[], tenantScopeSet: Set<string>): PermissionGroupDto[] {
+	const permMap = new Map<string, PermNode>();
+	const rootPerms: PermNode[] = [];
+
+	const filteredPerms = tenantScopeSet.size > 0
+		? perms.filter((p) => {
+			let cur: PermissionDefinitionDto | undefined = p;
+			while (cur) {
+				if (tenantScopeSet.has(cur.name)) return true;
+				cur = cur.parentName ? perms.find((x) => x.name === cur!.parentName) : undefined;
+			}
+			return false;
+		})
+		: perms;
+
+	for (const p of filteredPerms) {
+		permMap.set(p.name, {
+			name: p.name,
+			displayName: p.displayName,
+			parentName: p.parentName,
+			isGranted: false,
+			allowedProviders: [],
+			grantedProviders: [],
+			permissions: [],
+		});
+	}
+
+	for (const node of permMap.values()) {
+		if (node.parentName && permMap.has(node.parentName)) {
+			permMap.get(node.parentName)!.permissions.push(node);
+		} else {
+			rootPerms.push(node);
+		}
+	}
+
+	if (rootPerms.length === 0) {
+		return [];
+	}
+
+	return [{
+		name: '__tenant_scope_permissions__',
+		displayName: '租户可用权限',
+		permissions: rootPerms,
+	}];
 }
 
 // ── 操作 ──────────────────────────────────────────────────────────────────
@@ -173,19 +180,76 @@ async function onSubmit() {
 </script>
 
 <style scoped lang="scss">
-.dialog-intro {
-	margin-bottom: 12px;
-	padding: 10px 14px;
-	border-radius: 8px;
-	background: var(--el-fill-color-light);
-	color: var(--el-text-color-secondary);
-	line-height: 1.7;
-	font-size: 13px;
-}
+.tenant-permission-drawer-container {
+	:deep(.tenant-permission-drawer) {
+		max-width: 92vw;
+	}
 
-.toolbar {
-	display: flex;
-	gap: 8px;
-	margin-bottom: 10px;
+	:deep(.el-drawer__header) {
+		margin-bottom: 0;
+		padding: 16px 20px;
+		border-bottom: 1px solid var(--el-border-color-lighter);
+		color: var(--el-text-color-primary);
+	}
+
+	:deep(.el-drawer__body) {
+		display: flex;
+		flex-direction: column;
+		padding: 18px 20px;
+		overflow: hidden;
+	}
+
+	:deep(.el-drawer__footer) {
+		padding: 14px 20px;
+		border-top: 1px solid var(--el-border-color-lighter);
+	}
+
+	.drawer-title {
+		display: inline-flex;
+		align-items: center;
+		gap: 6px;
+		font-weight: 600;
+	}
+
+	.drawer-content {
+		display: flex;
+		min-height: 0;
+		flex: 1;
+		flex-direction: column;
+	}
+
+	.dialog-intro {
+		margin-bottom: 12px;
+		padding: 12px 14px;
+		border-radius: 8px;
+		background: var(--el-fill-color-light);
+		color: var(--el-text-color-secondary);
+		line-height: 1.7;
+		font-size: 13px;
+	}
+
+	.toolbar {
+		display: flex;
+		gap: 8px;
+		margin-bottom: 10px;
+	}
+
+	:deep(.permission-tree-wrapper) {
+		display: flex;
+		min-height: 0;
+		flex: 1;
+		flex-direction: column;
+	}
+
+	:deep(.permission-tree) {
+		flex: 1;
+		max-height: none;
+	}
+
+	.drawer-footer {
+		display: flex;
+		justify-content: flex-end;
+		gap: 10px;
+	}
 }
 </style>

@@ -1,6 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 using Censeq.TenantManagement.Entities;
 using Microsoft.AspNetCore.Authorization;
 using Volo.Abp.Application.Dtos;
@@ -34,7 +31,7 @@ public class TenantAppService : TenantManagementAppServiceBase, ITenantAppServic
         LocalEventBus = localEventBus;
     }
 
-    [Authorize]
+    [Authorize(TenantManagementPermissions.Tenants.Default)]
     public virtual async Task<TenantDto> GetAsync(Guid id)
     {
         return ObjectMapper.Map<Tenant, TenantDto>(
@@ -42,7 +39,7 @@ public class TenantAppService : TenantManagementAppServiceBase, ITenantAppServic
         );
     }
 
-    [Authorize]
+    [Authorize(TenantManagementPermissions.Tenants.Default)]
     public virtual async Task<PagedResultDto<TenantDto>> GetListAsync(GetTenantsInput input)
     {
         if (input.Sorting.IsNullOrWhiteSpace())

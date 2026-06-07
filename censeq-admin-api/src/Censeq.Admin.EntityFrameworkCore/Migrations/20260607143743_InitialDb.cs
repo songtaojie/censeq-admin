@@ -1101,15 +1101,23 @@ namespace Censeq.Admin.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "ix_censeq_identity_role_code",
+                name: "ix_censeq_identity_role_host_code",
                 table: "censeq_identity_role",
                 column: "code",
-                unique: true);
+                unique: true,
+                filter: "tenant_id IS NULL AND code IS NOT NULL");
 
             migrationBuilder.CreateIndex(
                 name: "ix_censeq_identity_role_normalized_name",
                 table: "censeq_identity_role",
                 column: "normalized_name");
+
+            migrationBuilder.CreateIndex(
+                name: "ix_censeq_identity_role_tenant_id_code",
+                table: "censeq_identity_role",
+                columns: new[] { "tenant_id", "code" },
+                unique: true,
+                filter: "tenant_id IS NOT NULL AND code IS NOT NULL");
 
             migrationBuilder.CreateIndex(
                 name: "ix_censeq_identity_role_claim_identity_role_id",

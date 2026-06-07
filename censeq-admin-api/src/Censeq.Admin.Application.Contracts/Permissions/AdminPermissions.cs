@@ -1,4 +1,6 @@
-﻿namespace Censeq.Admin.Permissions;
+﻿using Censeq.TenantManagement;
+
+namespace Censeq.Admin.Permissions;
 
 public static class AdminPermissions
 {
@@ -44,7 +46,7 @@ public static class AdminPermissions
     /// </summary>
     public static class TenantAdmin
     {
-        public const string Default = GroupName + ".TenantAdmin";
+        public const string Default = TenantManagementPermissions.GroupName + ".TenantAdmin";
 
         public static class TenantPermissions
         {

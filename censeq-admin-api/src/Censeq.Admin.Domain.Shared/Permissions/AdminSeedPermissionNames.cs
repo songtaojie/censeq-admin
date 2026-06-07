@@ -57,6 +57,11 @@ public static class AdminSeedPermissionNames
     public static IReadOnlyList<string> TenantUpdate { get; } = ["TenantManagement.Tenants.Update"];
     public static IReadOnlyList<string> TenantDelete { get; } = ["TenantManagement.Tenants.Delete"];
     public static IReadOnlyList<string> TenantManageFeatures { get; } = ["TenantManagement.Tenants.ManageFeatures"];
+    public static IReadOnlyList<string> TenantManageConnectionStrings { get; } = ["TenantManagement.Tenants.ManageConnectionStrings"];
+    public static IReadOnlyList<string> TenantResetAdminPassword { get; } = ["TenantManagement.Tenants.ResetAdminPassword"];
+    public static IReadOnlyList<string> TenantAdminMenu { get; } = ["TenantManagement.TenantAdmin"];
+    public static IReadOnlyList<string> TenantAdminPermissions { get; } = ["TenantManagement.TenantAdmin.TenantPermissions"];
+    public static IReadOnlyList<string> TenantAdminPermissionsUpdate { get; } = ["TenantManagement.TenantAdmin.TenantPermissions.Update"];
 
     public static IReadOnlyList<string> HostFeatureMenu { get; } = ["CenseqFeatureManagement.ManageHostFeatures"];
 
@@ -113,6 +118,11 @@ public static class AdminSeedPermissionNames
         TenantUpdate,
         TenantDelete,
         TenantManageFeatures,
+        TenantManageConnectionStrings,
+        TenantResetAdminPassword,
+        TenantAdminMenu,
+        TenantAdminPermissions,
+        TenantAdminPermissionsUpdate,
         HostFeatureMenu,
         MenuManagementMenu,
         MenuManagementCreate,

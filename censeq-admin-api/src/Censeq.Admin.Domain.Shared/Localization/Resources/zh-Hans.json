@@ -80,7 +80,7 @@
         "Permission:Files": "文件列表",
         "Permission:FileProviders": "存储服务商",
         "Permission:SystemConfigs": "应用配置",
-        "Permission:TenantAdmin": "租户管理",
+        "Permission:TenantAdmin": "租户授权管理",
         "Permission:TenantPermissions": "租户权限",
         "Permission:Create": "创建",
         "Permission:Edit": "编辑",

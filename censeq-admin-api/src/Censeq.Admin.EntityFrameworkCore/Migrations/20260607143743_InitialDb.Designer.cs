@@ -13,7 +13,7 @@ using Volo.Abp.EntityFrameworkCore;
 namespace Censeq.Admin.Migrations
 {
     [DbContext(typeof(CenseqAdminDbContext))]
-    [Migration("20260606150128_InitialDb")]
+    [Migration("20260607143743_InitialDb")]
     partial class InitialDb
     {
         /// <inheritdoc />
@@ -1213,10 +1213,16 @@ namespace Censeq.Admin.Migrations
 
                     b.HasIndex("Code")
                         .IsUnique()
-                        .HasDatabaseName("ix_censeq_identity_role_code");
+                        .HasDatabaseName("ix_censeq_identity_role_host_code")
+                        .HasFilter("tenant_id IS NULL AND code IS NOT NULL");
 
                     b.HasIndex("NormalizedName")
                         .HasDatabaseName("ix_censeq_identity_role_normalized_name");
+
+                    b.HasIndex("TenantId", "Code")
+                        .IsUnique()
+                        .HasDatabaseName("ix_censeq_identity_role_tenant_id_code")
+                        .HasFilter("tenant_id IS NOT NULL AND code IS NOT NULL");
 
                     b.ToTable("censeq_identity_role", (string)null);
                 });

@@ -111,7 +111,14 @@ namespace Censeq.Identity.EntityFrameworkCore.Modeling
                 b.Property(r => r.Remark).IsRequired(false).HasMaxLength(IdentityRoleConsts.MaxRemarkLength);
                 b.Property(r => r.TenantId);
 
-                b.HasIndex(r => r.Code).IsUnique();
+                b.HasIndex(r => r.Code)
+                    .IsUnique()
+                    .HasFilter("tenant_id IS NULL AND code IS NOT NULL")
+                    .HasDatabaseName("ix_censeq_identity_role_host_code");
+                b.HasIndex(r => new { r.TenantId, r.Code })
+                    .IsUnique()
+                    .HasFilter("tenant_id IS NOT NULL AND code IS NOT NULL")
+                    .HasDatabaseName("ix_censeq_identity_role_tenant_id_code");
                 b.HasIndex(r => r.NormalizedName);
                 b.ApplyObjectExtensionMappings();
             });
