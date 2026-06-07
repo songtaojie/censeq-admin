@@ -360,7 +360,7 @@ public class StaticPermissionSaver : IStaticPermissionSaver, ITransientDependenc
     /// <returns>分布式锁键。</returns>
     private string GetApplicationDistributedLockKey()
     {
-        return $"{CacheOptions.KeyPrefix}_{ApplicationInfoAccessor.ApplicationName}_AbpPermissionUpdateLock";
+        return $"{CacheOptions.KeyPrefix}_{ApplicationInfoAccessor.ApplicationName}_PermissionUpdateLock";
     }
 
     /// <summary>
@@ -369,7 +369,7 @@ public class StaticPermissionSaver : IStaticPermissionSaver, ITransientDependenc
     /// <returns>分布式锁键。</returns>
     private string GetCommonDistributedLockKey()
     {
-        return $"{CacheOptions.KeyPrefix}_Common_AbpPermissionUpdateLock";
+        return $"{CacheOptions.KeyPrefix}_Common_PermissionUpdateLock";
     }
 
     /// <summary>

@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<Import Project="..\..\..\common.props" />
 
@@ -6,12 +6,12 @@
 		<TargetFramework>net8.0</TargetFramework>
 		<Nullable>enable</Nullable>
 		<GenerateEmbeddedFilesManifest>true</GenerateEmbeddedFilesManifest>
-		<RootNamespace>Censeq.AuditLogging</RootNamespace>
+		<RootNamespace />
 	</PropertyGroup>
 
 	<ItemGroup>
-		<EmbeddedResource Include="Localization\Resources\*.json" />
-		<Content Remove="Localization\Resources\*.json" />
+		<EmbeddedResource Include="Censeq\AuditLogging\Localization\Resources\*.json" />
+		<Content Remove="Censeq\AuditLogging\Localization\Resources\*.json" />
 	</ItemGroup>
 
 	<ItemGroup>
