@@ -13,7 +13,7 @@ using Volo.Abp.EntityFrameworkCore;
 namespace Censeq.Admin.Migrations
 {
     [DbContext(typeof(CenseqAdminDbContext))]
-    [Migration("20260607143743_InitialDb")]
+    [Migration("20260611143737_InitialDb")]
     partial class InitialDb
     {
         /// <inheritdoc />

@@ -56,10 +56,12 @@ export function useSignalR({ hubUrl, automaticReconnect = [0, 2000, 5000, 10000,
 		connection?.off(event);
 	};
 
+	const isConnected = () => connection?.state === HubConnectionState.Connected;
+
 	const invoke = async <TResult = void>(method: string, ...args: unknown[]) => {
 		const conn = await start();
 		return (await conn.invoke(method, ...args)) as TResult;
 	};
 
-	return { start, stop, on, off, invoke };
+	return { start, stop, on, off, isConnected, invoke };
 }

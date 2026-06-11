@@ -183,6 +183,20 @@ function getLocalRuntimeRoutes(): RouteRecordRaw[] {
 				icon: 'iconfont icon-gerenzhongxin',
 			},
 		},
+		{
+			path: '/system/online-user',
+			name: 'systemOnlineUser',
+			component: () => import('/@/views/system/online-user/index.vue'),
+			meta: {
+				title: 'message.router.systemOnlineUser',
+				isLink: '',
+				isHide: true,
+				isKeepAlive: true,
+				isAffix: false,
+				isIframe: false,
+				icon: 'ele-Connection',
+			},
+		},
 	];
 }
 

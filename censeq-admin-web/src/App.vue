@@ -23,7 +23,6 @@ import setIntroduction from '/@/utils/setIconfont';
 import { useOidc } from '/@/composables/useOidc';
 import { ensureAntiforgeryCookies } from '/@/utils/antiforgery';
 import { startOnlineUserHub, stopOnlineUserHub } from '/@/composables/useOnlineUserHub';
-import { startNotificationHub, stopNotificationHub } from '/@/composables/useNotificationHub';
 
 // 引入组件
 const LockScreen = defineAsyncComponent(() => import('/@/layout/lockScreen/index.vue'));
@@ -68,10 +67,10 @@ const startRealtimeHubs = async () => {
 	if (!shouldStartRealtime()) return;
 	const oidc = useOidc();
 	if (!(await oidc.isAuthenticated())) return;
-	await Promise.all([startOnlineUserHub(), startNotificationHub()]);
+	await startOnlineUserHub();
 };
 const stopRealtimeHubs = async () => {
-	await Promise.all([stopOnlineUserHub(), stopNotificationHub()]);
+	await stopOnlineUserHub();
 };
 // 设置初始化，防止刷新时恢复默认
 onBeforeMount(() => {

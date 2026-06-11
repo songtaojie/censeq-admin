@@ -32,6 +32,10 @@ public static class AdminSeedPermissionNames
     public static IReadOnlyList<string> SecurityLogMenu { get; } = ["CenseqIdentity.SecurityLogs"];
     public static IReadOnlyList<string> SecurityLogDelete { get; } = ["CenseqIdentity.SecurityLogs.Delete"];
 
+    public static IReadOnlyList<string> SessionMenu { get; } = ["CenseqIdentity.Sessions"];
+    public static IReadOnlyList<string> SessionManage { get; } = ["CenseqIdentity.Sessions.Manage"];
+    public static IReadOnlyList<string> SessionRevoke { get; } = ["CenseqIdentity.Sessions.Revoke"];
+
     public static IReadOnlyList<string> MenuManagementMenu { get; } = ["CenseqAdmin.Menus"];
     public static IReadOnlyList<string> MenuManagementCreate { get; } = ["CenseqAdmin.Menus.Create"];
     public static IReadOnlyList<string> MenuManagementUpdate { get; } = ["CenseqAdmin.Menus.Update"];
@@ -113,6 +117,9 @@ public static class AdminSeedPermissionNames
         ClaimTypeCreate,
         ClaimTypeUpdate,
         ClaimTypeDelete,
+        SessionMenu,
+        SessionManage,
+        SessionRevoke,
         TenantMenu,
         TenantCreate,
         TenantUpdate,
@@ -178,6 +185,9 @@ public static class AdminSeedPermissionNames
         RoleUpdate,
         RoleDelete,
         RoleManagePermissions,
+        SessionMenu,
+        SessionManage,
+        SessionRevoke,
         MenuCopyFromHost
     );
 

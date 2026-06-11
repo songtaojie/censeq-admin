@@ -12,10 +12,11 @@
 					</el-button-group>
 				</el-form-item>
 			</el-form>
+			<el-alert v-if="loadError" :title="loadError" type="error" show-icon :closable="false" style="margin-bottom: 12px" />
 		</el-card>
 
 		<el-card class="full-table" shadow="hover" style="margin-top: 5px">
-			<el-table :data="onlineUsers" style="width: 100%" border stripe>
+			<el-table v-loading="loading" :data="onlineUsers" style="width: 100%" border stripe>
 				<el-table-column type="index" label="序号" width="60" align="center" fixed />
 				<el-table-column prop="userName" label="账号" min-width="130" show-overflow-tooltip>
 					<template #default="{ row }">
@@ -53,16 +54,18 @@
 </template>
 
 <script setup lang="ts" name="systemOnlineUser">
-import { computed, onMounted } from 'vue';
+import { computed, onMounted, onUnmounted, ref } from 'vue';
 import { ElMessage, ElMessageBox } from 'element-plus';
 import { storeToRefs } from 'pinia';
 import type { OnlineUserInfo } from '/@/api/models/signalr';
-import { forceOffline, startOnlineUserHub, stopOnlineUserHub } from '/@/composables/useOnlineUserHub';
+import { forceOffline, stopOnlineUserHub, subscribeOnlineUsers, unsubscribeOnlineUsers } from '/@/composables/useOnlineUserHub';
 import { useOnlineUserStore } from '/@/stores/onlineUser';
 
 const store = useOnlineUserStore();
 const { users } = storeToRefs(store);
 const onlineUsers = computed(() => users.value);
+const loading = ref(false);
+const loadError = ref('');
 
 const formatDate = (val?: string) => {
 	if (!val) return '—';
@@ -76,14 +79,44 @@ const simplifyUserAgent = (value?: string | null) => {
 	return value.length > 90 ? `${value.slice(0, 90)}...` : value;
 };
 
+const getErrorMessage = (error: unknown) => {
+	if (error instanceof Error) return error.message;
+	if (typeof error === 'string') return error;
+	return '在线用户 Hub 连接失败，请检查后端是否已重启、/hubs/online-user 是否可访问，以及当前账号是否拥有会话管理权限';
+};
+
+const loadOnlineUsers = async () => {
+	loading.value = true;
+	loadError.value = '';
+	try {
+		await subscribeOnlineUsers();
+	} catch (error) {
+		loadError.value = getErrorMessage(error);
+		ElMessage.error(loadError.value);
+	} finally {
+		loading.value = false;
+	}
+};
+
 const refreshOnlineUsers = async () => {
-	await startOnlineUserHub();
+	await loadOnlineUsers();
+	if (loadError.value) return;
 	ElMessage.success('在线列表已刷新');
 };
 
 const reconnect = async () => {
-	await stopOnlineUserHub();
-	await startOnlineUserHub();
+	loading.value = true;
+	loadError.value = '';
+	try {
+		await stopOnlineUserHub();
+		await subscribeOnlineUsers();
+	} catch (error) {
+		loadError.value = getErrorMessage(error);
+		ElMessage.error(loadError.value);
+		return;
+	} finally {
+		loading.value = false;
+	}
 	ElMessage.success('SignalR 已重连');
 };
 
@@ -102,7 +135,11 @@ const onForceOffline = async (row: OnlineUserInfo) => {
 };
 
 onMounted(() => {
-	void startOnlineUserHub();
+	void loadOnlineUsers();
+});
+
+onUnmounted(() => {
+	void unsubscribeOnlineUsers();
 });
 </script>
 
