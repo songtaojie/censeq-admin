@@ -17,6 +17,9 @@ namespace Censeq.Identity.Entities;
 /// </summary>
 public class IdentityUser : FullAuditedAggregateRoot<Guid>, IUser, IHasEntityVersion
 {
+    /// <summary>
+    /// 租户标识。
+    /// </summary>
     public virtual Guid? TenantId { get; protected set; }
 
     /// <summary>

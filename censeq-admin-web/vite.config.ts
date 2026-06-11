@@ -16,18 +16,24 @@ const alias: Record<string, string> = {
 
 const viteConfig = defineConfig((mode: ConfigEnv) => {
 	const env = loadEnv(mode.mode, process.cwd());
-	return {
+		return {
 		plugins: [vue(), vueSetupExtend(), viteCompression(), JSON.parse(env.VITE_OPEN_CDN) ? buildConfig.cdn() : null],
 		root: process.cwd(),
 		resolve: { alias },
 		base: mode.command === 'serve' ? './' : env.VITE_PUBLIC_PATH,
 		optimizeDeps: { exclude: ['vue-demi'] },
-		server: {
+			server: {
 			host: '0.0.0.0',
 			port: env.VITE_PORT as unknown as number,
 			open: JSON.parse(env.VITE_OPEN),
 			hmr: true,
 			proxy: {
+				'/hubs': {
+					target: env.VITE_API_URL,
+					ws: true,
+					changeOrigin: true,
+					secure: false,
+				},
 				'/gitee': {
 					target: 'https://gitee.com',
 					ws: true,

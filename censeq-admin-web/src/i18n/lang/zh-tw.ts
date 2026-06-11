@@ -7,6 +7,7 @@ export default {
 		systemMenu: '選單管理',
 		systemRole: '角色管理',
 		systemUser: '用戶管理',
+		systemOnlineUser: '在線用戶',
 		systemDept: '機構管理',
 		systemDic: '字典管理',
 		systemTenant: '租戶管理',

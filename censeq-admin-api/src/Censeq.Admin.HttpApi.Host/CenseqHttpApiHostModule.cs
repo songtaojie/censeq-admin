@@ -4,6 +4,8 @@ using Censeq.Admin.EntityFrameworkCore;
 using Censeq.Admin.MultiTenancy;
 using Censeq.Framework.AspNetCore;
 using Censeq.Framework.AspNetCore.Mvc.UI.Theme.Basic;
+using Censeq.Framework.SignalR;
+using Censeq.Framework.SignalR.Extensions;
 using Censeq.Framework.Swashbuckle;
 using Censeq.Identity;
 using Censeq.Identity.AspNetCore;
@@ -38,6 +40,7 @@ namespace Censeq.Admin;
     typeof(CenseqAspNetCoreMvcUIBasicThemeModule),
     typeof(AbpAspNetCoreSerilogModule),
     typeof(CenseqSwashbuckleModule),
+    typeof(CenseqSignalRModule),
     typeof(CenseqAspNetCoreModule)
 )]
 public class CenseqHttpApiHostModule : AbpModule
@@ -211,6 +214,9 @@ public class CenseqHttpApiHostModule : AbpModule
         // 使用 Session 中间件（必须在 UseAuthentication 之后）
         app.UseIdentitySession();
 
-        app.UseConfiguredEndpoints();
+        app.UseConfiguredEndpoints(endpoints =>
+        {
+            endpoints.MapCenseqHubs();
+        });
     }
 }

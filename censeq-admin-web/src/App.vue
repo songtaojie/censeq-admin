@@ -22,6 +22,8 @@ import mittBus from '/@/utils/mitt';
 import setIntroduction from '/@/utils/setIconfont';
 import { useOidc } from '/@/composables/useOidc';
 import { ensureAntiforgeryCookies } from '/@/utils/antiforgery';
+import { startOnlineUserHub, stopOnlineUserHub } from '/@/composables/useOnlineUserHub';
+import { startNotificationHub, stopNotificationHub } from '/@/composables/useNotificationHub';
 
 // 引入组件
 const LockScreen = defineAsyncComponent(() => import('/@/layout/lockScreen/index.vue'));
@@ -61,6 +63,16 @@ const getGlobalComponentSize = computed(() => {
 const getGlobalI18n = computed(() => {
 	return messages.value[locale.value];
 });
+const shouldStartRealtime = () => route.path !== '/login' && !route.path.startsWith('/callback') && !route.path.startsWith('/logout-callback');
+const startRealtimeHubs = async () => {
+	if (!shouldStartRealtime()) return;
+	const oidc = useOidc();
+	if (!(await oidc.isAuthenticated())) return;
+	await Promise.all([startOnlineUserHub(), startNotificationHub()]);
+};
+const stopRealtimeHubs = async () => {
+	await Promise.all([stopOnlineUserHub(), stopNotificationHub()]);
+};
 // 设置初始化，防止刷新时恢复默认
 onBeforeMount(() => {
 	// 设置批量第三方 icon 图标
@@ -98,6 +110,7 @@ onMounted(() => {
 				} catch {
 					/* 忽略 */
 				}
+				await startRealtimeHubs();
 			}
 		})();
 	});
@@ -105,12 +118,14 @@ onMounted(() => {
 // 页面销毁时，关闭监听布局配置/i18n监听
 onUnmounted(() => {
 	mittBus.off('openSetingsDrawer', () => {});
+	void stopRealtimeHubs();
 });
 // 监听路由的变化，设置网站标题
 watch(
 	() => route.path,
 	() => {
 		other.useTitle();
+		void startRealtimeHubs();
 	},
 	{
 		deep: true,

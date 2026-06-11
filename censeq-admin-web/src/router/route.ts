@@ -388,6 +388,21 @@ export const dynamicRoutes: Array<RouteRecordRaw> = [
 						},
 					},
 					{
+						path: '/system/online-user',
+						name: 'systemOnlineUser',
+						component: () => import('/@/views/system/online-user/index.vue'),
+						meta: {
+							title: 'message.router.systemOnlineUser',
+							isLink: '',
+							isHide: false,
+							isKeepAlive: true,
+							isAffix: false,
+							isIframe: false,
+							roles: ['admin'],
+							icon: 'ele-Connection',
+						},
+					},
+					{
 						path: '/system/dept',
 						name: 'systemDept',
 						component: () => import('/@/views/system/dept/index.vue'),
