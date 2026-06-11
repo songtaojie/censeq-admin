@@ -1,6 +1,6 @@
-using Censeq.Framework.SignalR.Dto;
+﻿using Censeq.Framework.AspNetCore.SignalR.Dto;
 
-namespace Censeq.Framework.SignalR.Services;
+namespace Censeq.Framework.AspNetCore.SignalR.Services;
 
 /// <summary>
 /// 面向业务层的实时通知发送服务。

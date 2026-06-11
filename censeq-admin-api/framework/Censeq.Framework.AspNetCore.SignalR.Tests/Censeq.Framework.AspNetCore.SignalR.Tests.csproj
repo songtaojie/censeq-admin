@@ -17,6 +17,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Censeq.Framework.SignalR\Censeq.Framework.SignalR.csproj" />
+    <ProjectReference Include="..\Censeq.Framework.AspNetCore.SignalR\Censeq.Framework.AspNetCore.SignalR.csproj" />
   </ItemGroup>
 </Project>

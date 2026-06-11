@@ -1,11 +1,11 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 	<Import Project="..\..\common.props" />
 
 	<PropertyGroup>
 		<IsPackable>true</IsPackable>
 		<OutputType>Library</OutputType>
-		<AssemblyName>Censeq.Framework.SignalR</AssemblyName>
-		<PackageId>Censeq.Framework.SignalR</PackageId>
+		<AssemblyName>Censeq.Framework.AspNetCore.SignalR</AssemblyName>
+		<PackageId>Censeq.Framework.AspNetCore.SignalR</PackageId>
 		<GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
 		<GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
 		<GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
@@ -14,7 +14,7 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Volo.Abp.AspNetCore" />
+		<PackageReference Include="Volo.Abp.AspNetCore.SignalR" />
 		<PackageReference Include="Volo.Abp.Caching" />
 		<PackageReference Include="Volo.Abp.MultiTenancy" />
 	</ItemGroup>

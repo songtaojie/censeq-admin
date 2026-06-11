@@ -1,7 +1,7 @@
-namespace Censeq.Framework.SignalR.Dto;
+﻿namespace Censeq.Framework.AspNetCore.SignalR.Dto;
 
 /// <summary>
-/// 租户在线用户缓存项，为后续分布式缓存或 Redis 扩展预留的数据结构。
+/// 租户在线用户缓存项。
 /// </summary>
 public class TenantOnlineUsersCacheItem
 {

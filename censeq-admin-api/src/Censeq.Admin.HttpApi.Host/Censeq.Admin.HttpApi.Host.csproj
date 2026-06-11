@@ -11,7 +11,7 @@
   </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="Microsoft.EntityFrameworkCore.Design" >
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Design">
           <PrivateAssets>all</PrivateAssets>
           <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
@@ -24,7 +24,7 @@
 
     <ItemGroup>
         <ProjectReference Include="..\..\framework\Censeq.Framework.AspNetCore\Censeq.Framework.AspNetCore.csproj" />
-        <ProjectReference Include="..\..\framework\Censeq.Framework.SignalR\Censeq.Framework.SignalR.csproj" />
+        <ProjectReference Include="..\..\framework\Censeq.Framework.AspNetCore.SignalR\Censeq.Framework.AspNetCore.SignalR.csproj" />
         <ProjectReference Include="..\..\framework\Censeq.Framework.Swashbuckle\Censeq.Framework.Swashbuckle.csproj" />
         <ProjectReference Include="..\..\modules\account\Censeq.Account.Web.OpenIddict\Censeq.Account.Web.OpenIddict.csproj" />
         <ProjectReference Include="..\..\modules\audit-logging\Censeq.AuditLogging.HttpApi\Censeq.AuditLogging.HttpApi.csproj" />

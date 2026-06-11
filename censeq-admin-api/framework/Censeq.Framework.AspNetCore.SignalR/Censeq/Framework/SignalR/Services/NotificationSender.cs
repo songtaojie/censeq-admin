@@ -1,9 +1,9 @@
-using Censeq.Framework.SignalR.Dto;
-using Censeq.Framework.SignalR.Hubs;
+﻿using Censeq.Framework.AspNetCore.SignalR.Dto;
+using Censeq.Framework.AspNetCore.SignalR.Hubs;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.Extensions.Logging;
 
-namespace Censeq.Framework.SignalR.Services;
+namespace Censeq.Framework.AspNetCore.SignalR.Services;
 
 /// <summary>
 /// 基于 SignalR HubContext 的实时通知发送服务实现。

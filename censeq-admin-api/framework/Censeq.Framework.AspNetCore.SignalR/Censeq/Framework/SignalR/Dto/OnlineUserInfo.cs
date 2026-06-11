@@ -1,4 +1,4 @@
-namespace Censeq.Framework.SignalR.Dto;
+﻿namespace Censeq.Framework.AspNetCore.SignalR.Dto;
 
 /// <summary>
 /// 当前在线用户的单个 SignalR 连接信息，一个浏览器标签页通常对应一条连接记录。

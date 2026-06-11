@@ -1,6 +1,6 @@
-using Censeq.Framework.SignalR.Dto;
+﻿using Censeq.Framework.AspNetCore.SignalR.Dto;
 
-namespace Censeq.Framework.SignalR.Hubs;
+namespace Censeq.Framework.AspNetCore.SignalR.Hubs;
 
 /// <summary>
 /// 在线用户 Hub 调用前端客户端时使用的强类型契约。

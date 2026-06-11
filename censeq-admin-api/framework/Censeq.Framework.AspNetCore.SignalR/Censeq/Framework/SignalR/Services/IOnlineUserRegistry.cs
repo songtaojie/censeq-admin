@@ -1,6 +1,6 @@
-using Censeq.Framework.SignalR.Dto;
+﻿using Censeq.Framework.AspNetCore.SignalR.Dto;
 
-namespace Censeq.Framework.SignalR.Services;
+namespace Censeq.Framework.AspNetCore.SignalR.Services;
 
 /// <summary>
 /// 在线用户连接注册表，抽象连接登记、移除和查询能力。

@@ -1,21 +1,19 @@
-using Censeq.Framework.SignalR.Dto;
-using Censeq.Framework.SignalR.Extensions;
-using Censeq.Framework.SignalR.Services;
+﻿using Censeq.Framework.AspNetCore.SignalR.Dto;
+using Censeq.Framework.AspNetCore.SignalR.Services;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.SignalR;
-using Microsoft.Extensions.Logging;
-using Volo.Abp.MultiTenancy;
+using Volo.Abp.AspNetCore.SignalR;
 using Volo.Abp.Security.Claims;
-using Volo.Abp.Users;
 
-namespace Censeq.Framework.SignalR.Hubs;
+namespace Censeq.Framework.AspNetCore.SignalR.Hubs;
 
 /// <summary>
-/// 在线用户 Hub，负责登记连接、广播上下线事件、查询在线列表和执行强制下线通知。
+/// 在线用户 Hub，负责登记连接、广播上下线事件、查询在线列表和发送强制下线通知。
 /// </summary>
 [Authorize]
-[CenseqHubRoute("/hubs/online-user")]
-public class OnlineUserHub : Hub<IOnlineUserClient>
+[HubRoute("/hubs/online-user")]
+public class OnlineUserHub : AbpHub<IOnlineUserClient>
 {
     /// <summary>
     /// 租户分组名称前缀。
@@ -23,25 +21,19 @@ public class OnlineUserHub : Hub<IOnlineUserClient>
     public const string TenantGroupPrefix = "tenant:";
 
     private readonly IOnlineUserRegistry _registry;
-    private readonly ICurrentUser _currentUser;
-    private readonly ICurrentTenant _currentTenant;
-    private readonly ILogger<OnlineUserHub> _logger;
+    private readonly IHubContext<OnlineUserHub, IOnlineUserClient> _hubContext;
 
     public OnlineUserHub(
         IOnlineUserRegistry registry,
-        ICurrentUser currentUser,
-        ICurrentTenant currentTenant,
-        ILogger<OnlineUserHub> logger)
+        IHubContext<OnlineUserHub, IOnlineUserClient> hubContext)
     {
         _registry = registry;
-        _currentUser = currentUser;
-        _currentTenant = currentTenant;
-        _logger = logger;
+        _hubContext = hubContext;
     }
 
     public override async Task OnConnectedAsync()
     {
-        if (!_currentUser.IsAuthenticated || !_currentUser.Id.HasValue)
+        if (!CurrentUser.IsAuthenticated || !CurrentUser.Id.HasValue)
         {
             Context.Abort();
             return;
@@ -51,21 +43,21 @@ public class OnlineUserHub : Hub<IOnlineUserClient>
         var info = new OnlineUserInfo
         {
             ConnectionId = Context.ConnectionId,
-            UserId = _currentUser.Id.Value,
-            UserName = _currentUser.UserName ?? string.Empty,
-            Name = _currentUser.Name,
-            TenantId = _currentTenant.Id,
-            SessionId = _currentUser.FindClaim(AbpClaimTypes.SessionId)?.Value,
-            Ip = httpContext?.Connection.RemoteIpAddress?.ToString(),
+            UserId = CurrentUser.Id.Value,
+            UserName = CurrentUser.UserName ?? string.Empty,
+            Name = CurrentUser.Name,
+            TenantId = CurrentTenant.Id,
+            SessionId = CurrentUser.FindClaim(AbpClaimTypes.SessionId)?.Value,
+            Ip = httpContext?.GetRemoteIpAddressToIPv4(),
             UserAgent = httpContext?.Request.Headers.UserAgent.ToString(),
             ConnectedAt = DateTimeOffset.UtcNow
         };
 
         await _registry.AddAsync(info);
         await Groups.AddToGroupAsync(Context.ConnectionId, GroupOfTenant(info.TenantId));
-        await Clients.Group(GroupOfTenant(info.TenantId)).OnlineChanged(new OnlineUserChange(info, true));
+        await _hubContext.Clients.Group(GroupOfTenant(info.TenantId)).OnlineChanged(new OnlineUserChange(info, true));
 
-        _logger.LogInformation("SignalR user connected. UserId: {UserId}, TenantId: {TenantId}, ConnectionId: {ConnectionId}",
+        Logger.LogInformation("SignalR user connected. UserId: {UserId}, TenantId: {TenantId}, ConnectionId: {ConnectionId}",
             info.UserId, info.TenantId, info.ConnectionId);
 
         await base.OnConnectedAsync();
@@ -76,8 +68,8 @@ public class OnlineUserHub : Hub<IOnlineUserClient>
         var info = await _registry.RemoveByConnectionAsync(Context.ConnectionId);
         if (info is not null)
         {
-            await Clients.Group(GroupOfTenant(info.TenantId)).OnlineChanged(new OnlineUserChange(info, false));
-            _logger.LogInformation("SignalR user disconnected. UserId: {UserId}, TenantId: {TenantId}, ConnectionId: {ConnectionId}",
+            await _hubContext.Clients.Group(GroupOfTenant(info.TenantId)).OnlineChanged(new OnlineUserChange(info, false));
+            Logger.LogInformation("SignalR user disconnected. UserId: {UserId}, TenantId: {TenantId}, ConnectionId: {ConnectionId}",
                 info.UserId, info.TenantId, info.ConnectionId);
         }
 
@@ -89,7 +81,7 @@ public class OnlineUserHub : Hub<IOnlineUserClient>
     /// </summary>
     public Task<IReadOnlyList<OnlineUserInfo>> GetOnlineList()
     {
-        return _registry.GetByTenantAsync(_currentTenant.Id);
+        return _registry.GetByTenantAsync(CurrentTenant.Id);
     }
 
     /// <summary>
@@ -102,9 +94,9 @@ public class OnlineUserHub : Hub<IOnlineUserClient>
             ? "您已被管理员强制下线"
             : input.Reason;
 
-        await Clients.Client(input.ConnectionId).ForceOffline(reason);
-        _logger.LogInformation("SignalR force offline sent. OperatorUserId: {UserId}, ConnectionId: {ConnectionId}",
-            _currentUser.Id, input.ConnectionId);
+        await _hubContext.Clients.Client(input.ConnectionId).ForceOffline(reason);
+        Logger.LogInformation("SignalR force offline sent. OperatorUserId: {UserId}, ConnectionId: {ConnectionId}",
+            CurrentUser.Id, input.ConnectionId);
     }
 
     /// <summary>

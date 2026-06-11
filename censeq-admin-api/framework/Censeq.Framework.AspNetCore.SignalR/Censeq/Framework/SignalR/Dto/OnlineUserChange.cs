@@ -1,4 +1,4 @@
-namespace Censeq.Framework.SignalR.Dto;
+﻿namespace Censeq.Framework.AspNetCore.SignalR.Dto;
 
 /// <summary>
 /// 在线用户连接状态变更事件。

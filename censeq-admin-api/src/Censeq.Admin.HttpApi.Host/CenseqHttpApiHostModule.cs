@@ -4,8 +4,7 @@ using Censeq.Admin.EntityFrameworkCore;
 using Censeq.Admin.MultiTenancy;
 using Censeq.Framework.AspNetCore;
 using Censeq.Framework.AspNetCore.Mvc.UI.Theme.Basic;
-using Censeq.Framework.SignalR;
-using Censeq.Framework.SignalR.Extensions;
+using Censeq.Framework.AspNetCore.SignalR;
 using Censeq.Framework.Swashbuckle;
 using Censeq.Identity;
 using Censeq.Identity.AspNetCore;
@@ -96,7 +95,7 @@ public class CenseqHttpApiHostModule : AbpModule
 
         Configure<AbpAuditingOptions>(options =>
         {
-            // 追踪实现了 IFullAuditedObject 或 IAuditedObject 的实体（用户、角色、租户等业务实体）
+            // 追踪实现�?IFullAuditedObject �?IAuditedObject 的实体（用户、角色、租户等业务实体�?
             options.EntityHistorySelectors.Add(new NamedTypeSelector(
                 "AuditedEntities",
                 type => typeof(IAuditedObject).IsAssignableFrom(type)
@@ -110,7 +109,7 @@ public class CenseqHttpApiHostModule : AbpModule
     }
 
     /// <summary>
-    /// 跨站（如 http://localhost:4200 → https://localhost:5001）携带防伪 Cookie 须 SameSite=None；HTTPS API 下 Cookie 须 Secure。
+    /// 跨站（如 http://localhost:4200 �?https://localhost:5001）携带防�?Cookie �?SameSite=None；HTTPS API �?Cookie �?Secure�?
     /// </summary>
     private static void ConfigureAntiforgeryForCrossOriginSpa(ServiceConfigurationContext context, IWebHostEnvironment hostingEnvironment)
     {
@@ -211,12 +210,9 @@ public class CenseqHttpApiHostModule : AbpModule
         app.UseAuditing();
         app.UseAbpSerilogEnrichers();
 
-        // 使用 Session 中间件（必须在 UseAuthentication 之后）
+        // 使用 Session 中间件（必须�?UseAuthentication 之后�?
         app.UseIdentitySession();
 
-        app.UseConfiguredEndpoints(endpoints =>
-        {
-            endpoints.MapCenseqHubs();
-        });
+        app.UseConfiguredEndpoints();
     }
 }

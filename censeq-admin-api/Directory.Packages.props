@@ -2,7 +2,7 @@
   <PropertyGroup>
     <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
     <CentralPackageTransitivePinningEnabled>true</CentralPackageTransitivePinningEnabled>
-    <!-- 统一版本变量：升级时只需改这里 -->
+    <!-- 统一版本变量：升级时只需改这�?-->
     <AbpVersion>8.3.4</AbpVersion>
     <OpenIddictVersion>5.6.0</OpenIddictVersion>
     <MicrosoftExtensionsVersion>8.0.16</MicrosoftExtensionsVersion>
@@ -35,6 +35,7 @@
     <PackageVersion Include="Volo.Abp.AspNetCore.Mvc.UI.MultiTenancy" Version="$(AbpVersion)" />
     <PackageVersion Include="Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared" Version="$(AbpVersion)" />
     <PackageVersion Include="Volo.Abp.AspNetCore.Serilog" Version="$(AbpVersion)" />
+    <PackageVersion Include="Volo.Abp.AspNetCore.SignalR" Version="$(AbpVersion)" />
     <PackageVersion Include="Volo.Abp.AspNetCore.MultiTenancy" Version="$(AbpVersion)" />
     <PackageVersion Include="Volo.Abp.Autofac" Version="$(AbpVersion)" />
     <PackageVersion Include="Volo.Abp.Auditing" Version="$(AbpVersion)" />

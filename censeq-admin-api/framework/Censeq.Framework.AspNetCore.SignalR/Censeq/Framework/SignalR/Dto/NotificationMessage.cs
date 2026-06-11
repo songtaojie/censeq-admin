@@ -1,4 +1,4 @@
-namespace Censeq.Framework.SignalR.Dto;
+﻿namespace Censeq.Framework.AspNetCore.SignalR.Dto;
 
 /// <summary>
 /// 服务端推送到前端的实时通知消息。

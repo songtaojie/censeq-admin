@@ -1,4 +1,4 @@
-﻿
+
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.14.36811.4
@@ -183,9 +183,9 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Censeq.FileManagement.Entit
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Censeq.FileManagement.HttpApi", "modules\file-management\Censeq.FileManagement.HttpApi\Censeq.FileManagement.HttpApi.csproj", "{2F7419A3-3FFE-49D6-8A4C-39548DF5C136}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Censeq.Framework.SignalR", "framework\Censeq.Framework.SignalR\Censeq.Framework.SignalR.csproj", "{5D539938-9D08-46A0-99CD-D57133F504FB}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Censeq.Framework.AspNetCore.SignalR", "framework\Censeq.Framework.AspNetCore.SignalR\Censeq.Framework.AspNetCore.SignalR.csproj", "{5D539938-9D08-46A0-99CD-D57133F504FB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Censeq.Framework.SignalR.Tests", "framework\Censeq.Framework.SignalR.Tests\Censeq.Framework.SignalR.Tests.csproj", "{5819D53A-B3B9-4FC5-95AE-C2E357A27F3C}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Censeq.Framework.AspNetCore.SignalR.Tests", "framework\Censeq.Framework.AspNetCore.SignalR.Tests\Censeq.Framework.AspNetCore.SignalR.Tests.csproj", "{5819D53A-B3B9-4FC5-95AE-C2E357A27F3C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

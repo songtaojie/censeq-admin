@@ -1,4 +1,4 @@
-namespace Censeq.Framework.SignalR.Dto;
+﻿namespace Censeq.Framework.AspNetCore.SignalR.Dto;
 
 /// <summary>
 /// 管理员强制指定连接下线时提交的参数。

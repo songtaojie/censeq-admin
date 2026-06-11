@@ -1,4 +1,4 @@
-namespace Censeq.Framework.SignalR.Options;
+﻿namespace Censeq.Framework.AspNetCore.SignalR.Options;
 
 /// <summary>
 /// SignalR 模块配置项，对应 appsettings 中的 SignalR 节点。
@@ -19,14 +19,4 @@ public class CenseqSignalROptions
     /// 客户端超时时间秒数。
     /// </summary>
     public int ClientTimeoutSeconds { get; set; } = 30;
-
-    /// <summary>
-    /// Redis 连接字符串，后续启用分布式 SignalR 背板时使用。
-    /// </summary>
-    public string? RedisConnectionString { get; set; }
-
-    /// <summary>
-    /// Redis 背板通道前缀，避免不同系统之间的消息串扰。
-    /// </summary>
-    public string? RedisChannelPrefix { get; set; } = "censeq:signalr";
 }
