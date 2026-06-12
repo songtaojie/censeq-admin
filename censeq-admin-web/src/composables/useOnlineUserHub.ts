@@ -35,6 +35,27 @@ export async function unsubscribeOnlineUsers() {
 	}
 }
 
+export async function subscribeMyOnlineUsers() {
+	const store = useOnlineUserStore();
+	await startOnlineUserHub();
+	await onlineUserHub.on<OnlineUserChange>('OnlineChanged', (change) => store.applyChange(change));
+	await onlineUserHub.on<OnlineUserInfo[]>('OnlineList', (list) => store.replaceAll(list));
+
+	const list = await onlineUserHub.invoke<OnlineUserInfo[]>('SubscribeMyOnlineUsers');
+	store.replaceAll(list);
+}
+
+export async function unsubscribeMyOnlineUsers() {
+	onlineUserHub.off('OnlineChanged');
+	onlineUserHub.off('OnlineList');
+	if (!onlineUserHub.isConnected()) return;
+	try {
+		await onlineUserHub.invoke('UnsubscribeMyOnlineUsers');
+	} catch {
+		// 页面离开或连接断开时无需打断用户流程。
+	}
+}
+
 export async function stopOnlineUserHub() {
 	await onlineUserHub.stop();
 	forceOfflineRegistered = false;
